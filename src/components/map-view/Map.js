@@ -3,7 +3,7 @@ import ReactMapGL from 'react-map-gl';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defaultMapStyle, getChoroplethLayer } from '../../style/map-style';
-import { onHoverFeature, onViewportChange } from '../../actions/mapActions';
+import { onHoverFeature, onViewportChange, onSelectFeature } from '../../actions/mapActions';
 
 class Map extends Component {
 
@@ -69,6 +69,14 @@ class Map extends Component {
     this.setState({ mapStyle });
   }
 
+  _onClick = event => {
+    const { features, srcEvent: { offsetX, offsetY } } = event;
+    const selectedFeature = features && 
+      features.find(f => f.layer.id === 'choropleth');
+    return selectedFeature &&
+      this.props.onSelectFeature(selectedFeature)
+  }
+
   _onHover = event => {
     const { features, srcEvent: { offsetX, offsetY } } = event;
     const hoveredFeature = features && 
@@ -114,6 +122,7 @@ class Map extends Component {
             mapStyle={mapStyle}
             onViewportChange={ (vp) => onViewportChange(vp) }
             onHover={this._onHover}
+            onClick={this._onClick}
           >
             {this._renderTooltip()}
           </ReactMapGL>
@@ -130,6 +139,7 @@ Map.propTypes = {
   viewport: PropTypes.object,
   onViewportChange: PropTypes.func,
   onHoverFeature: PropTypes.func,
+  onSelectFeature: PropTypes.func,
 }
 
 const mapStateToProps = (state) => ({
@@ -138,8 +148,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   onHoverFeature: (feature) => dispatch(onHoverFeature(feature)),
-  onViewportChange: (vp) => dispatch(onViewportChange(vp))
-
+  onViewportChange: (vp) => dispatch(onViewportChange(vp)),
+  onSelectFeature: (feature) => dispatch(onSelectFeature(feature)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Map);

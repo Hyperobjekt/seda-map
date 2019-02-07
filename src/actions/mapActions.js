@@ -22,3 +22,13 @@ export const onRegionChange = (region) => ({
   type: 'SET_MAP_REGION',
   region
 });
+
+export const onSelectFeature = (feature) => ({
+  type: 'ADD_SELECTED_FEATURE',
+  feature
+});
+
+export const onRemoveSelectedFeature = (feature) => ({
+  type: 'REMOVE_SELECTED_FEATURE',
+  feature
+});

@@ -2,12 +2,13 @@ const initialState = {
   metric: 'ach',
   region: 'districts',
   demographic: 'mn',
-  hoveredFeatue: null,
+  hoveredFeature: null,
   viewport: {
     latitude: 37.7577,
     longitude: -122.4376,
     zoom: 8
   },
+  selected: []
 }
 
 const map = (state = initialState, action) => {
@@ -31,6 +32,14 @@ const map = (state = initialState, action) => {
       return {
         ...state,
         metric: action.metric
+      }
+    case 'ADD_SELECTED_FEATURE':
+      return {
+        ...state,
+        selected: [ 
+          ...state.selected, 
+          action.feature
+        ]
       }
     case 'SET_MAP_VIEWPORT':
       return {
