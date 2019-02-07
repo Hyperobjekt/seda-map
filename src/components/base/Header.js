@@ -8,7 +8,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import IconButton from '@material-ui/core/IconButton';
 
 const Header = ({ onActionClick, children }) => (
-  <AppBar className="header" position="sticky">
+  <AppBar className="header" color="default" position="sticky">
     <Toolbar className="header__container">
       <Grid container 
             alignItems="center" 
