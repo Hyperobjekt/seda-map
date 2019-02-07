@@ -13,14 +13,14 @@ const Header = ({ onActionClick, children }) => (
       <Grid container 
             alignItems="center" 
             justify="space-between" 
-            spacing={24} 
+            spacing={ 24 } 
             className="header__content">
           <Grid item>
             {children}
           </Grid>
           <Grid item>
             <IconButton 
-              onClick={() => onActionClick('menu')}
+              onClick={ () => onActionClick('menu') }
             >
               <MenuIcon />
             </IconButton>
@@ -31,11 +31,12 @@ const Header = ({ onActionClick, children }) => (
 );
 
 Header.propTypes = {
-  onActionClick: PropTypes.func.isRequired
+  onActionClick: PropTypes.func.isRequired,
+  children: PropTypes.element,
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  onActionClick: (action) => dispatch({type: 'MENU_ITEM_CLICK', item: action})
+  onActionClick: (action) => dispatch({ type: 'MENU_ITEM_CLICK', item: action })
 })
 
 export default connect(

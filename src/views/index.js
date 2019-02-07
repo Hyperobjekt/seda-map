@@ -10,7 +10,7 @@ const App = () => (
       <Link to="/">Home</Link>
     </Header>
     <main className="body">
-      <Route exact path="/" component={MapView} />
+      <Route exact path="/" component={ MapView } />
     </main>
   </div>
 )

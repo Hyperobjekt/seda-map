@@ -1,8 +1,6 @@
 {
   "private": true,
-  "homepage": "https://create-react-app-redux.now.sh",
   "scripts": {
-    "deploy": "now && now alias",
     "start": "react-scripts start",
     "now-start": "serve -s ./build",
     "build": "react-scripts build",
@@ -11,6 +9,11 @@
     "precommit": "pretty-quick --staged"
   },
   "devDependencies": {
+    "babel-eslint": "^10.0.1",
+    "babel-loader": "^8.0.5",
+    "eslint": "^5.13.0",
+    "eslint-loader": "^2.1.2",
+    "eslint-plugin-react": "^7.12.4",
     "prettier": "1.16.4",
     "react-scripts": "2.1.3"
   },
