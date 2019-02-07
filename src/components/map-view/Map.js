@@ -70,7 +70,7 @@ class Map extends Component {
   }
 
   _onClick = event => {
-    const { features, srcEvent: { offsetX, offsetY } } = event;
+    const { features } = event;
     const selectedFeature = features && 
       features.find(f => f.layer.id === 'choropleth');
     return selectedFeature &&
