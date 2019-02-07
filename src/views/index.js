@@ -8,7 +8,10 @@ const App = () => (
   <div className="app__container">
     <Header>
       <Link to="/">
-        <img src="https://via.placeholder.com/240x40?text=LOGO" />
+        <img 
+          alt="Logo" 
+          src="https://via.placeholder.com/240x40?text=LOGO"
+        />
       </Link>
     </Header>
     <main className="body">
