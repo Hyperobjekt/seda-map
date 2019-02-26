@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Link } from 'react-router-dom'
+import { Route, Link, Redirect } from 'react-router-dom'
 import Header from '../components/base/Header';
 import MapView from './map'
 import withRoot from '../withRoot';
@@ -16,7 +16,8 @@ const App = () => (
     </Header>
 
     <main className="body">
-      <Route exact path="/" component={ MapView } />
+      <Route exact path="/" render={() => (<Redirect to="/counties/avg/all/3.5/38/-97"/>)} />
+      <Route path="/:region/:metric/:demographic/:zoom/:latitude/:longitude" component={ MapView } />
     </main>
   </div>
 )

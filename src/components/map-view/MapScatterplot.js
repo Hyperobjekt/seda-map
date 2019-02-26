@@ -4,7 +4,8 @@ import { connect } from 'react-redux'
 import {FlyToInterpolator} from 'react-map-gl';
 // 3rd-party easing functions
 import * as ease from 'd3-ease';
-
+import { compose } from 'redux';
+import { withRouter } from 'react-router-dom';
 import Paper from '@material-ui/core/Paper';
 import ReactEcharts from 'echarts-for-react';
 import { scatterOptions, hoverOptions } from '../../constants/scatterOptions';
@@ -198,11 +199,12 @@ export class MapScatterplot extends Component {
 }
 
 const mapStateToProps = ({
-  map: { options: { region, metric } },
   hovered: { feature },
   scatterplot, 
   metrics,
   search: { results }
+}, {
+  match: { params: { region, metric } }
 }) => { 
   region = (region === 'schools' ? 'districts' : region);
   return ({
@@ -241,4 +243,7 @@ const mapDispatchToProps = (dispatch) => ({
       })) : null
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(MapScatterplot)
+export default compose(
+  withRouter,
+  connect(mapStateToProps, mapDispatchToProps)
+)(MapScatterplot)

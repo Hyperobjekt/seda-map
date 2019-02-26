@@ -22,6 +22,7 @@
     "echarts": "^4.1.0",
     "echarts-for-react": "^2.0.15-beta.0",
     "immutable": "^4.0.0-rc.12",
+    "lodash.debounce": "^4.0.8",
     "lodash.isempty": "^4.4.0",
     "papaparse": "^4.6.3",
     "react": "16.8.1",

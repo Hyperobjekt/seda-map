@@ -5,6 +5,9 @@ import { connect } from 'react-redux';
 import Select from '../base/Select';
 import { metrics, regions, demographics } from '../../constants/dataOptions';
 import { onMetricChange, onRegionChange, onDemographicChange } from '../../actions/mapActions';
+import { compose } from 'redux';
+import { withRouter } from 'react-router-dom';
+import { updateRoute } from '../../modules/router';
 
 const MapControls = ({ 
   metric, 
@@ -58,16 +61,15 @@ MapControls.propTypes = {
   onDemographicChange: PropTypes.func
 }
 
-const mapStateToProps = ({map: {options}}) => ({
-  metric: options.metric,
-  region: options.region,
-  demographic: options.demographic
+const mapStateToProps = (state, { match: { params } }) => params
+
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  onMetricChange: (value) => updateRoute(ownProps, { metric: value }),
+  onRegionChange: (value) => updateRoute(ownProps, { region: value }),
+  onDemographicChange: (value) => updateRoute(ownProps, { demographic: value }),
 })
 
-const mapDispatchToProps = (dispatch) => ({
-  onMetricChange: (value) => dispatch(onMetricChange(value)),
-  onRegionChange: (value) => dispatch(onRegionChange(value)),
-  onDemographicChange: (value) => dispatch(onDemographicChange(value)),
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(MapControls);
+export default compose(
+  withRouter,
+  connect(mapStateToProps, mapDispatchToProps)
+)(MapControls);
