@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Select from '../base/Select';
 import { metrics, regions, demographics } from '../../constants/dataOptions';
-import { onMetricChange, onRegionChange, onDemographicChange } from '../../actions/mapActions';
 import { compose } from 'redux';
 import { withRouter } from 'react-router-dom';
 import { updateRoute } from '../../modules/router';
