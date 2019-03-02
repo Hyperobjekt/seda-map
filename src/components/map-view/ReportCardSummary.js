@@ -8,8 +8,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 
 const ReportCardSummary = ({
   data, 
-  vars, 
-  metricItems, 
+  vars,  
   demographic,
   onDemographicChange
 }) => {
@@ -29,11 +28,11 @@ const ReportCardSummary = ({
           <ListItem key={"rcs-"+i}>
             <ListItemText 
               primary={
-                (data[demographic+'_'+v] && data[demographic+'_'+v]) > -9999 ?
-                (Math.round(data[demographic+'_'+v] * 100) / 100) :
+                (data[demographic+'_'+v.id] && data[demographic+'_'+v.id]) > -9999 ?
+                (Math.round(data[demographic+'_'+v.id] * 100) / 100) :
                 'Unavailable'
               }
-              secondary={metricItems[v].label}
+              secondary={v.label}
             />
           </ListItem>
         )}
