@@ -5,6 +5,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import { Button } from '@material-ui/core';
 
 const MapLocation = ({ name, number, color, onDismissClick, onLocationClick, ...rest }) => {
   return (
@@ -20,8 +21,22 @@ const MapLocation = ({ name, number, color, onDismissClick, onLocationClick, ...
           inset 
           primary={name}>
         </ListItemText>
+        <Button
+          size="small"
+          color="primary"
+          variant="outlined"
+          classes={
+            {root: 'map-location__report-button'}
+          }
+          onClick={(e)=> { 
+            return false;
+          }}
+        >View Report</Button>
         <IconButton 
-          size="small" 
+          size="small"
+          classes={
+            {root: 'map-location__close-button'}
+          }
           aria-label="Dismiss Location"
           onClick={(e)=> { 
             e.preventDefault();

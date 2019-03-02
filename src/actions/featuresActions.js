@@ -1,5 +1,5 @@
 import { loadFeaturesFromRoute, loadFeatureFromCoords } from "../utils/tilequery";
-import { addFeatureToRoute } from '../modules/router';
+import { addFeatureToRoute, removeFeatureFromRoute } from '../modules/router';
 
 const onLoadFeaturesRequest = (locations) => ({
   type: 'LOAD_FEATURES_REQUEST',
@@ -26,6 +26,7 @@ export const loadLocation = (location) =>
         dispatch(addFeatureToRoute(dispatch, pathname, feature))
       })
       .catch((error) => {
+        console.error(error)
         dispatch(onLoadFeaturesError(error))
       })
     }
@@ -38,6 +39,7 @@ export const loadRouteLocations = (locations) =>
         dispatch(onLoadFeaturesSuccess(features))
       })
       .catch((error) => {
+        console.error(error)
         dispatch(onLoadFeaturesError(error))
       })
   }

@@ -351,18 +351,34 @@ body {
 .map-location {
   padding: 16px;
 }
+
+.map-location .map-location__report-button {
+  height:24px;
+  padding: 0 8px;
+  border-radius: 2px;
+  min-width: 96px;
+}
+
+.map-location .map-location__close-button {
+  border-radius: 2px;
+  padding: 4px;
+  font-size: 12px;
+  margin: 2px 8px;
+}
+
+
 .map-locations ul {
   display:flex;
-  align-items: flex-start;
+  align-items: stretch;
   justify-content: flex-start;
-  flex-wrap: wrap;
+  flex-direction: column;
 }
 .map-locations ul li {
   position:relative;
   border-radius: 2px;
   padding: 4px 8px;
   font-size: 12px;
-  margin: 0 0 0 8px;
+  margin: 0 8px 0 8px;
 }
 .map-locations ul li div:first-child {
   margin-right:0;
@@ -373,16 +389,10 @@ body {
 }
 .map-locations ul li div:nth-child(2) span {
   font-size:12px;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
-.map-locations ul li button {
-  position: absolute;
-  right:-4px;
-  top:2px;
-  border-radius: 2px;
-  padding: 4px;
-  font-size: 12px;
-  margin: 2px 8px;
-}
+
 .map-locations ul li button svg {
   width: 16px;
   height:16px;

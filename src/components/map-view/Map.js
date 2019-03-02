@@ -270,6 +270,7 @@ const mapStateToProps = ({
 {
   match: { params: { metric, demographic, region } }
 }) => ({
+  metric,
   region,
   viewport,
   demographic,
