@@ -31,15 +31,13 @@ export class MapView extends Component {
           <div className="map-view__search-overlay">
             <MapSearch />
           </div>
-          <div className="map-view__locations">
-            <MapSelectedLocations />
-          </div>
           <div className="map-view__controls-overlay">
             <MapLegend />
             <MapControls />
           </div>
           <div className="map-view__scatterplot-overlay">
             <MapScatterplot />
+            <MapSelectedLocations />
           </div>
         </div>
       </div>

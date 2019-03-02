@@ -208,10 +208,7 @@ export class MapScatterplot extends Component {
         {
           id: 'selected',
           type: 'scatter',
-          symbolSize: (value, params) => {
-
-            return sizeScale(value[2])
-          },
+          symbolSize: (value) => sizeScale(value[2]),
           itemStyle: {
             borderWidth: 1.5,
             borderColor: '#fff',
@@ -247,9 +244,7 @@ export class MapScatterplot extends Component {
           type: 'scatter',
           data: Object.keys(this.state.scatterplotData)
             .map(k => this.state.scatterplotData[k]),
-          symbolSize: (value, params) => {
-            return sizeScale(value[2])
-          },
+          symbolSize: (value) => sizeScale(value[2]),
           itemStyle: {
             borderWidth: 1,
             borderColor: 'rgba(0,0,0,0.15)'
@@ -344,7 +339,7 @@ export class MapScatterplot extends Component {
 
   render() {
     return (
-      <Paper className='map-scatterplot'>
+      <div className='map-scatterplot'>
         <div className="map-scatterplot__header">
           <p>
             Displaying {' '}
@@ -369,7 +364,7 @@ export class MapScatterplot extends Component {
             option={this._getOverlayOptions()}
           />
         </div>
-      </Paper>
+      </div>
     )
   }
 }
