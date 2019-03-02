@@ -19,7 +19,7 @@ const MapControls = ({
   <div className="map-controls">
     <div className="map-controls__container">
       <Grid spacing={16} container>
-        <Grid xs={12} lg={4} item>
+        <Grid xs={12} item>
           <Select
             fullWidth
             label="Data Metric"
@@ -28,7 +28,7 @@ const MapControls = ({
             onChange={ onMetricChange }
           />
         </Grid>
-        <Grid xs={12} lg={4} item>
+        <Grid xs={12} item>
           <Select
             fullWidth
             label="Region"
@@ -37,7 +37,7 @@ const MapControls = ({
             onChange={ onRegionChange }
           />
         </Grid>
-        <Grid xs={12} lg={4} item>
+        <Grid xs={12} item>
           <Select
             fullWidth
             label="Demographic"

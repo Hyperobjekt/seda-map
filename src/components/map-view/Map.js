@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import ReactMapGL from 'react-map-gl';
+import ReactMapGL, {NavigationControl} from 'react-map-gl';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { compose } from 'redux';
@@ -116,7 +116,7 @@ class Map extends Component {
 
   _onLoad = event => {
     this.map = event.target;
-    this.map.addControl(new mapboxgl.AttributionControl(), 'top-right');
+    this.map.addControl(new mapboxgl.AttributionControl(), 'bottom-left');
     this._updateOutlineSelected([], this.props.selectedIds)
   }
 
@@ -240,7 +240,11 @@ class Map extends Component {
             onClick={this._onClick}
             onLoad={this._onLoad}
             attributionControl={false}
-          />
+          >
+            <div className="map__zoom">
+              <NavigationControl onViewportChange={ (vp) => this._updateViewport(vp)} />
+            </div>
+          </ReactMapGL>
         </div>
       </div>
     );

@@ -26,18 +26,19 @@ export class MapView extends Component {
     return (
       <div className="map-view">
         <div className="map-view__container">
-          <Map />
+          
           <MapTooltip />
+          <div className="map-view__map">
+            <Map />
+          </div>
           <div className="map-view__search-overlay">
             <MapSearch />
           </div>
-          <div className="map-view__controls-overlay">
-            <MapLegend />
-            <MapControls />
-          </div>
           <div className="map-view__scatterplot-overlay">
+            <MapLegend />
             <MapScatterplot />
             <MapSelectedLocations />
+            <MapControls />
           </div>
         </div>
       </div>

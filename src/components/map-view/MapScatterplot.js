@@ -19,7 +19,13 @@ import { fade } from '@material-ui/core/styles/colorManipulator';
 import * as _isEqual from 'lodash.isequal';
 import * as scale from 'd3-scale';
 import * as d3array from 'd3-array';
+import { getStops } from '../../modules/metrics';
+import ColorStops from './ColorStops';
 
+
+// TODO: refactoring, this component is too big.
+//   Should split into presentational scatterplot component
+//   and pass data to abstact data loading
 export class MapScatterplot extends Component {
   static propTypes = {
     region: PropTypes.string,
@@ -40,7 +46,8 @@ export class MapScatterplot extends Component {
     updateMapViewport: PropTypes.func,
     addSelectedLocation: PropTypes.func,
     selectedIds: PropTypes.array,
-    selectedColors: PropTypes.array
+    selectedColors: PropTypes.array,
+    stops: PropTypes.array,
   }
 
   constructor(props) {
@@ -351,6 +358,13 @@ export class MapScatterplot extends Component {
           </p>
         </div>
         <div className="map-scatterplot__container">
+          { this.props.stops && 
+            <ColorStops 
+              stops={this.props.stops} 
+              label={false} 
+              vertical={true} 
+            />
+          }
           { 
             this.state.baseScatterplot && 
             <ReactEcharts
@@ -367,6 +381,17 @@ export class MapScatterplot extends Component {
       </div>
     )
   }
+}
+
+const getPaddedStops = (stops, amount) => {
+  const targetLength = (stops.length-1) + (amount*2)
+  const newStops = [];
+  for(var i = 0; i < targetLength; i++) {
+    newStops[i] = (i >= (targetLength - stops.length + amount)) ?
+      ((i <= stops.length - 1) ? stops[i] : stops[stops.length - 1])
+      : stops[0]
+  }
+  return newStops
 }
 
 const mapStateToProps = ({
@@ -390,6 +415,7 @@ const mapStateToProps = ({
     yRange: getPaddedMinMax(metrics, metric, 1),
     xVar: 'all_ses',
     zVar: 'sz',
+    stops: getPaddedStops(getStops(metrics, metric), 1), 
     loadedVars: scatterplot.data[region] ?
       Object.keys(scatterplot.data[region]) : [],
     colors: metrics.colors,
