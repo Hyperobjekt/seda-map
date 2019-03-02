@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { compose } from 'redux';
 import { withRouter } from 'react-router-dom';
-import Paper from '@material-ui/core/Paper';
 import ReactEcharts from 'echarts-for-react';
 import { scatterOptions, hoverOptions } from '../../constants/scatterOptions';
 import { getPaddedMinMax } from '../../modules/metrics';
