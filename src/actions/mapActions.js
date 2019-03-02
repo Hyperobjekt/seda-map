@@ -13,6 +13,15 @@ export const onCoordsChange = (coords) => ({
   coords
 });
 
+export const showReportCard = (id) => ({
+  type: 'SHOW_REPORT_CARD',
+  id
+});
+
+export const hideReportCard = () => ({
+  type: 'HIDE_REPORT_CARD'
+});
+
 export const onViewportChange = (viewport, transition = false) => {
   if (transition) {
     viewport = { 

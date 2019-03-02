@@ -7,7 +7,15 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import { Button } from '@material-ui/core';
 
-const MapLocation = ({ name, number, color, onDismissClick, onLocationClick, ...rest }) => {
+const MapLocation = ({ 
+  name, 
+  number, 
+  color, 
+  onDismissClick, 
+  onLocationClick, 
+  onReportClick,
+  ...rest 
+}) => {
   return (
     <MenuItem 
       onClick={onLocationClick} 
@@ -28,9 +36,7 @@ const MapLocation = ({ name, number, color, onDismissClick, onLocationClick, ...
           classes={
             {root: 'map-location__report-button'}
           }
-          onClick={(e)=> { 
-            return false;
-          }}
+          onClick={onReportClick}
         >View Report</Button>
         <IconButton 
           size="small"

@@ -1,5 +1,5 @@
 import { loadFeaturesFromRoute, loadFeatureFromCoords } from "../utils/tilequery";
-import { addFeatureToRoute, removeFeatureFromRoute } from '../modules/router';
+import { addFeatureToRoute } from '../modules/router';
 
 const onLoadFeaturesRequest = (locations) => ({
   type: 'LOAD_FEATURES_REQUEST',
