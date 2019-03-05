@@ -67,7 +67,7 @@ const ReportCard = ({
             </Typography>
             <div className="report-card-section__body">
               <Typography variant="body2">
-                This section shows how achievement gaps are associated with other variables like socioeconomic status or segregation. By default, it shows white / black achievement gap by white / black socioeconomic status gap. The scatterplot also allows the user to select the type of achievement gap and comparison variable. 
+                This section will show how achievement gaps are associated with other variables like socioeconomic status or segregation. By default, it shows white / black achievement gap by white / black socioeconomic status gap. The scatterplot also allows the user to select the type of achievement gap and comparison variable. 
               </Typography>
             </div>
           </div>
@@ -77,7 +77,7 @@ const ReportCard = ({
             </Typography>
             <div className="report-card-section__body">
               <Typography variant="body2">
-                This section shows similar places based on size, socioeconomic status, and racial composition.
+                This section will show similar places based on size, socioeconomic status, and racial composition.
               </Typography>
             </div>
           </div>

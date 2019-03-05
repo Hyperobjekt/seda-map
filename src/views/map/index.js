@@ -45,20 +45,17 @@ export class MapView extends Component {
             <MapControls />
           </div>
           { 
-              reportCardData &&
               <div className={
                 "map-view__report-card" +
                 (reportCardData ? " map-view__report-card--visible" : '')
               }>
-                
                 <ReportCard 
-                  data={reportCardData}
+                  data={reportCardData || {}}
                   demographic={demographic}
                   onClose={hideReportCard}
                   metricItems={metrics}
                   onDemographicChange={onDemographicChange}
                 />
-              
               </div>
           }
 
