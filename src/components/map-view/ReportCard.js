@@ -4,6 +4,10 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import ReportCardSummary from './ReportCardSummary';
+import { updateRoute } from '../../modules/router';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
 const ReportCard = ({
   onClose, 
@@ -27,15 +31,14 @@ const ReportCard = ({
         >
           <CloseIcon />
         </IconButton>
-        
       </div>
       <div className="report-card__body">
           <ReportCardSummary 
             data={data} 
             vars={[ 
               { id: 'avg', label: 'Average Test Scores' },
-              { id: 'grd', label: 'Average Test Scores' },
-              { id: 'coh', label: 'Average Test Scores' },
+              { id: 'grd', label: 'Growth Over Years' },
+              { id: 'coh', label: 'Trend Over Years' },
               { id: 'ses', label: 'Socioeconomic Status' },
             ]}
             demographic={demographic}
@@ -89,6 +92,27 @@ const ReportCard = ({
 ReportCard.propTypes = {
   data: PropTypes.object,
   onClose: PropTypes.func,
+  demographic: PropTypes.string, 
+  onDemographicChange: PropTypes.func
 }
 
-export default ReportCard
+const mapStateToProps = (
+  { reportCard, features },
+  { match: { params: { demographic } } }
+) => ({
+  data: reportCard && features[reportCard] ?
+    features[reportCard].properties :
+    {}
+  ,
+  demographic
+})
+
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  onDemographicChange: (value) => 
+    updateRoute(ownProps, { demographic: value })
+})
+
+export default compose(
+  withRouter,
+  connect(mapStateToProps, mapDispatchToProps)
+)(ReportCard)

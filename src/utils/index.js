@@ -12,9 +12,9 @@ export const isPropEqual = (obj1, obj2, propName) => {
 }
 
 /**
- * Takes two data sets with identifiers and merges them
+ * Takes multiple data sets with identifiers and merges them
  * into one for use with echarts scatterplot. Filters out 
- * entries where there are not values in both data sets.
+ * entries where there are not values in all data sets.
  * @param {object} sets a variable amount of data sets - e.g. { "01001": 3.45, ... }
  * @returns {object} e.g. { "01001": [ 3.45, 5.10, 01001 ], ... }
  */

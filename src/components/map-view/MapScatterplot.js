@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { compose } from 'redux';
 import { withRouter } from 'react-router-dom';
 import ReactEcharts from 'echarts-for-react';
-import { scatterOptions, hoverOptions } from '../../constants/scatterOptions';
+import { scatterOptions } from '../../constants/scatterOptions';
 import { getPaddedMinMax } from '../../modules/metrics';
 import { loadVarsForRegion } from '../../actions/scatterplotActions';
 import { onHoverFeature, onCoordsChange, onViewportChange } from '../../actions/mapActions';
@@ -16,10 +16,10 @@ import Hint from '../base/Hint';
 import { loadLocation } from '../../actions/featuresActions';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import * as _isEqual from 'lodash.isequal';
-import * as scale from 'd3-scale';
 import * as d3array from 'd3-array';
 import { getStops } from '../../modules/metrics';
 import ColorStops from './ColorStops';
+import { getDataScale, getVisualMapOptions, getDataSeries, getAxisOptions, getContainerOptions } from '../../utils/scatterplot';
 
 
 // TODO: refactoring, this component is too big.
@@ -83,14 +83,40 @@ export class MapScatterplot extends Component {
     loadVarsForRegion(vars, region);
   }
 
-  _getVisualMap() {
+  /**
+   * Gets the visual map that is used to color the base dots
+   * in the scatterplot
+   */
+  _getBaseVisualMap() {
     const { colors, metric: {min, max} } = this.props;
-    return {
+    return getVisualMapOptions({
       min,
       max,
       inRange: {
         color: colors.map(c => fade(c, 0.9))
       }
+    })
+  }
+
+  /**
+   * Gets the visual map that is used to color the hover
+   * dot and any selected locations.
+   */
+  _getOverlayVisualMap() {
+    const { selectedColors, selectedIds } = this.props;
+    return {
+      show: false,
+      type: 'piecewise',
+      dimension: 4,
+      pieces: [
+        { value: -1, color: '#f00' }, // hovered style
+        ...selectedIds.map((id, i) => {
+          return {
+            value: i,
+            color: selectedColors[i]
+          }
+        })
+      ]
     }
   }
 
@@ -99,12 +125,10 @@ export class MapScatterplot extends Component {
    * to dot sizes
    */
   _getAxisScale(axis = 'z', targetRange = [5, 40]) {
-    if (!this.state.dataRanges[axis]) { return () => 0 }
-    return scale.scalePow()
-      .exponent(1)
-      .domain(this.state.dataRanges[axis])
-      .range(targetRange)
-      .clamp(true);
+    return getDataScale(
+      this.state.dataRanges[axis], 
+      { range: targetRange }
+    )
   }
 
   /**
@@ -174,36 +198,18 @@ export class MapScatterplot extends Component {
    * Gets the configuration options for the overlay scatterplot
    */
   _getOverlayOptions() {
-    const { hoveredFeature, yRange, selectedIds, selectedColors } = this.props;
+    const { hoveredFeature, yRange, selectedIds } = this.props;
     const sizeScale = this._getAxisScale('z');
     return {
-      ...hoverOptions,
-      yAxis: {
-        ...hoverOptions.yAxis,
-        ...yRange
-      },
-      visualMap: {
-        show: false,
-        type: 'piecewise',
-        dimension: 4,
-        pieces: [
-          { value: -1, color: '#f00' },
-          ...selectedIds.map((id, i) => {
-            return {
-              value: i,
-              color: selectedColors[i]
-            }
-          })
-        ]
-      },
+      grid: getContainerOptions(scatterOptions.grid),
+      xAxis: getAxisOptions('x', { ...scatterOptions.xAxis, show: false }),
+      yAxis: getAxisOptions('y', { ...scatterOptions.yAxis, ...yRange, show: false }),
+      visualMap: this._getOverlayVisualMap(),
       series: [
         {
           id: 'hover',
           type: 'effectScatter',
           symbolSize: 10,
-          itemStyle: {
-            color: 'rgba(255,0,0, 1)'
-          },
           data: hoveredFeature && 
             hoveredFeature.properties.id ? 
               [this._getDataForFeatureId(hoveredFeature.properties.id, -1)] : 
@@ -234,29 +240,17 @@ export class MapScatterplot extends Component {
     const { yRange } = this.props;
     const sizeScale = this._getAxisScale('z');
     return {
-      ...scatterOptions,
-      visualMap: {
-        ...scatterOptions.visualMap,
-        ...this._getVisualMap()
-      },
-      yAxis: {
-        ...scatterOptions.yAxis,
-        ...yRange
-      },
+      grid: getContainerOptions(scatterOptions.grid),
+      visualMap: this._getVisualMap(),
+      xAxis: getAxisOptions('x', scatterOptions.xAxis),
+      yAxis: getAxisOptions('y', { ...scatterOptions.yAxis, ...yRange }),
       series: [
-        {
+        getDataSeries({
           id: 'scatter',
-          name: 'scatter',
-          type: 'scatter',
           data: Object.keys(this.state.scatterplotData)
             .map(k => this.state.scatterplotData[k]),
-          symbolSize: (value) => sizeScale(value[2]),
-          itemStyle: {
-            borderWidth: 1,
-            borderColor: 'rgba(0,0,0,0.15)'
-          },
-          z:2
-        }
+          symbolSize: (value) => sizeScale(value[2])
+        })
       ]
     }
   }

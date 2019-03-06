@@ -13,21 +13,29 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { loadRouteLocations } from '../../actions/featuresActions';
 import { hideReportCard } from '../../actions/mapActions';
-import { updateRoute } from '../../modules/router';
+
 
 export class MapView extends Component {
   static propTypes = {
     loadRouteLocations: PropTypes.any,
     match: PropTypes.object,
-    reportCardData: PropTypes.object
+    reportCard: PropTypes.boolean,
+    hideReportCard: PropTypes.func, 
+    demographic: PropTypes.string, 
+    onDemographicChange: PropTypes.func
   }
 
   componentDidMount() { 
-    this.props.loadRouteLocations(this.props.match.params.locations);
+    this.props.loadRouteLocations(
+      this.props.match.params.locations
+    );
   }
 
   render() {
-    const { reportCardData, hideReportCard, metrics, demographic, onDemographicChange } = this.props;
+    const { 
+      reportCard, 
+      hideReportCard,
+    } = this.props;
     return (
       <div className="map-view">
         <div className="map-view__container">
@@ -45,18 +53,12 @@ export class MapView extends Component {
             <MapControls />
           </div>
           { 
-              <div className={
-                "map-view__report-card" +
-                (reportCardData ? " map-view__report-card--visible" : '')
-              }>
-                <ReportCard 
-                  data={reportCardData || {}}
-                  demographic={demographic}
-                  onClose={hideReportCard}
-                  metricItems={metrics}
-                  onDemographicChange={onDemographicChange}
-                />
-              </div>
+            <div className={
+              "map-view__report-card" +
+              (reportCard ? " map-view__report-card--visible" : '')
+            }>
+              <ReportCard onClose={hideReportCard} />
+            </div>
           }
 
         </div>
@@ -65,25 +67,15 @@ export class MapView extends Component {
   }
 }
 
-const mapStateToProps = (
-  {reportCard, features, metrics},
-  {match: { params: { demographic } } }
-) => ({
-  reportCardData: reportCard && features[reportCard] ?
-    features[reportCard].properties :
-    null
-  ,
-  metrics: metrics.items,
-  demographic
+const mapStateToProps = ({ reportCard }) => ({
+  reportCard: Boolean(reportCard)
 })
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
+const mapDispatchToProps = (dispatch) => ({
   loadRouteLocations: (locations) => 
     dispatch(loadRouteLocations(locations)),
   hideReportCard: () =>
     dispatch(hideReportCard()),
-  onDemographicChange: (value) => 
-    updateRoute(ownProps, { demographic: value })
 })
 
 export default compose(
