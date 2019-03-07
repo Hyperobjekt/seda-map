@@ -136,7 +136,7 @@ body {
 /** Map View: Report Card */
 
 .map-view__report-card {
-  z-index:300;
+  display: none;
   background: #fff;
   box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 3px 1px -2px rgba(0,0,0,0.12);
   transform: translate(100%, 0);
@@ -148,9 +148,14 @@ body {
   height: auto;
   width: 100%;
   transform: translate(0, 0);
+  z-index:1;
+  opacity:0;
 }
 
 .map-view__report-card--visible {
+  z-index:300;
+  opacity: 1;
+  display: block;
   top:0;
   max-width: 420px;
   margin:auto;
@@ -161,6 +166,7 @@ body {
 
 @media(min-width: 960px) {
   .map-view__report-card {
+    display:block;
     position:absolute;
     transform: translate(100%, 0);
     top:0;

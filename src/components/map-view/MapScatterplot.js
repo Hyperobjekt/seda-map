@@ -3,23 +3,23 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { compose } from 'redux';
 import { withRouter } from 'react-router-dom';
-import ReactEcharts from 'echarts-for-react';
 import { scatterOptions } from '../../constants/scatterOptions';
 import { getPaddedMinMax } from '../../modules/metrics';
 import { loadVarsForRegion } from '../../actions/scatterplotActions';
 import { onHoverFeature, onCoordsChange, onViewportChange } from '../../actions/mapActions';
 import { getRegionData } from '../../modules/scatterplot';
-import { mergeDatasets } from '../../utils';
+import { getDataScale } from '../../utils';
 import { fetchResults } from '../../actions/searchActions';
 import * as _isEmpty from 'lodash.isempty';
 import Hint from '../base/Hint';
 import { loadLocation } from '../../actions/featuresActions';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import * as _isEqual from 'lodash.isequal';
-import * as d3array from 'd3-array';
 import { getStops } from '../../modules/metrics';
 import ColorStops from './ColorStops';
-import { getDataScale, getVisualMapOptions, getDataSeries, getAxisOptions, getContainerOptions } from '../../utils/scatterplot';
+import { getScatterplotConfig } from '../../utils/scatterplot';
+import Scatterplot from '../scatterplot/Scatterplot';
+import ConnectedScatterplot from './ConnectedScatterplot';
 
 
 // TODO: refactoring, this component is too big.
@@ -51,18 +51,10 @@ export class MapScatterplot extends Component {
 
   constructor(props) {
     super(props)
-
     this.state = {
       baseScatterplot: null,
-      overlayScatterplot: null,
-      scatterplotData: null,
-      dataRanges: {}
+      overlayScatterplot: null
     }
-  }
-
-  _isVarLoaded(varName) {
-    const { loadedVars } = this.props;
-    return loadedVars.indexOf(varName) > -1
   }
 
   _loadScatterplotData() {
@@ -87,22 +79,22 @@ export class MapScatterplot extends Component {
    * Gets the visual map that is used to color the base dots
    * in the scatterplot
    */
-  _getBaseVisualMap() {
+  _getBaseVisualMapOverrides() {
     const { colors, metric: {min, max} } = this.props;
-    return getVisualMapOptions({
+    return {
       min,
       max,
       inRange: {
         color: colors.map(c => fade(c, 0.9))
       }
-    })
+    }
   }
 
   /**
    * Gets the visual map that is used to color the hover
    * dot and any selected locations.
    */
-  _getOverlayVisualMap() {
+  _getOverlayVisualMapOverrides() {
     const { selectedColors, selectedIds } = this.props;
     return {
       show: false,
@@ -121,67 +113,15 @@ export class MapScatterplot extends Component {
   }
 
   /**
-   * Returns a scale function that can be used to map data values
-   * to dot sizes
-   */
-  _getAxisScale(axis = 'z', targetRange = [5, 40]) {
-    return getDataScale(
-      this.state.dataRanges[axis], 
-      { range: targetRange }
-    )
-  }
-
-  /**
-   * Returns an object containing all data for the scatterplot
-   */
-  _getData() {
-    const { xData, yData, zData } = this.props;
-    if (!yData || !xData || !zData) { return []; }
-    return mergeDatasets(xData, yData, zData);
-  }
-
-  /**
-   * Gets the range for the provided dataset
-   * @param {*} data 
-   */
-  _getDataRange(data) {
-    const values = Object.keys(data)
-      .map(k => parseFloat(data[k]))
-      .filter(v => v > -9999)
-      .sort((a, b) => a - b);
-    return [
-      d3array.quantile(values, 0.001), 
-      d3array.quantile(values, 0.999)
-    ]
-  }
-
-  /**
-   * Gets the range for data on all axis
-   * @param {*} data 
-   */
-  _getDataRanges(data) {
-    return [ 'x', 'y', 'z' ].reduce((acc,curr,i) => {
-      const d = Object.keys(data).map(k => data[k][i])
-      acc[curr] = this._getDataRange(d)
-      return acc;
-    }, {})
-  }
-
-  /**
    * Gets the scatterplot data for a given ID
    * @param {string} id 
    * @param {number} i optional index to add to the data
    */
   _getDataForFeatureId(id, i = -1) {
-    return this.state.scatterplotData[id] ?
-      [ 
-        this.state.scatterplotData[id][0], 
-        this.state.scatterplotData[id][1],
-        this.state.scatterplotData[id][2], 
-        id, 
-        i
-      ] 
-      : []
+    const { xData, yData, zData } = this.props;
+    return xData[id] && yData[id] && zData[id] ?
+      [ xData[id], yData[id], zData[id], id, i ] :
+      [ ]
   }
 
   /**
@@ -189,25 +129,24 @@ export class MapScatterplot extends Component {
    * @param {Array<string>} ids
    */
   _getDataForFeatureIds(ids) {
-    return this.state.scatterplotData ?
+    const { xData, yData, zData } = this.props;
+    return xData && yData && zData ?
       ids.map((id,i) => this._getDataForFeatureId(id, i)) :
       [ ]
   }
 
   /**
-   * Gets the configuration options for the overlay scatterplot
+   * Gets the configuration overrides for the overlay scatterplot
    */
-  _getOverlayOptions() {
-    const { hoveredFeature, yRange, selectedIds } = this.props;
-    const sizeScale = this._getAxisScale('z');
+  _getOverlayOverrides() {
+    const { hoveredFeature, yRange, selectedIds, zData } = this.props;
+    const sizeScale = getDataScale(zData, { range: [5, 40] });
     return {
-      grid: getContainerOptions(scatterOptions.grid),
-      xAxis: getAxisOptions('x', { ...scatterOptions.xAxis, show: false }),
-      yAxis: getAxisOptions('y', { ...scatterOptions.yAxis, ...yRange, show: false }),
-      visualMap: this._getOverlayVisualMap(),
+      xAxis: { ...scatterOptions.xAxis, show: false },
+      yAxis: { ...yRange, show: false },
+      visualMap: this._getOverlayVisualMapOverrides(),
       series: [
         {
-          id: 'hover',
           type: 'effectScatter',
           symbolSize: 10,
           data: hoveredFeature && 
@@ -218,8 +157,7 @@ export class MapScatterplot extends Component {
           z: 3
         },
         {
-          id: 'selected',
-          type: 'scatter',
+          data: this._getDataForFeatureIds(selectedIds), 
           symbolSize: (value) => sizeScale(value[2]),
           itemStyle: {
             borderWidth: 1.5,
@@ -227,36 +165,27 @@ export class MapScatterplot extends Component {
             shadowColor: 'rgba(0,0,0,1)',
             shadowBlur: 2
           },
-          data: this._getDataForFeatureIds(selectedIds)
         }
       ]
     }
   }
 
   /**
-   * Gets the configuration options for the overlay scatterplot
+   * Gets the configuration overrides for the base scatterplot
    */
-  _getScatterOptions() {
+  _getOverrides() {
     const { yRange } = this.props;
-    const sizeScale = this._getAxisScale('z');
     return {
-      grid: getContainerOptions(scatterOptions.grid),
-      visualMap: this._getVisualMap(),
-      xAxis: getAxisOptions('x', scatterOptions.xAxis),
-      yAxis: getAxisOptions('y', { ...scatterOptions.yAxis, ...yRange }),
-      series: [
-        getDataSeries({
-          id: 'scatter',
-          data: Object.keys(this.state.scatterplotData)
-            .map(k => this.state.scatterplotData[k]),
-          symbolSize: (value) => sizeScale(value[2])
-        })
-      ]
+      visualMap: this._getBaseVisualMapOverrides(),
+      xAxis: scatterOptions.xAxis,
+      yAxis: { ...yRange, splitNumber: 7 },
     }
   }
 
-  _handleMouseOver = (e) => {
-    const data = e.data;
+  _handleHover = (data, e) => {
+    if (!data) {
+      return this.props.onHoverFeature(null, {x:0,y:0});
+    }
     const feature = {
       id: data[3],
       properties: {
@@ -270,17 +199,13 @@ export class MapScatterplot extends Component {
     //    should either set position fixed on tooltip, or account
     //    for offset of parent container to avoid a hard coded value
     const coords = {
-      x: e.event.event.clientX,
-      y: e.event.event.clientY - 64
+      x: e.event.clientX,
+      y: e.event.clientY - 64
     }
     this.props.onHoverFeature(feature, coords);
     if (_isEmpty(this.props.hoveredMetaData)) {
       this.props.loadMetadataForPlace(feature.id)
     }
-  }
-
-  _handleMouseOut = () => {
-    this.props.onHoverFeature(null, {x:0,y:0});
   }
 
   _handleClick = () => {
@@ -293,21 +218,16 @@ export class MapScatterplot extends Component {
     updateMapViewport(hoveredFeature, hoveredMetaData)
   }
 
-  _onChartReady(e) {
-    // console.log(e)
-    e.on('mouseover', this._handleMouseOver)
-    e.on('mouseout', this._handleMouseOut)
-    e.on('click', this._handleClick)
-    // e.on('datarangeselected', console.log)
-    this.echart = e;
-  }
-
   componentDidMount() {
     this._loadScatterplotData();
+    this.setState({
+      baseScatterplot: this._getOverrides(),
+      overlayScatterplot: this._getOverlayOverrides()
+    })
   }
 
   componentDidUpdate(prevProps) {
-    const { region, xVar, yVar, zVar, xData, yData, zData } = this.props;
+    const { region, xVar, yVar, zVar, selectedIds, hoveredFeature } = this.props;
     if (
       prevProps.region !== region ||
       prevProps.xVar !== xVar ||
@@ -316,24 +236,22 @@ export class MapScatterplot extends Component {
     ) {
       this._loadScatterplotData();
     }
-    // update the state when data changes
+    // update scatterplot overrides when metric or range changes
     if (
-      (xData && yData && zData) && (
-      !_isEqual(xData, prevProps.xData) ||
-      !_isEqual(yData, prevProps.yData) ||
-      !_isEqual(zData, prevProps.zData)
-    )) {
-      const scatterplotData = this._getData()
-      const dataRanges = this._getDataRanges(scatterplotData)
+      !_isEqual(prevProps.metric, this.props.metric) ||
+      !_isEqual(prevProps.yRange, this.props.yRange)
+    ) {
       this.setState({
-        scatterplotData,
-        dataRanges
-      }, () => {
-        this.setState({
-          baseScatterplot: this._getScatterOptions()
-        })
+        baseScatterplot: this._getOverrides(),
+        overlayScatterplot: this._getOverlayOverrides()
       })
-        
+    } else if (
+      !_isEqual(prevProps.hoveredFeature, hoveredFeature) ||
+      !_isEqual(prevProps.selectedIds, selectedIds)
+    ) {
+      this.setState({
+        overlayScatterplot: this._getOverlayOverrides()
+      })
     }
   }
 
@@ -360,16 +278,23 @@ export class MapScatterplot extends Component {
           }
           { 
             this.state.baseScatterplot && 
-            <ReactEcharts
-              onChartReady={this._onChartReady.bind(this)}
-              style={{ position: 'absolute', width: '100%', height: '100%' }}
-              option={this.state.baseScatterplot}
+            <ConnectedScatterplot
+              xVar={this.props.xVar}
+              yVar={this.props.yVar}
+              zVar={this.props.zVar}
+              region={this.props.region}
+              options={this.state.baseScatterplot}
+              onHover={this._handleHover.bind(this)}
+              onClick={this._handleClick.bind(this)}
             /> 
           }
-          <ReactEcharts
-            style={{ pointerEvents: 'none', position: 'absolute', width: '100%', height: '100%' }}
-            option={this._getOverlayOptions()}
-          />
+          { 
+            this.state.overlayScatterplot && 
+            <Scatterplot
+              style={{ pointerEvents: 'none', position: 'absolute', width: '100%', height: '100%' }}
+              options={this.state.overlayScatterplot}
+            />
+          }
         </div>
       </div>
     )

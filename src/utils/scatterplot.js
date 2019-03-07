@@ -1,6 +1,6 @@
 import * as merge from 'lodash.merge';
-import * as scale from 'd3-scale';
 
+/** Default options for scatterplot container */
 const containerOptions = {
   top: '24',
   right: '24',
@@ -8,6 +8,7 @@ const containerOptions = {
   left: '24',
 };
 
+/** Default options for x axis */
 const xAxisOptions = {
   type: 'value',
   name: '',
@@ -29,6 +30,7 @@ const xAxisOptions = {
   }
 }
 
+/** Default options for y axis */
 const yAxisOptions = {
   type: 'value',
   name: '',
@@ -55,6 +57,7 @@ const yAxisOptions = {
   }
 };
 
+/** Default options for data series */
 const seriesOptions = {
   type: 'scatter',
   itemStyle: {
@@ -64,6 +67,7 @@ const seriesOptions = {
   z:2
 }
 
+/** Default options for visual map */
 const visualMapOptions = {
   dimension: 1,
   calculable: false,
@@ -71,50 +75,59 @@ const visualMapOptions = {
 };
 
 /**
- * Returns a scale function that can be used to map data values
- * to dot sizes
+ * Merge data series overrides with default options
+ * @param {object} overrides https://ecomfe.github.io/echarts-doc/public/en/option.html#series-scatter
  */
-export const getDataScale = (
-  domain, { 
-  range = [0, 1], 
-  exponent = 1 
-  }
-) => {
-  if (!domain) { return () => 0 }
-  return scale.scalePow()
-    .exponent(exponent)
-    .domain(domain)
-    .range(range)
-    .clamp(true);
-}
+const getScatterSeries = (overrides = {}) => 
+  merge(
+    {},
+    seriesOptions,
+    overrides
+  )
 
-export const getDataSeries = (overrides = {}) => ({
-  ...seriesOptions,
-  ...overrides
-})
+/**
+ * Merge axis overrides with default axis options
+ * @param {string} axisName 'x' or 'y'
+ * @param {object} overrides https://ecomfe.github.io/echarts-doc/public/en/option.html#xAxis
+ */
+const getAxisOptions = (axisName, overrides = {}) =>
+  merge(
+    {},
+    axisName === 'x' ? xAxisOptions : yAxisOptions,
+    overrides
+  );
 
-export const getAxisOptions = (axisName, overrides = {}) => {
-    const base = axisName === 'x' ? xAxisOptions : yAxisOptions;
-    return merge(
-      {},
-      base,
-      overrides
-    );
-  }
-
-export const getContainerOptions = (overrides = {}) => {
-  return merge(
+/**
+ * Merge container overrides with default container options
+ * @param {object} overrides https://ecomfe.github.io/echarts-doc/public/en/option.html#grid
+ */
+const getContainerOptions = (overrides = {}) =>
+  merge(
     {},
     containerOptions,
     overrides
   );
-}
 
-export const getVisualMapOptions = (overrides = {}) => {
-  return merge(
+/**
+ * Merge visual map overrides with default visual map options
+ * @param {object} overrides https://ecomfe.github.io/echarts-doc/public/en/option.html#visualMap
+ */
+const getVisualMapOptions = (overrides = {}) =>
+  merge(
     {},
     visualMapOptions,
     overrides
-  );
-}
+  )
 
+/**
+ * Gets the base scatterplot config with the provided overrides
+ * @param {*} overrides any override options for the scatterplot
+ */
+export const getScatterplotConfig = (overrides = {}) => ({
+  grid: getContainerOptions(overrides.grid),
+  xAxis: getAxisOptions('x', overrides.xAxis),
+  yAxis: getAxisOptions('y', overrides.yAxis),
+  visualMap: getVisualMapOptions(overrides.visualMap),
+  series: (overrides.series || [])
+    .map(d => getScatterSeries(d))
+})

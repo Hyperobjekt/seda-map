@@ -23,8 +23,5 @@ export const scatterOptions = {
       inside: false,
       margin: 8,
     }
-  },
-  yAxis: {
-    splitNumber: 7
   }
 };

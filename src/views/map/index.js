@@ -19,7 +19,7 @@ export class MapView extends Component {
   static propTypes = {
     loadRouteLocations: PropTypes.any,
     match: PropTypes.object,
-    reportCard: PropTypes.boolean,
+    reportCard: PropTypes.bool,
     hideReportCard: PropTypes.func, 
     demographic: PropTypes.string, 
     onDemographicChange: PropTypes.func
