@@ -9,13 +9,19 @@ export class Scatterplot extends Component {
     onHover: PropTypes.func,
     onClick: PropTypes.func,
     onReady: PropTypes.func,
+    onMouseMove: PropTypes.func,
     style: PropTypes.object
   }
 
   _onChartReady(e) {
-    e.on('mouseover', (e) => this.props.onHover(e.data, e.event))
-    e.on('mouseout', (e) => this.props.onHover(null, e.event))
-    e.on('click', this.props.onClick)
+    this.props.onHover &&
+      e.on('mouseover', (e) => this.props.onHover(e.data, e.event))
+    this.props.onHover && 
+      e.on('mouseout', (e) => this.props.onHover(null, e.event))
+    this.props.onMouseMove && 
+      e.on('mousemove', (e) => this.props.onMouseMove(e))
+    this.props.onClick && 
+      e.on('click', this.props.onClick)
     this.props.onReady && this.props.onReady(e)
   }
 

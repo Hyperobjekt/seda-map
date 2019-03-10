@@ -515,7 +515,7 @@ body {
 /** END COMPONENTS */
 
 .tooltip {
-  position: absolute;
+  position: fixed;
   z-index: 9999;
   margin: 8px;
   padding: 8px;

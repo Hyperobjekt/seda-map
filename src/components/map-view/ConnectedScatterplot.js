@@ -5,13 +5,14 @@ import Scatterplot from '../scatterplot/Scatterplot';
 import { getScatterplotData, getDataScale } from '../../utils';
 import { scatterOptions } from '../../constants/scatterOptions';
 import * as _isEmpty from 'lodash.isempty';
-import { onHoverFeature, onViewportChange } from '../../actions/mapActions';
+import { onHoverFeature, onViewportChange, onCoordsChange } from '../../actions/mapActions';
 import { fetchResults } from '../../actions/searchActions';
 import { loadLocation } from '../../actions/featuresActions';
 import { loadVarsForRegion } from '../../actions/scatterplotActions';
 import * as _debounce from 'lodash.debounce';
 import * as _isEqual from 'lodash.isequal';
 
+/** Get series with default styles and selected areas */
 const getBaseSeries = (data, selected, x, y, z) => { 
   const sizeScale = 
     getDataScale(data[z], { range: [ 5, 40 ] });
@@ -225,7 +226,7 @@ export class ConnectedScatterplot extends Component {
       this.props.loadMetadataForPlace(feature.id)
     }
     this.props.onHover && this.props.onHover(data);
-  }, 100);
+  }, 40);
 
   _onReady = (echart) => {
     this.echart = echart;
@@ -236,8 +237,15 @@ export class ConnectedScatterplot extends Component {
     if(data && data[3]) {
       this.props.onHoverFeature(null)
     }
+    
     // call debounced hover function
     this._handleHover(data, e);
+  }
+
+  _onMouseMove = (e) => {
+    this.props.onCoordsChange({
+      x: e.event.event.clientX, y: e.event.event.clientY
+    })
   }
 
   render() {
@@ -245,6 +253,7 @@ export class ConnectedScatterplot extends Component {
       <Scatterplot 
         onReady={this._onReady}
         onHover={this._onHover}
+        onMouseMove={this._onMouseMove}
         onClick={this._handleClick}
         options={this.state.options}
       />  
@@ -282,6 +291,8 @@ const mapStateToProps = (
 const mapDispatchToProps = (dispatch) => ({
   onHoverFeature: (feature) =>
     dispatch(onHoverFeature(feature)),
+  onCoordsChange: (coords) =>
+    dispatch(onCoordsChange(coords)),
   loadMetadataForPlace: (id) =>
     dispatch(fetchResults(id)),
   loadVarsForRegion: (vars, region) => 
