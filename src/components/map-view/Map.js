@@ -62,7 +62,7 @@ class Map extends Component {
     selectedIds.forEach((id,i) => {
       const region = getRegionFromId(id);
       this._setFeatureState(
-        region, id, { selected: this.props.colors[i] }
+        region, id, { selected: this.props.colors[i % this.props.colors.length] }
       );
     })
   }

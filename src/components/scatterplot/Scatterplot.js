@@ -8,6 +8,7 @@ export class Scatterplot extends Component {
     options: PropTypes.object,
     onHover: PropTypes.func,
     onClick: PropTypes.func,
+    onReady: PropTypes.func,
     style: PropTypes.object
   }
 
@@ -15,7 +16,7 @@ export class Scatterplot extends Component {
     e.on('mouseover', (e) => this.props.onHover(e.data, e.event))
     e.on('mouseout', (e) => this.props.onHover(null, e.event))
     e.on('click', this.props.onClick)
-    this.echart = e;
+    this.props.onReady && this.props.onReady(e)
   }
 
   render() {

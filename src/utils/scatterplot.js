@@ -112,12 +112,12 @@ const getContainerOptions = (overrides = {}) =>
  * Merge visual map overrides with default visual map options
  * @param {object} overrides https://ecomfe.github.io/echarts-doc/public/en/option.html#visualMap
  */
-const getVisualMapOptions = (overrides = {}) =>
-  merge(
+const getVisualMapOptions = (overrides = []) =>
+  overrides.map((vm) => merge(
     {},
     visualMapOptions,
-    overrides
-  )
+    vm
+  ))
 
 /**
  * Gets the base scatterplot config with the provided overrides

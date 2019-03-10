@@ -27,7 +27,8 @@ const createRegionListReducer = (region) =>
   (state = [], action) => {
     switch (action.type) {
       case 'ADD_SELECTED_FEATURE':
-        return (action.region === region || region === 'all') ? 
+        return (action.region === region || region === 'all') &&
+          state.indexOf(action.feature.properties.id) === -1 ? 
           [ ...state, action.feature.properties.id ] : state;
       case 'LOAD_FEATURES_SUCCESS':
         return [

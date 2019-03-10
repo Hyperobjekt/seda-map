@@ -26,7 +26,7 @@ const MapSelectedLocations = ({
               key={s.id}
               number={i+1}
               {...s.properties}
-              color={colors[i]}
+              color={colors[i % colors.length]}
               onLocationClick={() => navigateToLocation(s)}
               onDismissClick={() => removeLocation(s)}
               onReportClick={() => showReportCard(s.properties.id)}
