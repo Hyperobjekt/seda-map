@@ -24,6 +24,7 @@ const getBaseSeries = (data, selected, x, y, z) => {
     symbolSize: (value) => sizeScale(value[2]),
     itemStyle: {
       'emphasis': {
+        color: '#f00',
         borderColor: '#ff0000',
         borderWidth: 2
       }
