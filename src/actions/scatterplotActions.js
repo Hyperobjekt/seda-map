@@ -1,4 +1,4 @@
-import { fetchVarsFromCSV } from "../utils";
+import { fetchScatterplotVars } from "../utils/scatterplot";
 
 /**
  * Fetches the data for the variables and dispatches events
@@ -8,7 +8,7 @@ import { fetchVarsFromCSV } from "../utils";
 export const loadVarsForRegion = (vars = [], region) => 
   (dispatch) => {
     dispatch({ type: 'FETCH_VAR_REQUEST' })
-    fetchVarsFromCSV(vars, region)
+    fetchScatterplotVars(vars, region)
       .then(data => {
         dispatch({
           type: 'FETCH_VAR_SUCCESS',

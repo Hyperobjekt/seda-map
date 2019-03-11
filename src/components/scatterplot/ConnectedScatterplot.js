@@ -3,7 +3,15 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Scatterplot from './Scatterplot';
 import { loadVarsForRegion } from '../../actions/scatterplotActions';
-import { getDataForId } from '../../utils/scatterplot';
+
+
+const getDataForId = (id, data) => 
+  Object.keys(data).reduce((acc, curr) => {
+    if (data[curr][id]) {
+      acc[curr] = data[curr][id]
+    }
+    return acc;
+  }, {})
 
 const getDataIndex = (id, series) => {
   return series.findIndex(d => d[3] === id)

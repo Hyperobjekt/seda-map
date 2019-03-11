@@ -1,10 +1,45 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import ReactEcharts from 'echarts-for-react';
-import { getScatterplotData, getDataScale } from '../../utils';
 import { scatterOptions } from '../../constants/scatterOptions';
-import { getScatterplotConfig } from '../../utils/scatterplot';
+import { getScatterplotConfig, getScatterplotData } from '../../utils/scatterplot';
 import * as _isEqual from 'lodash.isequal';
+import * as scale from 'd3-scale';
+import * as d3array from 'd3-array';
+
+/**
+ * Gets the range for the provided dataset, while filtering
+ * out extreme outliers
+ * @param {object} data 
+ */
+const getDataRange = (data) => {
+  const values = Object.keys(data)
+    .map(k => parseFloat(data[k]))
+    .filter(v => v > -9999)
+    .sort((a, b) => a - b);
+  return [
+    d3array.quantile(values, 0.001), 
+    d3array.quantile(values, 0.999)
+  ]
+}
+
+/**
+ * Returns a scale function that can be used to map data values
+ * to dot sizes
+ * @param {object} data data to generate scale for
+ * @param {object} options range and exponent options for scale
+ */
+const getDataScale = (
+  data, 
+  { range = [0, 1], exponent = 1 }
+) => {
+  if (!data) { return () => 0 }
+  return scale.scalePow()
+    .exponent(exponent)
+    .domain(getDataRange(data))
+    .range(range)
+    .clamp(true);
+}
 
 export class Scatterplot extends Component {
   static propTypes = {
