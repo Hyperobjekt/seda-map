@@ -49,8 +49,8 @@ const mapDispatchToProps = (dispatch) => ({
       dispatch(onRegionChange(region))
       dispatch(loadLocation({ 
         id: hit.id,
-        latitude: hit.lat,
-        longitude: hit.lon
+        lat: hit.lat,
+        lon: hit.lon
       }))
     }
   }

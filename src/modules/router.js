@@ -10,8 +10,8 @@ export const routeVars = [
   'metric', 
   'demographic', 
   'zoom', 
-  'latitude', 
-  'longitude', 
+  'lat', 
+  'lon', 
   'locations' 
 ];
 
@@ -38,11 +38,11 @@ export const getLocationFromFeature = (feature) => {
 /**
  * Gets an array of objects representing the locations in the pathname
  * @param {string} pathname 
- * @returns {Array<{id, latitude, longitude }>}
+ * @returns {Array<{id, lat, lon }>}
  */
 export const parseLocationsString = (locations) => {
   if (!locations) { return []; }
-  const locationParts = ['id', 'latitude', 'longitude' ];
+  const locationParts = ['id', 'lat', 'lon' ];
   return locations.split('+').map(l => 
     l.split(',')
       .reduce((acc, curr, i) => ({ 
@@ -59,7 +59,7 @@ export const parseLocationsString = (locations) => {
 export const locationsToString = (locations) =>
   locations.reduce((acc, curr, i) => (
     acc + 
-    curr.id + ',' + curr.latitude + ',' + curr.longitude +
+    curr.id + ',' + curr.lat + ',' + curr.lon +
     (i === (locations.length-1) ? '' : '+')
   ), '');
 
@@ -124,7 +124,7 @@ export const getViewportFromRoute = ({ params }) =>
   ['latitude', 'longitude', 'zoom']
     .reduce((acc, curr) => ({
       ...acc,
-      [curr]: parseFloat(params[curr])
+      [curr]: parseFloat(params[curr !== 'zoom' ? curr.substr(0,3) : curr])
     }), {})
 
 /**
@@ -146,10 +146,11 @@ export const updateRoute = (props, updates) => {
  */
 export const updateViewportRoute = _debounce((props, vp) => {
   if (vp.latitude && vp.longitude && vp.zoom) {
-    const routeUpdates = [ 'latitude', 'longitude', 'zoom' ]
-      .reduce((acc, curr) => ({ 
+    const paramMap = [ 'latitude', 'longitude', 'zoom' ]
+    const routeUpdates = [ 'lat', 'lon', 'zoom' ]
+      .reduce((acc, curr, i) => ({ 
         ...acc, 
-        [curr]: Math.round(vp[curr] * 100) / 100
+        [curr]: Math.round(vp[paramMap[i]] * 100) / 100
       }), {})
     updateRoute(props, routeUpdates);
   }

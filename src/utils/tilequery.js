@@ -40,10 +40,10 @@ const getTilequeryUrl = (region, lat, lon) =>
  * @param {object} location 
  * @returns {Promise<Feature>}
  */
-export const loadFeatureFromCoords = ({ id, latitude, longitude }) => {
+export const loadFeatureFromCoords = ({ id, lat, lon }) => {
   const region = id.length === 5 ? 'counties' :
     id.length === 12 ? 'schools' : 'districts';
-  return axios.get(getTilequeryUrl(region, latitude, longitude))
+  return axios.get(getTilequeryUrl(region, lat, lon))
     .then((res) => {
       return getFeatureFromCollection(id, res.data.features)
     })

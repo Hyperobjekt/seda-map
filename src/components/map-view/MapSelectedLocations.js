@@ -71,8 +71,8 @@ const mapDispatchToProps = (dispatch) => ({
     )[0];
     if (l) {
       dispatch(onViewportChange({ 
-        latitude: parseFloat(l.latitude), 
-        longitude: parseFloat(l.longitude),
+        latitude: parseFloat(l.lat), 
+        longitude: parseFloat(l.lon),
         zoom: l.id.length + 2
       }, true))
     }

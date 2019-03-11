@@ -124,6 +124,7 @@ const getVisualMapOptions = (overrides = []) =>
  * @param {*} overrides any override options for the scatterplot
  */
 export const getScatterplotConfig = (overrides = {}) => ({
+  ...overrides,
   grid: getContainerOptions(overrides.grid),
   xAxis: getAxisOptions('x', overrides.xAxis),
   yAxis: getAxisOptions('y', overrides.yAxis),
@@ -131,3 +132,11 @@ export const getScatterplotConfig = (overrides = {}) => ({
   series: (overrides.series || [])
     .map(d => getScatterSeries(d))
 })
+
+export const getDataForId = (id, data) => 
+  Object.keys(data).reduce((acc, curr) => {
+    if (data[curr][id]) {
+      acc[curr] = data[curr][id]
+    }
+    return acc;
+  }, {})

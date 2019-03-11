@@ -5,7 +5,7 @@ import * as d3array from 'd3-array';
 
 // load endpoint from env variable or use fallback
 const endpoint = process.env.REACT_APP_VARS_ENDPOINT ||
-  'http://seda-data.s3-website-us-east-1.amazonaws.com/build/dev/vars/';
+  'http://seda-data.s3-website-us-east-1.amazonaws.com/build/dev/scatterplot/';
 
 /**
  * Gets the range for the provided dataset, while filtering
@@ -55,6 +55,8 @@ const mergeDatasets = (...sets) => {
   return merged;
 }
 
+const baseVars = ['id', 'name', 'lat', 'lon', 'all_ses', 'all_avg', 'sz' ];
+
 /**
  * Fetches data and returns a promise that contains 
  * an array of all the requested vars data on success.
@@ -62,32 +64,66 @@ const mergeDatasets = (...sets) => {
  * @param {string} region region to fetch (e.g. 'districts')
  * @returns {Promise<object>}
  */
-export const fetchVarsFromCSV = (vars = [], region) =>
-  Promise.all(
-    vars.map(v => axios
-      .get(`${endpoint}${region}-${v}.csv`)
-      .then((res) => {
-        // parse CSV data
-        const parsed = parse(res.data);
-        if (parsed.errors.length) {
-          throw new Error(res.errors[0])
-        }
-        // reduce array of data into an object
-        // e.g. { '0100001': 2.44, ... }
-        return parsed.data.reduce((acc, curr) => {
-          acc[curr[0]] = parseFloat(curr[1]);
-          return acc;
-        }, {});
-      })
-    )
+export const fetchVarsFromCSV = (vars = [], region) => {
+  const fetchVars = vars
+    .map(v => baseVars.indexOf(v) > -1 ? 'base' : v)
+    .filter((value, index, self) => self.indexOf(value) === index)
+  return Promise.all(
+    fetchVars
+      .map(v => axios
+        .get(`${endpoint}${region}-${v}.csv`)
+        .then((res) => {
+          // parse CSV data
+          console.time(`parsing ${v} csv`);
+          const parsed = parse(res.data, {
+            transform: (value, column) => {
+              return (
+                (v === 'base' && column > 1) ||
+                (v !== 'base' && column > 0)
+               ) && (value || value === 0) ?
+                  parseFloat(value) :
+                  value
+            }
+          });
+          console.timeEnd(`parsing ${v} csv`);
+          if (parsed.errors.length) {
+            throw new Error(res.errors[0])
+          }
+          // reduce array of data into an object
+          // e.g. { '0100001': 2.44, ... }
+          return parsed.data.reduce((acc, curr) => {
+            acc[curr[0]] = curr.length === 2 ? curr[1] : curr;
+            return acc;
+          }, {});
+        })
+      )
   )
   // take the data for all fetched variables and combine
   // into an object based on variable key
   // (e.g. { 'all_avg': { '0100001': 2.44, ... } })
-  .then(data => vars.reduce((acc, curr, i) => {
-    acc[curr] = data[i];
-    return acc;
-  }, {}))
+  .then(data => {
+    console.time('structure parsed csv data')
+    const newData = fetchVars.reduce((acc, curr, i) => {
+      if (curr === 'base') {
+        baseVars.forEach((v,j) => {
+          if(j > 0) {
+            acc[v] = Object.keys(data[i])
+              .reduce((a, c) => {
+                if (data[i][c][j])
+                  a[c] = data[i][c][j]
+                return a;
+              }, {})
+          }  
+        })
+      } else {
+        acc[curr] = data[i];
+      }
+      return acc;
+    }, {})
+    console.timeEnd('structure parsed csv data')
+    return newData;
+})
+}
 
 
 /**

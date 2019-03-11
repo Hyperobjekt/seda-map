@@ -23,7 +23,7 @@ export const loadLocation = (location) =>
     loadFeatureFromCoords(location)
       .then(feature => {
         dispatch(onLoadFeaturesSuccess([feature]))
-        dispatch(addFeatureToRoute(dispatch, pathname, feature))
+        addFeatureToRoute(dispatch, pathname, feature)
       })
       .catch((error) => {
         console.error(error)

@@ -10,7 +10,9 @@ import { fade } from '@material-ui/core/styles/colorManipulator';
 import * as _isEqual from 'lodash.isequal';
 import { getStops } from '../../modules/metrics';
 import ColorStops from './ColorStops';
-import ConnectedScatterplot from './ConnectedScatterplot';
+import ConnectedScatterplot from '../scatterplot/ConnectedScatterplot';
+import { onHoverFeature, onViewportChange, onCoordsChange } from '../../actions/mapActions';
+import { loadLocation } from '../../actions/featuresActions';
 
 export class MapScatterplot extends Component {
   static propTypes = {
@@ -22,6 +24,10 @@ export class MapScatterplot extends Component {
     metric: PropTypes.object,
     yRange: PropTypes.object,
     stops: PropTypes.array,
+    onHoverFeature: PropTypes.func,
+    updateMapViewport: PropTypes.func,
+    addSelectedLocation: PropTypes.func,
+    onCoordsChange: PropTypes.func,
   }
 
   constructor(props) {
@@ -58,6 +64,30 @@ export class MapScatterplot extends Component {
       xAxis: scatterOptions.xAxis,
       yAxis: { ...yRange, splitNumber: 7 },
     }
+  }
+
+  _onClick = (location) => {
+    this.props.addSelectedLocation(location)
+    this.props.updateMapViewport(location)
+  }
+  
+  _onHover = (location) => {
+    if (location && location.id) {
+      const feature = {
+        id: location.id,
+        properties: location,
+      }
+      this.props.onHoverFeature(feature);
+    } else {
+      this.props.onHoverFeature(null);
+    }
+
+  }
+
+ _onMouseMove = (e) => {
+   this.props.onCoordsChange({
+     x: e.event.event.clientX, y: e.event.event.clientY
+   })
   }
 
   componentDidMount() {
@@ -107,6 +137,9 @@ export class MapScatterplot extends Component {
               zVar={this.props.zVar}
               region={this.props.region}
               options={this.state.baseScatterplot}
+              onHover={this._onHover}
+              onClick={this._onClick}
+              onMouseMove={this._onMouseMove}
             /> 
           }
         </div>
@@ -148,7 +181,23 @@ const mapStateToProps = (
   })
 }
 
+const mapDispatchToProps = (dispatch) => ({
+  onHoverFeature: (feature) =>
+    dispatch(onHoverFeature(feature)),
+  onCoordsChange: (coords) =>
+    dispatch(onCoordsChange(coords)),
+  addSelectedLocation: (location) => (
+    dispatch(loadLocation(location))
+  ),
+  updateMapViewport: (locationData) =>
+    dispatch(onViewportChange({ 
+      latitude: locationData.lat, 
+      longitude: locationData.lon,
+      zoom: locationData.id.length+2
+    }, true))
+})
+
 export default compose(
   withRouter,
-  connect(mapStateToProps, null)
+  connect(mapStateToProps, mapDispatchToProps)
 )(MapScatterplot)
