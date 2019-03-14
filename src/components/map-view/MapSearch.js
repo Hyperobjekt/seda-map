@@ -73,7 +73,7 @@ const Search = connect(null, mapDispatchToProps)(
 
 const MapSearch = () => {
   return (
-    <div className="map-search-wrapper">
+    <div className="map-search">
       <InstantSearch
         appId={algolia.id}
         apiKey={algolia.key}

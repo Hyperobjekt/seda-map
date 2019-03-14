@@ -46,9 +46,9 @@ export class MapView extends Component {
         <div className="map-view__container">
           <div className="map-view__map">
             <Map />
+            <MapLegend />
           </div>
           <div className="map-view__scatterplot-overlay">
-            <MapLegend />
             <MapScatterplot />
             <MapSelectedLocations />
           </div>
