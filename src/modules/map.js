@@ -1,9 +1,9 @@
 import { combineReducers } from "redux";
 
 const defaultViewport = {
-  latitude: 38,
-  longitude: -97,
-  zoom: 3.5
+  latitude: 37.39,
+  longitude: -96.78,
+  zoom: 3.15
 }
 const viewport = (state = defaultViewport, action) => {
   switch (action.type) {

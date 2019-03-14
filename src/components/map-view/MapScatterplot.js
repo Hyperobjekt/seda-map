@@ -77,6 +77,19 @@ export class MapScatterplot extends Component {
           }
         }
       },
+      series: [{
+        itemStyle: {
+          'normal': {
+            borderWidth: 1,
+            borderColor: 'rgba(0,0,0,0.34)'
+          },
+          'emphasis': {
+            borderWidth: 2,
+            borderColor: 'rgba(255,0,0,1)'
+          }
+          
+        }
+      }]
     }
   }
 
@@ -144,6 +157,7 @@ export class MapScatterplot extends Component {
               zVar={this.props.zVar}
               prefix={this.props.region}
               options={this.state.baseScatterplot}
+              hovered={this.props.hoveredId}
               onHover={this._onHover}
               onClick={this._onClick}
               onMouseMove={this._onMouseMove}
@@ -181,7 +195,7 @@ const getPaddedStops = (stops, amount) => {
 }
 
 const mapStateToProps = (
-  { metrics }, 
+  { metrics, hovered: { feature } }, 
   { match: { params: { region, metric, demographic } } }
 ) => { 
   region = (region === 'schools' ? 'districts' : region);
@@ -195,6 +209,10 @@ const mapStateToProps = (
     stops: getPaddedStops(getStops(metrics, metric), 0), 
     colors: metrics.colors,
     metric: metrics.items[metric],
+    hoveredId: feature && 
+      feature.properties && 
+      feature.properties.id ?
+        feature.properties.id : false
   })
 }
 

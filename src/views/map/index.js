@@ -5,7 +5,7 @@ import MapScatterplot from '../../components/map-view/MapScatterplot';
 import MapSearch from '../../components/map-view/MapSearch';
 import MapTooltip from '../../components/map-view/MapTooltip';
 import MapSelectedLocations from '../../components/map-view/MapSelectedLocations';
-import ReportCard from '../../components/map-view/ReportCard';
+import ReportCard from '../../components/report-card/ReportCard';
 import { withRouter } from 'react-router-dom';
 import React, { Component } from 'react'
 import { compose } from 'redux';
