@@ -62,7 +62,7 @@ class Hint extends React.Component {
 
 Hint.propTypes = {
   text: PropTypes.string,
-  cursor: PropTypes.text,
+  cursor: PropTypes.string,
 };
 
 export default Hint;

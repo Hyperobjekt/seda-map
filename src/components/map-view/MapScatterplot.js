@@ -9,12 +9,12 @@ import { fade } from '@material-ui/core/styles/colorManipulator';
 import * as _isEqual from 'lodash.isequal';
 import { getStops } from '../../modules/metrics';
 import ColorStops from './ColorStops';
-import ConnectedScatterplot from '../scatterplot/ConnectedScatterplot';
 import { onHoverFeature, onViewportChange, onCoordsChange } from '../../actions/mapActions';
 import { loadLocation } from '../../actions/featuresActions';
 import { Typography } from '@material-ui/core';
 import { getSingularRegion } from '../../utils/index'
 import { demographics } from '../../constants/dataOptions';
+import SedaScatterplot from 'react-seda-scatterplot';
 
 export class MapScatterplot extends Component {
   static propTypes = {
@@ -137,15 +137,17 @@ export class MapScatterplot extends Component {
           }
           { 
             this.state.baseScatterplot && 
-            <ConnectedScatterplot
+            <SedaScatterplot
+              endpoint={process.env.REACT_APP_VARS_ENDPOINT}
               xVar={this.props.xVar}
               yVar={this.props.yVar}
               zVar={this.props.zVar}
-              region={this.props.region}
+              prefix={this.props.region}
               options={this.state.baseScatterplot}
               onHover={this._onHover}
               onClick={this._onClick}
               onMouseMove={this._onMouseMove}
+              onDataLoaded={(e) => console.log(e)}
             /> 
           }
           <Typography variant="body2" classes={{root: "tmp__axis-overlay" }}>
