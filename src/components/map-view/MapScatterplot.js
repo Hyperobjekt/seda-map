@@ -158,6 +158,8 @@ export class MapScatterplot extends Component {
               prefix={this.props.region}
               options={this.state.baseScatterplot}
               hovered={this.props.hoveredId}
+              selected={this.props.selectedIds}
+              selectedColors={this.props.selectedColors}
               onHover={this._onHover}
               onClick={this._onClick}
               onMouseMove={this._onMouseMove}
@@ -195,7 +197,7 @@ const getPaddedStops = (stops, amount) => {
 }
 
 const mapStateToProps = (
-  { metrics, hovered: { feature } }, 
+  { metrics, hovered: { feature }, selected }, 
   { match: { params: { region, metric, demographic } } }
 ) => { 
   region = (region === 'schools' ? 'districts' : region);
@@ -209,6 +211,8 @@ const mapStateToProps = (
     stops: getPaddedStops(getStops(metrics, metric), 0), 
     colors: metrics.colors,
     metric: metrics.items[metric],
+    selectedIds: selected[region],
+    selectedColors: selected.colors,
     hoveredId: feature && 
       feature.properties && 
       feature.properties.id ?
