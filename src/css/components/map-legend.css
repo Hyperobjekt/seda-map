@@ -1,0 +1,26 @@
+.map-legend {
+  position: absolute;
+  bottom: 8px;
+  left: 104px;
+  right: 8px;
+  width: auto;
+  background: #fff;
+  display: flex;
+  padding: 4px;
+  font-size: 12px;
+  align-items: flex-start;
+  justify-content: space-between;
+  text-transform: uppercase;
+  font-weight: 900;
+  color: #777;
+  line-height: 1;
+  height: 30px;
+}
+
+.map-legend__gradient {
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  height: 8px;
+}

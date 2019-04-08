@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { onHoverFeature, onViewportChange, onSelectFeature, onCoordsChange } from '../../actions/mapActions';
 import { updateViewportRoute } from '../../modules/router';
 
-import Map from '../map/Map';
+import Map from '../base/Map';
 import { DEFAULT_VIEWPORT } from '../../constants/dataOptions';
 
 /**

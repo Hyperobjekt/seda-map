@@ -67,7 +67,6 @@ export const METRICS = [
   {
     id: 'avg',
     label: 'Average Test Scores',
-    short_label: 'Avg. Test Score',
     description: 'Shows the set of educational opportunities children have had from birth to the time they take the tests',
     help: 'Average test scores for grades 3-8 explainer',
     min: -4,
@@ -78,7 +77,6 @@ export const METRICS = [
   {
     id: 'grd',
     label: 'Growth of test scores',
-    short_label: 'Growth Rate',
     descriptive_label: 'Grow %value% grade levels each year',
     description: 'Shows how much students learn on average while they are in school',
     min: 0.4,
@@ -89,7 +87,6 @@ export const METRICS = [
   {
     id: 'coh',
     label: 'Trend of test scores',
-    short_label: 'Trend',
     description: 'Indicates the extent to which a community is getting better at providing educational opportunities over time',
     min: -0.3,
     max: 0.3,
@@ -99,7 +96,6 @@ export const METRICS = [
   {
     id: 'ses',
     label: 'Socioeconomic Status',
-    short_label: 'SES',
     description: 'Socioeconomic status helper',
     map: false,
     scatterplot: true
@@ -107,7 +103,6 @@ export const METRICS = [
   {
     id: 'seg',
     label: 'Segregation Measure',
-    short_label: 'Segregation',
     description: 'Segregation status helper',
     map: false,
     scatterplot: true
