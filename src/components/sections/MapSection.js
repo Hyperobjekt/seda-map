@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import SedaMap from '../map/SedaMap';
 import MapScatterplot from '../map/MapScatterplot';
 import { loadRouteLocations } from '../../actions/featuresActions';
-import { getRegionControl, getMetricControl, getDemographicControl, getHighlightControl, getChoroplethColors } from '../../modules/config';
+import { getRegionControl, getMetricControl, getDemographicControl, getHighlightControl, getChoroplethColors, getValuePositionForMetric } from '../../modules/config';
 import MapLocationCards from '../map/MapLocationCards';
 import MenuSentence from '../base/MenuSentence';
 import MapTooltip from '../map/MapTooltip';
@@ -18,6 +18,7 @@ import { updateCurrentState, onViewportChange } from '../../actions/mapActions';
 import { getStateProp } from '../../constants/statesFips';
 import LANG from '../../constants/lang';
 import GradientLegend from '../base/GradientLegend';
+import { getFeatureProperty } from '../../modules/features';
 
 
 const MapSection = ({
@@ -93,16 +94,17 @@ const MapSection = ({
               {...headerMenu}
               onChange={onOptionChange}
             />
+            
           </div>
           
           <div className="section__right">
             <SedaMap />
-            <GradientLegend
-              {...legend}
-            />
           </div>
           <div className="section__left section__left--scatterplot">
             <MapScatterplot />
+            <GradientLegend
+              {...legend}
+            />
           </div>
         </div>
       </div>
@@ -132,6 +134,7 @@ MapSection.propTypes = {
 const mapStateToProps = ({ 
   scatterplot: { loaded },
   selected,
+  sections: { map: { hovered } },
   map: { usState },
 },
 { match: { params: { region, metric, demographic } } }
@@ -146,8 +149,12 @@ const mapStateToProps = ({
     highlightedState: usState,
     legend: {
       colors: getChoroplethColors(),
-      startLabel: LANG['LEGEND_LOW_' + metric.toUpperCase()],
-      endLabel: LANG['LEGEND_HIGH_' + metric.toUpperCase()],
+      markerPosition: hovered ?
+        getValuePositionForMetric(
+          getFeatureProperty(hovered, demographic + '_' + metric),
+          metric
+        ) : null,
+      vertical: true
     },
     headerMenu: {
       text: usState ?

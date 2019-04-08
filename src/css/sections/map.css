@@ -27,3 +27,21 @@
   width: 100%;
   height: 100%;
 }
+
+.section__right .map-legend {
+  position: absolute;
+  bottom: 8px;
+  left: auto;
+  right: 8px;
+  max-width: 320px;
+}
+
+.section__left .map-legend {
+  position: absolute;
+  bottom: 52px;
+  top: 4px;
+  left: auto;
+  right: 4px;
+  width: 8px;
+  border-left: 4px solid #fff;
+}

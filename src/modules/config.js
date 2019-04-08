@@ -124,6 +124,18 @@ export const getStopsForMetric = (id) => {
 }
 
 /**
+ * Gets the percent value of where the value sites on
+ * the scale for the metric.
+ * @param {*} value 
+ * @param {*} metricId 
+ * @returns {number} between 0 - 1
+ */
+export const getValuePositionForMetric = (value, metricId) => {
+  const { min, max } = getMetricById(metricId);
+  return Math.min(1, Math.max(0, (value - min) / (max - min)))
+}
+
+/**
  * Gets an object mapping metric ID to label
  * @param {array} metricIds an array of metric IDs
  * @param {string} demographic the demographic for the metrics

@@ -169,10 +169,9 @@ h6,
 
 .map-scatterplot__container {
   position: absolute;
-  width: 100%;
   top: 0px;
   left: 0;
-  right: 0;
+  right: 12px;
   bottom: 0;
 }
 

@@ -44,8 +44,9 @@ export const theme = {
     'emphasis': { 
       itemStyle: {
         borderWidth: 2,
-        borderColor: 'rgba(255,0,0,1)',
-        color: 'rgba(255,0,0,0.6)'
+        borderColor: '#fff',
+        color: '#f00',
+        opacity:1,
       }
     }
   },
