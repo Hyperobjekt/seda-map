@@ -182,7 +182,7 @@ const interpolate = (text, params = {}) => {
       }
       return a
     }
-  }).join()
+  }).join('')
 }
 
 export const getLang = (key = '', props = {}) => {
