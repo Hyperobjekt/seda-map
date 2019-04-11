@@ -1,6 +1,7 @@
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { isGapDemographic, isGapVar, getDemographicFromVarName, getLabelFromVarName, getMetricIdFromVarName, getMetricFromVarName, getSelectedColors, getChoroplethColors, getDemographicById, getDemographicIdFromVarName } from '../modules/config';
 import { getStateName } from '../constants/statesFips';
+import { getLang } from '../constants/lang';
 
 /** GRID CONFIGURATION  */
 
@@ -235,14 +236,20 @@ const getAxisLine = ({axis, position, style}) => {
 }
 
 
+const getLangKeyForAxisLabel = (value, metric) => {
+  const base = 'AXIS_' + metric.toUpperCase()
+  const position = value === 0 ? '_ZERO' :
+    value > 0 ? '_HIGH' : '_LOW'
+  const single = value === 1 ? '_SINGLE' : ''
+  return base + position + single;
+}
+
 const getMapAverageOverlay = () => getOverlay(
   new Array(7).fill().map((v, i) => {
     const position = -3 + i;
-    const grades = Math.abs(position) === 1 ? 'grade' : 'grades'
-    const label = position === 0 ? 'average\nperformance' :
-      position > 0 ? 
-        `${Math.abs(position)} ${grades}\nahead` : 
-        `${Math.abs(position)} ${grades}\nbehind`
+    const labelKey =
+      getLangKeyForAxisLabel(position, 'avg')
+    const label = getLang(labelKey, { value: Math.abs(position) })
     return {
       value: [0, position], 
       name: label,
@@ -258,9 +265,9 @@ const getMapAverageOverlay = () => getOverlay(
 const getMapAverageGapOverlay = () => getOverlay(
   new Array(8).fill().map((v, i) => {
     const position = 0 - i;
-    const grades = Math.abs(position) === 1 ? 'grade' : 'grades'
-    const label = position === 0 ? 'no\ndifference' :
-      `${Math.abs(position)} ${grades}\ndifference`
+    const labelKey =
+      getLangKeyForAxisLabel(position, 'avg_gap')
+    const label = getLang(labelKey, { value: position })
     return {
       value: [0, position], 
       name: label,
@@ -276,10 +283,9 @@ const getMapAverageGapOverlay = () => getOverlay(
 const getMapGrowthOverlay = () => getOverlay(
   new Array(5).fill().map((v, i) => {
     const position = 0.6 + (i * (1)/5);
-    const label = position === 1 ? 'average\ngrowth' :
-      position > 1 ? 
-        `${Math.abs(position)} grade levels\nper year` : 
-        `${Math.abs(position)} grade levels\nper year`
+    const labelKey =
+      getLangKeyForAxisLabel(position, 'grd')
+    const label = getLang(labelKey, { value: Math.abs(position) })
     return {
       value: [0, position], 
       name: label,
@@ -295,8 +301,9 @@ const getMapGrowthOverlay = () => getOverlay(
 const getMapGrowthGapOverlay = () => getOverlay(
   new Array(5).fill().map((v, i) => {
     const position = Math.round((-0.4 + (i * (1)/5)) * 10) / 10;
-    const label = position === 0 ? 'no change\nin growth gap' :
-      `${Math.abs(position)} ${position > 0 ? 'increase' : 'decrease'}\nin growth gap`
+    const labelKey =
+      getLangKeyForAxisLabel(position, 'grd_gap')
+    const label = getLang(labelKey, { value: Math.abs(position) })
     return {
       value: [0, position], 
       name: label,
@@ -312,10 +319,9 @@ const getMapGrowthGapOverlay = () => getOverlay(
 const getMapTrendOverlay = () => getOverlay(
   new Array(5).fill().map((v, i) => {
     const position = Math.round((-0.2 + (i * 0.1))*10)/10;
-    const label = position === 0 ? 'no change\nin test scores' :
-      position > 0 ? 
-        `${Math.abs(position)} grade level\nincrease` : 
-        `${Math.abs(position)} grade level\ndecrease`
+    const labelKey =
+      getLangKeyForAxisLabel(position, 'coh')
+    const label = getLang(labelKey, { value: Math.abs(position) })
     return {
       value: [0, position], 
       name: label,
@@ -331,8 +337,9 @@ const getMapTrendOverlay = () => getOverlay(
 const getMapTrendGapOverlay = () => getOverlay(
   new Array(5).fill().map((v, i) => {
     const position = Math.round((-0.2 + (i * 0.1))*10)/10;
-    const label = position === 0 ? 'no change\nin trend gap' :
-      `${Math.abs(position)} ${position > 0 ? 'increase' : 'decrease'}\nin trend gap`
+    const labelKey =
+      getLangKeyForAxisLabel(position, 'coh_gap')
+    const label = getLang(labelKey, { value: Math.abs(position) })
     return {
       value: [0, position], 
       name: label,
@@ -374,7 +381,7 @@ const getOpportunityAverageOverlay = () => ({
     data: [
       [
         { 
-          name: 'equal opportunity', 
+          name: getLang('OPP_DIFF_EQUAL_LINE'), 
           coord: [-4, -4], 
           symbol: 'none',
         },
@@ -477,8 +484,8 @@ const getMapXAxis = ({ metric, demographic }) => ({
     formatter: function (val) {
       if (val === 0) {
         return isGapDemographic(demographic.id) ?
-          'no gap in\nsocioeconomic status' : 
-          'average\nsocioeconomic status'
+          getLang('AXIS_SES_ZERO_GAP') : 
+          getLang('AXIS_SES_ZERO')
       }
       return null;
     },
@@ -592,7 +599,10 @@ const getGapLabel = (gapId) => {
     getDemographicById(gapId[0])
   const dem2 = 
     getDemographicById(gapId[1] === 'n' ? 'np' : gapId[1])
-  return `${dem1.label} and ${dem2.label}`.toLowerCase()
+  return getLang('LABEL_GAP', {
+    demographic1: dem1.label,
+    demographic2: dem2.label
+  }).toLowerCase()
 }
 
 const getAverageScoreDescription = (value, varName) => {
@@ -600,11 +610,15 @@ const getAverageScoreDescription = (value, varName) => {
   const isGap = isGapDemographic(demographicId);
   const amount = Math.round(value*100)/100
   return isGap ?
-    `Difference of ${amount} grade levels between
-      ${getGapLabel(demographicId)} students`
+    getLang('VALUE_AVG_GAP', {
+      amount,
+      gap: getGapLabel(demographicId)
+    })
     :
-    `Students score ${Math.abs(amount)} grade levels 
-      ${amount > 0 ? 'above' : 'below'} average`
+    getLang('VALUE_AVG', {
+      amount: Math.abs(amount),
+      aboveBehind: amount > 0 ? 'above' : 'behind'
+    })
 }
 
 const getGrowthDescription = (value, varName) => {
@@ -612,11 +626,13 @@ const getGrowthDescription = (value, varName) => {
   const isGap = isGapDemographic(demographicId);
   const amount = Math.round(value*100)/100
   return isGap ?
-    `Difference in growth ${amount > 0 ? 'increased' : 'decreased'} 
-      ${Math.abs(amount)} grade levels between
-      ${getGapLabel(demographicId)} students`
+    getLang('VALUE_GRD_GAP', {
+      amount: Math.abs(amount),
+      gap: getGapLabel(demographicId),
+      increasedDecreased: amount > 0 ? 'increased' : 'decreased'
+    })
     :
-    `Students grow ${amount} grade levels each year`;
+    getLang('VALUE_GRD', { amount })
 }
 
 const getTrendDescription = (value, varName) => {
@@ -624,12 +640,16 @@ const getTrendDescription = (value, varName) => {
   const isGap = isGapDemographic(demographicId);
   const amount = Math.round(value*100)/100
   return isGap ?
-    `Difference in test scores ${amount > 0 ? 'increased' : 'decreased'}
-      ${Math.abs(amount)} grade levels between
-      ${getGapLabel(demographicId)} students`
+    getLang('VALUE_COH_GAP', {
+      amount: amount > 0 ? 'increased' : 'decreased',
+      increasedDecreased: Math.abs(amount),
+      gap: getGapLabel(demographicId) 
+    })
     :
-    `Test scores ${amount > 0 ? 'raising' : 'falling'} 
-      ${Math.abs(amount)} grade levels over time`;
+    getLang('VALUE_COH', {
+      risingFalling: amount > 0 ? 'rising' : 'falling',
+      amount: Math.abs(amount)
+    })
 }
 
 const getDescriptionForVarName = (varName, value) => {
@@ -665,7 +685,7 @@ const getTooltip = ({ data, xVar, yVar, ...rest }) => {
     trigger: 'item',
     formatter: ({value}) => {
       const name = placeNames && placeNames[value[3]] ? 
-        placeNames[value[3]] : 'Unknown'
+        placeNames[value[3]] : getLang('NO_DATA')
       const stateName = getStateName(value[3])
       const line1 = xLabel + ': ' + value[0];
       const line2 = yLabel + ': ' + value[1];

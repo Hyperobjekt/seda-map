@@ -3,7 +3,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 
 import { loadLocation } from '../../actions/featuresActions';
-import { getChoroplethColors, getValuePositionForMetric, getSelectedColors } from '../../modules/config';
+import { getChoroplethColors, getValuePositionForMetric, getSelectedColors, isGapDemographic } from '../../modules/config';
 import { getRegionControl, getMetricControl, getDemographicGapControl, getHighlightControl } from '../../modules/controls';
 import { onScatterplotData, onScatterplotLoaded } from '../../actions/scatterplotActions';
 import { onHoverFeature, onViewportChange, onSelectFeature, onCoordsChange, updateCurrentState } from '../../actions/mapActions';
@@ -13,6 +13,7 @@ import { getFeatureProperty } from '../../modules/features';
 import SplitSection from '../base/SplitSection';
 import { getMapViewport } from '../../modules/map';
 import { updateViewportRoute } from '../../modules/router';
+import { getLang } from '../../constants/lang';
 
 const mapStateToProps = ({ 
   scatterplot: { data },
@@ -43,20 +44,17 @@ const mapStateToProps = ({
     section: {
       id: 'map',
       title: {
-        text: "Map of $1 for $2 by $3",
+        text: getLang('MAP_TITLE'),
         controls
       },
-      description: `The average test scores of children in a community reveal the total 
-        set of educational opportunities they have had from birth to the time 
-        they take the tests. The map and scatterplot below shows how educational
-        opportunity is correlated with socioeconomic status.  How does your 
-        area compare?`,
+      description: 
+        getLang('MAP_DESCRIPTION_' + metric + (isGapDemographic(demographic) ? '_GAP': '')) + ' ' +
+        getLang('MAP_DESCRIPTION_SES' + (isGapDemographic(demographic) ? '_GAP': '')) + ' ' +
+        getLang('MAP_DESCRIPTION'),
       selected: selected && selected[region],
       cardMetrics: [ vars.xVar, vars.yVar ],
       headerMenu: {
-        text: usState ?
-          "Showing $1 for $2 by $3 in $4" :
-          "Showing $1 for $2 by $3 in the $4",
+        text: getLang('MAP_CONTROL_TEXT'),
         controls,
       }
     },

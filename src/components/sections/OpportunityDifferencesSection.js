@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { getRegionControl, getMetricControl, getDemographicControl, getHighlightControl } from '../../modules/controls';
 import { getDemographicIdFromVarName, getMetricIdFromVarName } from '../../modules/config';
-import LANG from '../../constants/lang.js';
+import { getLang } from '../../constants/lang.js';
 import ScatterplotSection from '../base/ScatterplotSection';
 import { sectionMapDispatchToProps } from '../../actions/sectionActions';
 
@@ -35,7 +35,7 @@ const mapStateToProps = (
   { 
     scatterplot: { data, loaded }, 
     selected,
-    map: { usState }, 
+    map: { usState },
     sections: { opportunity: { hovered, vars }  } 
   },
   { match: { params: { region } } }
@@ -45,10 +45,10 @@ const mapStateToProps = (
     section: {
       id: 'opportunity',
       type: 'scatterplot',
-      title: LANG['OPP_DIFF_TITLE'],
-      description: LANG['OPP_DIFF_DESCRIPTION'],
+      title: getLang('OPP_DIFF_TITLE'),
+      description: getLang('OPP_DIFF_DESCRIPTION'),
       headerMenu: {
-        text: 'Showing $1 for $2 vs. $3 by $4 in $5',
+        text: getLang('OPP_DIFF_CONTROL_TEXT'),
         controls: getSectionControls(region, vars, usState)
       },
       selected: selected && selected[region],

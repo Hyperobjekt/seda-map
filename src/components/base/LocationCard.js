@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import { IconButton } from '@material-ui/core';
 import Close from '@material-ui/icons/Close';
 import { getMetricLabel, getDemographicLabel } from '../../modules/config';
+import { getLabel, getLang } from '../../constants/lang';
 
 function LocationCard({
   active,
@@ -55,14 +56,16 @@ function LocationCard({
             <div key={'stat_' + k} className='location-stat'>
               <div className='location-stat__label'>
                 <span className='location-stat__primary-label'>
-                  {getMetricLabel(k.split('_')[1])}
+                  { getLabel(k.split('_')[1]) }
                 </span>
                 <span className='location-stat__secondary-label'>
-                  { getDemographicLabel(k.split('_')[0]) } Students
+                  { getLabel(k.split('_')[0]) } Students
                 </span>
               </div>
               
-              <span className='location-stat__value'>{data[k] && data[k] !== -9999 ? Math.round(data[k]*100)/100 : 'Unavailable'}</span>
+              <span className='location-stat__value'>
+                {data[k] && data[k] !== -9999 ? Math.round(data[k]*100)/100 : getLang('NO_DATA')}
+              </span>
             </div>
           )
         }

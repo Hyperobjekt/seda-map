@@ -11,5 +11,8 @@
     "document": true,
     "window": true,
     "console": true
+  },
+  "rules": {
+    "no-template-curly-in-string": 0
   }
 }

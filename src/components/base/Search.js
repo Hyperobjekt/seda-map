@@ -1,11 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types';
 import SedaSearch from 'react-seda-search';
-import LANG from '../../constants/lang';
 
 const defaultProps = {
   inputProps: {
-    placeholder: LANG['MAP_SEARCH_PLACEHOLDER']
+    placeholder: 'search'
   },
   indices: ['cities', 'counties', 'districts', 'schools']
 }

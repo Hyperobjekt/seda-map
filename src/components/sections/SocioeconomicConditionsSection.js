@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { getDemographicIdFromVarName, getMetricIdFromVarName } from '../../modules/config';
 import { getRegionControl, getMetricControl, getDemographicControl, getHighlightControl } from '../../modules/controls';
-import LANG from '../../constants/lang.js';
+import { getLang } from '../../constants/lang.js';
 import { sectionMapDispatchToProps } from '../../actions/sectionActions';
 import ScatterplotSection from '../base/ScatterplotSection';
 
@@ -38,12 +38,10 @@ const mapStateToProps = (
     section: {
       id: 'socioeconomic',
       type: 'scatterplot',
-      title: LANG['SES_COND_TITLE'],
-      description: LANG['SES_COND_DESCRIPTION'],
+      title: getLang('SES_COND_TITLE'),
+      description: getLang('SES_COND_DESCRIPTION'),
       headerMenu: {
-        text: usState ?
-          "Showing $1 for $2 by $3 in $4" :
-          "Showing $1 for $2 by $3 in the $4",
+        text: getLang('SES_CONTROL_TEXT'),
         controls: getSectionControls(region, vars, usState),
       },
       selected: selected && selected[region],

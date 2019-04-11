@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import MapLocationCards from '../map/MapLocationCards';
 import MapSearch from '../map/MapSearch';
 import MenuSentence from '../base/MenuSentence';
-import LANG from '../../constants/lang';
+import { getLang } from '../../constants/lang';
 
 function Section({ 
   id, 
@@ -55,7 +55,7 @@ function Section({
           >
             <div className="location-card location-card--search">
               <Typography component="p" className="helper helper--card-search">
-                { LANG['CARD_SEARCH_HELPER'] }
+                { getLang('CARD_SEARCH_HELPER') }
               </Typography>
             </div>
           </MapLocationCards>
@@ -73,7 +73,7 @@ function Section({
             <div className="location-card location-card--search">
               <MapSearch
                 inputProps={{
-                  placeholder: LANG['CARD_SEARCH_PLACEHOLDER']
+                  placeholder: getLang('CARD_SEARCH_PLACEHOLDER')
                 }}
               />
             </div>

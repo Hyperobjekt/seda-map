@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { getRegionControl, getGapControl, getHighlightControl, getSecondaryMetricControl } from '../../modules/controls';
 import { getDemographicIdFromVarName, getMetricIdFromVarName } from '../../modules/config';
-import LANG from '../../constants/lang.js';
+import { getLang } from '../../constants/lang.js';
 import ScatterplotSection from '../base/ScatterplotSection';
 import { sectionMapDispatchToProps } from '../../actions/sectionActions';
 
@@ -41,10 +41,10 @@ const mapStateToProps = (
     section: {
       id: 'achievement',
       type: 'scatterplot',
-      title: LANG['ACH_GAPS_TITLE'],
-      description: LANG['ACH_GAPS_DESCRIPTION'],
+      title: getLang('ACH_GAPS_TITLE'),
+      description: getLang('ACH_GAPS_DESCRIPTION'),
       headerMenu: {
-        text: 'Showing the $1 of $2 vs. average test scores by $3 in $4',
+        text: getLang('ACH_GAPS_CONTROL_TEXT'),
         controls: getSectionControls(region, vars, usState),
       },
       selected: (selected && selected[region]) || [],
