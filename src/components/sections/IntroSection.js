@@ -12,11 +12,12 @@ const assembleTextAndComponents = (text, components) => {
     if (a && a[0] !== '$') {
       return <span key={'intro-'+i}>{a}</span>
     } else {
-      a = a.replace('${', '')
-      a = a.replace('}', '')
+      a = a.replace('$[', '')
+      a = a.replace(']', '')
       if (components[a]) {
         return components[a]
       }
+      return a;
     }
   })
 }

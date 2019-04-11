@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { IconButton } from '@material-ui/core';
 import Close from '@material-ui/icons/Close';
-import { getMetricLabel, getDemographicLabel } from '../../modules/config';
 import { getLabel, getLang } from '../../constants/lang';
 
 function LocationCard({
