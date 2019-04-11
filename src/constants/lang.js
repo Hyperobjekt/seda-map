@@ -160,15 +160,6 @@ const LANG = {
 
 }
 
-/**
- * Interpolate params into the provided string
- */
-// const interpolate = (str, params = {}) => {
-//   const names = Object.keys(params);
-//   const vals = Object.values(params);
-//   return new Function(...names, `return \`${str}\`;`)(...vals);
-// }
-
 const interpolate = (text, params = {}) => {
   const arr = splitLang(text);
   return arr.map((a) => {
