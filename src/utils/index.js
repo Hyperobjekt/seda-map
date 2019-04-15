@@ -1,3 +1,6 @@
+import * as scale from 'd3-scale';
+import * as d3array from 'd3-array';
+
 const idLengths = {
   2: 'states',
   5: 'counties',
@@ -56,3 +59,37 @@ export const getSingularRegion = (region) => {
 
 export const makeId = () =>
   '_' + Math.random().toString(36).substr(2, 9)
+
+/**
+ * Gets the range for the provided dataset, while filtering
+ * out extreme outliers
+ * @param {object} data 
+ */
+const getDataRange = (data) => {
+  const values = Object.keys(data)
+    .map(k => parseFloat(data[k]))
+    .filter(v => v > -9999)
+    .sort((a, b) => a - b);
+  return [
+    d3array.min(values), 
+    d3array.max(values)
+  ]
+}
+
+/**
+ * Returns a scale function that can be used to map data values
+ * to dot sizes
+ * @param {object} data data to generate scale for (e.g. { '01001': 3.4, ... })
+ * @param {object} options range and exponent options for scale
+ */
+export const getSizerFunction = (
+  data, 
+  { range = [0, 1], exponent = 1 }
+) => {
+  if (!data) { return () => 0 }
+  return scale.scalePow()
+    .exponent(exponent)
+    .domain(getDataRange(data))
+    .range(range)
+    .clamp(true);
+}

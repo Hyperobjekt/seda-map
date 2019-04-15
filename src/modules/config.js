@@ -83,6 +83,12 @@ export const getMetricLabel = (id) => {
   return metric.label;
 }
 
+export const getRangeFromVarName = (varName, region) => {
+  const metricId = getMetricIdFromVarName(varName)
+  const demId = getDemographicIdFromVarName(varName)
+  return getMetricRange(metricId, demId, region);
+}
+
 /**
  * gets the range for the metric, or an alternate range
  * if a variant is specified
@@ -107,7 +113,6 @@ export const getMetricRange = (id, demographic, region) => {
     return isGapDemographic(demographic) && metric.range['gap'] ?
       metric.range['gap'] : metric.range['default']
   }
-  
 }
 
 /**

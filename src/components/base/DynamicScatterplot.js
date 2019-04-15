@@ -1,9 +1,12 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import SedaScatterplot from 'react-seda-scatterplot'
 import { theme } from '../../style/echartTheme';
-import { getBaseVars } from '../../modules/config'
+import { getBaseVars, getMetricRange, getRangeFromVarName } from '../../modules/config'
 import { getScatterplotOptions } from '../../style/scatterplot-style';
+import CircleOverlay from './CircleOverlay';
+import { getSizerFunction } from '../../utils';
+import { getDataForId } from '../../modules/scatterplot';
 
 /**
  * Gets the state IDs that belong to a certain state
@@ -36,8 +39,8 @@ function DynamicScatterplot({
   region,
   hovered,
   highlightedState,
-  selected,
   variant,
+  selected,
   onHover,
   onClick,
   onData,
@@ -47,7 +50,7 @@ function DynamicScatterplot({
     () => getScatterplotOptions(
       variant, 
       data[region], 
-      { xVar, yVar }, 
+      { xVar, yVar, zVar }, 
       highlightedState
     ),
     [xVar, yVar, zVar, highlightedState, data[region]]
@@ -56,6 +59,24 @@ function DynamicScatterplot({
     () => getStateHighlights(highlightedState, data && data[region]),
     [highlightedState, region]
   );
+  const [circleOverlay, setCircleOverlay] = useState({});
+  useEffect(() => {
+      data[region][xVar] && data[region][yVar] && data[region][zVar] &&
+      setCircleOverlay({
+        xRange: getRangeFromVarName(xVar),
+        yRange: getRangeFromVarName(yVar),
+        sizer: getSizerFunction(data[region][zVar], { range: [ 12, 52 ]}),
+        circles: selected.map(s => ({
+          x: data[region][xVar][s],
+          y: data[region][yVar][s],
+          z: data[region][zVar][s],
+          active: hovered === s,
+          id: s
+        }))
+      })
+    },
+    [xVar, yVar, data[region], selected, hovered]
+  )
   return (
     <div className='dynamic-scatterplot'>
       <div className='dynamic-scatterplot__graph'>
@@ -76,10 +97,27 @@ function DynamicScatterplot({
           prefix={region}
           options={scatterplotOptions}
           highlighted={highlighted}
-          selected={selected}
           theme={theme}
           baseVars={getBaseVars()}
-        /> 
+        />
+        <CircleOverlay
+          {...circleOverlay}
+          onHover={(circle) => {
+            onHover({
+              id: circle.id, 
+              properties: { 
+                id: circle.id,
+                ...getDataForId(circle.id, data[region])
+              }
+            })
+          }}
+          onClick={(circle) => { 
+            onClick({
+              id: circle.id,
+              ...getDataForId(circle.id, data[region])
+            })
+          }}
+        />
       </div>
     </div>
   )

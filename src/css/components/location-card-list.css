@@ -9,9 +9,9 @@
 .location-card-list .location-card {
   flex:1;
   width: 10%;
-  transition: all 0.4s ease-out;
-  max-width: 33.333%;
+  max-width: 280px;
 }
+
 
 .location-card--added {
   flex: 0.0001;
@@ -34,3 +34,196 @@
     flex: 0;
   }
 }
+
+/** Stacked Card Layout **/
+
+@media(min-width: 960px) {
+
+  .location-card-list--7 .location-card:nth-child(1) {
+    margin-right: -14%;
+  }
+  .location-card-list--7 .location-card:nth-child(2) {
+    margin-right: -12%;
+  }
+  .location-card-list--7 .location-card:nth-child(3) {
+    margin-right: -10%;
+  }
+  .location-card-list--7 .location-card:nth-child(4) {
+    margin-right: -8%;
+  }
+  .location-card-list--7 .location-card:nth-child(5) {
+    margin-right: -6%;
+  }
+  .location-card-list--7 .location-card:nth-child(6) {
+    margin-right: -4%;
+  }
+
+
+  .location-card-list--6 .location-card:nth-child(1) {
+    margin-right: -12%;
+  }
+  .location-card-list--6 .location-card:nth-child(2) {
+    margin-right: -10%;
+  }
+  .location-card-list--6 .location-card:nth-child(3) {
+    margin-right: -8%;
+  }
+  .location-card-list--6 .location-card:nth-child(4) {
+    margin-right: -6%;
+  }
+  .location-card-list--6 .location-card:nth-child(5) {
+    margin-right: -4%;
+  }
+
+  .location-card-list--5 .location-card:nth-child(1) {
+    margin-right: -10%;
+  }
+  .location-card-list--5 .location-card:nth-child(2) {
+    margin-right: -8%;
+  }
+  .location-card-list--5 .location-card:nth-child(3) {
+    margin-right: -6%;
+  }
+  .location-card-list--5 .location-card:nth-child(4) {
+    margin-right: -4%;
+  }
+
+  .location-card-list--4 .location-card:nth-child(1) {
+    margin-right: -8%;
+  }
+  .location-card-list--4 .location-card:nth-child(2) {
+    margin-right: -6%;
+  }
+  .location-card-list--4 .location-card:nth-child(3) {
+    margin-right: -4%;
+  }
+}
+
+
+@media(min-width: 1280px) {
+
+  .location-card-list--7 .location-card:nth-child(1) {
+    margin-right: -14%;
+  }
+  .location-card-list--7 .location-card:nth-child(2) {
+    margin-right: -12%;
+  }
+  .location-card-list--7 .location-card:nth-child(3) {
+    margin-right: -10%;
+  }
+  .location-card-list--7 .location-card:nth-child(4) {
+    margin-right: -8%;
+  }
+  .location-card-list--7 .location-card:nth-child(5) {
+    margin-right: -6%;
+  }
+  .location-card-list--7 .location-card:nth-child(6) {
+    margin-right: -4%;
+  }
+
+
+  .location-card-list--6 .location-card:nth-child(1) {
+    margin-right: -10%;
+  }
+  .location-card-list--6 .location-card:nth-child(2) {
+    margin-right: -8%;
+  }
+  .location-card-list--6 .location-card:nth-child(3) {
+    margin-right: -5%;
+  }
+  .location-card-list--6 .location-card:nth-child(4) {
+    margin-right: -4%;
+  }
+  .location-card-list--6 .location-card:nth-child(5) {
+    margin-right: -2%;
+  }
+
+  .location-card-list--5 .location-card:nth-child(1) {
+    margin-right: -8%;
+  }
+  .location-card-list--5 .location-card:nth-child(2) {
+    margin-right: -6%;
+  }
+  .location-card-list--5 .location-card:nth-child(3) {
+    margin-right: -4%;
+  }
+  .location-card-list--5 .location-card:nth-child(4) {
+    margin-right: -2%;
+  }
+
+  .location-card-list--4 .location-card:nth-child(1) {
+    margin-right: 0%;
+  }
+  .location-card-list--4 .location-card:nth-child(2) {
+    margin-right: 0%;
+  }
+  .location-card-list--4 .location-card:nth-child(3) {
+    margin-right: 0%;
+  }
+}
+
+
+@media(min-width: 1650px) {
+
+  .location-card-list--7 .location-card:nth-child(1) {
+    margin-right: -6%;
+  }
+  .location-card-list--7 .location-card:nth-child(2) {
+    margin-right: -5%;
+  }
+  .location-card-list--7 .location-card:nth-child(3) {
+    margin-right: -4%;
+  }
+  .location-card-list--7 .location-card:nth-child(4) {
+    margin-right: -3%;
+  }
+  .location-card-list--7 .location-card:nth-child(5) {
+    margin-right: -2%;
+  }
+  .location-card-list--7 .location-card:nth-child(6) {
+    margin-right: -1%;
+  }
+
+
+  .location-card-list--6 .location-card:nth-child(1) {
+    margin-right: 0%;
+  }
+  .location-card-list--6 .location-card:nth-child(2) {
+    margin-right: 0%;
+  }
+  .location-card-list--6 .location-card:nth-child(3) {
+    margin-right: 0%;
+  }
+  .location-card-list--6 .location-card:nth-child(4) {
+    margin-right: 0%;
+  }
+  .location-card-list--6 .location-card:nth-child(5) {
+    margin-right: 0%;
+  }
+
+  .location-card-list--5 .location-card:nth-child(1) {
+    margin-right: 0;
+  }
+  .location-card-list--5 .location-card:nth-child(2) {
+    margin-right: 0;
+  }
+  .location-card-list--5 .location-card:nth-child(3) {
+    margin-right: 0;
+  }
+  .location-card-list--5 .location-card:nth-child(4) {
+    margin-right: 0;
+  }
+
+  .location-card-list--4 .location-card:nth-child(1) {
+    margin-right: 0%;
+  }
+  .location-card-list--4 .location-card:nth-child(2) {
+    margin-right: 0%;
+  }
+  .location-card-list--4 .location-card:nth-child(3) {
+    margin-right: 0%;
+  }
+}
+
+
+

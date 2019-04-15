@@ -1,5 +1,7 @@
 import LANG from "./lang";
 
+/** min / max dot sizes */
+export const DOT_SIZES = [ 6, 48 ]
 
 /**
  * default viewport on map view
@@ -49,12 +51,8 @@ export const BASE_VARS = {
  * Colors for selected locations
  */
 export const SELECTED_COLORS = [
-  '#ff0d00', 
-  '#cc4f14', 
   '#ff9233', 
-  '#e5a800', 
   '#fbff00', 
-  '#32e617', 
   '#3dcc82', 
   '#00e2e6', 
   '#2967cc', 

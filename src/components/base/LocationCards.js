@@ -14,7 +14,7 @@ function LocationCards({
   onCardHover
 }) {
   return (
-    <div className='location-card-list'>
+    <div className={'location-card-list location-card-list--' + features.length}>
       { 
         Boolean(features.length) && features.map(
           (f, i) =>

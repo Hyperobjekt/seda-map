@@ -2,6 +2,7 @@ import { fade } from '@material-ui/core/styles/colorManipulator';
 import { isGapDemographic, isGapVar, getDemographicFromVarName, getLabelFromVarName, getMetricIdFromVarName, getMetricFromVarName, getSelectedColors, getChoroplethColors, getDemographicById, getDemographicIdFromVarName, getMetricRange } from '../modules/config';
 import { getStateName } from '../constants/statesFips';
 import { getLang } from '../constants/lang';
+import { getSizerFunction } from '../utils';
 
 /** GRID CONFIGURATION  */
 
@@ -40,7 +41,7 @@ const getSeries = (seriesId, type, options) => ({
  * Get the style overrides for the base series
  * @param {boolean} highlightedOn 
  */
-const getBaseSeries = ({ highlightedState }) => 
+const getBaseSeries = ({ highlightedState, sizer }) => 
   getSeries('base', 'scatter', {
     silent: highlightedState ? true : false,
     large: highlightedState ? true : false,
@@ -52,18 +53,20 @@ const getBaseSeries = ({ highlightedState }) =>
         'transparent' : 'rgba(6, 29, 86, 0.4)',
       borderWidth: highlightedState ? 0 : 0.75
     },
-    ...Boolean(highlightedState) && { symbolSize: 6 }
+    symbolSize: highlightedState ? 
+      6 : (value) => sizer(value[2])
   })
 
 /**
  * Get the style overrides for the highlight series
  */
-const getHighlightedSeries = ({ highlightedState }) =>
+const getHighlightedSeries = ({ highlightedState, sizer }) =>
   getSeries('highlighted', 'scatter', {
     show: highlightedState,
     itemStyle: {
       borderColor: 'rgba(6, 29, 86, 0.4)'
-    }
+    },
+    symbolSize: (value) => sizer(value[2])
   })
 
 /**
@@ -751,24 +754,23 @@ const tooltip = (variant, { data, xVar, yVar }) => {
 export const getScatterplotOptions = (
   variant,
   data = {},
-  { xVar, yVar },
+  { xVar, yVar, zVar },
   highlightedState, 
 ) => {
-  if (!data[xVar] || !data[yVar]) { return {} }
+  if (!data[xVar] || !data[yVar] || !data[zVar]) { return {} }
+  const sizer = getSizerFunction(data[zVar], { range: [ 8, 48 ]})
   const options = {
     grid: grid(variant),
     visualMap: visualMap(variant, { varName: yVar, highlightedState }),
     xAxis: xAxis(variant, { varName: xVar }),
     yAxis: yAxis(variant, { varName: yVar }),
     series: [
-      series('base', variant, { highlightedState }),
-      series('highlighted', variant, { highlightedState }),
-      series('selected', variant),
+      series('base', variant, { highlightedState, sizer }),
+      series('highlighted', variant, { highlightedState, sizer }),
       ...overlays(variant, { xVar, yVar })
     ],
     tooltip: tooltip(variant, { data, xVar, yVar })
   }
-  console.log(options);
   return options;
 }
 

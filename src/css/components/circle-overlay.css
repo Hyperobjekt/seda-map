@@ -1,0 +1,86 @@
+.circle-overlay__root {
+  position: absolute;
+  top:0;left:24px;right:80px;bottom:48px;
+  pointer-events:none;
+}
+
+.circle-overlay__circle {
+  pointer-events:none;
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+}
+
+.circle {
+  pointer-events:all;
+  width: 10px;
+  height: 10px;
+  transform: translate(-50%, -50%);
+  border-radius: 100%;
+  background: transparent;
+  border: 2px solid #fff;
+  transition: transform 0.1s cubic-bezier(0,1,.5,1);
+  cursor: pointer;
+}
+
+.circle-overlay__circle--active .circle,
+.circle:hover {
+  animation-name: heartBeat;
+  animation-duration: 0.2s;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: forwards;
+}
+
+.circle-overlay__circle:nth-child(1) .circle {
+  background: #a329cc;
+  z-index:4;
+}
+.circle-overlay__circle:nth-child(2) .circle {
+  background: #171ae6;
+  z-index:5;
+}
+.circle-overlay__circle:nth-child(3) .circle {
+  background: #2967cc;
+  z-index:6;
+}
+.circle-overlay__circle:nth-child(4) .circle {
+  background: #00e2e6;
+  z-index:7;
+}
+.circle-overlay__circle:nth-child(5) .circle {
+  background: #3dcc82;
+  z-index:8;
+}
+.circle-overlay__circle:nth-child(6) .circle {
+  background: #fbff00;
+  z-index:8;
+}
+.circle-overlay__circle:nth-child(7) .circle {
+  background: #ff9233;
+  z-index:8;
+}
+
+@keyframes heartBeat {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    border-width: 2px;
+  }
+
+  50% {
+    transform: translate(-50%, -50%) scale(2);
+    border-width: 1px;
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(1.666);
+    border-width: 1.2px;
+  }
+}
+
+.heartBeat {
+  animation-name: heartBeat;
+  animation-duration: 1.3s;
+  animation-timing-function: ease-in-out;
+}

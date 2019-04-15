@@ -63,7 +63,7 @@ function Section({
 
         {/* Hack approach to overlay search on top of visualization */}
         <div className="section__places section__places--overlay">
-          <div className="location-card-list">
+          <div className={"location-card-list location-card-list--" + selected.length}>
             {
               Boolean(selected) && Boolean(selected.length) && 
                 [...Array(selected.length)].map((_, i) =>

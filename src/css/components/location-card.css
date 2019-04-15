@@ -7,7 +7,6 @@
   align-items: flex-start;
   background: #fff;
   box-shadow: 0 1px 2px #ccc;
-  transition: transform 0.2s ease;
   position:relative;
 }
 .location-card:nth-child(1) {  
@@ -49,7 +48,12 @@
   padding: 8px 16px 16px;
   align-items: stretch;
   justify-content: stretch;
+  min-width: 280px;
+  margin-left: 8px;
+  pointer-events:none;
 }
+
+
 .location-card.location-card--search:hover {
   cursor: default;
   background: #fff;
@@ -58,42 +62,46 @@
   margin-left: -8px;
   margin-right: -8px;
   margin-bottom: 16px;
+  pointer-events:all;
 }
 
 .location-card--search .react-autosuggest__input {
   background:#f4f4f4;
   border-bottom: 1px solid #ccc;
   padding:14px 16px 13px;
+
 }
 
-
+.location-card--search .helper {
+  font-size: 0.825em;
+}
 
 .location-card:nth-child(1) .location-card__marker {
-  background: #ff3369;
-  z-index:2;
-}
-.location-card:nth-child(2) .location-card__marker {
-  background: #e6179a;
-  z-index:3;
-}
-.location-card:nth-child(3) .location-card__marker {
   background: #a329cc;
   z-index:4;
 }
-.location-card:nth-child(4) .location-card__marker {
+.location-card:nth-child(2) .location-card__marker {
   background: #171ae6;
   z-index:5;
 }
-.location-card:nth-child(5) .location-card__marker {
+.location-card:nth-child(3) .location-card__marker {
   background: #2967cc;
   z-index:6;
 }
-.location-card:nth-child(6) .location-card__marker {
+.location-card:nth-child(4) .location-card__marker {
   background: #00e2e6;
   z-index:7;
 }
-.location-card:nth-child(7) .location-card__marker {
+.location-card:nth-child(5) .location-card__marker {
   background: #3dcc82;
+  z-index:8;
+}
+.location-card:nth-child(6) .location-card__marker {
+  background: #fbff00;
+  z-index:8;
+}
+.location-card:nth-child(7) .location-card__marker {
+  background: #ff9233;
   z-index:8;
 }
 
@@ -121,17 +129,15 @@
 }
 
 .location-card__marker {
-  order:2;
-  display: block;
-  min-width:12px;
-  min-height: 12px;
-  height: 12px;
-  width:12px;
-  margin-left: 8px;
-  flex:0;
   background:transparent;
-  border-radius: 10px;
-  margin-top:2px;
+  display: block;
+  min-width: 24px;
+  height: 4px;
+  width: 100%;
+  top: 0;
+  left: 0px;
+  right: 0;
+  position: absolute;
 }
 
 .location-card__marker-text {
@@ -151,7 +157,7 @@
   text-overflow: ellipsis;
   overflow: hidden;
   margin-bottom: 4px;
-  max-width: calc(100% - 44px);
+  max-width: calc(100% - 24px);
 }
 
 .location-card__subtitle {
