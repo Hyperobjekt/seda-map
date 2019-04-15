@@ -5,6 +5,7 @@ import MapLocationCards from '../map/MapLocationCards';
 import MapSearch from '../map/MapSearch';
 import MenuSentence from '../base/MenuSentence';
 import { getLang } from '../../constants/lang';
+import { CSSTransitionGroup } from 'react-transition-group'
 
 function Section({ 
   id, 
@@ -53,31 +54,44 @@ function Section({
             section={id}
             metrics={cardMetrics}
           >
-            <div className="location-card location-card--search">
-              <Typography component="p" className="helper helper--card-search">
-                { getLang('CARD_SEARCH_HELPER') }
-              </Typography>
-            </div>
+            { selected.length < 7 &&
+              <div key={'section-search'} className="location-card location-card--search">
+                <Typography component="p" className="helper helper--card-search">
+                  { getLang('CARD_SEARCH_HELPER') }
+                </Typography>
+              </div>
+            }
+            
           </MapLocationCards>
         </div>
 
         {/* Hack approach to overlay search on top of visualization */}
         <div className="section__places section__places--overlay">
-          <div className={"location-card-list location-card-list--" + selected.length}>
+          
+          <CSSTransitionGroup
+            component="div"
+            className={"location-card-list location-card-list--" + selected.length}
+            transitionName="location-card"
+            transitionEnterTimeout={500}
+            transitionLeaveTimeout={500}
+          >
             {
               Boolean(selected) && Boolean(selected.length) && 
                 [...Array(selected.length)].map((_, i) =>
                   <div key={'pchld-'+i} className="location-card"></div>
                 )
             }
-            <div className="location-card location-card--search">
-              <MapSearch
-                inputProps={{
-                  placeholder: getLang('CARD_SEARCH_PLACEHOLDER')
-                }}
-              />
-            </div>
-          </div>
+            {
+              selected.length < 7 &&
+                <div key={'section-search-overlay'} className="location-card location-card--search">
+                  <MapSearch
+                    inputProps={{
+                      placeholder: getLang('CARD_SEARCH_PLACEHOLDER')
+                    }}
+                  />
+                </div>
+            }
+          </CSSTransitionGroup>
         </div>
 
         <div className="section__component">

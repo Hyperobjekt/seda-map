@@ -1,7 +1,8 @@
 .circle-overlay__root {
   position: absolute;
-  top:0;left:24px;right:80px;bottom:48px;
+  top:0;left:0;right:0;bottom:0;
   pointer-events:none;
+  overflow: hidden;
 }
 
 .circle-overlay__circle {
@@ -14,7 +15,6 @@
 }
 
 .circle {
-  pointer-events:all;
   width: 10px;
   height: 10px;
   transform: translate(-50%, -50%);
@@ -69,13 +69,13 @@
   }
 
   50% {
-    transform: translate(-50%, -50%) scale(2);
-    border-width: 1px;
+    transform: translate(-50%, -50%) scale(1.5);
+    border-width: 1.5px;
   }
 
   100% {
-    transform: translate(-50%, -50%) scale(1.666);
-    border-width: 1.2px;
+    transform: translate(-50%, -50%) scale(1.1);
+    border-width: 1.9px;
   }
 }
 

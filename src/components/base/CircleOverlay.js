@@ -6,13 +6,25 @@ const getPercentOfRange = (value, range) =>
   ( (value - range[0]) / (range[1] - range[0]) ) * 100
 
 
-const CircleOverlay = ({ circles, xRange, yRange, sizer, onHover, onClick }) => {
+const CircleOverlay = ({ 
+  circles, 
+  xRange, 
+  yRange, 
+  sizer,
+  variant,
+  onHover, 
+  onClick,
+  ...rest
+}) => {
   return (
-    <div className='circle-overlay__root'>
+    <div 
+      className={classNames('circle-overlay__root')}
+      {...rest}
+    >
       {
         circles && circles.map((c,i) => c.x && c.y && c.z ?
           <div 
-            key={'circle' + i}
+            key={'circle-' + variant + i}
             className={
               classNames(
                 "circle-overlay__circle", 
@@ -36,7 +48,7 @@ const CircleOverlay = ({ circles, xRange, yRange, sizer, onHover, onClick }) => 
             />
           </div>
           :
-          <div />
+          <div key={'circle-' + variant + i} />
         )
       }
     </div>

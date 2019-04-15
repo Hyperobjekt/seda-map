@@ -39,6 +39,7 @@
     "react-scroll": "^1.7.11",
     "react-seda-scatterplot": "^1.1.1",
     "react-seda-search": "^1.0.1",
+    "react-transition-group": "^1.2.1",
     "redux": "4.0.1",
     "redux-thunk": "2.3.0",
     "sanitize.css": "7.0.3",

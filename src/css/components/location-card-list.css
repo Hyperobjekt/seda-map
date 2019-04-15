@@ -12,27 +12,33 @@
   max-width: 280px;
 }
 
-
-.location-card--added {
-  flex: 0.0001;
-  animation: flexGrow 500ms ease forwards;
+.location-card-enter {
+  transform: translateY(100%);
+  /* opacity:0; */
+  flex:0.001;
+  transition: transform 500ms ease-out, flex 0.5s linear;
 }
 
-.location-card--removed {
-  flex: 1;
-  animation: flexShrink 500ms ease forwards;
+.location-card-enter.location-card-enter-active {
+  transform: translateY(0);
+  /* opacity: 1; */
+  flex:1;
 }
 
-@keyframes flexGrow {
-  to {
-    flex: 1;
-  }
+.location-card-leave {
+  /* opacity: 1; */
+  min-width: 1px!important;
+  flex:1;
+  transform: translateY(0);
+  transition: transform 0.5s cubic-bezier(0.165, 0.84, 0.44, 1), flex 0.5s linear;
 }
 
-@keyframes flexShrink {
-  to {
-    flex: 0;
-  }
+.location-card-leave.location-card-leave-active {
+  transform: translateY(100%);
+  /* opacity:0.1; */
+  flex:0.001;
+  min-width: 1px!important;
+  
 }
 
 /** Stacked Card Layout **/
@@ -166,22 +172,22 @@
 @media(min-width: 1650px) {
 
   .location-card-list--7 .location-card:nth-child(1) {
-    margin-right: -6%;
+    margin-right: 0;
   }
   .location-card-list--7 .location-card:nth-child(2) {
-    margin-right: -5%;
+    margin-right: 0;
   }
   .location-card-list--7 .location-card:nth-child(3) {
-    margin-right: -4%;
+    margin-right: 0;
   }
   .location-card-list--7 .location-card:nth-child(4) {
-    margin-right: -3%;
+    margin-right: 0;
   }
   .location-card-list--7 .location-card:nth-child(5) {
-    margin-right: -2%;
+    margin-right: 0;
   }
   .location-card-list--7 .location-card:nth-child(6) {
-    margin-right: -1%;
+    margin-right: 0;
   }
 
 

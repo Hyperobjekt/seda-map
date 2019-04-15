@@ -1,5 +1,4 @@
 import { combineReducers } from "redux";
-import { getRegionFromId } from "../utils";
 
 const defaultData = {
   'schools': {},

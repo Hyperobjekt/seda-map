@@ -2,7 +2,7 @@ import React, { useMemo, useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import SedaScatterplot from 'react-seda-scatterplot'
 import { theme } from '../../style/echartTheme';
-import { getBaseVars, getMetricRange, getRangeFromVarName } from '../../modules/config'
+import { getBaseVars, getRangeFromVarName } from '../../modules/config'
 import { getScatterplotOptions } from '../../style/scatterplot-style';
 import CircleOverlay from './CircleOverlay';
 import { getSizerFunction } from '../../utils';
@@ -102,6 +102,10 @@ function DynamicScatterplot({
         />
         <CircleOverlay
           {...circleOverlay}
+          variant={variant}
+          style={{
+            ...scatterplotOptions.grid
+          }}
           onHover={(circle) => {
             onHover({
               id: circle.id, 
