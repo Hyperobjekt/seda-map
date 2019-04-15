@@ -9,6 +9,28 @@
 .location-card-list .location-card {
   flex:1;
   width: 10%;
-  transition: flex 0.2s ease-out;
+  transition: all 0.4s ease-out;
   max-width: 33.333%;
+}
+
+.location-card--added {
+  flex: 0.0001;
+  animation: flexGrow 500ms ease forwards;
+}
+
+.location-card--removed {
+  flex: 1;
+  animation: flexShrink 500ms ease forwards;
+}
+
+@keyframes flexGrow {
+  to {
+    flex: 1;
+  }
+}
+
+@keyframes flexShrink {
+  to {
+    flex: 0;
+  }
 }
