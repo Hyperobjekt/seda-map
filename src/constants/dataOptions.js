@@ -1,10 +1,18 @@
+import LANG from "./lang";
 
+
+/**
+ * default viewport on map view
+ */
 export const DEFAULT_VIEWPORT = {
   latitude: 37.39,
   longitude: -96.78,
   zoom: 3.15
 }
 
+/**
+ * default vars for each section
+ */
 export const SECTIONS = {
   'map': {
     xVar: 'all_ses',
@@ -37,6 +45,9 @@ export const BASE_VARS = {
   'schools': ['id', 'name', 'lat', 'lon', 'all_avg', 'frl_pct', 'sz' ]
 }
 
+/**
+ * Colors for selected locations
+ */
 export const SELECTED_COLORS = [
   '#ff0d00', 
   '#cc4f14', 
@@ -48,11 +59,12 @@ export const SELECTED_COLORS = [
   '#00e2e6', 
   '#2967cc', 
   '#171ae6', 
-  '#a329cc', 
-  '#e6179a', 
-  '#ff3369'
+  '#a329cc'
 ].reverse();
 
+/**
+ * colors for map choropleths
+ */
 export const CHOROPLETH_COLORS = [
   '#37469C', 
   '#3561A8', 
@@ -63,127 +75,145 @@ export const CHOROPLETH_COLORS = [
   '#F9FECC'
 ];
 
+/**
+ * Data metrics in the SEDA data set
+ */
 export const METRICS = [
   {
     id: 'avg',
-    label: 'Average Test Scores',
-    description: 'Shows the set of educational opportunities children have had from birth to the time they take the tests',
-    help: 'Average test scores for grades 3-8 explainer',
-    min: -4,
-    max: 4,
-    gapMin: -8,
-    gapMax: 1,
+    label: LANG['LABEL_AVG'],
+    description: LANG['EXPLAINER_AVG'],
+    range: {
+      'default': [ -4, 4 ],
+      'gap': [ -8, 1 ]
+    },
     map: true,
     scatterplot: true,
   },
   {
     id: 'grd',
-    label: 'Growth of test scores',
-    descriptive_label: 'Grow %value% grade levels each year',
-    description: 'Shows how much students learn on average while they are in school',
-    min: 0.4,
-    max: 1.6,
-    gapMin: -0.5,
-    gapMax: 0.5,
+    label: LANG['LABEL_GRD'],
+    description: LANG['EXPLAINER_GRD'],
+    range: {
+      'default': [ 0.4, 1.6 ],
+      'gap': [ -0.5, 0.5 ]
+    },
     map: true,
     scatterplot: true,
   },
   {
     id: 'coh',
-    label: 'Trend of test scores',
-    description: 'Indicates the extent to which a community is getting better at providing educational opportunities over time',
-    min: -0.3,
-    max: 0.3,
-    gapMin: -0.3,
-    gapMax: 0.3,
+    label: LANG['LABEL_COH'],
+    description: LANG['EXPLAINER_COH'],
+    range: {
+      'default': [ -0.3, 0.3 ]
+    },
     map: true,
     scatterplot: true,
   },
   {
     id: 'ses',
-    label: 'Socioeconomic Status',
-    description: 'Socioeconomic status helper',
+    label: LANG['LABEL_SES'],
+    description: LANG['EXPLAINER_SES'],
     map: false,
-    scatterplot: true
+    scatterplot: true,
+    range: {
+      'default': [ -5, 4 ],
+      'b': [ -14, 5 ],
+      'h': [ -16, 5 ]
+    }
   },
   {
     id: 'seg',
-    label: 'Segregation Measure',
-    description: 'Segregation status helper',
+    label: LANG['LABEL_SEG'],
+    description: LANG['EXPLAINER_SEG'],
+    range: {
+      'default': [ -5, 5 ],
+      
+    },
     map: false,
     scatterplot: true
   }
 ]
 
+/**
+ * regions data is available for
+ */
 export const REGIONS = [
   {
     id: 'counties',
-    label: 'Counties'
+    label: LANG['LABEL_COUNTIES']
   },
   {
     id: 'districts',
-    label: 'School Districts'
+    label: LANG['LABEL_DISTRICTS']
   },
   {
     id: 'schools',
-    label: 'Schools'
+    label: LANG['LABEL_SCHOOLS']
   }
 ];
 
+/**
+ * demographics data is available for
+ */
 export const DEMOGRAPHICS = [
   {
     id: 'all',
-    label: 'All'
+    label: LANG['LABEL_ALL']
   },
   {
     id: 'w',
-    label: 'White'
+    label: LANG['LABEL_W']
   },
   {
     id: 'b',
-    label: 'Black'
+    label: LANG['LABEL_B']
   },
   {
     id: 'h',
-    label: 'Hispanic'
+    label: LANG['LABEL_H']
   },
   {
     id: 'a',
-    label: 'Asian'
+    label: LANG['LABEL_A']
   },
   {
     id: 'm',
-    label: 'Male'
+    label: LANG['LABEL_M']
   },
   {
     id: 'f',
-    label: 'Female'
+    label: LANG['LABEL_F']
   },
   {
     id: 'p',
-    label: 'Poor'
+    label: LANG['LABEL_P']
   },
   {
     id: 'np',
-    label: 'Non-Poor'
+    label: LANG['LABEL_NP']
   },
 ]
 
+/**
+ * gaps data is available for
+ */
 export const GAPS = [
   {
     id: 'wb',
-    label: 'White / Black Gap'
+    label: LANG['LABEL_WB']
   },
   {
     id: 'wh',
-    label: 'White / Hispanic Gap'
+    label: LANG['LABEL_WH']
   },
   {
     id: 'wa',
-    label: 'White / Asian Gap'
+    label: LANG['LABEL_WA']
   },
   {
     id: 'pn',
-    label: 'Poor / Non-poor Gap'
+    label: LANG['LABEL_PN']
   }
 ]

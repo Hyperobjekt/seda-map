@@ -84,6 +84,33 @@ export const getMetricLabel = (id) => {
 }
 
 /**
+ * gets the range for the metric, or an alternate range
+ * if a variant is specified
+ * @param {string} id 
+ * @param {string} variant 
+ */
+export const getMetricRange = (id, demographic, region) => {
+  const metric = getMetricById(id)
+  if (!metric || !metric.range ) {
+    throw new Error(`no range specified for metric ${id}`)
+  }
+  if (region && demographic) {
+    const key = [demographic, region].join('_')
+    if (metric.range[key]) {
+      return metric.range[key]
+    }
+  } else if (demographic && metric.range[demographic]) {
+    return metric.range[demographic]
+  } else if (region && metric.range[region]) {
+    return metric.range[region]
+  } else {
+    return isGapDemographic(demographic) && metric.range['gap'] ?
+      metric.range['gap'] : metric.range['default']
+  }
+  
+}
+
+/**
  * Gets the label for the provided demographic ID
  * @param {string} id 
  * @returns {string}
@@ -118,11 +145,10 @@ export const getRegionLabel = (id) => {
  * @returns {array}
  */
 export const getStopsForVarName = (varName) => {
-  const isGap = isGapVar(varName);
-  const metric = getMetricFromVarName(varName);
+  const demId = getDemographicIdFromVarName(varName);
+  const metricId = getMetricIdFromVarName(varName);
   const colors = getChoroplethColors()
-  const min = isGap ? metric.gapMin : metric.min;
-  const max = isGap ? metric.gapMax : metric.max;
+  const [ min, max ] = getMetricRange(metricId, demId)
   const range = Math.abs(max - min);
   const stepSize = range / (colors.length);
   return colors.map((c, i) =>
@@ -138,10 +164,9 @@ export const getStopsForVarName = (varName) => {
  * @returns {number} between 0 - 1
  */
 export const getValuePositionForMetric = (value, varName) => {
-  const isGap = isGapVar(varName);
-  const metric = getMetricFromVarName(varName);
-  const min = isGap ? metric.gapMin : metric.min;
-  const max = isGap ? metric.gapMax : metric.max;
+  const demId = getDemographicIdFromVarName(varName);
+  const metricId = getMetricIdFromVarName(varName);
+  const [ min, max ] = getMetricRange(metricId, demId)
   return Math.min(1, Math.max(0, (value - min) / (max - min)))
 }
 

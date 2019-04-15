@@ -160,6 +160,14 @@ const LANG = {
 
 }
 
+export default LANG
+
+/**
+ * Takes a text string and injects object keys that
+ * match $[key]
+ * @param {*} text 
+ * @param {*} params 
+ */
 const interpolate = (text, params = {}) => {
   const arr = splitLang(text);
   return arr.map((a) => {
@@ -176,6 +184,11 @@ const interpolate = (text, params = {}) => {
   }).join('')
 }
 
+/**
+ * Gets the language string for the given key and data
+ * @param {string} key 
+ * @param {object} props 
+ */
 export const getLang = (key = '', props = {}) => {
   key = key.toUpperCase();
   if (!LANG[key]) { return key }
