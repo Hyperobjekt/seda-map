@@ -67,6 +67,19 @@ h6,
   position: relative;
   flex-grow: 1;
 }
+
+.map-tool {
+  /* The height needs to be set to a fixed value for the effect to work.
+   * 100vh is the full height of the viewport. */
+   height: 100vh;
+   /* The scaling of the images would add a horizontal scrollbar, so disable x overflow. */
+   overflow-x: hidden;
+   /* Enable scrolling on the page. */
+   overflow-y: auto;
+   /* Set the perspective to 2px. This is essentailly the simulated distance from the viewport to transformed objects.*/
+   perspective: 2px;
+}
+
 /** COMPONENTS */
 
 /** Header Component */

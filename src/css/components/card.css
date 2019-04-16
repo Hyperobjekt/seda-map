@@ -1,0 +1,77 @@
+
+/** Location Card Root */
+
+.card {
+  position:relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background: #fff;
+  box-shadow: 0 1px 2px #ccc;
+}
+
+/** Location Stats Header */
+
+.card__header {
+  position:relative;
+  z-index:9;
+  width: 100%;
+  flex: 0;
+  text-align:left;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 16px 16px 8px 16px;
+  min-height: 56px;
+}
+
+.card__title {
+  order: 1;
+  font-size: 18px;
+  font-weight: bold;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  margin-bottom: 4px;
+  max-width: calc(100% - 24px);
+}
+
+.card__subtitle {
+  order:3;
+  width: 100%;
+  color: #666;
+  font-size: 14px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+/** List of stats for the location */
+
+.card__body {
+  padding: 0px 16px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  align-items: flex-start;
+  justify-content: stretch;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.card .card__button {
+  margin-top: auto;
+}
+
+/** Dark overrides */
+
+.card.dark {
+  border: 1px solid rgba(255,255,255,0.1);
+  background:transparent;
+  box-shadow: none;
+  color: #fff;
+}
+
+.card.dark .card__text {
+  color: #fff;
+  text-align: left;
+}

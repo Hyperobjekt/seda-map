@@ -109,7 +109,7 @@ const LANG = {
   'CARD_SEARCH_HELPER': 'Use the search above to add and view data for a school, district, or county. You can select up to 7 locations.',
 
   // Intro Section
-  'INTRO_TITLE': 'Explore educational opportunity in',
+  'INTRO_TITLE': 'Which measure would you like to explore?',
   'INTRO_DESCRIPTION': 'Using over 330 million test scores across the U.S., we have calculated $[avg], $[grd], and $[coh] to measure educational opportunity.',
   'SEARCH_PLACEHOLDER': 'Enter a city, county, district, or school',
 
