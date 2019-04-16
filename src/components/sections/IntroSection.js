@@ -1,44 +1,46 @@
 import React from 'react'
 import PropTypes from 'prop-types';
 import Hint from '../base/Hint';
-import MapSearch from '../map/MapSearch';
 import { Typography, Button } from '@material-ui/core';
-import { getLang, splitLang } from '../../constants/lang';
+import { getLang } from '../../constants/lang';
 import Card from '../base/Card';
 
 
-const assembleTextAndComponents = (text, components) => {
-  const arr = splitLang(text);
-  return arr.map((a,i) => {
-    if (a && a[0] !== '$') {
-      return <span key={'intro-'+i}>{a}</span>
-    } else {
-      a = a.replace('$[', '')
-      a = a.replace(']', '')
-      if (components[a]) {
-        return components[a]
-      }
-      return a;
-    }
-  })
-}
+// TODO: re-implement lang for the intro section if we use
+// the card components
 
-const getIntroText = () => {
-  const params = {
-    avg: <Hint key='intro-avg' text={getLang('EXPLAINER_AVG')}>
-        {getLang('LABEL_AVG')}
-      </Hint>,
-    grd: <Hint key='intro-grd' text={getLang('EXPLAINER_GRD')}>
-      {getLang('LABEL_GRD')}
-      </Hint>,
-    coh: <Hint key='intro-coh' text={getLang('EXPLAINER_COH')}>
-      {getLang('LABEL_COH')}
-    </Hint>
-  };
-  return assembleTextAndComponents(
-    getLang('INTRO_DESCRIPTION'), params
-  );
-}
+// const assembleTextAndComponents = (text, components) => {
+//   const arr = splitLang(text);
+//   return arr.map((a,i) => {
+//     if (a && a[0] !== '$') {
+//       return <span key={'intro-'+i}>{a}</span>
+//     } else {
+//       a = a.replace('$[', '')
+//       a = a.replace(']', '')
+//       if (components[a]) {
+//         return components[a]
+//       }
+//       return a;
+//     }
+//   })
+// }
+
+// const getIntroText = () => {
+//   const params = {
+//     avg: <Hint key='intro-avg' text={getLang('EXPLAINER_AVG')}>
+//         {getLang('LABEL_AVG')}
+//       </Hint>,
+//     grd: <Hint key='intro-grd' text={getLang('EXPLAINER_GRD')}>
+//       {getLang('LABEL_GRD')}
+//       </Hint>,
+//     coh: <Hint key='intro-coh' text={getLang('EXPLAINER_COH')}>
+//       {getLang('LABEL_COH')}
+//     </Hint>
+//   };
+//   return assembleTextAndComponents(
+//     getLang('INTRO_DESCRIPTION'), params
+//   );
+// }
 
 function MapIntro() {
   return (
