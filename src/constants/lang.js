@@ -112,6 +112,12 @@ const LANG = {
   'INTRO_TITLE': 'Which measure would you like to explore?',
   'INTRO_DESCRIPTION': 'Using over 330 million test scores across the U.S., we have calculated $[avg], $[grd], and $[coh] to measure educational opportunity.',
   'SEARCH_PLACEHOLDER': 'Enter a city, county, district, or school',
+  'INTRO_CARD_TITLE_AVG': 'Educational Opportunity',
+  'INTRO_CARD_DESCRIPTION_AVG': 'Explore educational opportunity within communities by comparing $[avg] to socioeconomic status and poverty measures',
+  'INTRO_CARD_TITLE_GRD': 'School Quality',
+  'INTRO_CARD_DESCRIPTION_GRD': 'Explore the quality of education for schools and communities by viewing $[grd] that show how much students are learning each year.',
+  'INTRO_CARD_TITLE_COH': 'Changes in Opportunity',
+  'INTRO_CARD_DESCRIPTION_COH': 'Explore how opportunity is changing over time in your community by viewing the $[coh] over time.',
 
   // Map Section
   'MAP_TITLE': 'Map of $[metric] for $[demographic] by $[region]',
@@ -209,4 +215,20 @@ export const getLabel = (id) => {
 /** Split a lang string at the variables */
 export const splitLang = (text) =>
   text.split(/(\$\[[a-zA-Z0-9_]*\])/)
+
+export const getLangWithComponents = (key, components) => {
+  const arr = splitLang(getLang(key));
+  return arr.map((a,i) => {
+    if (a && a[0] !== '$') {
+      return a
+    } else {
+      a = a.replace('$[', '')
+      a = a.replace(']', '')
+      if (components[a]) {
+        return components[a]
+      }
+      return a;
+    }
+  })
+}
 

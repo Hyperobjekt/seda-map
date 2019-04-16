@@ -12,6 +12,7 @@ import OpportunityDifferences from '../../components/sections/OpportunityDiffere
 import AchievementGaps from '../../components/sections/AchievementGapSection';
 import MapIntro from '../../components/sections/IntroSection';
 import MapSection from '../../components/sections/MapSection';
+import { updateRoute } from '../../modules/router';
 
 const ScrollElement = Scroll.ScrollElement;
 const ScrollLink = Scroll.Link;
@@ -30,6 +31,7 @@ export class MapView extends Component {
     onDemographicChange: PropTypes.func,
     mapScatterplotLoaded: PropTypes.bool,
     selectedLocationCount: PropTypes.number,
+    setMetric: PropTypes.func,
   }
 
   componentDidMount() { 
@@ -50,12 +52,13 @@ export class MapView extends Component {
 
   render() {
     return (
-      <div className="map-tool">
+      <div id="scrollWrapper" className="map-tool">
         <div>
         {
           Object.keys(sectionIdComponentMap).map(
             (k) => 
               <ScrollLink 
+                containerId="scrollWrapper"
                 key={k+'-link'}
                 to={k}
                 onSetActive={this.onSectionEnter}
@@ -65,11 +68,13 @@ export class MapView extends Component {
           )
         }
         </div>
-        <MapIntro 
-          onSearchSelect={() => {
+        <MapIntro
+          onMeasureClick={(metricId) => {
+            this.props.setMetric(metricId);
             Scroll.scroller.scrollTo('map', {
               duration: 400,
               smooth: true,
+              containerId: 'scrollWrapper'
             })
           }}
         />
@@ -101,9 +106,12 @@ const mapStateToProps = (
       selected[region].length : 0, 
 })
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = (dispatch, ownProps) => ({
   loadRouteLocations: (locations) => 
-    dispatch(loadRouteLocations(locations))
+    dispatch(loadRouteLocations(locations)),
+  setMetric: (metricId) => {
+    updateRoute(ownProps, { metric: metricId })
+  }
 })
 
 export default compose(
