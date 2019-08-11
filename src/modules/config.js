@@ -504,3 +504,10 @@ export const getPredictedValue = (value, metric, region) => {
     b[2]*Math.pow(value,2) + 
     b[3]*Math.pow(value,3);
 }
+
+export const valueToLowMidHigh = (metricId, value) => {
+  if (!value && value !== 0) { return 'NONE'; }
+  return metricId === 'grd' ?
+    (value > 1 ? 'HIGH' : (value < 1 ? 'LOW' : 'MID')) :
+    (value > 0 ? 'HIGH' : (value < 0 ? 'LOW' : 'MID')) 
+}

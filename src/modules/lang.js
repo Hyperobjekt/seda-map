@@ -199,7 +199,8 @@ export const getDescriptionForVarName = (varName, value) => {
   if (!isGap) {
     return getLang(langKey, { 
       value: formattedValue[0] === '-' ? 
-        formattedValue.substring(1) : formattedValue 
+        formattedValue.substring(1) : formattedValue,
+      students: getLang('LABEL_STUDENTS_' + demographicId)
     })
   }
   // gap demographic lang

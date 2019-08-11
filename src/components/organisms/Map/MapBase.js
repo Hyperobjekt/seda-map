@@ -117,7 +117,7 @@ const MapBase = ({
 
   // handler for resize event
   const handleResize = () => {
-    onViewportChange({...viewport, ...getContainerSize(mapEl.current)});
+    onViewportChange({...viewport, ...getContainerSize(mapEl.current)}, false);
   }
 
   // resize map on window resize

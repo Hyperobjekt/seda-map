@@ -59,7 +59,7 @@ const LocationMetric = ({
 LocationMetric.propTypes = {
   metric: PropTypes.string,
   feature: PropTypes.object,
-  toggleExpanded: PropTypes.bool,
+  toggleExpanded: PropTypes.func,
   onGapClick: PropTypes.func,
   onHelpClick: PropTypes.func,
   expanded: PropTypes.bool,

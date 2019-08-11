@@ -127,9 +127,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     dispatch(onCoordsChange(coords))
     dispatch(addToFeatureIdMap([ feature ]))
   },
-  onViewportChange: (vp) => {
+  onViewportChange: (vp, updateRoute = true) => {
     dispatch(onViewportChange(vp))
-    updateViewportRoute(ownProps, vp);
+    updateRoute && updateViewportRoute(ownProps, vp);
   },
   resetHighlightedState: () => {
     dispatch(onHighlightedStateChange('us', ownProps))

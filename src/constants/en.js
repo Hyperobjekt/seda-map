@@ -91,6 +91,17 @@ const LANG = {
   'LABEL_SHORT_WH': 'white / Hispanic',
   'LABEL_SHORT_MF': 'male / female',
 
+  'LABEL_STUDENTS_ALL': 'Students',
+  'LABEL_STUDENTS_B': 'Black students',
+  'LABEL_STUDENTS_W': 'White students',
+  'LABEL_STUDENTS_H': 'Hispanic students',
+  'LABEL_STUDENTS_A': 'Asian students',
+  'LABEL_STUDENTS_M': 'Male students',
+  'LABEL_STUDENTS_F': 'Female students',
+  'LABEL_STUDENTS_P': 'Poor students',
+  'LABEL_STUDENTS_NP': 'Non-poor students',
+  'LABEL_STUDENTS_N': 'Non-poor students',
+
   // Region Labels
   'LABEL_COUNTIES': 'counties',
   'LABEL_DISTRICTS': 'school districts',
@@ -181,15 +192,15 @@ const LANG = {
   'EXPLAINER_SEG': '',
 
   // Description of metric value for location
-  'VALUE_AVG_HIGH': 'Students score <strong>$[value] grade levels above</strong> U.S. average.',
-  'VALUE_AVG_MID': 'Students test scores are at the national average.',
-  'VALUE_AVG_LOW': 'Students score <strong>$[value] grade levels below</strong> U.S. average.',
-  'VALUE_GRD_HIGH': 'Students learn <strong>$[value] more each grade</strong> than the U.S. average.',
-  'VALUE_GRD_MID': 'Students learn the same each grade as the U.S. average.',
-  'VALUE_GRD_LOW': 'Students learn <strong>$[value] less each grade</strong> than the U.S. average.',
-  'VALUE_COH_HIGH': 'Test scores <strong>increased an average of $[value] grade levels</strong> each year from 2009-2016.',
-  'VALUE_COH_MID': 'No change in test scores.',
-  'VALUE_COH_LOW': 'Test scores <strong>decreased an average of $[value] grade levels</strong> each year from 2009-2016.',
+  'VALUE_AVG_HIGH': '$[students] score <strong>$[value] grade levels above</strong> U.S. average.',
+  'VALUE_AVG_MID': '$[students] test scores are at the national average.',
+  'VALUE_AVG_LOW': '$[students] score <strong>$[value] grade levels below</strong> U.S. average.',
+  'VALUE_GRD_HIGH': '$[students] learn <strong>$[value] more each grade</strong> than the U.S. average.',
+  'VALUE_GRD_MID': '$[students] learn the same each grade as the U.S. average.',
+  'VALUE_GRD_LOW': '$[students] learn <strong>$[value] less each grade</strong> than the U.S. average.',
+  'VALUE_COH_HIGH': '$[students] test scores <strong>increased an average of $[value] grade levels</strong> each year from 2009-2016.',
+  'VALUE_COH_MID': '$[students] test scores were stable from 2009-2016.',
+  'VALUE_COH_LOW': '$[students] test scores <strong>decreased an average of $[value] grade levels</strong> each year from 2009-2016.',
 
   'VALUE_SES_ULTRA_HIGH': 'Socioeconomic status is <strong>very far above national average</strong>.',
   'VALUE_SES_VERY_HIGH': 'Socioeconomic status is <strong>far above national average</strong>.',
@@ -453,17 +464,17 @@ const LANG = {
   'HELP_LEGEND_LOW_COH': 'lower',
   'HELP_LEGEND_HIGH_COH': 'higher',
 
-  'HELP_LEGEND_VAL_AVG_LOW': 'Students score $[value] grade levels below average',
+  'HELP_LEGEND_VAL_AVG_LOW': '$[students] score $[value] grade levels below average',
   'HELP_LEGEND_VAL_AVG_MID': 'national average',
-  'HELP_LEGEND_VAL_AVG_HIGH': 'Students score $[value] grade levels above average',
+  'HELP_LEGEND_VAL_AVG_HIGH': '$[students] score $[value] grade levels above average',
 
-  'HELP_LEGEND_VAL_GRD_LOW': 'Students learn $[value] more per grade than average',
+  'HELP_LEGEND_VAL_GRD_LOW': '$[students] learn $[value] more per grade than average',
   'HELP_LEGEND_VAL_GRD_MID': 'national average',
-  'HELP_LEGEND_VAL_GRD_HIGH': 'Students learn $[value] less per grade than average',
+  'HELP_LEGEND_VAL_GRD_HIGH': '$[students] learn $[value] less per grade than average',
 
-  'HELP_LEGEND_VAL_COH_LOW': 'Average test scores improving $[value] grade levels per year',
+  'HELP_LEGEND_VAL_COH_LOW': '$[students] average test scores declining $[value] grade levels per year',
   'HELP_LEGEND_VAL_COH_MID': 'national average',
-  'HELP_LEGEND_VAL_COH_HIGH': 'Average test scores improving $[value] grade levels per year',
+  'HELP_LEGEND_VAL_COH_HIGH': '$[students] average test scores improving $[value] grade levels per year',
 
 
   'HELP_MAP': 'What does the map show?',

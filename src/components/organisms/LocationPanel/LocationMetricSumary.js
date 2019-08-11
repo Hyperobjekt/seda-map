@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { getLang } from '../../../modules/lang';
 import { LocationStatList } from './LocationStats';
-import { getMetricRange, getRegionFromFeatureId, getPredictedValue } from '../../../modules/config';
+import { getMetricRange, getRegionFromFeatureId, getPredictedValue, valueToLowMidHigh } from '../../../modules/config';
 import { getFeatureProperty } from '../../../modules/features';
 import { Typography, Button } from '@material-ui/core';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -84,12 +84,7 @@ LocationMetric.propTypes = {
   children: PropTypes.node,
 }
 
-const valueToLowMidHigh = (metricId, value) => {
-  if (!value && value !== 0) { return 'NONE'; }
-  return metricId === 'grd' ?
-    (value > 1 ? 'HIGH' : (value < 1 ? 'LOW' : 'MID')) :
-    (value > 0 ? 'HIGH' : (value < 0 ? 'LOW' : 'MID')) 
-}
+
 
 const MetricSummary = ({metric, demographic = 'all', name, value}) => {
   const langKey = 'SUMMARY_' + metric + '_' + valueToLowMidHigh(metric, value);

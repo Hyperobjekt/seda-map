@@ -4,7 +4,7 @@ import { getLang, getLegendEndLabelsForVarName } from '../../modules/lang';
 import { compose } from 'redux';
 import { withRouter } from 'react-router-dom';
 import { Typography } from '@material-ui/core';
-import { getChoroplethColors, isGapVarName, getInvertedFromVarName, getMetricRangeFromVarName, getFormatterForVarName, getSingularRegion } from '../../modules/config';
+import { getChoroplethColors, isGapVarName, getInvertedFromVarName, getMetricRangeFromVarName, getFormatterForVarName, getSingularRegion, valueToLowMidHigh } from '../../modules/config';
 import Panel from '../molecules/Panel';
 import AccordionItem from '../molecules/AccordionItem';
 import { hideHelpTopic, showHelpTopic } from '../../actions';
@@ -98,7 +98,17 @@ const HelpMap = withRouter(({id, match, expanded, onChange}) => {
   const invert = getInvertedFromVarName(varName);
   const [ startLabel, endLabel ] = getLegendEndLabelsForVarName(varName, 'HELP_LEGEND_');
   const colorRange = getMetricRangeFromVarName(varName, region, 'map');
-  const formatter = getFormatterForVarName(varName);
+  
+  // formatter function for legend
+  const formatter = (value) => {
+    const numFormat = getFormatterForVarName(varName);
+    const lowMidHigh = valueToLowMidHigh(metric, value);
+    const langKey = 'HELP_LEGEND_VAL_' + metric + '_' + lowMidHigh
+    return getLang(langKey, {
+      value: numFormat(value),
+      students: getLang('LABEL_STUDENTS_' + demographic)
+    })
+  }
   return (
     <AccordionItem
       id={id}
@@ -119,7 +129,6 @@ const HelpMap = withRouter(({id, match, expanded, onChange}) => {
           startLabel={startLabel}
           endLabel={endLabel}
           className='help-legend'
-          valueLangPrefix={'HELP_LEGEND_VAL_' + metric + '_'}
         />
       </div>
     </AccordionItem>

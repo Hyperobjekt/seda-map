@@ -1,11 +1,5 @@
 import { createMuiTheme } from '@material-ui/core/styles';
 
-const defaultTheme = createMuiTheme({
-  typography: { useNextVariants: true },
-})
-
-console.log(defaultTheme)
-
 // Theme for the tool
 const materialTheme = createMuiTheme({
   palette: {

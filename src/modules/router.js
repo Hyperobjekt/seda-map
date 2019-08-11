@@ -148,6 +148,16 @@ export const getViewportFromPathname = (path) => {
 }
 
 /**
+ * Checks if updates contain new data that are not
+ * already in props.
+ */
+const areNewUpdates = (params, updates) => {
+  return Object.keys(updates).reduce((acc, curr) => {
+    return acc ? acc : params[curr] !== updates[curr].toString()
+  }, false)
+}
+
+/**
  * Pushes an updated route to history
  * @param {object} props props from a component connected to the router
  * @param {object} updates an object of route params to update
@@ -157,9 +167,10 @@ export const updateRoute = (props, updates, routeVars) => {
     updates['highlightedState'] = updates['highlightedState'].toLowerCase()
   }
   const root = props.match.path.split(':')[0].slice(0,-1)
-  props.history.push(
-    root + getPathnameFromParams(props.match.params, updates, routeVars)
-  );
+  areNewUpdates(props.match.params, updates) &&
+    props.history.push(
+      root + getPathnameFromParams(props.match.params, updates, routeVars)
+    );
 }
 
 /**

@@ -130,7 +130,7 @@ const LegendBar = ({
               getLang(
                 valueLangPrefix + 'HIGH', 
                 { value: formatter(legendRange[1]) }
-              ) : ('+' + formatter(legendRange[1]))
+              ) : (formatter(legendRange[1]))
           }
         </div>
       </div>
