@@ -7,9 +7,33 @@ cache:
 script:
   - npm run build
 deploy:
-  provider: surge
-  skip_cleanup: true
-  domain: seda-dev.surge.sh
-  project: ./build/
-  on:
-    branch: master
+  - skip_cleanup: true
+    provider: s3
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
+    bucket: edop-explorer-staging
+    region: us-east-1
+    acl: public_read
+    local_dir: build
+    upload-dir: explorer
+    on:
+      branch: staging
+  - provider: script
+    script: aws cloudfront create-invalidation --distribution-id=$CLOUDFRONT_ID_STAGING --paths="/*"
+    on:
+      branch: staging
+  - skip_cleanup: true
+    provider: s3
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
+    bucket: edop-explorer-production
+    region: us-east-1
+    acl: public_read
+    local_dir: build
+    upload-dir: explorer
+    on:
+      branch: production
+  - provider: script
+    script: aws cloudfront create-invalidation --distribution-id=$CLOUDFRONT_ID_PRODUCTION --paths="/*"
+    on:
+      branch: production
