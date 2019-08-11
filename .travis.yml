@@ -5,6 +5,8 @@ cache:
   directories:
     - node_modules
 script:
+  - if [ "$TRAVIS_BRANCH" = "production" ]; then export PUBLIC_URL=https://edopportunity.org/explorer/; fi
+  - if [ "$TRAVIS_BRANCH" = "staging" ]; then export PUBLIC_URL=https://staging.edopportunity.org/explorer/; fi
   - npm run build
 before_deploy:
   - pip install --user awscli
