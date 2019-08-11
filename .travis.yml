@@ -6,6 +6,9 @@ cache:
     - node_modules
 script:
   - npm run build
+before_deploy:
+  - pip install --user awscli
+  - export PATH=$PATH:$HOME/.local/bin
 deploy:
   - skip_cleanup: true
     provider: s3
