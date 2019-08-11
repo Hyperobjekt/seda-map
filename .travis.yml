@@ -18,11 +18,10 @@ deploy:
     region: us-east-1
     acl: public_read
     local_dir: build
-    upload-dir: explorer
     on:
       branch: staging
   - provider: script
-    script: aws cloudfront create-invalidation --distribution-id=$CLOUDFRONT_ID_STAGING --paths="/*"
+    script: aws cloudfront create-invalidation --distribution-id=$CLOUDFRONT_ID_STAGING --paths="/explorer/*"
     on:
       branch: staging
   - skip_cleanup: true
@@ -33,10 +32,9 @@ deploy:
     region: us-east-1
     acl: public_read
     local_dir: build
-    upload-dir: explorer
     on:
       branch: production
   - provider: script
-    script: aws cloudfront create-invalidation --distribution-id=$CLOUDFRONT_ID_PRODUCTION --paths="/*"
+    script: aws cloudfront create-invalidation --distribution-id=$CLOUDFRONT_ID_PRODUCTION --paths="/explorer/*"
     on:
       branch: production
