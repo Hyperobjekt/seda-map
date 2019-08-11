@@ -57,7 +57,7 @@ const gtm = GoogleTagManager();
 
 const gtmMiddleware = createMiddleware(eventsMap, gtm);
 
-export const history = createHistory({basename: process.env.REACT_APP_SUBFOLDER})
+export const history = createHistory()
 
 const initialState = {}
 const enhancers = []
