@@ -1,16 +1,16 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { MENU } from '../../constants/site';
-import SiteMenu from '../organisms/SiteMenu';
+import { MENU } from '../../shared/constants/site'
+import SiteMenu from '../organisms/SiteMenu'
 
-const SedaMenu = ({menuOpen, onClose}) => {
-  return(
+const SedaMenu = ({ menuOpen, onClose }) => {
+  return (
     <SiteMenu
       open={menuOpen}
       navItems={MENU.navItems}
       socialItems={MENU.socialItems}
-      activeItemId='explorer'
+      activeItemId="explorer"
       onClose={onClose}
     />
   )
@@ -18,18 +18,22 @@ const SedaMenu = ({menuOpen, onClose}) => {
 
 SedaMenu.propTypes = {
   menuOpen: PropTypes.bool,
-  onClose: PropTypes.func,
+  onClose: PropTypes.func
 }
 
 const mapStateToProps = ({ ui: { menuOpen } }) => ({
-  menuOpen,
+  menuOpen
 })
 
-const mapDispatchToProps = (dispatch) => ({
-  onClose: () => dispatch({
-    type: 'TOGGLE_MENU',
-    open: false,
-  })
+const mapDispatchToProps = dispatch => ({
+  onClose: () =>
+    dispatch({
+      type: 'TOGGLE_MENU',
+      open: false
+    })
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(SedaMenu)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SedaMenu)

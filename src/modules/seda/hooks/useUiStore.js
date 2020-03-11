@@ -1,0 +1,40 @@
+import create from 'zustand'
+
+const [useUiStore] = create(set => ({
+  // current view of the data
+  view: 'chart',
+  setView: view => set({ view }),
+  // currently hovered feature
+  hovered: null,
+  setHovered: feature => set({ hovered: feature }),
+  // x, y coords of tooltip
+  coords: [0, 0],
+  setCoords: coords => set({ coords }),
+  // vars to show in tooltip
+  tooltipVars: [],
+  setTooltipVars: tooltipVars => set({ tooltipVars }),
+  // boolean determining if menu is open
+  showMenu: false,
+  toggleMenu: () =>
+    set(state => ({ showMenu: !state.showMenu })),
+  // boolean determining if help is open
+  showHelp: false,
+  toggleHelp: () =>
+    set(state => ({ showHelp: !state.showHelp })),
+  // boolean determining is preview chart is visible
+  showChart: true,
+  toggleChart: () =>
+    set(state => ({ showChart: !state.showChart })),
+  // boolean determining if controls are condensed
+  condensed: false,
+  toggleCondensed: () =>
+    set(state => ({ condensed: !state.condensed })),
+  // active location
+  activeLocation: null,
+  setActiveLocation: activeLocation => set({ activeLocation }),
+  // string determining which selection is currently active
+  selection: null,
+  setSelection: selection => set({ selection })
+}))
+
+export default useUiStore

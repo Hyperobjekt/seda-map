@@ -1,0 +1,7 @@
+export { default as MenuIcon } from "./MenuIcon"
+export { default as ChartIcon } from "./ChartIcon"
+export { default as MapIcon } from "./MapIcon"
+export { default as SplitIcon } from "./SplitIcon"
+export { default as ScoresIcon } from "./ScoresIcon"
+export { default as RatesIcon } from "./RatesIcon"
+export { default as TrendsIcon } from "./TrendsIcon"

@@ -1,16 +1,15 @@
-
 /* 
  * Utility class to hide content visually while keeping it screen reader-accessible.
  * Source: https://www.scottohara.me/blog/2017/04/14/inclusively-hidden.html 
  */
 
- .sr-only:not(:focus):not(:active) {
-  clip: rect(0 0 0 0); 
+.sr-only:not(:focus):not(:active) {
+  clip: rect(0 0 0 0);
   clip-path: inset(100%);
   height: 1px;
   overflow: hidden;
   position: absolute;
-  white-space: nowrap; 
+  white-space: nowrap;
   width: 1px;
 }
 
@@ -55,8 +54,8 @@ hr {
   bottom: 0px;
   top: 0px;
   height: 100%;
-  left: 24px;
-  right: auto;
+  right: 24px;
+  left: auto;
   margin: auto;
   display: flex;
   align-items: center;
@@ -68,10 +67,10 @@ hr {
   margin-bottom: 8px;
 }
 
-@media(min-width: 1023px) {
+@media (min-width: 1023px) {
   .map__zoom {
-    left: 24px;
-    right: auto;
+    left: auto;
+    right: 24px;
     height: 160px;
   }
 }
@@ -84,7 +83,7 @@ hr {
 .mapboxgl-ctrl-group button:focus {
   background-color: var(--highlight-background);
   box-shadow: inset 0 0 0 2px var(--link);
-  border-radius:0px;
+  border-radius: 0px;
 }
 
 .mapboxgl-ctrl-us {
