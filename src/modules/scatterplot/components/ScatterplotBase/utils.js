@@ -3,7 +3,8 @@ import { parse } from 'papaparse'
 import * as scale from 'd3-scale'
 import * as d3array from 'd3-array'
 import * as merge from 'deepmerge'
-import { extendScatterplotOptions } from './style'
+import { extendScatterplotStyle } from './style'
+import { getStateAbbr } from '../../../../shared/selectors/states'
 
 function FetchException(message, urls, err) {
   this.message = message
@@ -299,7 +300,7 @@ const getHighlightedSeries = ({
     id: 'highlighted',
     type: 'scatter',
     symbolSize: zVar ? value => scale(value[2]) : 10,
-    z: 3
+    zLevel: 3
   }
   const overrides = options
     ? getDataSeries('highlighted', options.series)
@@ -329,7 +330,7 @@ const getSelectedSeries = ({
     id: 'selected',
     type: 'scatter',
     symbolSize: value => scale(value[2]),
-    z: 4
+    zLevel: 4
   }
   const overrides = options
     ? getDataSeries('selected', options.series)
@@ -356,7 +357,7 @@ const getBaseSeries = ({ scatterData, scale, options }) => {
       type: 'scatter',
       data: scatterData,
       symbolSize: value => scale(value[2]),
-      z: 2
+      zLevel: 2
     },
     overrides ? overrides : {}
   )
@@ -415,7 +416,7 @@ export const getScatterplotOptions = props => {
     ...props.options,
     series
   }
-  return extendScatterplotOptions(options)
+  return extendScatterplotStyle(options)
 }
 
 /**
@@ -424,11 +425,21 @@ export const getScatterplotOptions = props => {
  * @param {*} data
  */
 export const getDataForId = (id, data) => {
-  return Object.keys(data).reduce((acc, curr) => {
-    // only add data if it exists
-    if (data[curr][id] || data[curr][id] === 0) {
-      acc[curr] = data[curr][id]
-    }
-    return acc
-  }, {})
+  return Object.keys(data).reduce(
+    (acc, curr) => {
+      // only add data if it exists
+      if (data[curr][id] || data[curr][id] === 0) {
+        acc[curr] = data[curr][id]
+      }
+      return acc
+    },
+    { id, state: getStateAbbr(id) }
+  )
+}
+
+export const getFeatureForId = (id, data) => {
+  return {
+    id,
+    properties: getDataForId(id, data)
+  }
 }

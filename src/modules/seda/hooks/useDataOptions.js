@@ -4,7 +4,8 @@ import {
   getMetrics,
   getDemographicById,
   getGapById,
-  getRegionById
+  getRegionById,
+  getScatterplotVars
 } from '../../../shared/selectors'
 import { loadFeatureFromCoords } from '../../../shared/utils/tilequery'
 
@@ -12,7 +13,7 @@ const defaultMetric = getMetricById('avg')
 const defaultDemographic = getDemographicById('all')
 const defaultRegion = getRegionById('districts')
 
-const [useDataOptions] = create(set => ({
+const [useDataOptions] = create((set, get, api) => ({
   metric: defaultMetric,
   setMetric: metric =>
     set({
@@ -46,7 +47,13 @@ const [useDataOptions] = create(set => ({
     set(state => ({ locations: [...state.locations, feature] }))
   },
   filters: [],
-  setFilters: filters => set({ filters })
+  setFilters: filters => set({ filters }),
+  getScatterplotVars: () =>
+    getScatterplotVars(
+      get().region.id,
+      get().metric.id,
+      get().demographic.id
+    )
 }))
 
 export default useDataOptions

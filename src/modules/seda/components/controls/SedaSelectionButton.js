@@ -33,7 +33,6 @@ const useStyles = makeStyles(theme => ({
 
 const SelectionIcon = ({ selectionId }) => {
   const metric = useDataOptions(state => state.metric)
-  console.log(selectionId)
   switch (selectionId) {
     case 'metric':
       return <MetricIcon metricId={metric.id} />

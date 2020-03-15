@@ -1,4 +1,9 @@
-import React, { useState, useMemo, useEffect } from 'react'
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useMemo
+} from 'react'
 import PropTypes from 'prop-types'
 
 // import the core library.
@@ -21,20 +26,12 @@ import 'echarts/lib/component/markPoint'
 import 'echarts/lib/component/markLine'
 import 'echarts/lib/component/markArea'
 
-import { getScatterplotOptions, getDataForId } from './utils'
 import { genId } from '../../../../shared/utils'
 
 const ScatterplotBase = ({
   theme,
-  options: optionOverrides,
-  xVar,
-  yVar,
-  zVar,
-  data,
+  options,
   loading,
-  scale,
-  selected,
-  highlighted,
   spinner = '#0078d4',
   style,
   onHover,
@@ -46,90 +43,18 @@ const ScatterplotBase = ({
   ...props
 }) => {
   const [themeId, setThemeId] = useState(null)
-  const [hoverTimeout, setHoverTimeout] = useState(null)
+  const ref = useRef(null)
 
-  const options = useMemo(
-    () =>
-      getScatterplotOptions({
-        data,
-        xVar,
-        yVar,
-        zVar,
-        selected,
-        highlighted,
-        options: optionOverrides,
-        scale
-      }),
-    [
-      data,
-      xVar,
-      yVar,
-      zVar,
-      selected,
-      highlighted,
-      scale,
-      optionOverrides
-    ]
-  )
-
-  console.log(options)
-
-  const handleClick = e => {
-    if (!onClick) return
-    const locationData = {
-      id: e.data[3],
-      ...getDataForId(e.data[3])
-    }
-    onClick(locationData, e)
-  }
-
-  const handleHover = e => {
-    if (!onHover) return
-    // index of the id property in the scatterplot data
-    const idIndex = zVar ? 3 : 2
-    // get the data array for the hovered location
-    const hoverData =
-      e && e.data && e.data.hasOwnProperty('value')
-        ? e.data['value']
-        : e.data
-    // get the data from the state for the location
-    const locationData =
-      hoverData && e.type === 'mouseover'
-        ? {
-            id: hoverData[idIndex],
-            ...getDataForId(hoverData[idIndex], data)
-          }
-        : null
-    // if there is a location then call onHover immediately
-    if (locationData) {
-      onHover(locationData, e)
-      // clear the timeout if it is waiting to clear the hovered feature
-      if (hoverTimeout) {
-        clearTimeout(hoverTimeout)
-        setHoverTimeout(null)
-      }
-    } else {
-      // set a timeout to inform the callback no items are hovered
-      setHoverTimeout(
-        setTimeout(() => {
-          onHover(null, e)
-        }, 200)
-      )
-    }
+  const eventsDict = {
+    click: onClick,
+    mouseover: onHover,
+    mouseout: onHover
   }
 
   /**
    * Bind events when the chart is ready
    */
   const handleChartReady = e => {
-    onHover && e.on('mouseover', handleHover)
-    onHover && e.on('mouseout', handleHover)
-    onMouseMove && e.on('mousemove', onMouseMove)
-    onClick && e.on('click', handleClick)
-    onMouseOver &&
-      e.getDom().addEventListener('mouseover', onMouseOver)
-    onMouseOut &&
-      e.getDom().addEventListener('mouseout', onMouseOut)
     onReady && onReady(e)
   }
 
@@ -149,6 +74,7 @@ const ScatterplotBase = ({
   return (
     options && (
       <ReactEchartsCore
+        ref={ref}
         echarts={echarts}
         onChartReady={handleChartReady}
         style={{
@@ -165,6 +91,7 @@ const ScatterplotBase = ({
         loadingOption={{
           color: spinner
         }}
+        onEvents={eventsDict}
         {...props}
       />
     )
@@ -174,19 +101,12 @@ const ScatterplotBase = ({
 ScatterplotBase.propTypes = {
   options: PropTypes.object,
   style: PropTypes.object,
-  xVar: PropTypes.string,
-  yVar: PropTypes.string,
-  zVar: PropTypes.string,
-  data: PropTypes.object,
-  selected: PropTypes.array,
-  highlighted: PropTypes.array,
   onHover: PropTypes.func,
   onClick: PropTypes.func,
   onReady: PropTypes.func,
   onMouseMove: PropTypes.func,
   notMerge: PropTypes.bool,
-  theme: PropTypes.object,
-  freeze: PropTypes.bool
+  theme: PropTypes.object
 }
 
 export default ScatterplotBase

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import {
@@ -34,46 +34,52 @@ const useStyles = makeStyles(theme => ({
   axisLabelsY: {}
 }))
 
-const SedaScatterplot = ({ ...props }) => {
+const getLocatonIdFromEvent = e => {
+  // index of the id property in the scatterplot data
+  const idIndex = 3
+  // get the data array for the hovered location
+  const hoverData =
+    e && e.data && e.data.hasOwnProperty('value')
+      ? e.data['value']
+      : e.data
+  const id = hoverData ? hoverData[idIndex] : null
+  // get the data from the state for the location
+  return id
+}
+
+const getCoordsFromEvent = e => [
+  e.event.event.pageX,
+  e.event.event.pageY
+]
+
+const SedaScatterplot = () => {
   // pull required data from store
   const region = useDataOptions(state => state.region)
   const metric = useDataOptions(state => state.metric)
   const demographic = useDataOptions(state => state.demographic)
-  const hovered = useUiStore(state => state.hovered)
   const highlightedState = null
-  const data = useScatterplotStore(state => state.data)
-
-  const setData = useScatterplotStore(state => state.setData)
-  const setLoading = useScatterplotStore(
-    state => state.setLoading
-  )
   const setHovered = useUiStore(state => state.setHovered)
-  const setCoords = useUiStore(state => state.setCoords)
-  const setTooltipVars = useUiStore(
-    state => state.setTooltipVars
-  )
   const addLocation = useDataOptions(
     state => state.addLocationFromChart
   )
 
-  const handleData = (data, region) => {
-    setData(data, region)
-  }
+  const handleHover = useCallback(
+    e => {
+      const id = getLocatonIdFromEvent(e)
+      const coords = getCoordsFromEvent(e)
+      console.log(id, coords)
+      e.type === 'mouseover' && setHovered(id, coords)
+    },
+    [setHovered]
+  )
 
-  const handleReady = () => {
-    setLoading(false)
-  }
-
-  const handleHover = (feature, vars, e) => {
-    setHovered(feature)
-    setCoords([e.pageX, e.pageY])
-    setTooltipVars([vars.xVar, vars.yVar])
-  }
-
-  const handleClick = location => {
-    console.log(location)
-    addLocation(location)
-  }
+  const handleClick = useCallback(
+    location => {
+      console.log(location)
+      addLocation(location)
+    },
+    [addLocation]
+  )
 
   const handleError = () => {}
 
@@ -97,32 +103,15 @@ const SedaScatterplot = ({ ...props }) => {
       xVar={vars.xVar}
       yVar={vars.yVar}
       zVar={vars.zVar}
-      data={data}
       className={clsx(classes.root, {
         'scatterplot--versus': isVersus
       })}
       region={region.id}
       variant="map"
       highlightedState={getStateFipsFromAbbr(highlightedState)}
-      onData={handleData}
-      onReady={handleReady}
       onHover={handleHover}
       onClick={handleClick}
       onError={handleError}>
-      {/* <ScatterplotAxis
-        axis="y"
-        varName={vars.yVar}
-        hovered={hovered}
-        region={region.id}
-        className="scatterplot__axis scatterplot__axis--y"
-      />
-      <ScatterplotAxis
-        axis="x"
-        varName={vars.xVar}
-        hovered={hovered}
-        region={region.id}
-        className="scatterplot__axis scatterplot__axis--x"
-      /> */}
       <BookEnds
         style={{
           position: 'absolute',

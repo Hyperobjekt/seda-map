@@ -14,6 +14,7 @@ import {
 } from '../../shared/selectors'
 import { getLang } from '../../shared/selectors/lang'
 import { getCSSVariable, formatNumber } from '../../shared/utils'
+import { getScatterplotOptions as getScatterplotBaseOptions } from './components/ScatterplotBase/utils'
 
 /** UTILS */
 
@@ -132,9 +133,9 @@ const getBaseSeries = ({ highlightedState, sizer, variant }) => {
   const hl = isStateHighlighed(highlightedState)
   return getSeries('base', 'scatter', {
     silent: hl || variant === 'preview',
-    z: 5,
+    z: 100,
     itemStyle: {
-      color: hl ? '#e6e6e6' : '#76ced2cc',
+      color: hl ? '#e6e6e6' : '#ff0000',
       borderColor: hl ? 'transparent' : 'rgba(7,55,148,0.4)',
       borderWidth: hl ? 0 : 0.75
     },
@@ -148,7 +149,7 @@ const getBaseSeries = ({ highlightedState, sizer, variant }) => {
 const getHighlightedSeries = ({ highlightedState, sizer }) =>
   getSeries('highlighted', 'scatter', {
     show: isStateHighlighed(highlightedState),
-    z: 10,
+    z: 101,
     itemStyle: {
       borderColor: 'rgba(7,55,148,0.666)',
       borderWidth: 1
@@ -347,7 +348,7 @@ const getOverlay = (points, lines) => {
     label: {
       show: false
     },
-    z: 0,
+    zLevel: 1,
     markPoint: getAxisLabels(
       points.map(
         ({ axis = 'y', value, x, y, name, ...rest }) => ({
@@ -490,7 +491,7 @@ const getVersusOverlay = (xVar, yVar) => {
     visualMap: false,
     data: [[-6, -6], [6, 6]],
     symbolSize: 0.1,
-    z: 100,
+    zLevel: 100,
     label: {
       show: false
     },
@@ -500,7 +501,7 @@ const getVersusOverlay = (xVar, yVar) => {
     markLine: {
       animation: false,
       silent: true,
-      z: 100,
+      zLevel: 100,
       label: {
         position: 'middle',
         formatter: function(value) {
@@ -520,7 +521,7 @@ const getVersusOverlay = (xVar, yVar) => {
           {
             coord: labelEnd,
             symbol: 'none',
-            z: 100,
+            zLevel: 100,
             name: getLang('LINE_EQUAL_OPPORTUNITY', {
               demographic1: getLang('LABEL_' + xDem.id),
               demographic2: getLang('LABEL_' + yDem.id)
@@ -572,7 +573,8 @@ const getMapVisualMap = ({
     orient: 'vertical',
     itemHeight: 400,
     itemWidth: 24,
-    precision: 1
+    precision: 1,
+    contentColor: '#ff0000'
   }
 }
 
@@ -712,6 +714,29 @@ const yAxis = (variant, { varName, region }) => {
   }
 }
 
+/**
+ * Gets the state IDs that belong to a certain state
+ * @param {array} ids
+ * @param {string} fips
+ */
+const getStateIds = (ids, fips) => {
+  if (ids && fips) {
+    return ids.filter(d => d.substring(0, 2) === fips)
+  }
+  return []
+}
+
+/**
+ * Gets the IDs for a provided state from the data
+ * @param {string} stateId
+ * @param {object} data
+ */
+const getStateHighlights = (stateId, data) => {
+  return data && data['name'] && stateId
+    ? getStateIds(Object.keys(data['name']), stateId)
+    : []
+}
+
 export const getScatterplotOptions = (
   variant,
   data = {},
@@ -743,5 +768,19 @@ export const getScatterplotOptions = (
       ...overlays(variant, { xVar, yVar, region })
     ]
   }
-  return options
+  // limit to 3000
+  const hl = getStateHighlights(highlightedState, data).slice(
+    0,
+    3000
+  )
+
+  return getScatterplotBaseOptions({
+    data,
+    xVar,
+    yVar,
+    zVar,
+    selected: [],
+    highlighted: hl,
+    options
+  })
 }

@@ -73,7 +73,7 @@ const BookEnds = ({
           overrides.labelContainer,
           overrides.start
         )}
-        onStartClick={onStartClick}>
+        onClick={onStartClick}>
         {startIcon}
         <Typography variant="body2">{startLabel}</Typography>
       </Tag>
@@ -94,7 +94,7 @@ const BookEnds = ({
           overrides.labelContainer,
           overrides.end
         )}
-        onEndClick={onEndClick}>
+        onClick={onEndClick}>
         <Typography variant="body2">{endLabel}</Typography>
         {endIcon}
       </Tag>

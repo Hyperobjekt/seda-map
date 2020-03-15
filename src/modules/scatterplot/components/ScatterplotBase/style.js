@@ -83,10 +83,10 @@ const getVisualMapOptions = (overrides = []) =>
  * Gets the base scatterplot config with the provided overrides
  * @param {*} overrides any override options for the scatterplot
  */
-export const extendScatterplotOptions = (overrides = {}) => ({
+export const extendScatterplotStyle = (overrides = {}) => ({
+  ...overrides,
   grid: getGridOptions(overrides.grid),
   xAxis: getAxisOptions('x', overrides.xAxis),
   yAxis: getAxisOptions('y', overrides.yAxis),
-  visualMap: getVisualMapOptions(overrides.visualMap),
-  ...overrides
+  visualMap: getVisualMapOptions(overrides.visualMap)
 })

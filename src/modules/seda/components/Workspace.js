@@ -2,6 +2,7 @@ import React from 'react'
 import { useTheme } from '@material-ui/core'
 import SedaMap from './SedaMap'
 import SedaScatterplot from './SedaScatterplot'
+import SedaTooltip from './SedaTooltip'
 
 export const Workspace = ({ children, view, ...props }) => {
   const theme = useTheme()
@@ -14,6 +15,7 @@ export const Workspace = ({ children, view, ...props }) => {
         overflow: 'hidden',
         whiteSpace: 'nowrap'
       }}>
+      <SedaTooltip />
       <div
         style={{
           width: view === 'split' ? '100%' : '200%',

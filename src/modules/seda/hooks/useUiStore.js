@@ -6,7 +6,8 @@ const [useUiStore] = create(set => ({
   setView: view => set({ view }),
   // currently hovered feature
   hovered: null,
-  setHovered: feature => set({ hovered: feature }),
+  setHovered: (hoveredId, coords) =>
+    set({ hovered: hoveredId, coords }),
   // x, y coords of tooltip
   coords: [0, 0],
   setCoords: coords => set({ coords }),
