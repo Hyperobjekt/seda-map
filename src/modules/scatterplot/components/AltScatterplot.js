@@ -83,6 +83,7 @@ function Scatterplot({
   region,
   highlightedState,
   variant,
+  autoFetch = true,
   children,
   onHover,
   onClick,
@@ -97,9 +98,6 @@ function Scatterplot({
   const regionData = data[region]
   // store copy of scatterplot options
   const [options, setOptions] = useState({})
-  // store timeout for clearing hover
-  const [hoverTimeout, setHoverTimeout] = useState(null)
-
   // get list of vars needed to render current options
   const neededVars = getMissingVarNames(regionData, [
     xVar,
@@ -107,49 +105,10 @@ function Scatterplot({
     zVar,
     'name'
   ])
-
-  // // handler for scatterplot dot hovers
-  // const handleHover = useCallback(
-  //   e => {
-  //     const feature = getFeatureFromHoverEvent(e, regionData)
-  //     // if there is a location then call onHover immediately
-  //     if (feature) {
-  //       onHover(feature, { xVar, yVar }, e.event.event)
-  //       // clear the timeout if it is waiting to clear the hovered feature
-  //       // if (hoverTimeout) {
-  //       //   clearTimeout(hoverTimeout)
-  //       //   setHoverTimeout(null)
-  //       // }
-  //       return
-  //     }
-  //     onHover(null, {}, e)
-  //     // clear hover if related target and not hovering a marker
-  //     // const clearHover = e =>
-  //     //   e.relatedTarget
-  //     //     ? !e.relatedTarget.classList.contains('marker') &&
-  //     //       onHover(null, {}, e)
-  //     //     : onHover(null, {}, e)
-  //     // // set a timeout to inform the callback no items are hovered
-  //     // setHoverTimeout(
-  //     //   setTimeout(() => {
-  //     //     clearHover(e.event.event)
-  //     //   }, 200)
-  //     // )
-  //   },
-  //   [regionData]
-  // )
-
-  // handler for scatterplot clicks
-  // const handleClick = e => {
-  //   if (!onClick) return
-  //   const locationData = getDataForId(e.data[3], data)
-  //   onClick(locationData, e)
-  // }
-
   // fetch base vars for region if they haven't already been fetched
   // this is required as sometimes names are not available
   useEffect(() => {
-    if (neededVars.length === 0) return
+    if (!autoFetch || neededVars.length === 0) return
     const promises = [
       fetchVariables(neededVars, region, highlightedState)
     ]
@@ -167,26 +126,24 @@ function Scatterplot({
   // fetch any additional school level data for highlighted states
   useEffect(() => {
     if (
-      region === 'schools' &&
-      highlightedState &&
-      highlightedState !== 'us'
-    ) {
-      fetchVariables(
-        [xVar, yVar, zVar],
-        'schools',
-        highlightedState
-      ).then(data => {
-        setData(data, 'schools')
-        return data
-      })
-    }
-    // disable lint, this doesn't need to fire when onData changes
-    // eslint-disable-next-line
-  }, [xVar, yVar, zVar, region, highlightedState])
+      !autoFetch ||
+      region !== 'schools' ||
+      !highlightedState ||
+      highlightedState === 'us'
+    )
+      return
+    fetchVariables(
+      [xVar, yVar, zVar],
+      'schools',
+      highlightedState
+    ).then(data => {
+      setData(data, 'schools')
+      return data
+    })
+  }, [xVar, yVar, zVar, region, highlightedState, setData])
 
   useEffect(() => {
     if (neededVars.length !== 0) return
-    log('updating options')
     const newOptions = getScatterplotOptions(
       variant,
       regionData,

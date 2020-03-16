@@ -10,7 +10,8 @@ import {
   getHoveredId,
   getSelectedColors,
   getScatterplotVars,
-  isVersusFromVarNames
+  isVersusFromVarNames,
+  getFeatureProperty
 } from '../../../shared/selectors'
 import { getLang } from '../../../shared/selectors/lang'
 import useMapStore from '../hooks/useMapStore'
@@ -32,7 +33,7 @@ const SedaMap = props => {
   const locations = useDataOptions(state => state.locations)
   const filters = useDataOptions(state => state.filters)
   const view = useUiStore(state => state.view)
-  const hovered = useUiStore(state => state.hovered)
+  const hoveredId = useUiStore(state => state.hovered)
   const selectedIds = getIdsForRegion(region.id, locations)
 
   // pull required setters from store
@@ -42,9 +43,6 @@ const SedaMap = props => {
     state => state.setLocations
   )
   const setCoords = useUiStore(state => state.setCoords)
-
-  // id for the hovered feature
-  const hoveredId = getHoveredId(hovered)
 
   // geography region based on map zoom level
   const zoomLevel =
@@ -90,8 +88,8 @@ const SedaMap = props => {
 
   // handle hover
   const handleHover = (feature, coords) => {
-    setHovered(feature)
-    setCoords(coords)
+    const id = getFeatureProperty(feature, 'id')
+    setHovered(id, coords)
   }
 
   const ariaLabel = getLang('UI_MAP_SR', {

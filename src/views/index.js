@@ -1,7 +1,5 @@
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
-import ExplorerView from './explorer'
-import SandboxView from './sandbox'
 // import { MapEmbedView, ChartEmbedView } from '../components/organisms/Embed';
 import SedaApp from '../modules/seda/SedaApp'
 import theme from '../theme'

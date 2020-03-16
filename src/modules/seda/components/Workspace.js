@@ -15,7 +15,6 @@ export const Workspace = ({ children, view, ...props }) => {
         overflow: 'hidden',
         whiteSpace: 'nowrap'
       }}>
-      <SedaTooltip />
       <div
         style={{
           width: view === 'split' ? '100%' : '200%',

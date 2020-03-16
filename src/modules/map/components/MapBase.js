@@ -198,11 +198,11 @@ const MapBase = ({
       features && features.length > 0 ? features[0] : null
     const coords =
       srcEvent && srcEvent.pageX && srcEvent.pageY
-        ? {
-            x: Math.round(srcEvent.pageX),
-            y: Math.round(srcEvent.pageY)
-          }
-        : { x: null, y: null }
+        ? [
+            Math.round(srcEvent.pageX),
+            Math.round(srcEvent.pageY)
+          ]
+        : null
     onHover(newHoveredFeature, coords)
   }
 

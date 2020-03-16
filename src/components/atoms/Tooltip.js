@@ -1,43 +1,97 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Typography } from '@material-ui/core';
+import React, { useRef } from 'react'
+import PropTypes from 'prop-types'
+import { Typography, makeStyles } from '@material-ui/core'
+import clsx from 'clsx'
+import { useSpring, animated } from 'react-spring'
 
+const tooltipWidth = 304
+const tooltipMargin = 16
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    background: theme.palette.common.black,
+    color: theme.palette.common.white,
+    borderRadius: theme.shape.borderRadius,
+    width: tooltipWidth,
+    padding: theme.spacing(1),
+    zIndex: theme.zIndex.tooltip,
+    pointerEvents: 'none'
+  },
+  title: {
+    fontSize: theme.typography.body1.fontSize
+  },
+  subtitle: {}
+}))
 
 const Tooltip = ({
   title,
-  subtitle, 
-  children, 
-  x, 
-  y, 
-  above,
-  left,
+  subtitle,
+  children,
+  x,
+  y,
+  show = 0,
+  bounds = [0, 0, window.innerWidth, window.innerHeight],
+  classes: overrides
 }) => {
-  if (!x || !y) { return null; }
-  const xPos = left ?
-    'calc(-115% + ' + x + 'px)' :
-    'calc(15% + ' + x + 'px)';
-  const yPos = above ?
-    'calc(-133% + ' + y + 'px)' :
-    'calc(33% + ' + y + 'px)'
+  const elRef = useRef(null)
+  const elRect = elRef.current
+    ? elRef.current.getBoundingClientRect()
+    : { height: 0 }
+  const onRight = x + tooltipWidth + tooltipMargin < bounds[2]
+  const xOffset = onRight
+    ? tooltipMargin
+    : -tooltipWidth - tooltipMargin
+  const onBottom = y + elRect.height + tooltipMargin < bounds[3]
+  const yOffset = onBottom
+    ? tooltipMargin
+    : bounds[3] - (y + elRect.height + tooltipMargin)
+  const props = useSpring({
+    transform: `translate3d(${x + xOffset}px,${y +
+      yOffset}px,0)`,
+    opacity: show ? 1 : 0
+  })
+  const classes = useStyles()
   return (
-    <div 
-      className="tooltip" 
-      style={{ 
-        transform: `translate(${xPos}, ${yPos})`,
-      }}
-    >
+    <animated.div
+      className={clsx('tooltip', classes.root, overrides.root)}
+      style={props}
+      ref={elRef}>
       <div className="tooltip__header">
-        { title && 
-          <Typography variant="h6" className="tooltip__title">{title}</Typography>
-        }
-        { subtitle && 
-          <Typography variant="body1" className="tooltip__subtitle">{subtitle}</Typography>
-        }
+        {title && (
+          <Typography
+            variant="h6"
+            className={clsx(
+              'tooltip__title',
+              classes.title,
+              overrides.title
+            )}>
+            {title}
+          </Typography>
+        )}
+        {subtitle && (
+          <Typography
+            variant="body1"
+            className={clsx(
+              'tooltip__subtitle',
+              classes.subtitle,
+              overrides.subtitle
+            )}>
+            {subtitle}
+          </Typography>
+        )}
       </div>
-      <div className="tooltip__content">
+      <div
+        className={clsx(
+          'tooltip__content',
+          classes.content,
+          overrides.content
+        )}>
         {children}
       </div>
-    </div>
+    </animated.div>
   )
 }
 
@@ -50,14 +104,13 @@ Tooltip.propTypes = {
   ]),
   x: PropTypes.number,
   y: PropTypes.number,
-  above: PropTypes.oneOfType(
-    [PropTypes.number, PropTypes.bool]
-  ),
-  left: PropTypes.oneOfType(
-    [PropTypes.number, PropTypes.bool]
-  ),
-  offset: PropTypes.object,
+  above: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
+  left: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
+  offset: PropTypes.object
 }
 
+Tooltip.defaultProps = {
+  classes: {}
+}
 
-export default Tooltip;
+export default Tooltip

@@ -7,13 +7,19 @@ const [useUiStore] = create(set => ({
   // currently hovered feature
   hovered: null,
   setHovered: (hoveredId, coords) =>
-    set({ hovered: hoveredId, coords }),
+    hoveredId
+      ? set(state => ({
+          hovered: hoveredId,
+          coords: coords ? coords : state.coords,
+          showTooltip: true
+        }))
+      : set({ showTooltip: false }),
   // x, y coords of tooltip
   coords: [0, 0],
   setCoords: coords => set({ coords }),
-  // vars to show in tooltip
-  tooltipVars: [],
-  setTooltipVars: tooltipVars => set({ tooltipVars }),
+  // boolean determining tooltip visibility
+  showTooltip: false,
+  setShowTooltip: showTooltip => set({ showTooltip }),
   // boolean determining if menu is open
   showMenu: false,
   toggleMenu: () =>

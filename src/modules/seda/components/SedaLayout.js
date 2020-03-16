@@ -19,6 +19,7 @@ import {
   getTitleFromSelections,
   getSubtitleFromSelections
 } from '../../../shared/selectors/lang'
+import SedaTooltip from './SedaTooltip'
 
 const drawerWidth = 360
 
@@ -108,6 +109,7 @@ const SedaLayout = props => {
       {/* 
 
       <PageFooter></PageFooter> */}
+      <SedaTooltip />
     </Page>
   )
 }

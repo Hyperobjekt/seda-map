@@ -38,6 +38,7 @@ const useStyles = makeStyles(theme => ({
 
 const SedaTooltip = props => {
   const hoveredId = useUiStore(state => state.hovered)
+  const showTooltip = useUiStore(state => state.showTooltip)
   const [x, y] = useUiStore(state => state.coords)
   const { xVar, yVar } = useDataOptions(state =>
     state.getScatterplotVars()
@@ -45,11 +46,7 @@ const SedaTooltip = props => {
   const data = useScatterplotStore(state =>
     state.getDataForId(hoveredId)
   )
-  const classes = useStyles()
-  const above =
-    window.innerHeight && y && y > window.innerHeight / 3
-  const left =
-    window.innerWidth && x && x > window.innerWidth / 2
+
   const isVersus = isVersusFromVarNames(xVar, yVar)
   const demographic = getDemographicForVarNames(xVar, yVar)
   const descriptionVars = isVersus
@@ -69,29 +66,24 @@ const SedaTooltip = props => {
   }, '')
 
   return (
-    <div className={clsx('tooltip__wrapper', classes.root)}>
-      {hoveredId && (
-        <Tooltip
-          title={data.name}
-          subtitle={stateName}
-          x={x}
-          y={y}
-          above={above}
-          left={left}>
-          <Typography
-            className="tooltip__description"
-            variant="caption"
-            dangerouslySetInnerHTML={{
-              __html:
-                description +
-                '<em>' +
-                getLang('TOOLTIP_SUMMARY') +
-                '</em>'
-            }}
-          />
-        </Tooltip>
-      )}
-    </div>
+    <Tooltip
+      title={data.name}
+      subtitle={stateName}
+      show={showTooltip}
+      x={x}
+      y={y}>
+      <Typography
+        className="tooltip__description"
+        variant="caption"
+        dangerouslySetInnerHTML={{
+          __html:
+            description +
+            '<em>' +
+            getLang('TOOLTIP_SUMMARY') +
+            '</em>'
+        }}
+      />
+    </Tooltip>
   )
 }
 
