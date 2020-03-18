@@ -1,6 +1,6 @@
 {
   "private": true,
-  "homepage": "./explorer",
+  "homepage": "./",
   "scripts": {
     "start": "react-scripts start",
     "now-start": "serve -s ./build",

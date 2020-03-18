@@ -1,27 +1,27 @@
-import React from "react"
-import PropTypes from "prop-types"
-import clsx from "clsx"
-import { makeStyles } from "@material-ui/core"
+import React from 'react'
+import PropTypes from 'prop-types'
+import clsx from 'clsx'
+import { makeStyles } from '@material-ui/core'
+import BubbleChart from '@material-ui/icons/BubbleChart'
 
 const useStyles = makeStyles(theme => ({
   root: {
-    width: "1em",
-    height: "1em",
-    fill: "currentColor",
-  },
+    width: '1em',
+    height: '1em',
+    fill: 'currentColor'
+  }
 }))
 
 const ChartIcon = ({ color, size = 16, ...props }) => {
   const classes = useStyles()
   return (
     <svg
-      className={clsx("icon", classes.root)}
+      className={clsx('icon', classes.root)}
       viewBox="0 0 16 16"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       style={{ fontSize: size }}
-      {...props}
-    >
+      {...props}>
       <path
         d="M2 2H3V9.95489C3.41589 8.71631 3.90114 7.52845 4.43466 6.71443C4.65977 6.37096 4.90231 6.07983 5.16354 5.87898C5.42652 5.67679 5.72426 5.55479 6.04676 5.58603C6.36822 5.61718 6.66562 5.7959 6.93848 6.09424C7.21047 6.39163 7.47275 6.82303 7.72845 7.39837C7.94327 7.88171 8.12571 8.08806 8.25415 8.15744C8.30894 8.18704 8.35281 8.19126 8.39541 8.18318C8.44373 8.17401 8.50751 8.14528 8.58807 8.08047C8.75363 7.94727 8.93525 7.70727 9.13597 7.38201C9.30915 7.10137 9.48451 6.77783 9.66822 6.43889L9.7479 6.29199C9.95871 5.90395 10.1803 5.50328 10.4132 5.15124C10.6445 4.80179 10.8985 4.48196 11.1803 4.26768C11.4673 4.04943 11.8056 3.92546 12.1797 4.02151C12.5397 4.11392 12.8765 4.39688 13.2034 4.85459L12.7966 5.14521C12.4985 4.72793 12.2493 4.55558 12.0554 4.5058C11.8756 4.45964 11.6922 4.50657 11.4829 4.6657C11.2684 4.8288 11.0514 5.09283 10.8302 5.42714C10.6108 5.75885 10.3985 6.1418 10.1873 6.53067L10.1082 6.67638C9.92544 7.01369 9.74265 7.35099 9.56148 7.64458C9.35686 7.97616 9.13812 8.27967 8.90148 8.47005C8.78094 8.56702 8.64317 8.64509 8.48862 8.67442C8.32835 8.70482 8.16806 8.67922 8.01651 8.59736C7.7323 8.44383 7.49345 8.10071 7.27155 7.60144C7.02725 7.05178 6.79109 6.67394 6.56953 6.43169C6.34884 6.1904 6.15756 6.09911 5.99855 6.0837C5.84058 6.0684 5.66606 6.12332 5.4683 6.27537C5.26879 6.42877 5.06211 6.66921 4.85284 6.98851C4.13944 8.077 3.499 9.91603 3 11.6388V12H13V13H2V2Z"
         fill={color}
@@ -32,4 +32,4 @@ const ChartIcon = ({ color, size = 16, ...props }) => {
 
 ChartIcon.propTypes = {}
 
-export default ChartIcon
+export default BubbleChart

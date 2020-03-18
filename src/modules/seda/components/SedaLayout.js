@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Page, PageBody } from '../../../base/components/Page'
-import SedaHeader from './Header/SedaHeader'
+import { SedaHeader } from './header'
 import SedaMenu from './SedaMenu'
 import { makeStyles, Button } from '@material-ui/core'
 import {
@@ -10,10 +10,12 @@ import {
 } from '../../../base/components/Panels/SidePanel'
 import { Workspace } from './Workspace'
 import useUiStore from '../hooks/useUiStore'
-import HelpPanel from './SidePanels/HelpPanel'
-import FullPanel from './SidePanels/FullPanel'
-import CondensedPanel from './SidePanels/CondensedPanel'
-import SelectionPanel from './SidePanels/SelectionPanel'
+import {
+  CondensedPanel,
+  SelectionPanel,
+  FullPanel,
+  HelpPanel
+} from './panels'
 import useDataOptions from '../hooks/useDataOptions'
 import {
   getTitleFromSelections,

@@ -17,10 +17,10 @@ import useDataOptions from '../../hooks/useDataOptions'
 
 import MenuOpen from '@material-ui/icons/MenuOpen'
 import PlaceIcon from '@material-ui/icons/Place'
-import MetricIcon from '../Icons/MetricIcon'
+import MetricIcon from '../icons/MetricIcon'
 import LayersIcon from '@material-ui/icons/Layers'
 import ScatterplotIcon from '@material-ui/icons/ScatterPlot'
-import FilterIcon from '../Icons/FilterIcon'
+import FilterIcon from '../icons/FilterIcon'
 import PeopleIcon from '@material-ui/icons/PeopleAlt'
 
 const useStyles = makeStyles(theme => ({

@@ -1,11 +1,12 @@
 import React, { useCallback, useState, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
-import { isVersusFromVarNames } from '../../../shared/selectors'
-import { getStateFipsFromAbbr } from '../../../shared/selectors/states'
-import Scatterplot from '../../scatterplot/components/AltScatterplot'
-import useDataOptions from '../hooks/useDataOptions'
+import { isVersusFromVarNames } from '../../../../shared/selectors'
+import { getStateFipsFromAbbr } from '../../../../shared/selectors/states'
+import Scatterplot from '../../../scatterplot/components/AltScatterplot'
+import useDataOptions from '../../hooks/useDataOptions'
 import clsx from 'clsx'
+import SedaLocationMarkers from './SedaLocationMarkers'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -39,8 +40,9 @@ const SedaScatterplotPreview = () => {
       })}
       region={region.id}
       variant="preview"
-      highlightedState={getStateFipsFromAbbr(highlightedState)}
-    />
+      highlightedState={getStateFipsFromAbbr(highlightedState)}>
+      <SedaLocationMarkers />
+    </Scatterplot>
   )
 }
 

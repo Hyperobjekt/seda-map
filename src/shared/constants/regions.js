@@ -7,22 +7,26 @@ export const REGIONS = [
   {
     id: 'states',
     label: 'States',
-    singular: 'State'
+    singular: 'State',
+    idLength: 2
   },
   {
     id: 'counties',
     label: LANG['LABEL_COUNTIES'],
-    singular: LANG['LABEL_COUNTIES_SINGULAR']
+    singular: LANG['LABEL_COUNTIES_SINGULAR'],
+    idLength: 5
   },
   {
     id: 'districts',
     label: LANG['LABEL_DISTRICTS'],
-    singular: LANG['LABEL_DISTRICTS_SINGULAR']
+    singular: LANG['LABEL_DISTRICTS_SINGULAR'],
+    idLength: 7
   },
   {
     id: 'schools',
     label: LANG['LABEL_SCHOOLS'],
-    singular: LANG['LABEL_SCHOOLS_SINGULAR']
+    singular: LANG['LABEL_SCHOOLS_SINGULAR'],
+    idLength: 12
   }
 ]
 

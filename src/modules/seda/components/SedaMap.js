@@ -30,19 +30,14 @@ const SedaMap = props => {
   const region = useDataOptions(state => state.region)
   const metric = useDataOptions(state => state.metric)
   const demographic = useDataOptions(state => state.demographic)
-  const locations = useDataOptions(state => state.locations)
-  const filters = useDataOptions(state => state.filters)
+  const locationIds = useDataOptions(state => state.getLocationIdsForRegion())
   const view = useUiStore(state => state.view)
   const hoveredId = useUiStore(state => state.hovered)
-  const selectedIds = getIdsForRegion(region.id, locations)
 
   // pull required setters from store
   const setViewport = useMapStore(state => state.setViewport)
   const setHovered = useUiStore(state => state.setHovered)
-  const setLocations = useDataOptions(
-    state => state.setLocations
-  )
-  const setCoords = useUiStore(state => state.setCoords)
+  const addLocationFromFeature = useDataOptions(state => state.addLocationFromFeature)
 
   // geography region based on map zoom level
   const zoomLevel =
@@ -91,6 +86,10 @@ const SedaMap = props => {
     const id = getFeatureProperty(feature, 'id')
     setHovered(id, coords)
   }
+  
+  const handleClick = (feature) => {
+    addLocationFromFeature(feature)
+  }
 
   const ariaLabel = getLang('UI_MAP_SR', {
     metric: getLang('LABEL_' + metric.id),
@@ -120,13 +119,13 @@ const SedaMap = props => {
       layers={layers}
       viewport={viewport}
       idMap={{}}
-      selectedIds={[]}
+      selectedIds={locationIds}
       hoveredId={hoveredId}
       ariaLabel={ariaLabel}
       onHover={handleHover}
       onLoad={handleLoad}
       onViewportChange={setViewport}
-      onClick={e => console.log(e)}
+      onClick={handleClick}
     />
   )
 }

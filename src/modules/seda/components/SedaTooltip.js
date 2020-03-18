@@ -18,7 +18,6 @@ import clsx from 'clsx'
 import Tooltip from '../../../components/atoms/Tooltip'
 import debug from 'debug'
 import useDataOptions from '../hooks/useDataOptions'
-import useScatterplotStore from '../hooks/useScatterplotStore'
 
 debug.enable('Tooltip')
 const log = debug('Tooltip')
@@ -43,7 +42,7 @@ const SedaTooltip = props => {
   const { xVar, yVar } = useDataOptions(state =>
     state.getScatterplotVars()
   )
-  const data = useScatterplotStore(state =>
+  const data = useDataOptions(state =>
     state.getDataForId(hoveredId)
   )
 

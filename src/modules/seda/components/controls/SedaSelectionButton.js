@@ -7,11 +7,13 @@ import {
   ListItemText,
   ListItemSecondaryAction
 } from '@material-ui/core'
-import PlaceIcon from '@material-ui/icons/Place'
-import MetricIcon from '../Icons/MetricIcon'
-import LayersIcon from '@material-ui/icons/Layers'
-import FilterIcon from '../Icons/FilterIcon'
-import PeopleIcon from '@material-ui/icons/PeopleAlt'
+import {
+  MetricIcon,
+  FilterIcon,
+  RegionsIcon,
+  SubgroupsIcon,
+  LocationsIcon
+} from '../icons'
 import ChevronRight from '@material-ui/icons/ChevronRight'
 import { getSelectionLabel } from '../../../../shared/selectors/lang'
 import clsx from 'clsx'
@@ -37,13 +39,13 @@ const SelectionIcon = ({ selectionId }) => {
     case 'metric':
       return <MetricIcon metricId={metric.id} />
     case 'demographic':
-      return <PeopleIcon />
+      return <SubgroupsIcon />
     case 'region':
-      return <LayersIcon />
+      return <RegionsIcon />
     case 'filter':
       return <FilterIcon />
     case 'location':
-      return <PlaceIcon />
+      return <LocationsIcon />
     default:
       return null
   }

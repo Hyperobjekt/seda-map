@@ -2,9 +2,12 @@ import create from 'zustand'
 import produce from 'immer'
 import * as merge from 'deepmerge'
 import { getRegionFromFeatureId } from '../../../shared/selectors'
-import { getDataForId } from '../../scatterplot/components/ScatterplotBase/utils'
+import {
+  getDataForId,
+  getFeatureForId
+} from '../../scatterplot/components/ScatterplotBase/utils'
 
-const [useScatterplotStore] = create((set, get, api) => ({
+const [useDataOptions] = create((set, get, api) => ({
   data: {
     districts: {}
   },
@@ -20,8 +23,13 @@ const [useScatterplotStore] = create((set, get, api) => ({
     const region = getRegionFromFeatureId(id)
     return getDataForId(id, get().data[region])
   },
+  getFeatureForId: id => {
+    if (!id) return {}
+    const region = getRegionFromFeatureId(id)
+    return getFeatureForId(id, get().data[region])
+  },
   loading: true,
   setLoading: loading => set({ loading })
 }))
 
-export default useScatterplotStore
+export default useDataOptions

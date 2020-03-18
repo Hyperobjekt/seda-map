@@ -4,23 +4,23 @@ import { makeStyles } from '@material-ui/core/styles'
 import {
   getScatterplotVars,
   isVersusFromVarNames
-} from '../../../shared/selectors'
+} from '../../../../shared/selectors'
 import * as _debounce from 'lodash.debounce'
-import { getStateFipsFromAbbr } from '../../../shared/selectors/states'
-import Scatterplot from '../../scatterplot/components/AltScatterplot'
-import useScatterplotStore from '../hooks/useScatterplotStore'
-import useDataOptions from '../hooks/useDataOptions'
-import useUiStore from '../hooks/useUiStore'
+import { getStateFipsFromAbbr } from '../../../../shared/selectors/states'
+import Scatterplot from '../../../scatterplot/components/AltScatterplot'
+import useDataOptions from '../../hooks/useDataOptions'
+import useUiStore from '../../hooks/useUiStore'
 import clsx from 'clsx'
-import BookEnds from '../../../base/components/BookEnds'
+import BookEnds from '../../../../base/components/BookEnds'
 import ArrowLeft from '@material-ui/icons/ArrowLeft'
 import ArrowRight from '@material-ui/icons/ArrowRight'
 import {
   getLegendEndLabelsForVarName as getEndLabels,
   getLabelForVarName,
   getRegionLabel
-} from '../../../shared/selectors/lang'
+} from '../../../../shared/selectors/lang'
 import { Typography } from '@material-ui/core'
+import SedaLocationMarkers from './SedaLocationMarkers'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -53,6 +53,16 @@ const getCoordsFromEvent = e => [
   e.event.event.pageY
 ]
 
+/**
+ * Checks if the event has a marker as a related event
+ * @param {*} e
+ */
+const isMarkerRelated = e => {
+  return !e.event.event.relatedTarget
+    ? false
+    : !e.event.event.relatedTarget.classList.contains('marker')
+}
+
 const SedaScatterplot = () => {
   // ref to track the timeout that clears the tooltip
   const timeoutRef = useRef(null)
@@ -64,8 +74,8 @@ const SedaScatterplot = () => {
   )
   const highlightedState = null
   const setHovered = useUiStore(state => state.setHovered)
-  const addLocation = useDataOptions(
-    state => state.addLocationFromChart
+  const addLocationFromId = useDataOptions(
+    state => state.addLocationFromId
   )
 
   // handle hover events
@@ -84,7 +94,7 @@ const SedaScatterplot = () => {
         }
       }
       // set a timeout to clear the tooltip
-      if (e.type === 'mouseout') {
+      if (e.type === 'mouseout' && !isMarkerRelated(e)) {
         if (timeoutRef.current) clearTimeout(timeoutRef.current)
         timeoutRef.current = setTimeout(
           () => setHovered(null),
@@ -97,11 +107,13 @@ const SedaScatterplot = () => {
 
   // handle click events
   const handleClick = useCallback(
-    location => {
-      console.log(location)
-      addLocation(location)
+    e => {
+      // grab data from event
+      const id = getLocatonIdFromEvent(e)
+      console.log(id, e)
+      addLocationFromId(id)
     },
-    [addLocation]
+    [addLocationFromId]
   )
 
   // handle errors loading data
@@ -125,6 +137,7 @@ const SedaScatterplot = () => {
       onHover={handleHover}
       onClick={handleClick}
       onError={handleError}>
+      <SedaLocationMarkers />
       <BookEnds
         style={{
           position: 'absolute',

@@ -1,14 +1,14 @@
-import React from "react"
-import PropTypes from "prop-types"
-import { makeStyles, Button } from "@material-ui/core"
-import useUiStore from "../../hooks/useUiStore"
-import clsx from "clsx"
+import React from 'react'
+import PropTypes from 'prop-types'
+import { makeStyles, Button } from '@material-ui/core'
+import useUiStore from '../../hooks/useUiStore'
+import clsx from 'clsx'
 
 const useStyles = makeStyles(theme => ({
   root: {
     borderColor: theme.palette.secondary.main,
-    color: theme.palette.secondary.main,
-  },
+    color: theme.palette.secondary.main
+  }
 }))
 
 const SedaHelpButton = ({
@@ -23,8 +23,7 @@ const SedaHelpButton = ({
       variant="outlined"
       className={clsx(classes.root, overrides.root)}
       onClick={toggleHelp}
-      {...props}
-    >
+      {...props}>
       Help
     </Button>
   )

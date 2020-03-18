@@ -1,1 +1,5 @@
-export { default as SedaHeader } from "./SedaHeader";
+export { default as SedaHeader } from './SedaHeader'
+export { default as HelpButton } from './SedaHelpButton'
+export { default as Logo } from './SedaLogo'
+export { default as MenuButton } from './SedaMenuButton'
+export { default as ViewControls } from './SedaViewControls'

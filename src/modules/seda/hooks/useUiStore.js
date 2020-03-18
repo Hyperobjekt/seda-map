@@ -4,7 +4,7 @@ const [useUiStore] = create(set => ({
   // current view of the data
   view: 'chart',
   setView: view => set({ view }),
-  // currently hovered feature
+  // currently hovered id
   hovered: null,
   setHovered: (hoveredId, coords) =>
     hoveredId

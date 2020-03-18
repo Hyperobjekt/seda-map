@@ -1,27 +1,27 @@
-import React from "react"
-import PropTypes from "prop-types"
-import clsx from "clsx"
-import { makeStyles } from "@material-ui/core"
+import React from 'react'
+import PropTypes from 'prop-types'
+import clsx from 'clsx'
+import { makeStyles } from '@material-ui/core'
+import VerticalSplit from '@material-ui/icons/VerticalSplit'
 
 const useStyles = makeStyles(theme => ({
   root: {
-    width: "1em",
-    height: "1em",
-    fill: "currentColor",
-  },
+    width: '1em',
+    height: '1em',
+    fill: 'currentColor'
+  }
 }))
 
 const SplitIcon = ({ color, size = 16, ...props }) => {
   const classes = useStyles()
   return (
     <svg
-      className={clsx("icon", classes.root)}
+      className={clsx('icon', classes.root)}
       viewBox="0 0 16 16"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       style={{ fontSize: size }}
-      {...props}
-    >
+      {...props}>
       <path
         d="M1 3.5C1 3.22386 1.22386 3 1.5 3H6.5C6.77614 3 7 3.22386 7 3.5C7 3.77614 6.77614 4 6.5 4H1.5C1.22386 4 1 3.77614 1 3.5Z"
         fill={color}
@@ -48,4 +48,4 @@ const SplitIcon = ({ color, size = 16, ...props }) => {
 
 SplitIcon.propTypes = {}
 
-export default SplitIcon
+export default VerticalSplit

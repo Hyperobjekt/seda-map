@@ -1,7 +1,7 @@
 import React from 'react'
 import { useTheme } from '@material-ui/core'
 import SedaMap from './SedaMap'
-import SedaScatterplot from './SedaScatterplot'
+import { Scatterplot } from './scatterplot'
 import SedaTooltip from './SedaTooltip'
 
 export const Workspace = ({ children, view, ...props }) => {
@@ -53,7 +53,7 @@ export const Workspace = ({ children, view, ...props }) => {
             height: '100%',
             background: 'rgba(255,255,255,0.7)'
           }}>
-          <SedaScatterplot />
+          <Scatterplot />
         </div>
       </div>
 

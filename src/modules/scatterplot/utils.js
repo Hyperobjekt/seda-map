@@ -10,7 +10,8 @@ import {
   getMidpointForVarName,
   isVersusFromVarNames,
   getDemographicForVarNames,
-  getFormatterForVarName
+  getFormatterForVarName,
+  getSelectedColors
 } from '../../shared/selectors'
 import { getLang } from '../../shared/selectors/lang'
 import { getCSSVariable, formatNumber } from '../../shared/utils'
@@ -783,4 +784,71 @@ export const getScatterplotOptions = (
     highlighted: hl,
     options
   })
+}
+
+/** checks if value is present */
+const hasVal = val => val || val === 0
+
+/**
+ * Returns object with position and size of a circle for a feature
+ */
+export const getCircle = ({
+  xVar,
+  yVar,
+  zVar,
+  xValueToPercent,
+  yValueToPercent,
+  zValueToRadius,
+  data
+}) => {
+  const MIN_OVERLAY_SIZE = 8
+  if (!data) {
+    return null
+  }
+  const xVal = data[xVar]
+  const yVal = data[yVar]
+  const zVal = data[zVar]
+  return {
+    id: data.id,
+    x:
+      xValueToPercent && hasVal(xVal)
+        ? xValueToPercent(xVal) + '%'
+        : null,
+    y:
+      yValueToPercent && hasVal(yVal)
+        ? yValueToPercent(yVal) + '%'
+        : null,
+    z:
+      zValueToRadius && hasVal(zVal)
+        ? Math.max(MIN_OVERLAY_SIZE, zValueToRadius(zVal))
+        : MIN_OVERLAY_SIZE,
+    data: data
+  }
+}
+
+/**
+ * Returns an array of circle data for the provided features
+ */
+export const getCircles = ({ data, ...props }) => {
+  if (!data) return {}
+  // add circles for selected items
+  return data
+    .map(d => getCircle({ data: d, ...props }))
+    .filter(f => f !== null)
+}
+
+/**
+ * Returns a percent based on where the value falls
+ * within the range
+ * @param {number} value
+ * @param {array<number>} range
+ */
+export const getValuePercentInRange = (
+  value,
+  range,
+  invert = false
+) => {
+  const percent =
+    ((value - range[0]) / (range[1] - range[0])) * 100
+  return invert ? 100 - percent : percent
 }

@@ -20,7 +20,7 @@ import clsx from 'clsx'
 import MenuOpen from '@material-ui/icons/MenuOpen'
 import ScatterplotIcon from '@material-ui/icons/ScatterPlot'
 import SedaSelectionButton from '../controls/SedaSelectionButton'
-import SedaScatterplotPreview from '../SedaScatterplotPreview'
+import { ScatterplotPreview } from '../scatterplot'
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -100,7 +100,7 @@ const FullPanel = props => {
             classes={{ details: classes.details }}
             title="Socioeconomic Status Chart"
             startIcon={<ScatterplotIcon />}>
-            <SedaScatterplotPreview />
+            <ScatterplotPreview />
           </ExpansionPanel>
         </SidePanelFooter>
       )}

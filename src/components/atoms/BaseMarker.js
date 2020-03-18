@@ -1,37 +1,43 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import classNames from 'classnames';
+import clsx from 'clsx'
 
-const BaseMarker = ({ 
-  type = 'circle', 
+const useStyles = makeStyles(theme => ({
+  root: {
+    border: props => `2px solid ${props.color}`,
+    borderRadius: '100%',
+    transform: 'translate(-50%, -50%)',
+    boxShadow: `0 0 0 1.5px #fff, inset 0 0 0 1.5px #fff`
+  }
+}))
+
+const BaseMarker = ({
   className,
-  color, 
+  color,
+  innerColor = 'transparent',
   children,
   style = {},
-  ...props 
+  ...props
 }) => {
+  const classes = useStyles({ color })
   return (
-    <div 
-      className={classNames("marker", {
-        "marker--circle": type === 'circle',
-        "marker--rect": type === 'rect',
-        "marker--arrow": type === 'arrow',
-      }, className)}
+    <div
+      className={clsx('marker', className, classes.root)}
       style={{
-        background: color,
+        background: innerColor,
         ...style
       }}
-      {...props}
-    >{children}</div>
+      {...props}>
+      {children}
+    </div>
   )
 }
 
 BaseMarker.propTypes = {
-  type: PropTypes.string,
   color: PropTypes.string,
   className: PropTypes.string,
   children: PropTypes.node,
-  style: PropTypes.object,
+  style: PropTypes.object
 }
 
 export default BaseMarker

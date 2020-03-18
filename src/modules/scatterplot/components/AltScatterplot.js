@@ -23,7 +23,7 @@ import {
   getDataForId
 } from './ScatterplotBase/utils'
 import clsx from 'clsx'
-import useScatterplotStore from '../../seda/hooks/useScatterplotStore'
+import useDataOptions from '../../seda/hooks/useDataOptions'
 
 const endpoint =
   process.env.REACT_APP_DATA_ENDPOINT + 'scatterplot/'
@@ -91,9 +91,9 @@ function Scatterplot({
   onError
 }) {
   // scatterplot data store
-  const data = useScatterplotStore(state => state.data)
+  const data = useDataOptions(state => state.data)
   // function to set data
-  const setData = useScatterplotStore(state => state.setData)
+  const setData = useDataOptions(state => state.setData)
   // scatterplot data for the current region
   const regionData = data[region]
   // store copy of scatterplot options

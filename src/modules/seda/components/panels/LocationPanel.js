@@ -1,23 +1,22 @@
-import React from "react"
-import PropTypes from "prop-types"
+import React from 'react'
+import PropTypes from 'prop-types'
 import {
   Typography,
   makeStyles,
-  Button,
-} from "@material-ui/core"
-import { ExpansionPanel } from "../../../../base/components/Panels"
+  Button
+} from '@material-ui/core'
+import { ExpansionPanel } from '../../../../base/components/Panels'
 
 import {
   SidePanel,
   SidePanelHeader,
-  SidePanelBody,
-} from "../../../../base/components/Panels/SidePanel"
-import LANG from "../../lang/en"
-import useUiStore from "../../hooks/useUiStore"
+  SidePanelBody
+} from '../../../../base/components/Panels/SidePanel'
+import useUiStore from '../../hooks/useUiStore'
 
 const useStyles = makeStyles(theme => ({
   root: {},
-  title: theme.typography.panelHeading,
+  title: theme.typography.panelHeading
 }))
 
 const LocationPanel = props => {

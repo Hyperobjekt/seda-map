@@ -7,86 +7,12 @@ import {
   getSizerFunctionForRegion,
   getDemographicForVarNames
 } from '../../../shared/selectors'
-import CircleMarker from './CircleMarker'
+import CircleMarker from './ScatterplotMarker'
 
 const colors = getSelectedColors()
 const MIN_OVERLAY_SIZE = 18
 
-/**
- * Returns a percent based on where the value falls
- * within the range
- * @param {number} value
- * @param {array<number>} range
- */
-const getPercentOfRange = (value, range, invert = false) => {
-  const percent = ((value - range[0]) / (range[1] - range[0])) * 100
-  return invert ? 100 - percent : percent
-}
-
 const hasVal = val => val || val === 0
-
-/**
- * Returns object with position and size of a circle for a feature
- */
-const getCircleForFeature = ({
-  feature,
-  xVar,
-  yVar,
-  zVar,
-  xValueToPercent,
-  yValueToPercent,
-  zValueToRadius
-}) => {
-  if (!feature || !feature.properties) {
-    return null
-  }
-  const xVal = getFeatureProperty(feature, xVar)
-  const yVal = getFeatureProperty(feature, yVar)
-  const zVal = getFeatureProperty(feature, zVar)
-  return {
-    id: feature.properties.id,
-    x: xValueToPercent && hasVal(xVal) ? xValueToPercent(xVal) + '%' : null,
-    y: yValueToPercent && hasVal(yVal) ? yValueToPercent(yVal) + '%' : null,
-    z:
-      zValueToRadius && hasVal(zVal)
-        ? Math.max(MIN_OVERLAY_SIZE, zValueToRadius(feature.properties[zVar]))
-        : MIN_OVERLAY_SIZE,
-    data: feature
-  }
-}
-
-/**
- * Returns an array of circle data for the provided features
- */
-const getCircles = ({
-  xVar,
-  yVar,
-  zVar,
-  xValueToPercent,
-  yValueToPercent,
-  zValueToRadius,
-  features,
-  selected
-}) => {
-  if (!features) {
-    return {}
-  }
-  // add circles for selected items
-  return selected
-    .map(id => (features[id] ? features[id] : null))
-    .map(feature =>
-      getCircleForFeature({
-        feature,
-        xVar,
-        yVar,
-        zVar,
-        xValueToPercent,
-        yValueToPercent,
-        zValueToRadius
-      })
-    )
-    .filter(f => f !== null)
-}
 
 /**
  * Returns if two features have the same id property
@@ -110,59 +36,15 @@ const isHoveredSelected = (hovered, selected = []) => {
 }
 
 const ScatterplotOverlay = ({
+  data,
   xVar,
   yVar,
   zVar,
-  selected,
   region,
-  features,
   hovered,
   invertX = false,
   onHover
 }) => {
-  // function that converts xValue to the % position on the scale
-  const xValueToPercent = useMemo(
-    () => val =>
-      getPercentOfRange(val, getMetricRangeFromVarName(xVar, region), invertX),
-    [xVar, region, invertX]
-  )
-  // function that converts yValue to the % position on the scale
-  const yValueToPercent = useMemo(
-    () => val =>
-      100 - getPercentOfRange(val, getMetricRangeFromVarName(yVar, region)),
-    [yVar, region]
-  )
-  // function that converts z value to circle radius in px
-  const zValueToRadius = useMemo(() => {
-    const sizerDem = getDemographicForVarNames(xVar, yVar)
-    return getSizerFunctionForRegion(region, sizerDem)
-  }, [region, xVar, yVar])
-  // circles for selected areas
-  const circles = useMemo(
-    () =>
-      getCircles({
-        xVar,
-        yVar,
-        zVar,
-        xValueToPercent,
-        yValueToPercent,
-        zValueToRadius,
-        features,
-        region,
-        selected
-      }),
-    [
-      xVar,
-      yVar,
-      zVar,
-      selected,
-      region,
-      features,
-      xValueToPercent,
-      yValueToPercent,
-      zValueToRadius
-    ]
-  )
   // circle for hovered feature
   const hoveredCircle =
     !isHoveredSelected(hovered, selected) &&
@@ -182,7 +64,9 @@ const ScatterplotOverlay = ({
         <CircleMarker
           key={'c' + i}
           color={
-            isSameFeature(c.data, hovered) ? '#f00' : colors[i % colors.length]
+            isSameFeature(c.data, hovered)
+              ? '#f00'
+              : colors[i % colors.length]
           }
           size={c.z}
           x={c.x}
