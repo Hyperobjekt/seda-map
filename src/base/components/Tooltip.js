@@ -4,7 +4,6 @@ import { Typography, makeStyles } from '@material-ui/core'
 import clsx from 'clsx'
 import { useSpring, animated } from 'react-spring'
 
-const tooltipWidth = 304
 const tooltipMargin = 16
 
 const useStyles = makeStyles(theme => ({
@@ -12,18 +11,26 @@ const useStyles = makeStyles(theme => ({
     position: 'absolute',
     top: 0,
     left: 0,
-    background: theme.palette.common.black,
+    background: theme.app.darkBackground,
     color: theme.palette.common.white,
     borderRadius: theme.shape.borderRadius,
-    width: tooltipWidth,
-    padding: theme.spacing(1),
+    maxWidth: 364,
+    padding: `${theme.spacing(1.5)}px ${theme.spacing(1.5)}px`,
     zIndex: theme.zIndex.tooltip,
     pointerEvents: 'none'
   },
-  title: {
-    fontSize: theme.typography.body1.fontSize
+  header: {
+    marginBottom: theme.spacing(0.75)
   },
-  subtitle: {}
+  title: {
+    fontSize: theme.typography.pxToRem(14),
+    lineHeight: 1.25
+  },
+  subtitle: {
+    fontSize: theme.typography.pxToRem(12),
+    lineHeight: 1.5,
+    color: theme.app.altDarkText
+  }
 }))
 
 const Tooltip = ({
@@ -39,11 +46,11 @@ const Tooltip = ({
   const elRef = useRef(null)
   const elRect = elRef.current
     ? elRef.current.getBoundingClientRect()
-    : { height: 0 }
-  const onRight = x + tooltipWidth + tooltipMargin < bounds[2]
+    : { width: 0, height: 0 }
+  const onRight = x + elRect.width + tooltipMargin < bounds[2]
   const xOffset = onRight
     ? tooltipMargin
-    : -tooltipWidth - tooltipMargin
+    : -elRect.width - tooltipMargin
   const onBottom = y + elRect.height + tooltipMargin < bounds[3]
   const yOffset = onBottom
     ? tooltipMargin
@@ -59,7 +66,12 @@ const Tooltip = ({
       className={clsx('tooltip', classes.root, overrides.root)}
       style={props}
       ref={elRef}>
-      <div className="tooltip__header">
+      <div
+        className={clsx(
+          'tooltip__header',
+          classes.header,
+          overrides.header
+        )}>
         {title && (
           <Typography
             variant="h6"

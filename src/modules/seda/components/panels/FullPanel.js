@@ -21,6 +21,10 @@ import MenuOpen from '@material-ui/icons/MenuOpen'
 import ScatterplotIcon from '@material-ui/icons/ScatterPlot'
 import SedaSelectionButton from '../controls/SedaSelectionButton'
 import { ScatterplotPreview } from '../scatterplot'
+import {
+  getLang,
+  getLangWithSingleOrNone
+} from '../../../../shared/selectors/lang'
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -50,6 +54,7 @@ const FullPanel = props => {
   const toggleCondensed = useUiStore(
     state => state.toggleCondensed
   )
+  const locations = useDataOptions(state => state.locations)
   const metric = useDataOptions(state => state.metric)
   const region = useDataOptions(state => state.region)
   const demographic = useDataOptions(state => state.demographic)
@@ -75,7 +80,7 @@ const FullPanel = props => {
         />
         <SedaSelectionButton
           selectionId="demographic"
-          value={demographic.label}
+          value={getLang('LABEL_STUDENTS_' + demographic.id)}
         />
         <SedaSelectionButton
           selectionId="filter"
@@ -83,7 +88,10 @@ const FullPanel = props => {
         />
         <SedaSelectionButton
           selectionId="location"
-          value="No locations selected"
+          value={getLangWithSingleOrNone(
+            locations.length,
+            'PANEL_LOCATION'
+          )}
         />
       </SidePanelBody>
       {view === 'map' && (

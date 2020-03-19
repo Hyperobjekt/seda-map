@@ -5,7 +5,8 @@ import {
 } from '../constants/colors'
 import { interpolateRgbBasis } from 'd3-interpolate'
 import { isGapVarName } from './demographics'
-import { getValuePositionForVarName } from './data'
+import { getMetricRangeFromVarName } from './data'
+import { getValuePositionInRange } from '../utils'
 
 /**
  * Gets the configuration for selected colors
@@ -42,15 +43,13 @@ export const getColorForVarNameValue = (
   region,
   type = 'map'
 ) => {
-  if (!value) {
+  if (!value && value !== 0) {
     return NO_DATA_COLOR
   }
-  const percent = getValuePositionForVarName(
-    value,
-    varName,
-    region,
-    type
-  )
+  const range = getMetricRangeFromVarName(varName, region, type)
+  const percent = getValuePositionInRange(value, range)
+  console.log('range n percent', range, percent)
+
   return isColorInvertedForVarName(varName)
     ? getChoroplethColorAtValue(1 - percent)
     : getChoroplethColorAtValue(percent)

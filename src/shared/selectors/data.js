@@ -100,28 +100,6 @@ export const getPositionForVarNameValue = (
 }
 
 /**
- * Gets the percent value of where the value sites on
- * the scale for the metric.
- * @param {*} value
- * @param {*} varName
- * @returns {number} between 0 - 1
- */
-export const getValuePositionForVarName = (
-  value,
-  varName,
-  region,
-  type
-) => {
-  if (!value && value !== 0) {
-    return null
-  }
-  return getValuePositionInRange(
-    value,
-    getMetricRangeFromVarName(varName, region, type)
-  )
-}
-
-/**
  * Returns a function to format values for the provided varName
  * @param {*} varName
  */

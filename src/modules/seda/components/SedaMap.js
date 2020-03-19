@@ -20,24 +20,24 @@ import useUiStore from '../hooks/useUiStore'
 
 const selectedColors = getSelectedColors()
 
-const getIdsForRegion = (regionId, locationIds) => {
-  return []
-}
-
 const SedaMap = props => {
   // pull required data from store
   const viewport = useMapStore(state => state.viewport)
   const region = useDataOptions(state => state.region)
   const metric = useDataOptions(state => state.metric)
   const demographic = useDataOptions(state => state.demographic)
-  const locationIds = useDataOptions(state => state.getLocationIdsForRegion())
+  const locationIds = useDataOptions(state =>
+    state.getLocationIdsForRegion()
+  )
   const view = useUiStore(state => state.view)
   const hoveredId = useUiStore(state => state.hovered)
 
   // pull required setters from store
   const setViewport = useMapStore(state => state.setViewport)
   const setHovered = useUiStore(state => state.setHovered)
-  const addLocationFromFeature = useDataOptions(state => state.addLocationFromFeature)
+  const addLocationFromFeature = useDataOptions(
+    state => state.addLocationFromFeature
+  )
 
   // geography region based on map zoom level
   const zoomLevel =
@@ -86,8 +86,8 @@ const SedaMap = props => {
     const id = getFeatureProperty(feature, 'id')
     setHovered(id, coords)
   }
-  
-  const handleClick = (feature) => {
+
+  const handleClick = feature => {
     addLocationFromFeature(feature)
   }
 

@@ -23,7 +23,7 @@ import {
 import { getValuePercentInRange } from '../../scatterplot/utils'
 const defaultMetric = getMetricById('avg')
 const defaultDemographic = getDemographicById('all')
-const defaultRegion = getRegionById('districts')
+const defaultRegion = getRegionById('counties')
 
 /**
  * Getters for fetching from store

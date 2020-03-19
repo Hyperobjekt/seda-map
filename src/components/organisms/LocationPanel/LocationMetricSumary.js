@@ -5,7 +5,10 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import Callout from '../../molecules/Callout'
 import HelpIcon from '@material-ui/icons/Help'
 
-import { formatNumber, formatPercentDiff } from '../../../shared/utils'
+import {
+  formatNumber,
+  formatPercentDiff
+} from '../../../shared/utils'
 import { getLang } from '../../../shared/selectors/lang'
 import { LocationStatList } from './LocationStats'
 import {
@@ -47,16 +50,25 @@ const LocationMetric = ({
       {children}
       {region !== 'schools' && (
         <>
-          <Typography className={'panel-section__subheading'} variant="h6">
+          <Typography
+            className={'panel-section__subheading'}
+            variant="h6">
             {getLang('LABEL_BY_SUBGROUP', {
               metric: getLang('LABEL_' + metric)
             })}
           </Typography>
           <LocationStatList
             feature={feature}
-            varNames={['w', 'b', 'h', 'a', 'np', 'p', 'm', 'f'].map(
-              d => d + '_' + metric
-            )}
+            varNames={[
+              'w',
+              'b',
+              'h',
+              'a',
+              'np',
+              'p',
+              'm',
+              'f'
+            ].map(d => d + '_' + metric)}
             range={range}
             formatter={formatter}
             varNameToLabel={statToLabel}
@@ -100,8 +112,14 @@ const MetricSummary = ({
 }) => {
   const langKey =
     region === 'schools'
-      ? 'SUMMARY_SCHOOL_' + metric + '_' + valueToLowMidHigh(metric, value)
-      : 'SUMMARY_' + metric + '_' + valueToLowMidHigh(metric, value)
+      ? 'SUMMARY_SCHOOL_' +
+        metric +
+        '_' +
+        valueToLowMidHigh(metric, value)
+      : 'SUMMARY_' +
+        metric +
+        '_' +
+        valueToLowMidHigh(metric, value)
   return (
     // eslint-disable-next-line
     <Typography
@@ -109,7 +127,10 @@ const MetricSummary = ({
       variant="body1"
       paragraph={true}
       dangerouslySetInnerHTML={{
-        __html: getLang(langKey, { name, value: formatter(value) })
+        __html: getLang(langKey, {
+          name,
+          value: formatter(value)
+        })
       }}
     />
   )
@@ -123,12 +144,18 @@ MetricSummary.propTypes = {
   region: PropTypes.string
 }
 
-export const LocationAvgSection = ({ feature, onHelpClick, ...rest }) => {
+export const LocationAvgSection = ({
+  feature,
+  onHelpClick,
+  ...rest
+}) => {
   if (!feature) {
     return null
   }
   const name = getFeatureProperty(feature, 'name')
-  const region = getRegionFromFeatureId(getFeatureProperty(feature, 'id'))
+  const region = getRegionFromFeatureId(
+    getFeatureProperty(feature, 'id')
+  )
 
   const avgValue = getFeatureProperty(feature, 'all_avg')
   const sesValue =
@@ -137,7 +164,9 @@ export const LocationAvgSection = ({ feature, onHelpClick, ...rest }) => {
       : getFeatureProperty(feature, 'all_ses')
   const diffVal =
     sesValue || sesValue === 0
-      ? formatNumber(avgValue - getPredictedValue(sesValue, 'avg', region))
+      ? formatNumber(
+          avgValue - getPredictedValue(sesValue, 'avg', region)
+        )
       : null
   const diffHighLow = valueToLowMidHigh(null, diffVal)
   const sesLangKey =
@@ -157,7 +186,11 @@ export const LocationAvgSection = ({ feature, onHelpClick, ...rest }) => {
         variant="body1"
         paragraph={true}
         dangerouslySetInnerHTML={{
-          __html: getLang(sesLangKey, { value: diffVal, name, region })
+          __html: getLang(sesLangKey, {
+            value: diffVal,
+            name,
+            region
+          })
         }}
       />
       <Callout
@@ -171,13 +204,19 @@ export const LocationAvgSection = ({ feature, onHelpClick, ...rest }) => {
   )
 }
 
-export const LocationGrdSection = ({ feature, onHelpClick, ...rest }) => {
+export const LocationGrdSection = ({
+  feature,
+  onHelpClick,
+  ...rest
+}) => {
   if (!feature) {
     return null
   }
   const name = getFeatureProperty(feature, 'name')
   const value = getFeatureProperty(feature, 'all_grd')
-  const region = getRegionFromFeatureId(getFeatureProperty(feature, 'id'))
+  const region = getRegionFromFeatureId(
+    getFeatureProperty(feature, 'id')
+  )
   const sesValue =
     region === 'schools'
       ? getFeatureProperty(feature, 'all_frl')
@@ -209,7 +248,7 @@ export const LocationGrdSection = ({ feature, onHelpClick, ...rest }) => {
         paragraph={true}
         dangerouslySetInnerHTML={{
           __html: getLang(sesLangKey, {
-            value: formatPercentDiff(diffVal, 0),
+            value: formatPercentDiff(diffVal, { from: 0 }),
             name,
             region
           })
@@ -226,13 +265,19 @@ export const LocationGrdSection = ({ feature, onHelpClick, ...rest }) => {
   )
 }
 
-export const LocationCohSection = ({ feature, onHelpClick, ...rest }) => {
+export const LocationCohSection = ({
+  feature,
+  onHelpClick,
+  ...rest
+}) => {
   if (!feature) {
     return null
   }
   const name = getFeatureProperty(feature, 'name')
   const value = getFeatureProperty(feature, 'all_coh')
-  const region = getRegionFromFeatureId(getFeatureProperty(feature, 'id'))
+  const region = getRegionFromFeatureId(
+    getFeatureProperty(feature, 'id')
+  )
 
   const sesValue =
     region === 'schools'
@@ -240,7 +285,9 @@ export const LocationCohSection = ({ feature, onHelpClick, ...rest }) => {
       : getFeatureProperty(feature, 'all_ses')
   const diffVal =
     sesValue || sesValue === 0
-      ? formatNumber(value - getPredictedValue(sesValue, 'coh', region))
+      ? formatNumber(
+          value - getPredictedValue(sesValue, 'coh', region)
+        )
       : null
   const diffHighLow = valueToLowMidHigh(null, diffVal)
   const sesLangKey =

@@ -10,6 +10,7 @@ import LANG from '../constants/en'
 import { getRegions } from './regions'
 import { getDemographics, getGaps } from './demographics'
 import { getMetrics } from './metrics'
+import { getMidpointForVarName } from './data'
 
 const isStringMatch = (s1, s2) =>
   s1 &&
@@ -378,15 +379,15 @@ export const getSubtitleFromSelections = ({
 
 /**
  * Gets the label for the provided metric ID
- * @param {string} id
+ * @param {string} metric id or var name
  * @return {string}
  */
-export const getMetricLabel = id => {
-  let metric = getMetrics().find(d => d.id === id)
-  if (!metric) {
-    throw new Error('no metric found for ' + id)
+export const getMetricLabel = (id, prefix = 'LABEL') => {
+  if (id.includes('_')) {
+    // this is a var name, grab the metric portion
+    id = id.split('_')[1]
   }
-  return metric.label
+  return getLang(prefix + '_' + id)
 }
 
 /**
@@ -420,15 +421,12 @@ export const getLabelFromVarName = varName => {
  * @param {string} id
  * @returns {string}
  */
-export const getDemographicLabel = id => {
-  let dem = getDemographics().find(d => d.id === id)
-  if (!dem) {
-    dem = getGaps().find(d => d.id === id)
+export const getDemographicLabel = (id, prefix = 'LABEL') => {
+  if (id.includes('_')) {
+    // this is a var name, grab the metric portion
+    id = id.split('_')[0]
   }
-  if (!dem) {
-    throw new Error('no demographic found for ' + id)
-  }
-  return dem.label
+  return getLang(prefix + '_' + id)
 }
 
 /**
@@ -443,3 +441,45 @@ export const getRegionLabel = id => {
   }
   return region.label
 }
+
+export const getSingleOrNoneQuantifier = num =>
+  num === 0 ? 'NONE' : num === 1 ? 'SINGLE' : 'MANY'
+
+export const getMidpointQuantifier = (value, mid = 0) =>
+  value === mid ? 'MID' : value < mid ? 'LOW' : 'HIGH'
+
+export const getSesQuantifier = value => {
+  return value > 2.5
+    ? `ULTRA_HIGH`
+    : value > 1.5
+    ? `VERY_HIGH`
+    : value > 0.5
+    ? `HIGH`
+    : value > -0.5
+    ? `MID`
+    : value > -1.5
+    ? `LOW`
+    : value > -2.5
+    ? `LOW`
+    : `ULTRA_LOW`
+}
+
+export const getLangWithSingleOrNone = (num, prefix) =>
+  getLang(prefix + '_' + getSingleOrNoneQuantifier(num), { num })
+
+export const getLangDiverging = (
+  varName,
+  value,
+  prefix = 'VALUE'
+) => {
+  const mid = getMidpointForVarName(varName)
+  const metricId = getMetricIdFromVarName(varName)
+  const quantifier =
+    metricId === 'ses'
+      ? getSesQuantifier(value)
+      : getMidpointQuantifier(value, mid)
+  return getLang(prefix + '_' + metricId + '_' + quantifier)
+}
+
+export const getTooltipMetricLang = (varName, value) =>
+  getLangDiverging(varName, value, 'TOOLTIP_DESC')

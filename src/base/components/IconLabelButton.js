@@ -1,6 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Button, Tooltip, makeStyles } from '@material-ui/core'
+import {
+  Button,
+  Tooltip,
+  makeStyles,
+  Typography
+} from '@material-ui/core'
 import clsx from 'clsx'
 
 const useStyles = makeStyles(theme => ({
@@ -34,7 +39,7 @@ const IconLabelButton = ({
       }}
       startIcon={icon}
       {...props}>
-      <span className="sr-only">{tooltip}</span>
+      <Typography variant="srOnly">{tooltip}</Typography>
     </Button>
   )
   return tooltip ? (

@@ -94,7 +94,6 @@ export {
   getPositionForVarNameValue,
   getPredictedValue,
   getFormatterForVarName,
-  getValuePositionForVarName,
   getMidpointForVarName,
   getMetricRangeFromVarName
 } from './data'

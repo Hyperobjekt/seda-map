@@ -66,23 +66,24 @@ export const getCSSVariable = varname =>
  * Returns the value rounded to the provided number of decimal
  * places.
  */
-export const formatNumber = (val, decimals = 2) => {
+export const formatNumber = (val, options = {}) => {
   if (!val && val !== 0) {
     return 'N/A'
   }
-  const factor = Math.pow(10, decimals)
-  return Math.round(val * factor) / factor
+  const factor = Math.pow(10, options.decimals || 2)
+  const value = Math.round(val * factor) / factor
+  return options.abs ? Math.abs(value) : value
 }
 
 /**
  * Returns a percent string
  * @param {number} v
  */
-export const formatPercent = (v, decimals = 0) => {
+export const formatPercent = (v, options) => {
   if (!v && v !== 0) {
     return 'N/A'
   }
-  return formatNumber(v * 100, decimals) + '%'
+  return formatNumber(v * 100, options) + '%'
 }
 
 /**
@@ -91,11 +92,12 @@ export const formatPercent = (v, decimals = 0) => {
  * @param {number} v the value to format
  * @param {number} from the point of reference to determine what the % diff is
  */
-export const formatPercentDiff = (v, from = 1) => {
+export const formatPercentDiff = (v, options = {}) => {
+  const from = options.from || 1
   if (!v && v !== 0) {
     return 'N/A'
   }
-  return formatPercent(v - from)
+  return formatPercent(v - from, options)
 }
 
 export const parseColor = input => {

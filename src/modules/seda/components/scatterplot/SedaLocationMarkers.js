@@ -89,8 +89,7 @@ const SedaLocationMarkers = ({ ...props }) => {
           innerColor={getColorForVarNameValue(
             c.data[yVar],
             yVar,
-            region.id,
-            'chart'
+            region.id
           )}
           onMouseMove={e => setHovered(c.id, [e.pageX, e.pageY])}
           onMouseLeave={e => setHovered(null)}

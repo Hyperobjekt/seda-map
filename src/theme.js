@@ -115,11 +115,26 @@ const theme = createMuiTheme({
     },
     MuiExpansionPanelSummary: {
       content: { margin: 0 }
+    },
+    MuiTooltip: {
+      tooltip: {
+        backgroundColor: 'rgba(3, 18, 50, 0.94)',
+        fontSize: 12
+      },
+      arrow: {
+        color: 'rgba(3, 18, 50, 0.94)'
+      }
     }
   },
   app: {
     panelWidth: 360,
     condensedPanelWidth: 72,
+    darkBackground: 'rgba(3, 18, 50, 0.94)',
+    altDarkText: 'rgba(255,255,255,0.66)',
+    aboveColor: '#40B875',
+    belowColor: '#57A5FF',
+    aboveColorAlt: '#40B875',
+    belowColorAlt: '#57A5FF',
     selectedColors: [
       '#F46800',
       '#8C1AF4',
