@@ -1,18 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { makeStyles, useTheme } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
-import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
-import Divider from '@material-ui/core/Divider'
 import useDataOptions from '../../hooks/useDataOptions'
 import clsx from 'clsx'
 import { ListSubheader } from '@material-ui/core'
 import {
   getDemographics,
-  getGaps
+  getGaps,
+  getDemographicLabel
 } from '../../../../shared/selectors'
 
 const useStyles = makeStyles(theme => ({
@@ -58,7 +56,12 @@ const SedaDemographicSelect = ({ onSelect, ...props }) => {
               button
               key={m.id}
               onClick={() => handleClick(m.id)}>
-              <ListItemText primary={m.label} />
+              <ListItemText
+                primary={getDemographicLabel(
+                  m.id,
+                  'LABEL_STUDENTS'
+                )}
+              />
             </ListItem>
           )
         })}
@@ -77,7 +80,9 @@ const SedaDemographicSelect = ({ onSelect, ...props }) => {
               button
               key={m.id}
               onClick={() => handleClick(m.id)}>
-              <ListItemText primary={m.label} />
+              <ListItemText
+                primary={getDemographicLabel(m.id)}
+              />
             </ListItem>
           )
         })}

@@ -23,6 +23,13 @@ import ScatterplotIcon from '@material-ui/icons/ScatterPlot'
 import FilterIcon from '../icons/FilterIcon'
 import PeopleIcon from '@material-ui/icons/PeopleAlt'
 
+const DetailedTooltip = ({
+  primary,
+  secondary,
+  hint,
+  ...props
+}) => {}
+
 const useStyles = makeStyles(theme => ({
   header: {
     padding: 0

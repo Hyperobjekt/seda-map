@@ -126,7 +126,7 @@ const LANG = {
   LABEL_SES_NP: '$[region] socioeconomic status (SES)',
   LABEL_SES_WB: 'White - Black gap in socioeconomic status',
   LABEL_SES_WH: 'White - Hispanic gap in socioeconomic status',
-  LABEL_FRL: 'Free/Reduced Price Lunch Percentage',
+  LABEL_FRL: 'Free/Reduced Lunch',
 
   // Short Metric Labels
   LABEL_SHORT_AVG: 'scores',
@@ -177,16 +177,16 @@ const LANG = {
   LABEL_SHORT_MF: 'male / female',
 
   // Demographic label for students
-  LABEL_STUDENTS_ALL: 'Students',
+  LABEL_STUDENTS_ALL: 'all students',
   LABEL_STUDENTS_B: 'Black students',
   LABEL_STUDENTS_W: 'White students',
   LABEL_STUDENTS_H: 'Hispanic students',
   LABEL_STUDENTS_A: 'Asian students',
-  LABEL_STUDENTS_M: 'Male students',
-  LABEL_STUDENTS_F: 'Female students',
-  LABEL_STUDENTS_P: 'Poor students',
-  LABEL_STUDENTS_NP: 'Non-poor students',
-  LABEL_STUDENTS_N: 'Non-poor students',
+  LABEL_STUDENTS_M: 'male students',
+  LABEL_STUDENTS_F: 'female students',
+  LABEL_STUDENTS_P: 'poor students',
+  LABEL_STUDENTS_NP: 'non-poor students',
+  LABEL_STUDENTS_N: 'non-poor students',
   LABEL_STUDENTS_WB:
     'difference between White and Black students',
   LABEL_STUDENTS_WH:
@@ -241,6 +241,8 @@ const LANG = {
   TOOLTIP_DESC_AVG_LOW: 'grades below U.S. average',
   TOOLTIP_DESC_GRD_LOW: 'less learned each year',
   TOOLTIP_DESC_COH_LOW: 'decrease in scores per year',
+
+  TOOLTIP_DESC_FRL_HIGH: 'have free/reduced price lunch',
 
   TOOLTIP_DESC_SES_ULTRA_HIGH: 'very far above national average',
   TOOLTIP_DESC_SES_VERY_HIGH: 'far above national average',
