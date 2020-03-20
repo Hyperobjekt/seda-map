@@ -32,7 +32,7 @@ const LANG = {
     'Explore educational opportunity in your community and around the country',
 
   // Footer
-  FOOTER_COPYRIGHT: 'Copyright 2019',
+  FOOTER_COPYRIGHT: 'Copyright 2020',
   FOOTER_SHARE_LABEL: 'Share:',
   FOOTER_SHARE_FACEBOOK: 'Share on Facebook',
   FOOTER_SHARE_TWITTER: 'Share on Twitter',

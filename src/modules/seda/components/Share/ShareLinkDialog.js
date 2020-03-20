@@ -7,14 +7,19 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import { getLang } from '../../../shared/selectors/lang'
 import { InputAdornment, IconButton } from '@material-ui/core'
 import CopyIcon from '@material-ui/icons/FileCopy'
 import copy from 'copy-to-clipboard'
 import { toggleLinkShareDialog } from './actions'
 import { onShare } from './actions'
+import { getLang } from '../../../../shared/selectors/lang'
 
-export const ShareLinkDialog = ({ open, shareUrl, onClose, onCopy }) => {
+export const ShareLinkDialog = ({
+  open,
+  shareUrl,
+  onClose,
+  onCopy
+}) => {
   const [copied, setCopied] = React.useState(false)
 
   const handleFocus = event => event.target.select()
@@ -30,7 +35,9 @@ export const ShareLinkDialog = ({ open, shareUrl, onClose, onCopy }) => {
         {getLang('LINK_DIALOG_TITLE')}
       </DialogTitle>
       <DialogContent>
-        <DialogContentText>{getLang('LINK_INSTRUCTIONS')}</DialogContentText>
+        <DialogContentText>
+          {getLang('LINK_INSTRUCTIONS')}
+        </DialogContentText>
         <TextField
           label={getLang('LINK_INPUT_LABEL')}
           type="text"

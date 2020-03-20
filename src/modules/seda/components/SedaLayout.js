@@ -22,6 +22,7 @@ import {
   getSubtitleFromSelections
 } from '../../../shared/selectors/lang'
 import SedaTooltip from './SedaTooltip'
+import SedaFooter from './SedaFooter'
 
 const drawerWidth = 360
 
@@ -42,6 +43,9 @@ const useStyles = makeStyles(theme => ({
       duration: theme.transitions.duration.enteringScreen
     }),
     marginLeft: 0
+  },
+  body: {
+    overflow: 'hidden'
   }
 }))
 
@@ -77,7 +81,7 @@ const SedaLayout = props => {
       <SedaHeader heading={heading} subheading={subheading} />
       <div className={classes.offset} />
       <SedaMenu />
-      <PageBody>
+      <PageBody classes={{ root: classes.body }}>
         <SidePanelGroup condensed={condensed} maxVisible={1}>
           <CondensedPanel condensed open={condensed} />
           <HelpPanel open={showHelp}>Help Panel</HelpPanel>
@@ -87,30 +91,9 @@ const SedaLayout = props => {
             Location Panel
           </SidePanel>
         </SidePanelGroup>
-        <Workspace view={view}>
-          {/* <Map>
-            <MapLegend />
-            <ChartOverlay />
-          </Map>
-          <Chart>
-            <ChartLegend />
-          </Chart> */}
-        </Workspace>
+        <Workspace view={view} />
       </PageBody>
-      {/* <PageContent>
-        <PanelGroup>
-          <HelpPanel />
-          <ControlPanel />
-          <LocationPanel />
-        </PanelGroup>
-        <VisualizationWrapper>
-          <SedaMap></SedaMap>
-          <SedaChart></SedaChart>
-        </VisualizationWrapper>
-      </PageContent> */}
-      {/* 
-
-      <PageFooter></PageFooter> */}
+      <SedaFooter />
       <SedaTooltip />
     </Page>
   )
