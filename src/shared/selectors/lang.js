@@ -8,7 +8,11 @@ import {
 
 import LANG from '../constants/en'
 import { getRegions } from './regions'
-import { getDemographics, getGaps } from './demographics'
+import {
+  getDemographics,
+  getGaps,
+  isVersusFromVarNames
+} from './demographics'
 import { getMetrics } from './metrics'
 import { getMidpointForVarName } from './data'
 
@@ -483,3 +487,21 @@ export const getLangDiverging = (
 
 export const getTooltipMetricLang = (varName, value) =>
   getLangDiverging(varName, value, 'TOOLTIP_DESC')
+
+export const getPreviewChartTitle = (xVar, yVar) => {
+  const isVersus = isVersusFromVarNames(xVar, yVar)
+  if (!isVersus)
+    return (
+      getMetricLabel(yVar, 'LABEL_CONCEPT') +
+      ' vs. ' +
+      getMetricLabel(xVar)
+    )
+  return (
+    getMetricLabel(yVar, 'LABEL_CONCEPT') +
+    ' (' +
+    getDemographicLabel(yVar) +
+    ' vs. ' +
+    getDemographicLabel(xVar) +
+    ')'
+  )
+}

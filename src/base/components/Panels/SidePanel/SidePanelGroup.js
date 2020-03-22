@@ -1,20 +1,20 @@
-import React from "react"
-import PropTypes from "prop-types"
-import { makeStyles, useTheme } from "@material-ui/core"
+import React from 'react'
+import PropTypes from 'prop-types'
+import { makeStyles, useTheme } from '@material-ui/core'
 
 const useStyles = makeStyles(theme => ({
   root: {
-    position: "relative",
+    position: 'relative',
     zIndex: 2,
     width: props =>
       props.condensed
         ? theme.app.condensedPanelWidth
         : props.panelCount * theme.app.panelWidth,
-    transition: theme.transitions.create("width", {
+    transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
+      duration: theme.transitions.duration.enteringScreen
+    })
+  }
 }))
 
 /**
@@ -46,8 +46,10 @@ const setChildPositions = (
     // only set position if panel is open
     if (!child.props.open) return child
     // get left offset
+    const baseStyle = child.props.style || {}
     const style = {
-      marginLeft: leftOffset,
+      ...baseStyle,
+      marginLeft: leftOffset
     }
     const w = child.props.condensed ? condensedWidth : fullWidth
     leftOffset =
@@ -64,24 +66,24 @@ const SidePanelGroup = ({ children, maxVisible, condensed }) => {
     maxVisible,
     {
       fullWidth: theme.app.panelWidth,
-      condensedWidth: theme.app.condensedPanelWidth,
+      condensedWidth: theme.app.condensedPanelWidth
     }
   )
   const openPanelCount = getOpenPanelCount(children)
 
   const classes = useStyles({
     panelCount: Math.min(openPanelCount, maxVisible),
-    condensed,
+    condensed
   })
   return <div className={classes.root}>{updatedChildren}</div>
 }
 
 SidePanelGroup.propTypes = {
   /** Maximum number of panels to show at once */
-  maxVisible: PropTypes.number,
+  maxVisible: PropTypes.number
 }
 SidePanelGroup.defaultProps = {
-  maxVisible: 1,
+  maxVisible: 1
 }
 
 export default SidePanelGroup

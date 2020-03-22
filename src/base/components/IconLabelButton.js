@@ -9,22 +9,46 @@ import {
 import clsx from 'clsx'
 
 const useStyles = makeStyles(theme => ({
-  root: {},
+  root: {
+    position: 'relative'
+  },
+  active: {
+    '&:before': {
+      content: '""',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      margin: 'auto',
+      display: 'block',
+      width: theme.spacing(6),
+      height: theme.spacing(6),
+      borderRadius: theme.spacing(6),
+      background: theme.app.highlightColor,
+      zIndex: -1
+    }
+  },
   label: {
     display: 'block'
   },
   startIcon: {
     display: 'block',
     margin: 0,
-    height: 32,
-    '& > svg.MuiSvgIcon-root': { fontSize: 32 }
+    height: theme.spacing(4),
+    '& > svg.MuiSvgIcon-root': { fontSize: theme.spacing(4) }
+  },
+  activeIcon: {
+    color: theme.palette.primary.main
   }
 }))
 
 const IconLabelButton = ({
   icon,
+  className,
   classes: overrides,
   children,
+  active,
   tooltip,
   placement,
   ...props
@@ -33,9 +57,19 @@ const IconLabelButton = ({
 
   const button = (
     <Button
+      className={clsx(
+        'icon-label-button',
+        className,
+        classes.root,
+        {
+          [classes.active]: active
+        }
+      )}
       classes={{
         label: clsx(classes.label, overrides.label),
-        startIcon: clsx(classes.startIcon, overrides.startIcon)
+        startIcon: clsx(classes.startIcon, overrides.startIcon, {
+          [classes.activeIcon]: active
+        })
       }}
       startIcon={icon}
       {...props}>

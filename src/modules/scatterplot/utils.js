@@ -107,10 +107,10 @@ export const grid = variant => {
       }
     default:
       return {
-        top: getCSSVariable('--sp-prev-top'),
-        right: getCSSVariable('--sp-prev-right'),
-        bottom: getCSSVariable('--sp-prev-bottom'),
-        left: getCSSVariable('--sp-prev-left')
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0
       }
   }
 }
@@ -130,14 +130,25 @@ const getSeries = (seriesId, type, options) => ({
  * Get the style overrides for the base series
  * @param {boolean} highlightedOn
  */
-const getBaseSeries = ({ highlightedState, sizer, variant }) => {
+const getBaseSeries = ({
+  highlightedState,
+  sizer,
+  variant,
+  xVar,
+  yVar
+}) => {
   const hl = isStateHighlighed(highlightedState)
+  const isVs = isVersusFromVarNames(xVar, yVar)
   return getSeries('base', 'scatter', {
     silent: hl || variant === 'preview',
     z: 100,
     itemStyle: {
       color: hl ? '#e6e6e6' : '#ff0000',
-      borderColor: hl ? 'transparent' : 'rgba(7,55,148,0.4)',
+      borderColor: hl
+        ? 'transparent'
+        : isVs
+        ? 'rgba(0,0,0,0.4)'
+        : 'rgba(7,55,148,0.4)',
       borderWidth: hl ? 0 : 0.75
     },
     symbolSize: hl ? 6 : value => sizer(value[2])
@@ -411,20 +422,19 @@ const getPreviewOverlayForVarName = (varName, axis = 'y') => {
   }
   const midPoint = getMidpointForVarName(varName)
   const positions = varName.includes('grd') ? [1] : [0]
-  const labels = createLabels(
-    positions,
-    'PREV',
-    axis,
-    undefined,
-    midPoint
-  )
-  const lines = createLines(positions, axis, midPoint).map(
-    l => ({
-      ...l,
-      start: 8
-    })
-  )
-  return getOverlay(labels, lines)
+  const lines = createLines(positions, axis, midPoint)
+  const overlay = getOverlay([], lines)
+  overlay.markLine.data = overlay.markLine.data.map(l => {
+    console.log(l)
+    return [
+      {
+        ...l[0],
+        lineStyle: { color: '#888', type: 'solid', width: 2 }
+      },
+      l[1]
+    ]
+  })
+  return overlay
 }
 
 const getOverlaysForContext = (
@@ -492,44 +502,16 @@ const getVersusOverlay = (xVar, yVar) => {
     visualMap: false,
     data: [[-6, -6], [6, 6]],
     symbolSize: 0.1,
-    zLevel: 100,
+    zlevel: 100,
+    z: 100,
     label: {
       show: false
     },
-    itemStyle: {
-      color: '#999'
-    },
-    markLine: {
-      animation: false,
-      silent: true,
-      zLevel: 100,
-      label: {
-        position: 'middle',
-        formatter: function(value) {
-          return value.name
-        }
-      },
-      lineStyle: {
-        width: 0,
-        color: '#000'
-      },
-      data: [
-        [
-          {
-            coord: labelStart,
-            symbol: 'none'
-          },
-          {
-            coord: labelEnd,
-            symbol: 'none',
-            zLevel: 100,
-            name: getLang('LINE_EQUAL_OPPORTUNITY', {
-              demographic1: getLang('LABEL_' + xDem.id),
-              demographic2: getLang('LABEL_' + yDem.id)
-            })
-          }
-        ]
-      ]
+    lineStyle: {
+      color: '#0071DB',
+      type: 'dotted',
+      width: 2,
+      opacity: 0.8
     }
   }
 }
@@ -761,7 +743,12 @@ export const getScatterplotOptions = (
     xAxis: xAxis(variant, { varName: xVar, region }),
     yAxis: yAxis(variant, { varName: yVar, region }),
     series: [
-      series('base', variant, { highlightedState, sizer }),
+      series('base', variant, {
+        highlightedState,
+        sizer,
+        xVar,
+        yVar
+      }),
       series('highlighted', variant, {
         highlightedState,
         sizer

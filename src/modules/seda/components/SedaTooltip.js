@@ -87,15 +87,7 @@ debug.enable('Tooltip')
 const log = debug('Tooltip')
 
 const useStyles = makeStyles(theme => ({
-  hint: {
-    display: 'block',
-    marginTop: theme.spacing(1),
-    padding: `${theme.spacing(1.5)}px 0 ${theme.spacing(0.5)}px`,
-    fontStyle: 'italic',
-    lineHeight: 1,
-    borderTop: '1px dotted rgba(255,255,255,0.34)',
-    color: theme.app.altDarkText
-  }
+  hint: theme.mixins.hint
 }))
 
 const SedaTooltip = props => {

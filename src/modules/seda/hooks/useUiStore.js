@@ -2,7 +2,7 @@ import create from 'zustand'
 
 const [useUiStore] = create(set => ({
   // current view of the data
-  view: 'chart',
+  view: 'map',
   setView: view => set({ view }),
   // currently hovered id
   hovered: null,
@@ -30,6 +30,7 @@ const [useUiStore] = create(set => ({
     set(state => ({ showHelp: !state.showHelp })),
   // boolean determining is preview chart is visible
   showChart: true,
+  setShowChart: showChart => set({ showChart }),
   toggleChart: () =>
     set(state => ({ showChart: !state.showChart })),
   // boolean determining if controls are condensed

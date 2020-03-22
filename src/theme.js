@@ -12,6 +12,8 @@ const borderRadius = 3
 const spacing = num => num * 8
 
 const primary = { main: '#0071DB', highlight: '#EBFBFF' }
+const altDarkText = 'rgba(255,255,255,0.66)'
+const highlightColor = '#EBFBFF'
 
 // Theme for the tool
 const theme = createMuiTheme({
@@ -96,6 +98,15 @@ const theme = createMuiTheme({
         left: spacing(2.5),
         borderRadius: borderRadius
       }
+    },
+    hint: {
+      display: 'block',
+      marginTop: spacing(1),
+      padding: `${spacing(1.5)}px 0 ${spacing(0.5)}px`,
+      fontStyle: 'italic',
+      lineHeight: 1,
+      borderTop: '1px dotted rgba(255,255,255,0.34)',
+      color: altDarkText
     }
   },
   overrides: {
@@ -130,11 +141,12 @@ const theme = createMuiTheme({
     panelWidth: 360,
     condensedPanelWidth: 72,
     darkBackground: 'rgba(3, 18, 50, 0.94)',
-    altDarkText: 'rgba(255,255,255,0.66)',
+    altDarkText: altDarkText,
     aboveColor: '#40B875',
     belowColor: '#57A5FF',
     aboveColorAlt: '#40B875',
     belowColorAlt: '#57A5FF',
+    highlightColor: highlightColor,
     selectedColors: [
       '#F46800',
       '#8C1AF4',

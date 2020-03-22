@@ -9,6 +9,8 @@ import {
   getLang,
   getLabelForVarName
 } from '../../../shared/selectors/lang'
+import { makeStyles } from '@material-ui/core'
+import clsx from 'clsx'
 
 const baseVars = getBaseVars()
 const endpoint =
@@ -40,6 +42,24 @@ const getStateHighlights = (stateId, data) => {
     : []
 }
 
+const useStyles = makeStyles(theme => ({
+  root: {
+    position: 'relative',
+    '&:before': {
+      content: '""',
+      display: 'block',
+      position: 'absolute',
+      top: 1,
+      bottom: 1,
+      right: 1,
+      left: 1,
+      border: '1px solid',
+      borderColor: theme.palette.divider,
+      background: '#f00'
+    }
+  }
+}))
+
 function ScatterplotPreview({
   data,
   xVar,
@@ -52,6 +72,7 @@ function ScatterplotPreview({
   error,
   onError
 }) {
+  const classes = useStyles()
   const regionData = data && data[region]
   // memoize scatterplot options
   const scatterplotOptions = useMemo(() => {
@@ -79,7 +100,7 @@ function ScatterplotPreview({
     <div
       role="img"
       aria-label={error ? null : ariaLabel}
-      className="scatterplot-preview"
+      className={clsx('scatterplot-preview', classes.root)}
       style={{
         height: error ? '0px' : null,
         margin: error ? 0 : null

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import { default as MuiExpansionPanel } from '@material-ui/core/ExpansionPanel'
@@ -41,7 +41,6 @@ const useStyles = makeStyles(theme => ({
   },
   root: {
     boxShadow: 'none',
-
     '&.Mui-expanded': {
       margin: 0,
       '& .MuiExpansionPanelSummary-root': {
@@ -85,8 +84,8 @@ const useStyles = makeStyles(theme => ({
       background: theme.palette.background.paper,
       left: 0,
       right: 0,
-      top: -4,
-      bottom: -4,
+      top: 0,
+      bottom: 0,
       borderRadius: 0,
       zIndex: 0
     }
@@ -103,6 +102,7 @@ export default function ExpansionPanel({
   title,
   startIcon,
   expandIcon,
+  defaultExpanded,
   classes: overrides,
   ...props
 }) {
@@ -124,7 +124,8 @@ export default function ExpansionPanel({
         aria-controls={`${id}-content`}
         id={`${id}-header`}>
         {startIcon}
-        <Typography className={clsx(classes.heading, overrides.heading)}>
+        <Typography
+          className={clsx(classes.heading, overrides.heading)}>
           {title}
         </Typography>
       </ExpansionPanelSummary>

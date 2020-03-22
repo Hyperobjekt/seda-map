@@ -252,6 +252,15 @@ const LANG = {
   TOOLTIP_DESC_SES_VERY_LOW: 'far below national average',
   TOOLTIP_DESC_SES_ULTRA_LOW: 'very far below U.S. average',
 
+  TOOLTIP_HINT_HIDE: 'hide side panel',
+  TOOLTIP_HINT_SHOW: 'show data options',
+  TOOLTIP_HINT_METRIC: 'click to change metric',
+  TOOLTIP_HINT_REGION: 'click to change region',
+  TOOLTIP_HINT_DEMOGRAPHIC: 'click to change subgroup or gap',
+  TOOLTIP_HINT_FILTER: 'click to change filters',
+  TOOLTIP_HINT_LOCATION: 'click to view selected locations',
+  TOOLTIP_HINT_CHART: 'click to toggle the chart preview',
+
   PANEL_FILTER_MANY: '$[num] filters applied',
   PANEL_FILTER_SINGLE: 'One filter applied',
   PANEL_FILTER_NONE: 'No filters applied',
@@ -567,9 +576,9 @@ const LANG = {
   AXIS_FRL_MID: ' ',
 
   // PREVIEW CHART AXIS LABELS
-  AXIS_PREV_ZERO: 'avg',
-  AXIS_PREV_MID: 'avg',
-  AXIS_PREV_HIGH_SINGLE: 'avg',
+  AXIS_PREV_ZERO: '',
+  AXIS_PREV_MID: '',
+  AXIS_PREV_HIGH_SINGLE: '',
 
   // LINE FOR VERSUS CHART
   LINE_EQUAL_OPPORTUNITY:

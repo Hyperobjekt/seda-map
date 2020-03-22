@@ -83,7 +83,11 @@ const SedaLayout = props => {
       <SedaMenu />
       <PageBody classes={{ root: classes.body }}>
         <SidePanelGroup condensed={condensed} maxVisible={1}>
-          <CondensedPanel condensed open={condensed} />
+          <CondensedPanel
+            style={{ zIndex: 1000 }}
+            condensed
+            open={condensed}
+          />
           <HelpPanel open={showHelp}>Help Panel</HelpPanel>
           <FullPanel open={!condensed} />
           <SelectionPanel open={selection} />

@@ -22,13 +22,56 @@ import LayersIcon from '@material-ui/icons/Layers'
 import ScatterplotIcon from '@material-ui/icons/ScatterPlot'
 import FilterIcon from '../icons/FilterIcon'
 import PeopleIcon from '@material-ui/icons/PeopleAlt'
+import clsx from 'clsx'
+import { getMetricLabel } from '../../../../shared/selectors'
+import {
+  getSelectionLabel,
+  getLang,
+  getRegionLabel,
+  getDemographicLabel,
+  getLangWithSingleOrNone
+} from '../../../../shared/selectors/lang'
+
+const useTooltipStyles = makeStyles(theme => ({
+  root: {
+    padding: theme.spacing(0.5)
+  },
+  primary: {
+    color: theme.palette.common.white,
+    fontSize: theme.typography.pxToRem(14)
+  },
+  secondary: {
+    color: theme.app.altDarkText,
+    textTransform: 'capitalize',
+    fontSize: theme.typography.pxToRem(12)
+  },
+  hint: {
+    ...theme.mixins.hint,
+    paddingTop: theme.spacing(1)
+  }
+}))
 
 const DetailedTooltip = ({
   primary,
   secondary,
   hint,
   ...props
-}) => {}
+}) => {
+  const classes = useTooltipStyles()
+  return (
+    <div className={clsx('panel-tooltip', classes.root)}>
+      <Typography className={classes.primary} variant="body1">
+        {primary}
+      </Typography>
+      <Typography className={classes.secondary} variant="body2">
+        {secondary}
+      </Typography>
+      <Typography className={classes.hint} variant="caption">
+        {hint}
+      </Typography>
+    </div>
+  )
+}
 
 const useStyles = makeStyles(theme => ({
   header: {
@@ -50,16 +93,21 @@ const CondensedPanel = props => {
     state => state.toggleCondensed
   )
   const metric = useDataOptions(state => state.metric)
+  const demographic = useDataOptions(state => state.demographic)
+  const region = useDataOptions(state => state.region)
   const view = useUiStore(state => state.view)
+  const locations = useDataOptions(state => state.locations)
+  const filters = []
   const selection = useUiStore(state => state.selection)
   const setSelection = useUiStore(state => state.setSelection)
+  const showChart = useUiStore(state => state.showChart)
   const toggleChart = useUiStore(state => state.toggleChart)
   return (
     <SidePanel condensed {...props}>
       <SidePanelHeader classes={{ root: classes.header }}>
         <IconLabelButton
           className={classes.button}
-          tooltip="Show all data options"
+          tooltip={getLang('TOOLTIP_HINT_SHOW')}
           icon={
             <MenuOpen
               style={{
@@ -74,7 +122,16 @@ const CondensedPanel = props => {
       <SidePanelBody classes={{ root: classes.body }}>
         <IconLabelButton
           className={classes.button}
-          tooltip="Show educational opportunity metrics"
+          active={selection === 'metric'}
+          tooltip={
+            selection !== 'metric' && (
+              <DetailedTooltip
+                primary={getSelectionLabel('metric')}
+                secondary={getMetricLabel(metric.id)}
+                hint={getLang('TOOLTIP_HINT_METRIC')}
+              />
+            )
+          }
           icon={
             <MetricIcon
               metricId={metric.id}
@@ -85,24 +142,69 @@ const CondensedPanel = props => {
         />
         <IconLabelButton
           className={classes.button}
-          tooltip="Show data region selection (state, counties, districts, schools)"
+          active={selection === 'region'}
+          tooltip={
+            selection !== 'region' && (
+              <DetailedTooltip
+                primary={getSelectionLabel('region')}
+                secondary={getRegionLabel(region.id)}
+                hint={getLang('TOOLTIP_HINT_REGION')}
+              />
+            )
+          }
           icon={<LayersIcon style={{ fontSize: 32 }} />}
           onClick={() => setSelection('region')}
         />
         <IconLabelButton
           className={classes.button}
-          tooltip="Show subgroups and gaps"
+          active={selection === 'demographic'}
+          tooltip={
+            selection !== 'demographic' && (
+              <DetailedTooltip
+                primary={getSelectionLabel('demographic')}
+                secondary={getDemographicLabel(
+                  demographic.id,
+                  'LABEL_STUDENTS'
+                )}
+                hint={getLang('TOOLTIP_HINT_DEMOGRAPHIC')}
+              />
+            )
+          }
           icon={<PeopleIcon />}
           onClick={() => setSelection('demographic')}
         />
         <IconLabelButton
           className={classes.button}
-          tooltip="Show data filtering options"
+          active={selection === 'filter'}
+          tooltip={
+            selection !== 'filter' && (
+              <DetailedTooltip
+                primary={getSelectionLabel('filter')}
+                secondary={getLangWithSingleOrNone(
+                  filters.length,
+                  'PANEL_FILTER'
+                )}
+                hint={getLang('TOOLTIP_HINT_REGION')}
+              />
+            )
+          }
           icon={<FilterIcon style={{ fontSize: 32 }} />}
           onClick={() => setSelection('filter')}
         />
         <IconLabelButton
-          tooltip="Show pinned locations"
+          active={selection === 'location'}
+          tooltip={
+            selection !== 'location' && (
+              <DetailedTooltip
+                primary={getSelectionLabel('location')}
+                secondary={getLangWithSingleOrNone(
+                  locations.length,
+                  'PANEL_LOCATION'
+                )}
+                hint={getLang('TOOLTIP_HINT_LOCATION')}
+              />
+            )
+          }
           className={classes.button}
           icon={<PlaceIcon />}
           onClick={() => setSelection('location')}
@@ -110,7 +212,8 @@ const CondensedPanel = props => {
         <Divider />
         {view === 'map' && (
           <IconLabelButton
-            tooltip="Toggle socioeconomic status chart"
+            active={showChart}
+            tooltip={getLang('TOOLTIP_HINT_CHART')}
             className={classes.button}
             icon={<ScatterplotIcon />}
             onClick={toggleChart}

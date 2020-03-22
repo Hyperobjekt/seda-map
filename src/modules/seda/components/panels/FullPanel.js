@@ -5,26 +5,25 @@ import {
   makeStyles,
   Button,
   IconButton,
-  useTheme
+  useTheme,
+  Tooltip
 } from '@material-ui/core'
 import {
   SidePanel,
   SidePanelHeader,
   SidePanelBody,
-  SidePanelFooter,
-  ExpansionPanel
+  SidePanelFooter
 } from '../../../../base/components/Panels'
 import useUiStore from '../../hooks/useUiStore'
 import useDataOptions from '../../hooks/useDataOptions'
 import clsx from 'clsx'
 import MenuOpen from '@material-ui/icons/MenuOpen'
-import ScatterplotIcon from '@material-ui/icons/ScatterPlot'
 import SedaSelectionButton from '../controls/SedaSelectionButton'
-import { ScatterplotPreview } from '../scatterplot'
 import {
   getLang,
   getLangWithSingleOrNone
 } from '../../../../shared/selectors/lang'
+import PreviewChartPanel from './PreviewChartPanel'
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -34,21 +33,23 @@ const useStyles = makeStyles(theme => ({
     padding: '4px 0'
   },
   footerPanel: {
-    borderTop: `5px solid ${theme.palette.divider}`
+    transition: 'transform 0.4s ease-in-out 0.2s',
+    transformOrigin: 'left bottom'
   },
   footerCondensed: {
     position: 'absolute',
     left: 0,
     bottom: 0,
     transform: `translate(calc(100% + ${theme.app
-      .condensedPanelWidth + theme.spacing(2)}px), 0px)`,
-    transition: 'transform 0.2s ease-in-out 0.4s'
+      .condensedPanelWidth + theme.spacing(2)}px), -8px)`
+  },
+  footerCondensedHide: {
+    transform: 'scale(0.0001)'
   }
 }))
 
 const FullPanel = props => {
   const classes = useStyles()
-  const theme = useTheme()
   const view = useUiStore(state => state.view)
   const condensed = useUiStore(state => state.condensed)
   const toggleCondensed = useUiStore(
@@ -65,9 +66,14 @@ const FullPanel = props => {
         <Typography className={classes.title}>
           Data Options
         </Typography>
-        <IconButton onClick={toggleCondensed}>
-          <MenuOpen />
-        </IconButton>
+        <Tooltip
+          arrow
+          title={getLang('TOOLTIP_HINT_HIDE')}
+          placement="right">
+          <IconButton onClick={toggleCondensed}>
+            <MenuOpen />
+          </IconButton>
+        </Tooltip>
       </SidePanelHeader>
       <SidePanelBody classes={{ root: classes.body }}>
         <SedaSelectionButton
@@ -95,21 +101,15 @@ const FullPanel = props => {
         />
       </SidePanelBody>
       {view === 'map' && (
-        <SidePanelFooter
-          classes={{
-            root: clsx(classes.footerPanel, {
+        <SidePanelFooter sticky>
+          <PreviewChartPanel
+            className={clsx(classes.footerPanel, {
               [classes.footerCondensed]:
-                condensed && showChart && view === 'map'
-            })
-          }}
-          sticky>
-          <ExpansionPanel
-            defaultExpanded
-            classes={{ details: classes.details }}
-            title="Socioeconomic Status Chart"
-            startIcon={<ScatterplotIcon />}>
-            <ScatterplotPreview />
-          </ExpansionPanel>
+                condensed && showChart && view === 'map',
+              [classes.footerCondensedHide]:
+                condensed && !showChart && view === 'map'
+            })}
+          />
         </SidePanelFooter>
       )}
     </SidePanel>

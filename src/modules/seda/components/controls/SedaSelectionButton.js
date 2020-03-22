@@ -22,7 +22,8 @@ import useDataOptions from '../../hooks/useDataOptions'
 
 const useStyles = makeStyles(theme => ({
   root: {
-    minHeight: theme.spacing(9)
+    minHeight: theme.spacing(9),
+    paddingLeft: theme.spacing(3)
   },
   icon: {
     color: theme.palette.common.black,
