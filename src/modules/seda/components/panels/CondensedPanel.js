@@ -1,11 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {
-  Typography,
-  makeStyles,
-  Button,
-  Divider
-} from '@material-ui/core'
+import { makeStyles, Divider } from '@material-ui/core'
 import useUiStore from '../../hooks/useUiStore'
 import {
   SidePanel,
@@ -22,7 +17,6 @@ import LayersIcon from '@material-ui/icons/Layers'
 import ScatterplotIcon from '@material-ui/icons/ScatterPlot'
 import FilterIcon from '../icons/FilterIcon'
 import PeopleIcon from '@material-ui/icons/PeopleAlt'
-import clsx from 'clsx'
 import { getMetricLabel } from '../../../../shared/selectors'
 import {
   getSelectionLabel,
@@ -31,47 +25,7 @@ import {
   getDemographicLabel,
   getLangWithSingleOrNone
 } from '../../../../shared/selectors/lang'
-
-const useTooltipStyles = makeStyles(theme => ({
-  root: {
-    padding: theme.spacing(0.5)
-  },
-  primary: {
-    color: theme.palette.common.white,
-    fontSize: theme.typography.pxToRem(14)
-  },
-  secondary: {
-    color: theme.app.altDarkText,
-    textTransform: 'capitalize',
-    fontSize: theme.typography.pxToRem(12)
-  },
-  hint: {
-    ...theme.mixins.hint,
-    paddingTop: theme.spacing(1)
-  }
-}))
-
-const DetailedTooltip = ({
-  primary,
-  secondary,
-  hint,
-  ...props
-}) => {
-  const classes = useTooltipStyles()
-  return (
-    <div className={clsx('panel-tooltip', classes.root)}>
-      <Typography className={classes.primary} variant="body1">
-        {primary}
-      </Typography>
-      <Typography className={classes.secondary} variant="body2">
-        {secondary}
-      </Typography>
-      <Typography className={classes.hint} variant="caption">
-        {hint}
-      </Typography>
-    </div>
-  )
-}
+import DetailedTooltip from '../base/DetailedTooltip'
 
 const useStyles = makeStyles(theme => ({
   header: {

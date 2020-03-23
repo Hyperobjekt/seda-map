@@ -2,11 +2,24 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { PageHeader } from '../../../../base/components/Page'
 import SedaLogo from './SedaLogo'
-import { makeStyles, Typography } from '@material-ui/core'
+import {
+  makeStyles,
+  Typography,
+  Tooltip
+} from '@material-ui/core'
 import SedaHelpButton from './SedaHelpButton'
 import SedaMenuButton from './SedaMenuButton'
 import SedaViewControls from './SedaViewControls'
 import SearchInput from '../../../../base/components/SearchInput'
+import useDataOptions from '../../hooks/useDataOptions'
+import {
+  getLang,
+  getMetricLabel,
+  getDemographicLabel,
+  getTitleFromSelections
+} from '../../../../shared/selectors/lang'
+import { isGapDemographic } from '../../../../shared/selectors'
+import DetailedTooltip from '../base/DetailedTooltip'
 
 const useLogoStyles = makeStyles(theme => ({
   root: {
@@ -63,6 +76,49 @@ const HeaderActions = ({ ...props }) => {
   )
 }
 
+const useSubtitleStyles = makeStyles(theme => ({
+  root: {
+    color: theme.palette.primary.main,
+    textDecoration: 'underline',
+    textDecorationColor: theme.palette.divider,
+    fontWeight: 'bold',
+    cursor: 'pointer'
+  }
+}))
+
+const Subtitle = ({ metric, demographic }) => {
+  const metricLabel = getMetricLabel(metric.id)
+  const metricTooltip = getMetricLabel(metric.id, 'HINT')
+  const classes = useSubtitleStyles()
+  const MetricLabel = (
+    <Tooltip
+      title={
+        <DetailedTooltip
+          primary={metricTooltip}
+          hint={`click for more info about ${metricLabel}`}
+        />
+      }
+      placement="bottom"
+      arrow>
+      <span className={classes.root}>{metricLabel}</span>
+    </Tooltip>
+  )
+  const studentLabel = getDemographicLabel(
+    demographic.id,
+    'LABEL_STUDENTS'
+  )
+  const isGap = isGapDemographic(demographic.id)
+  return isGap ? (
+    <>
+      shown by {studentLabel}' {MetricLabel}
+    </>
+  ) : (
+    <>
+      shown by {MetricLabel} for {studentLabel}
+    </>
+  )
+}
+
 const useHeaderStyles = makeStyles(theme => ({
   root: {
     background: theme.palette.background.paper,
@@ -76,12 +132,19 @@ const useHeaderStyles = makeStyles(theme => ({
     textTransform: 'capitalize'
   },
   subheading: {
-    fontSize: theme.typography.pxToRem(12),
     color: theme.palette.text.secondary
   }
 }))
 
-const SedaHeader = ({ heading, subheading, onMenuClick }) => {
+const SedaHeader = ({ onMenuClick }) => {
+  const metric = useDataOptions(state => state.metric)
+  const demographic = useDataOptions(state => state.demographic)
+  const region = useDataOptions(state => state.region)
+  const heading = getTitleFromSelections({
+    metric,
+    demographic,
+    region
+  })
   const classes = useHeaderStyles()
   return (
     <PageHeader
@@ -92,7 +155,7 @@ const SedaHeader = ({ heading, subheading, onMenuClick }) => {
         {heading}
       </Typography>
       <Typography className={classes.subheading} variant="body2">
-        {subheading}
+        <Subtitle {...{ metric, demographic }} />
       </Typography>
     </PageHeader>
   )

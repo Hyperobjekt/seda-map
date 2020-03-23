@@ -84,7 +84,7 @@ const SedaScatterplotPreview = () => {
             textTransform: 'capitalize',
             whiteSpace: 'nowrap',
             overflow: 'hidden',
-            'text-overflow': 'ellipsis'
+            textOverflow: 'ellipsis'
           }}
           variant="body1">
           {getLabelForVarName(yVar, {
@@ -107,7 +107,7 @@ const SedaScatterplotPreview = () => {
             textTransform: 'capitalize',
             whiteSpace: 'nowrap',
             overflow: 'hidden',
-            'text-overflow': 'ellipsis'
+            textOverflow: 'ellipsis'
           }}
           variant="body1">
           {getLabelForVarName(xVar, {

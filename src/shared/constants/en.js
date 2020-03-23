@@ -148,6 +148,17 @@ const LANG = {
   LABEL_CONCEPT_GRD: 'school effectiveness',
   LABEL_CONCEPT_COH: 'educational opportunity change',
 
+  // Hints for metrics
+  HINT_AVG:
+    'How students score, in grade levels, relative to the national average for grades 3 - 8',
+  HINT_GRD:
+    "An average of how much students' test scores improve per year, relative to the national average, as they progress through grades 3 - 8",
+  HINT_COH:
+    "An average of how students' test scores change in grade levels per year, for grades 3 - 8 from 2009 - 2016",
+  HINT_GAP_AVG: '',
+  HINT_GAP_GRD: '',
+  HINT_GAP_COH: '',
+
   // Demographic Labels
   LABEL_ALL: 'all',
   LABEL_B: 'Black',

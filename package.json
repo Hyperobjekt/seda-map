@@ -50,6 +50,7 @@
     "react-seda-search": "^1.0.9",
     "react-spring": "^8.0.27",
     "react-transition-group": "^4.1.1",
+    "react-use-gesture": "^7.0.5",
     "redux": "4.0.1",
     "redux-beacon": "^2.1.0",
     "redux-thunk": "2.3.0",

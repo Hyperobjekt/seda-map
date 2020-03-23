@@ -61,7 +61,7 @@ const FullPanel = props => {
   const demographic = useDataOptions(state => state.demographic)
   const showChart = useUiStore(state => state.showChart)
   return (
-    <SidePanel open={!condensed} {...props}>
+    <SidePanel {...props}>
       <SidePanelHeader sticky>
         <Typography className={classes.title}>
           Data Options

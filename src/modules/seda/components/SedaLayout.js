@@ -8,7 +8,7 @@ import {
   SidePanel,
   SidePanelGroup
 } from '../../../base/components/Panels/SidePanel'
-import { Workspace } from './Workspace'
+import { SplitView } from './SplitView'
 import useUiStore from '../hooks/useUiStore'
 import {
   CondensedPanel,
@@ -76,6 +76,9 @@ const SedaLayout = props => {
     demographic,
     region
   })
+  // determines the active portion of the split view
+  const splitView =
+    view === 'chart' ? 'right' : view === 'map' ? 'left' : view
   return (
     <Page>
       <SedaHeader heading={heading} subheading={subheading} />
@@ -83,19 +86,22 @@ const SedaLayout = props => {
       <SedaMenu />
       <PageBody classes={{ root: classes.body }}>
         <SidePanelGroup condensed={condensed} maxVisible={1}>
+          <HelpPanel open={showHelp} style={{ zIndex: 1001 }}>
+            Help Panel
+          </HelpPanel>
           <CondensedPanel
             style={{ zIndex: 1000 }}
             condensed
             open={condensed}
           />
-          <HelpPanel open={showHelp}>Help Panel</HelpPanel>
+
           <FullPanel open={!condensed} />
           <SelectionPanel open={selection} />
           <SidePanel open={activeLocation}>
             Location Panel
           </SidePanel>
         </SidePanelGroup>
-        <Workspace view={view} />
+        <SplitView view={splitView} />
       </PageBody>
       <SedaFooter />
       <SedaTooltip />

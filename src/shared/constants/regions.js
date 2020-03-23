@@ -4,12 +4,12 @@ import LANG from './en'
  * regions data is available for
  */
 export const REGIONS = [
-  {
-    id: 'states',
-    label: 'States',
-    singular: 'State',
-    idLength: 2
-  },
+  // {
+  //   id: 'states',
+  //   label: 'States',
+  //   singular: 'State',
+  //   idLength: 2
+  // },
   {
     id: 'counties',
     label: LANG['LABEL_COUNTIES'],

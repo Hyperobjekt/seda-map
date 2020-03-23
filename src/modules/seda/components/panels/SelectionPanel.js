@@ -23,11 +23,17 @@ import { getSelectionLabel } from '../../../../shared/selectors/lang'
 import CloseIcon from '@material-ui/icons/Close'
 import SearchInput from '../../../../base/components/SearchInput'
 
+//`translateX(${theme.app.condensedPanelWidth}px)`
+
 const useStyles = makeStyles(theme => ({
   root: {
     '&.panel--open': {
       transform: props =>
-        props.condensed ? 'translateX(0)' : 'translateX(-100%)'
+        props.condensed
+          ? props.showHelp
+            ? `translateX(${theme.app.condensedPanelWidth}px)`
+            : `translateX(0)`
+          : 'translateX(-100%)'
     }
   },
   title: theme.typography.panelHeading,
@@ -96,10 +102,11 @@ const SelectionComponent = ({ selectionId }) => {
 
 const SelectionPanel = props => {
   const condensed = useUiStore(state => state.condensed)
+  const showHelp = useUiStore(state => state.showHelp)
   const selection = useUiStore(state => state.selection)
   const setSelection = useUiStore(state => state.setSelection)
   const panelTitle = getSelectionLabel(selection)
-  const classes = useStyles({ condensed })
+  const classes = useStyles({ condensed, showHelp })
 
   return (
     <SidePanel classes={{ root: classes.root }} {...props}>
