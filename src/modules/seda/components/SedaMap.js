@@ -1,4 +1,6 @@
 import React, { useMemo, useEffect } from 'react'
+import { FlyToInterpolator } from 'react-map-gl'
+import * as ease from 'd3-ease'
 import PropTypes from 'prop-types'
 import {
   getMapViewport,
@@ -17,6 +19,7 @@ import { getLang } from '../../../shared/selectors/lang'
 import useMapStore from '../hooks/useMapStore'
 import useDataOptions from '../hooks/useDataOptions'
 import useUiStore from '../hooks/useUiStore'
+import { getStateViewportByFips } from '../../../shared/selectors/states'
 
 const selectedColors = getSelectedColors()
 
@@ -26,6 +29,7 @@ const SedaMap = props => {
   const region = useDataOptions(state => state.region)
   const metric = useDataOptions(state => state.metric)
   const demographic = useDataOptions(state => state.demographic)
+  const { prefix } = useDataOptions(state => state.filters)
   const locationIds = useDataOptions(state =>
     state.getLocationIdsForRegion()
   )
@@ -100,18 +104,41 @@ const SedaMap = props => {
   const handleLoad = () => {
     window.SEDA.trigger('map')
     // zoom to US if needed
-    // setTimeout(() => {
-    //   if (
-    //     viewport.zoom === 3.5 &&
-    //     viewport.latitude === 38 &&
-    //     viewport.longitude === -97 &&
-    //     view === 'map'
-    //   ) {
-    //     // if default viewport, zoom to US
-    //     resetHighlightedState()
-    //   }
-    // }, 1000)
+    setTimeout(() => {
+      if (
+        viewport.zoom === 3.5 &&
+        viewport.latitude === 38 &&
+        viewport.longitude === -97 &&
+        view === 'map'
+      ) {
+        const newViewport = getStateViewportByFips(
+          null,
+          viewport
+        )
+        setViewport({
+          ...newViewport,
+          transitionDuration: 3000,
+          transitionInterpolator: new FlyToInterpolator(),
+          transitionEasing: ease.easeCubic
+        })
+      }
+    }, 1000)
   }
+
+  useEffect(() => {
+    if (!prefix) {
+      return
+    }
+    const newViewport = getStateViewportByFips(prefix, viewport)
+    if (newViewport) {
+      setViewport({
+        ...newViewport,
+        transitionDuration: 3000,
+        transitionInterpolator: new FlyToInterpolator(),
+        transitionEasing: ease.easeCubic
+      })
+    }
+  }, [prefix])
 
   return (
     <MapBase

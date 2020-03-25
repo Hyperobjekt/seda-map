@@ -331,54 +331,8 @@ export const getMetricDescription = metricId => {
   return getLang('TAB_METRIC_' + metricId.toUpperCase())
 }
 
-export const getSelectionLabel = panelId => {
-  switch (panelId) {
-    case 'metric':
-      return 'Educational Opportunity Metric'
-    case 'demographic':
-      return 'Subgroup / Gap'
-    case 'region':
-      return 'Region'
-    case 'filter':
-      return 'Data Filters'
-    case 'location':
-      return 'Locations'
-    default:
-      return
-  }
-}
-
-/**
- * Returns the page heading based on selections
- */
-export const getTitleFromSelections = ({
-  metric,
-  demographic,
-  region
-}) => {
-  const isGap = isGapDemographic(demographic.id)
-  const metricConcept = getLang(
-    `LABEL_CONCEPT_${metric.id.toUpperCase()}`
-  )
-  return isGap
-    ? `${metricConcept} Gaps in U.S. ${region.label}`
-    : `${metricConcept} in U.S. ${region.label}`
-}
-
-/**
- * Returns the page subheading based on selections
- */
-export const getSubtitleFromSelections = ({
-  metric,
-  demographic
-}) => {
-  const studentLabel = getLang(
-    'LABEL_STUDENTS_' + demographic.id.toUpperCase()
-  )
-  const isGap = isGapDemographic(demographic.id)
-  return !isGap
-    ? `shown by ${metric.label} for ${studentLabel}`
-    : `shown by ${studentLabel} ${metric.label}`
+export const getPrefixLang = (id, prefix = 'LABEL', props) => {
+  return getLang(prefix + '_' + id, props)
 }
 
 /**
@@ -438,12 +392,8 @@ export const getDemographicLabel = (id, prefix = 'LABEL') => {
  * @param {string} id
  * @returns {string}
  */
-export const getRegionLabel = id => {
-  let region = getRegions().find(r => r.id === id)
-  if (!region) {
-    throw new Error('no region found for ' + id)
-  }
-  return region.label
+export const getRegionLabel = (id, prefix = 'LABEL') => {
+  return getLang(prefix + '_' + id)
 }
 
 export const getSingleOrNoneQuantifier = num =>
@@ -504,4 +454,22 @@ export const getPreviewChartTitle = (xVar, yVar) => {
     getDemographicLabel(xVar) +
     ')'
   )
+}
+
+export const getFiltersLang = (filters, region, idToName) => {
+  const labels = []
+  if (filters.prefix) {
+    labels.push('Only ' + idToName(filters.prefix))
+  }
+  if (filters.largest) {
+    labels.push(
+      getLang('FILTER_LARGEST_SELECTION', {
+        num: filters.largest,
+        region: getRegionLabel(region.id)
+      })
+    )
+  }
+  return labels.length > 0
+    ? labels.join(', ')
+    : getLang('PANEL_FILTER_NONE')
 }

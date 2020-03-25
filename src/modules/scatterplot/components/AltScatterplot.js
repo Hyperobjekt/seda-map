@@ -24,6 +24,10 @@ import {
 } from './ScatterplotBase/utils'
 import clsx from 'clsx'
 import useDataOptions from '../../seda/hooks/useDataOptions'
+import {
+  hasActiveFilters,
+  getFilteredIds
+} from '../../../shared/selectors/data'
 
 const endpoint =
   process.env.REACT_APP_DATA_ENDPOINT + 'scatterplot/'
@@ -81,7 +85,6 @@ function Scatterplot({
   zVar,
   className,
   region,
-  highlightedState,
   variant,
   autoFetch = true,
   children,
@@ -94,10 +97,22 @@ function Scatterplot({
   const data = useDataOptions(state => state.data)
   // function to set data
   const setData = useDataOptions(state => state.setData)
+  // get filter prefix
+  const { prefix, largest } = useDataOptions(
+    state => state.filters
+  )
   // scatterplot data for the current region
   const regionData = data[region]
   // store copy of scatterplot options
   const [options, setOptions] = useState({})
+  // highlight ids based on filters
+  const highlightIds = useMemo(() => {
+    return getFilteredIds(
+      regionData,
+      { prefix, largest },
+      zVar
+    ).slice(0, 3000)
+  }, [regionData, prefix, largest, zVar])
   // get list of vars needed to render current options
   const neededVars = getMissingVarNames(regionData, [
     xVar,
@@ -109,9 +124,7 @@ function Scatterplot({
   // this is required as sometimes names are not available
   useEffect(() => {
     if (!autoFetch || neededVars.length === 0) return
-    const promises = [
-      fetchVariables(neededVars, region, highlightedState)
-    ]
+    const promises = [fetchVariables(neededVars, region, prefix)]
     if (region === 'schools') {
       promises.push(fetchSchoolPair(xVar, yVar))
     }
@@ -125,22 +138,14 @@ function Scatterplot({
 
   // fetch any additional school level data for highlighted states
   useEffect(() => {
-    if (
-      !autoFetch ||
-      region !== 'schools' ||
-      !highlightedState ||
-      highlightedState === 'us'
+    if (!autoFetch || region !== 'schools' || !prefix) return
+    fetchVariables([xVar, yVar, zVar], 'schools', prefix).then(
+      data => {
+        setData(data, 'schools')
+        return data
+      }
     )
-      return
-    fetchVariables(
-      [xVar, yVar, zVar],
-      'schools',
-      highlightedState
-    ).then(data => {
-      setData(data, 'schools')
-      return data
-    })
-  }, [xVar, yVar, zVar, region, highlightedState, setData])
+  }, [xVar, yVar, zVar, region, prefix, setData])
 
   useEffect(() => {
     if (neededVars.length !== 0) return
@@ -148,7 +153,7 @@ function Scatterplot({
       variant,
       regionData,
       { xVar, yVar, zVar },
-      highlightedState,
+      highlightIds,
       region
     )
     setOptions(newOptions)
@@ -158,7 +163,7 @@ function Scatterplot({
     zVar,
     region,
     variant,
-    highlightedState,
+    highlightIds,
     regionData
   ])
 
@@ -191,7 +196,6 @@ Scatterplot.propTypes = {
   zVar: PropTypes.string,
   region: PropTypes.string,
   data: PropTypes.object,
-  highlightedState: PropTypes.string,
   selected: PropTypes.array,
   hovered: PropTypes.object,
   variant: PropTypes.string,

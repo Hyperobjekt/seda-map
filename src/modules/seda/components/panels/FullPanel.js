@@ -24,6 +24,7 @@ import {
   getLangWithSingleOrNone
 } from '../../../../shared/selectors/lang'
 import PreviewChartPanel from './PreviewChartPanel'
+import { getFilterCount } from '../../../../shared/selectors/data'
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -58,8 +59,13 @@ const FullPanel = props => {
   const locations = useDataOptions(state => state.locations)
   const metric = useDataOptions(state => state.metric)
   const region = useDataOptions(state => state.region)
+  const filters = useDataOptions(state => state.filters)
+  const selection = useUiStore(state => state.selection)
   const demographic = useDataOptions(state => state.demographic)
   const showChart = useUiStore(state => state.showChart)
+  const getActiveFiltersLang = useDataOptions(
+    state => state.getActiveFiltersLang
+  )
   return (
     <SidePanel {...props}>
       <SidePanelHeader sticky>
@@ -77,22 +83,27 @@ const FullPanel = props => {
       </SidePanelHeader>
       <SidePanelBody classes={{ root: classes.body }}>
         <SedaSelectionButton
+          active={selection === 'metric'}
           selectionId="metric"
           value={metric.label}
         />
         <SedaSelectionButton
+          active={selection === 'region'}
           selectionId="region"
           value={region.label}
         />
         <SedaSelectionButton
+          active={selection === 'demographic'}
           selectionId="demographic"
           value={getLang('LABEL_STUDENTS_' + demographic.id)}
         />
         <SedaSelectionButton
+          active={selection === 'filter'}
           selectionId="filter"
-          value="No filters applied"
+          value={getActiveFiltersLang()}
         />
         <SedaSelectionButton
+          active={selection === 'location'}
           selectionId="location"
           value={getLangWithSingleOrNone(
             locations.length,

@@ -44,6 +44,10 @@ export const getStateAbbrFromName = name => {
  */
 export const getStateName = id => getStateProp(id, 'full')
 
+/**
+ * Returns the full state name for the state abbreviation
+ * @param {*} abbr
+ */
 export const getStateNameFromAbbr = abbr => {
   const fips = getStateFipsFromAbbr(abbr)
   return STATES[fips].full
@@ -62,6 +66,10 @@ export const getStateSelectOptions = () =>
       a.label < b.label ? -1 : a.label > b.label ? 1 : 0
     )
 
+/**
+ * Gets the state FIPS code from abbreviation
+ * @param {*} abbr
+ */
 export const getStateFipsFromAbbr = abbr => {
   if (!abbr || abbr === 'us') {
     return null
@@ -72,14 +80,17 @@ export const getStateFipsFromAbbr = abbr => {
   )
 }
 
+/**
+ * Get a property from the static states object from the abbreviation
+ * @param {*} abbr (2 letter code)
+ * @param {*} prop (prop to get)
+ */
 export const getStatePropByAbbr = (abbr, prop) => {
   const stateFips = getStateFipsFromAbbr(abbr)
   return stateFips ? getStateProp(stateFips, prop) : null
 }
 
-const getStateBoundingBoxByAbbr = abbr => {
-  const fips = getStateFipsFromAbbr(abbr)
-
+const getStateBoundingBoxByFips = fips => {
   const state = fips
     ? STATES[fips]
     : {
@@ -91,11 +102,56 @@ const getStateBoundingBoxByAbbr = abbr => {
   return [[state.xmin, state.ymin], [state.xmax, state.ymax]]
 }
 
+/**
+ * Returns the bounding box for a state given the abbreviation
+ * @param {*} abbr
+ */
+const getStateBoundingBoxByAbbr = abbr => {
+  const fips = getStateFipsFromAbbr(abbr)
+  return getStateBoundingBoxByFips(fips)
+}
+
+/**
+ * Returns a viewport for the provided abbreviation and viewport width / height
+ * @param {*} abbr
+ * @param {*} param1
+ */
 export const getStateViewport = (abbr, { width, height }) => {
-  // const viewport = new WebMercatorViewport({ width, height })
-  // const bound = viewport.fitBounds(
-  //   getStateBoundingBoxByAbbr(abbr),
-  //   { padding: 20 }
-  // )
-  // return bound
+  const viewport = new WebMercatorViewport({ width, height })
+  const bound = viewport.fitBounds(
+    getStateBoundingBoxByAbbr(abbr),
+    { padding: 20 }
+  )
+  return bound
+}
+
+/**
+ * Returns a viewport for the provided abbreviation and viewport width / height
+ * @param {*} abbr
+ * @param {*} param1
+ */
+export const getStateViewportByFips = (
+  fips,
+  { width, height }
+) => {
+  const viewport = new WebMercatorViewport({ width, height })
+  const bound = viewport.fitBounds(
+    getStateBoundingBoxByFips(fips),
+    { padding: 20 }
+  )
+  return bound
+}
+
+/**
+ * Returns array of all states
+ */
+export const getAllStates = () => {
+  return Object.keys(STATES)
+    .map(k => ({
+      id: k,
+      ...STATES[k]
+    }))
+    .sort((a, b) =>
+      a.full.toUpperCase() > b.full.toUpperCase() ? 1 : -1
+    )
 }

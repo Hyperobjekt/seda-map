@@ -17,12 +17,9 @@ import {
   HelpPanel
 } from './panels'
 import useDataOptions from '../hooks/useDataOptions'
-import {
-  getTitleFromSelections,
-  getSubtitleFromSelections
-} from '../../../shared/selectors/lang'
 import SedaTooltip from './SedaTooltip'
 import SedaFooter from './SedaFooter'
+import FilterSelectionPanel from './panels/FilterSelectionPanel'
 
 const drawerWidth = 360
 
@@ -59,29 +56,16 @@ const SedaLayout = props => {
   const toggleCondensed = useUiStore(
     state => state.toggleCondensed
   )
+  const filterPanel = useUiStore(state => state.filterPanel)
   const view = useUiStore(state => state.view)
   const selection = useUiStore(state => state.selection)
-  const [metric, demographic, region] = useDataOptions(state => [
-    state.metric,
-    state.demographic,
-    state.region
-  ])
-  const heading = getTitleFromSelections({
-    metric,
-    demographic,
-    region
-  })
-  const subheading = getSubtitleFromSelections({
-    metric,
-    demographic,
-    region
-  })
+
   // determines the active portion of the split view
   const splitView =
     view === 'chart' ? 'right' : view === 'map' ? 'left' : view
   return (
     <Page>
-      <SedaHeader heading={heading} subheading={subheading} />
+      <SedaHeader />
       <div className={classes.offset} />
       <SedaMenu />
       <PageBody classes={{ root: classes.body }}>
@@ -95,8 +79,23 @@ const SedaLayout = props => {
             open={condensed}
           />
 
-          <FullPanel open={!condensed} />
-          <SelectionPanel open={selection} />
+          <FullPanel
+            style={{
+              zIndex: condensed || showHelp ? 998 : 999
+            }}
+            open={!condensed}
+          />
+          <SelectionPanel
+            style={{ zIndex: 999 }}
+            open={selection}
+          />
+          <FilterSelectionPanel
+            style={{
+              zIndex: 999,
+              transform: 'translateX(-100%)'
+            }}
+            open={filterPanel}
+          />
           <SidePanel open={activeLocation}>
             Location Panel
           </SidePanel>

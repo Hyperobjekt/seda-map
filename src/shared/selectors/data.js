@@ -121,3 +121,58 @@ export const getFormatterForVarName = varName => {
       return formatNumber
   }
 }
+
+/**
+ * Gets the state IDs that belong to a certain state
+ * @param {array} ids
+ * @param {string} fips
+ */
+const getPrefixIds = (ids, prefix) => {
+  if (ids) {
+    return ids.filter(
+      d => d.substring(0, prefix.length) === prefix
+    )
+  }
+  return []
+}
+
+/**
+ * Returns true if at least one active filter
+ * @param {*} filters
+ */
+export const hasActiveFilters = filters => {
+  return Boolean(filters.prefix) || Boolean(filters.largest)
+}
+
+/**
+ * Gets how many filters are currently active
+ * @param {*} filters
+ */
+export const getFilterCount = filters => {
+  let count = 0
+  if (filters.prefix) count++
+  if (filters.largest) count++
+  return count
+}
+
+/**
+ * Return an array of IDs that match the filter params
+ * @param {*} data
+ * @param {*} filters
+ * @param {*} sizeVar
+ */
+export const getFilteredIds = (data, filters = {}, sizeVar) => {
+  if (!hasActiveFilters(filters) || !data) return []
+  let ids = Object.keys(data['name'])
+  if (filters.prefix) {
+    ids = getPrefixIds(ids, filters.prefix)
+  }
+  if (filters.largest) {
+    ids = ids
+      .sort((a, b) =>
+        data[sizeVar][a] > data[sizeVar][b] ? -1 : 1
+      )
+      .slice(0, filters.largest)
+  }
+  return ids
+}

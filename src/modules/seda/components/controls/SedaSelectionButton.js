@@ -1,38 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {
-  ListItemIcon,
-  makeStyles,
-  ListItem,
-  ListItemText,
-  ListItemSecondaryAction
-} from '@material-ui/core'
-import {
   MetricIcon,
   FilterIcon,
   RegionsIcon,
   SubgroupsIcon,
   LocationsIcon
 } from '../icons'
-import ChevronRight from '@material-ui/icons/ChevronRight'
-import { getSelectionLabel } from '../../../../shared/selectors/lang'
-import clsx from 'clsx'
+import { getPrefixLang } from '../../../../shared/selectors/lang'
 import useUiStore from '../../hooks/useUiStore'
 import useDataOptions from '../../hooks/useDataOptions'
-
-const useStyles = makeStyles(theme => ({
-  root: {
-    minHeight: theme.spacing(9),
-    paddingLeft: theme.spacing(3)
-  },
-  icon: {
-    color: theme.palette.common.black,
-    '& svg': { fontSize: 32 }
-  },
-  secondary: {
-    textTransform: 'capitalize'
-  }
-}))
+import SelectionButton from '../base/SelectionButton'
 
 const SelectionIcon = ({ selectionId }) => {
   const metric = useDataOptions(state => state.metric)
@@ -57,28 +35,17 @@ const SedaSelectionButton = ({
   value,
   ...props
 }) => {
-  const classes = useStyles()
-  const label = getSelectionLabel(selectionId)
+  const label = getPrefixLang(selectionId, 'PANEL_TITLE')
   const selection = useUiStore(state => state.selection)
   const setSelection = useUiStore(state => state.setSelection)
   return (
-    <ListItem
-      classes={{ root: clsx(classes.root) }}
-      button
+    <SelectionButton
+      primary={label}
+      secondary={value}
+      icon={<SelectionIcon selectionId={selectionId} />}
       onClick={() => setSelection(selectionId)}
-      {...props}>
-      <ListItemIcon classes={{ root: classes.icon }}>
-        <SelectionIcon selectionId={selectionId} />
-      </ListItemIcon>
-      <ListItemText
-        primary={label}
-        secondary={value}
-        classes={{ secondary: classes.secondary }}
-      />
-      <ListItemSecondaryAction>
-        <ChevronRight />
-      </ListItemSecondaryAction>
-    </ListItem>
+      {...props}
+    />
   )
 }
 

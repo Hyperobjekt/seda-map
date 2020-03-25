@@ -10,6 +10,9 @@ const LANG = {
   TAB_CONCEPT_COH: 'Trends in Test Scores',
   TAB_METRIC_COH: 'reflect educational opportunity changes',
 
+  HEADER_TITLE_PREFIX: 'in $[0]',
+  HEADER_TITLE_LARGEST: 'in the largest $[num] $[region]',
+
   // Mobile header
   MOBILE_SUBLINE: 'for $[demographic] in $[place] $[region]',
 
@@ -222,6 +225,12 @@ const LANG = {
 
   LABEL_GAP_INPUT: '$[dem1] - $[dem2] gap in',
 
+  FILTER_PREFIX_STATES: 'Filter by state',
+  FILTER_PREFIX_COUNTIES: 'Filter by county',
+  FILTER_PREFIX_DISTRICTS: 'Filter by district',
+  FILTER_LARGEST: 'Filter by size',
+  FILTER_LARGEST_SELECTION: 'Largest $[num] $[region]',
+
   // Tooltips
   TOOLTIP_SUMMARY: 'Click on a location for more.',
   TOOLTIP_HINT: 'Click on a $[region] for more data.',
@@ -271,6 +280,14 @@ const LANG = {
   TOOLTIP_HINT_FILTER: 'click to change filters',
   TOOLTIP_HINT_LOCATION: 'click to view selected locations',
   TOOLTIP_HINT_CHART: 'click to toggle the chart preview',
+
+  PANEL_TITLE_METRIC: 'Educational Opportunity Metric',
+  PANEL_TITLE_DEMOGRAPHIC: 'Subgroup / Gap',
+  PANEL_TITLE_REGION: 'Region',
+  PANEL_TITLE_FILTER: 'Data Filters',
+  PANEL_TITLE_LOCATION: 'Locations',
+  PANEL_TITLE_STATE: 'Filter by State',
+  PANEL_TITLE_LARGEST: 'Filter by Size',
 
   PANEL_FILTER_MANY: '$[num] filters applied',
   PANEL_FILTER_SINGLE: 'One filter applied',

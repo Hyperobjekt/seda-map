@@ -16,7 +16,8 @@ import {
   getLang,
   getMetricLabel,
   getDemographicLabel,
-  getTitleFromSelections
+  getRegionLabel,
+  getPrefixLang
 } from '../../../../shared/selectors/lang'
 import { isGapDemographic } from '../../../../shared/selectors'
 import DetailedTooltip from '../base/DetailedTooltip'
@@ -86,8 +87,55 @@ const useSubtitleStyles = makeStyles(theme => ({
   }
 }))
 
-const Subtitle = ({ metric, demographic }) => {
+/**
+ * Returns the page heading based on selections
+ */
+const getTitleFromSelections = ({
+  metric,
+  demographic,
+  region,
+  parentLocation = 'U.S.'
+}) => {
+  const isGap = isGapDemographic(demographic.id)
+  const metricConcept = getPrefixLang(metric.id, `LABEL_CONCEPT`)
+  return isGap
+    ? `${metricConcept} Gaps in ${parentLocation} ${
+        region.label
+      }`
+    : `${metricConcept} in ${parentLocation} ${region.label}`
+}
+
+/**
+ * Returns text to use in the header subtitle for filters
+ * (e.g. in the largest 50 Counties in California)
+ * @param {object} filters
+ * @param {string} regionLabel
+ * @param {function} idToName (function to transform id to name)
+ */
+const getFilterLabel = (filters, regionLabel, idToName) => {
+  const labels = []
+  if (filters.largest) {
+    labels.push(
+      getLang('HEADER_TITLE_LARGEST', {
+        num: filters.largest,
+        region: regionLabel
+      })
+    )
+  }
+  return labels.length > 0 ? labels.join(' ') : ''
+}
+
+const Subtitle = ({ metric, demographic, region, filters }) => {
   const metricLabel = getMetricLabel(metric.id)
+  const regionLabel = getRegionLabel(region.id)
+  const getNameForId = useDataOptions(
+    state => state.getNameForId
+  )
+  const filterLabel = getFilterLabel(
+    filters,
+    regionLabel,
+    getNameForId
+  )
   const metricTooltip = getMetricLabel(metric.id, 'HINT')
   const classes = useSubtitleStyles()
   const MetricLabel = (
@@ -114,7 +162,7 @@ const Subtitle = ({ metric, demographic }) => {
     </>
   ) : (
     <>
-      shown by {MetricLabel} for {studentLabel}
+      shown by {MetricLabel} for {studentLabel} {filterLabel}
     </>
   )
 }
@@ -129,7 +177,10 @@ const useHeaderStyles = makeStyles(theme => ({
   },
   heading: {
     fontSize: theme.typography.pxToRem(16),
-    textTransform: 'capitalize'
+    textTransform: 'capitalize',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis'
   },
   subheading: {
     color: theme.palette.text.secondary
@@ -140,10 +191,17 @@ const SedaHeader = ({ onMenuClick }) => {
   const metric = useDataOptions(state => state.metric)
   const demographic = useDataOptions(state => state.demographic)
   const region = useDataOptions(state => state.region)
+  const filters = useDataOptions(state => state.filters)
+  const getNameForId = useDataOptions(
+    state => state.getNameForId
+  )
   const heading = getTitleFromSelections({
     metric,
     demographic,
-    region
+    region,
+    parentLocation: filters.prefix
+      ? getNameForId(filters.prefix)
+      : undefined
   })
   const classes = useHeaderStyles()
   return (
@@ -155,7 +213,9 @@ const SedaHeader = ({ onMenuClick }) => {
         {heading}
       </Typography>
       <Typography className={classes.subheading} variant="body2">
-        <Subtitle {...{ metric, demographic }} />
+        <Subtitle
+          {...{ metric, demographic, region, filters }}
+        />
       </Typography>
     </PageHeader>
   )

@@ -73,9 +73,6 @@ const getPositionArray = (count, inc, center = 0, range) => {
     )
 }
 
-const isStateHighlighed = highlightedState =>
-  highlightedState && highlightedState !== 'us'
-
 /**
  *
  * @param {*} value
@@ -131,13 +128,13 @@ const getSeries = (seriesId, type, options) => ({
  * @param {boolean} highlightedOn
  */
 const getBaseSeries = ({
-  highlightedState,
+  highlightIds,
   sizer,
   variant,
   xVar,
   yVar
 }) => {
-  const hl = isStateHighlighed(highlightedState)
+  const hl = highlightIds.length > 0
   const isVs = isVersusFromVarNames(xVar, yVar)
   return getSeries('base', 'scatter', {
     silent: hl || variant === 'preview',
@@ -158,9 +155,9 @@ const getBaseSeries = ({
 /**
  * Get the style overrides for the highlight series
  */
-const getHighlightedSeries = ({ highlightedState, sizer }) =>
+const getHighlightedSeries = ({ highlightIds, sizer }) =>
   getSeries('highlighted', 'scatter', {
-    show: isStateHighlighed(highlightedState),
+    show: highlightIds.length > 0,
     z: 101,
     itemStyle: {
       borderColor: 'rgba(7,55,148,0.666)',
@@ -534,7 +531,7 @@ const getChartColorsFromVarNames = (xVar, yVar) => {
 const getMapVisualMap = ({
   xVar,
   yVar,
-  highlightedState,
+  highlightIds,
   region
 }) => {
   const range = getMetricRangeFromVarName(yVar, region, 'map')
@@ -547,7 +544,7 @@ const getMapVisualMap = ({
       color: colors.map(c => fade(c, 0.9))
     },
     show: false,
-    seriesIndex: isStateHighlighed(highlightedState) ? 2 : 0,
+    seriesIndex: highlightIds.length > 0 ? 2 : 0,
     calculable: true,
     right: 0,
     bottom: 'auto',
@@ -697,34 +694,11 @@ const yAxis = (variant, { varName, region }) => {
   }
 }
 
-/**
- * Gets the state IDs that belong to a certain state
- * @param {array} ids
- * @param {string} fips
- */
-const getStateIds = (ids, fips) => {
-  if (ids && fips) {
-    return ids.filter(d => d.substring(0, 2) === fips)
-  }
-  return []
-}
-
-/**
- * Gets the IDs for a provided state from the data
- * @param {string} stateId
- * @param {object} data
- */
-const getStateHighlights = (stateId, data) => {
-  return data && data['name'] && stateId
-    ? getStateIds(Object.keys(data['name']), stateId)
-    : []
-}
-
 export const getScatterplotOptions = (
   variant,
   data = {},
   { xVar, yVar, zVar },
-  highlightedState,
+  highlightIds = [],
   region
 ) => {
   if (!data[xVar] || !data[yVar] || !data[zVar]) {
@@ -737,30 +711,25 @@ export const getScatterplotOptions = (
     visualMap: visualMap(variant, {
       xVar,
       yVar,
-      highlightedState,
+      highlightIds,
       region
     }),
     xAxis: xAxis(variant, { varName: xVar, region }),
     yAxis: yAxis(variant, { varName: yVar, region }),
     series: [
       series('base', variant, {
-        highlightedState,
+        highlightIds,
         sizer,
         xVar,
         yVar
       }),
       series('highlighted', variant, {
-        highlightedState,
+        highlightIds,
         sizer
       }),
       ...overlays(variant, { xVar, yVar, region })
     ]
   }
-  // limit to 3000
-  const hl = getStateHighlights(highlightedState, data).slice(
-    0,
-    3000
-  )
 
   return getScatterplotBaseOptions({
     data,
@@ -768,7 +737,7 @@ export const getScatterplotOptions = (
     yVar,
     zVar,
     selected: [],
-    highlighted: hl,
+    highlighted: highlightIds,
     options
   })
 }

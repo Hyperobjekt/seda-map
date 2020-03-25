@@ -10,6 +10,9 @@ import { MapIcon, ChartIcon, SplitIcon } from '../icons'
 
 const useStyles = makeStyles(theme => ({
   root: {},
+  button: {
+    whiteSpace: 'nowrap'
+  },
   active: {
     color: theme.palette.primary.main
   }
@@ -33,7 +36,9 @@ const SedaViewControls = ({ classes: overrides, ...props }) => {
       {buttons.map(b => (
         <Button
           key={b.id}
-          className={clsx({ [classes.active]: view === b.id })}
+          className={clsx(classes.button, {
+            [classes.active]: view === b.id
+          })}
           onClick={() => setView(b.id)}
           startIcon={b.icon}>
           {b.label}

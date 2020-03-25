@@ -19,7 +19,7 @@ import FilterIcon from '../icons/FilterIcon'
 import PeopleIcon from '@material-ui/icons/PeopleAlt'
 import { getMetricLabel } from '../../../../shared/selectors'
 import {
-  getSelectionLabel,
+  getPrefixLang,
   getLang,
   getRegionLabel,
   getDemographicLabel,
@@ -80,7 +80,7 @@ const CondensedPanel = props => {
           tooltip={
             selection !== 'metric' && (
               <DetailedTooltip
-                primary={getSelectionLabel('metric')}
+                primary={getPrefixLang('metric', 'PANEL_TITLE')}
                 secondary={getMetricLabel(metric.id)}
                 hint={getLang('TOOLTIP_HINT_METRIC')}
               />
@@ -100,7 +100,7 @@ const CondensedPanel = props => {
           tooltip={
             selection !== 'region' && (
               <DetailedTooltip
-                primary={getSelectionLabel('region')}
+                primary={getPrefixLang('region', 'PANEL_TITLE')}
                 secondary={getRegionLabel(region.id)}
                 hint={getLang('TOOLTIP_HINT_REGION')}
               />
@@ -115,7 +115,10 @@ const CondensedPanel = props => {
           tooltip={
             selection !== 'demographic' && (
               <DetailedTooltip
-                primary={getSelectionLabel('demographic')}
+                primary={getPrefixLang(
+                  'demographic',
+                  'PANEL_TITLE'
+                )}
                 secondary={getDemographicLabel(
                   demographic.id,
                   'LABEL_STUDENTS'
@@ -133,7 +136,7 @@ const CondensedPanel = props => {
           tooltip={
             selection !== 'filter' && (
               <DetailedTooltip
-                primary={getSelectionLabel('filter')}
+                primary={getPrefixLang('filter', 'PANEL_TITLE')}
                 secondary={getLangWithSingleOrNone(
                   filters.length,
                   'PANEL_FILTER'
@@ -150,7 +153,10 @@ const CondensedPanel = props => {
           tooltip={
             selection !== 'location' && (
               <DetailedTooltip
-                primary={getSelectionLabel('location')}
+                primary={getPrefixLang(
+                  'location',
+                  'PANEL_TITLE'
+                )}
                 secondary={getLangWithSingleOrNone(
                   locations.length,
                   'PANEL_LOCATION'

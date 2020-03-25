@@ -12,7 +12,8 @@ import {
   getMetricRangeFromVarName,
   getSizerFunctionForRegion,
   getDemographicForVarNames,
-  getFeatureProperty
+  getFeatureProperty,
+  getRegions
 } from '../../../shared/selectors'
 import { loadFeatureFromCoords } from '../../../shared/utils/tilequery'
 import { getRegionFromFeatureId } from '../../../shared/selectors'
@@ -21,6 +22,12 @@ import {
   getFeatureForId
 } from '../../scatterplot/components/ScatterplotBase/utils'
 import { getValuePercentInRange } from '../../scatterplot/utils'
+import {
+  hasActiveFilters,
+  getFilteredIds
+} from '../../../shared/selectors/data'
+import { getStateName } from '../../../shared/selectors/states'
+import { getFiltersLang } from '../../../shared/selectors/lang'
 const defaultMetric = getMetricById('avg')
 const defaultDemographic = getDemographicById('all')
 const defaultRegion = getRegionById('counties')
@@ -70,6 +77,22 @@ const makeGetters = get => ({
     if (!id) return {}
     const region = getRegionFromFeatureId(id)
     return getFeatureForId(id, get().data[region])
+  },
+  getNameForId: id => {
+    if (!id) return ''
+    const region = getRegionFromFeatureId(id)
+    switch (region) {
+      case 'states':
+        return getStateName(id)
+      default:
+        return getDataForId(id, get().data[region])['name']
+    }
+  },
+  getActiveFiltersLang: () => {
+    const filters = get().filters
+    const region = get().region
+    const idToName = get().getNameForId
+    return getFiltersLang(filters, region, idToName)
   }
 })
 
@@ -98,6 +121,13 @@ const makeSetters = set => ({
     }),
   setLocations: locations => set({ locations }),
   setFilters: filters => set({ filters }),
+  setFilter: (type, value) =>
+    set(state => ({
+      filters: {
+        ...state.filters,
+        [type]: value
+      }
+    })),
   setLoading: loading => set({ loading }),
   setData: (data, region) => {
     set(
@@ -113,7 +143,10 @@ const [useDataOptions] = create((set, get, api) => ({
   demographic: defaultDemographic,
   region: defaultRegion,
   locations: [],
-  filters: [],
+  filters: {
+    prefix: null,
+    largest: null
+  },
   data: { districts: {} },
   loading: true,
   addLocationFromId: async id => {

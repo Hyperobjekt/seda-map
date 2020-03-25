@@ -42,7 +42,10 @@ const [useUiStore] = create(set => ({
   setActiveLocation: activeLocation => set({ activeLocation }),
   // string determining which selection is currently active
   selection: null,
-  setSelection: selection => set({ selection })
+  setSelection: selection => set({ selection }),
+  // string to determine which filter selection is active
+  filterPanel: null,
+  setFilterPanel: filterPanel => set({ filterPanel })
 }))
 
 export default useUiStore
