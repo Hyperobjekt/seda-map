@@ -13,7 +13,9 @@ import {
   getSizerFunctionForRegion,
   getDemographicForVarNames,
   getFeatureProperty,
-  getRegions
+  getRegions,
+  getMapVars,
+  isGapDemographic
 } from '../../../shared/selectors'
 import { loadFeatureFromCoords } from '../../../shared/utils/tilequery'
 import { getRegionFromFeatureId } from '../../../shared/selectors'
@@ -39,6 +41,12 @@ const defaultRegion = getRegionById('counties')
 const makeGetters = get => ({
   getScatterplotVars: () =>
     getScatterplotVars(
+      get().region.id,
+      get().metric.id,
+      get().demographic.id
+    ),
+  getMapVars: () =>
+    getMapVars(
       get().region.id,
       get().metric.id,
       get().demographic.id
@@ -93,7 +101,8 @@ const makeGetters = get => ({
     const region = get().region
     const idToName = get().getNameForId
     return getFiltersLang(filters, region, idToName)
-  }
+  },
+  isDemographicGap: () => isGapDemographic(get().demographic.id)
 })
 
 const makeSetters = set => ({

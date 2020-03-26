@@ -54,7 +54,7 @@ export const getGapDemographics = demId => {
   if (demId.length === 2) {
     return [demId[0], demId[1]]
   }
-  throw new Error('invalid gap demographic: ' + demId)
+  return [demId]
 }
 
 /** Returns a single demographic for the provided varNames */

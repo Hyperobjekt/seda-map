@@ -30,9 +30,12 @@ const useStyles = makeStyles(theme => ({
     marginRight: theme.spacing(8),
     marginBottom: theme.spacing(8)
   },
-  axisLabels: {},
-  axisLabelsX: {},
-  axisLabelsY: {}
+  markers: {
+    top: 24,
+    left: 24,
+    bottom: 24,
+    right: 64
+  }
 }))
 
 const getLocatonIdFromEvent = e => {
@@ -137,7 +140,7 @@ const SedaScatterplot = () => {
       onHover={handleHover}
       onClick={handleClick}
       onError={handleError}>
-      <SedaLocationMarkers />
+      <SedaLocationMarkers className={classes.markers} />
       <BookEnds
         style={{
           position: 'absolute',

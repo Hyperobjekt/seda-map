@@ -20,8 +20,18 @@ import useMapStore from '../hooks/useMapStore'
 import useDataOptions from '../hooks/useDataOptions'
 import useUiStore from '../hooks/useUiStore'
 import { getStateViewportByFips } from '../../../shared/selectors/states'
+import SedaMapLegend from './SedaMapLegend'
+import { makeStyles } from '@material-ui/core'
 
 const selectedColors = getSelectedColors()
+
+const useStyles = makeStyles(theme => ({
+  legend: {
+    position: 'absolute',
+    bottom: 24,
+    right: 16
+  }
+}))
 
 const SedaMap = props => {
   // pull required data from store
@@ -35,6 +45,7 @@ const SedaMap = props => {
   )
   const view = useUiStore(state => state.view)
   const hoveredId = useUiStore(state => state.hovered)
+  const showHovered = useUiStore(state => state.showTooltip)
 
   // pull required setters from store
   const setViewport = useMapStore(state => state.setViewport)
@@ -140,6 +151,8 @@ const SedaMap = props => {
     }
   }, [prefix])
 
+  const classes = useStyles()
+
   return (
     <MapBase
       selectedColors={selectedColors}
@@ -147,13 +160,15 @@ const SedaMap = props => {
       viewport={viewport}
       idMap={{}}
       selectedIds={locationIds}
-      hoveredId={hoveredId}
+      hoveredId={showHovered && hoveredId}
       ariaLabel={ariaLabel}
       onHover={handleHover}
       onLoad={handleLoad}
       onViewportChange={setViewport}
-      onClick={handleClick}
-    />
+      onClick={handleClick}>
+      {props.children}
+      <SedaMapLegend className={classes.legend} />
+    </MapBase>
   )
 }
 

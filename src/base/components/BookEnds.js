@@ -9,6 +9,7 @@ import {
 
 const useStyles = makeStyles(theme => ({
   root: {
+    position: 'relative',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -49,7 +50,9 @@ const BookEnds = ({
   onStartClick,
   onEndClick,
   vertical,
+  midPosition,
   children,
+  className,
   classes: overrides = {},
   ...props
 }) => {
@@ -59,6 +62,7 @@ const BookEnds = ({
     <div
       className={clsx(
         'book-ends',
+        className,
         classes.root,
         overrides.root,
         { [classes.vertical]: vertical }

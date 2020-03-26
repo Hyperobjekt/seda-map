@@ -5,6 +5,7 @@ import { Scatterplot } from './scatterplot'
 import clsx from 'clsx'
 import { useSpring, animated } from 'react-spring'
 import { useDrag } from 'react-use-gesture'
+import SedaMapLegend from './SedaMapLegend'
 
 const getSplitRatio = (containerRef, dividerRef) => {
   const containerEl = containerRef.current

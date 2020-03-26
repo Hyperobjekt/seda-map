@@ -27,6 +27,7 @@ const ScatterplotMarker = ({
   x,
   y,
   size,
+  zIndex,
   ...props
 }) => {
   const classes = useStyles()
@@ -37,7 +38,10 @@ const ScatterplotMarker = ({
         classes.root,
         overrides.root
       )}
-      style={{ transform: `translate(${x}, ${y})` }}>
+      style={{
+        transform: `translate(${x}, ${y})`,
+        zIndex: zIndex
+      }}>
       <Marker
         className={clsx(
           'scatterplot__marker',

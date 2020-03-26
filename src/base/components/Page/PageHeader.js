@@ -1,27 +1,27 @@
-import React from "react"
-import PropTypes from "prop-types"
-import AppBar from "@material-ui/core/AppBar"
-import Toolbar from "@material-ui/core/Toolbar"
-import HideOnScroll from "../Helpers/HideOnScroll"
-import { makeStyles } from "@material-ui/core"
-import clsx from "clsx"
+import React from 'react'
+import PropTypes from 'prop-types'
+import AppBar from '@material-ui/core/AppBar'
+import Toolbar from '@material-ui/core/Toolbar'
+import HideOnScroll from '../Helpers/HideOnScroll'
+import { makeStyles } from '@material-ui/core'
+import clsx from 'clsx'
 
 const useStyles = makeStyles(theme => ({
   root: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   logo: {},
   title: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   actions: {},
   toolbar: {
-    display: "flex",
-    width: "100%",
-    maxWidth: props => props.contentWidth || "100%",
-  },
+    display: 'flex',
+    width: '100%',
+    maxWidth: props => props.contentWidth || '100%'
+  }
 }))
 
 /**
@@ -45,46 +45,45 @@ export default function PageHeader({
       <AppBar
         classes={{
           root: clsx(
-            "page__header",
-            "header",
+            'page__header',
+            'header',
             classes.root,
             overrides.root
-          ),
+          )
         }}
-        {...props}
-      >
+        {...props}>
         <Toolbar
           {...toolbarProps}
-          className={clsx(classes.toolbar, overrides.toolbar)}
-        >
+          className={clsx(
+            'header__toolbar',
+            classes.toolbar,
+            overrides.toolbar
+          )}>
           {LogoComponent && (
             <div
               className={clsx(
-                "header__logo",
+                'header__logo',
                 classes.logo,
                 overrides.logo
-              )}
-            >
+              )}>
               {LogoComponent}
             </div>
           )}
           <div
             className={clsx(
-              "header__title",
+              'header__title',
               classes.title,
               overrides.title
-            )}
-          >
+            )}>
             {children}
           </div>
           {ActionsComponent && (
             <div
               className={clsx(
-                "header__actions",
+                'header__actions',
                 classes.actions,
                 overrides.actions
-              )}
-            >
+              )}>
               {ActionsComponent}
             </div>
           )}
@@ -108,12 +107,12 @@ PageHeader.propTypes = {
   /** Props passed to the toolbar component */
   toolbarProps: PropTypes.object,
   /** The maximum width for page content */
-  conentWidth: PropTypes.string,
+  conentWidth: PropTypes.string
 }
 PageHeader.defaultProps = {
   hideOnScroll: false,
-  contentWidth: "100%",
+  contentWidth: '100%',
   classes: {},
   transitionProps: {},
-  toolbarProps: {},
+  toolbarProps: {}
 }

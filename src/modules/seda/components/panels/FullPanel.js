@@ -42,7 +42,7 @@ const useStyles = makeStyles(theme => ({
     left: 0,
     bottom: 0,
     transform: `translate(calc(100% + ${theme.app
-      .condensedPanelWidth + theme.spacing(2)}px), -8px)`
+      .condensedPanelWidth + theme.spacing(3)}px), -24px)`
   },
   footerCondensedHide: {
     transform: 'scale(0.0001)'

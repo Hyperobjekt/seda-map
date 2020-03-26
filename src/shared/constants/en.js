@@ -69,6 +69,7 @@ const LANG = {
 
   // Metric Labels
   LABEL_AVG: 'average test scores',
+  LABEL_AVG_ALL: 'Average Test Scores',
   LABEL_AVG_W: "White students' average test scores",
   LABEL_AVG_B: "Black students' average test scores",
   LABEL_AVG_A: "Asian students' average test scores",
@@ -643,21 +644,6 @@ const LANG = {
   LEGEND_SHORT_LOW_FRL: 'high poverty',
   LEGEND_SHORT_HIGH_FRL: 'low poverty',
 
-  // Text descriptions
-  LEGEND_DESC_AVG:
-    "Colors show $[demographic] students' scores, in grade levels, relative to the national average (grades 3-8, 2009-2016).",
-  LEGEND_DESC_GRD:
-    'Colors show how much $[demographic] students learn each year relative to the national average (grades 3-8, 2009-2016).',
-  //'LEGEND_DESC_COH': 'Colors show how many grade levels $[demographic] students\' test scores changed per year from 2009 - 2016.',
-  LEGEND_DESC_COH:
-    "Colors show how $[demographic] students' average test scores changed in grade levels per year (grades 3-8, 2009-2016).",
-  LEGEND_DESC_AVG_GAP:
-    'Colors show the difference (in grade levels) between $[gap] students.',
-  LEGEND_DESC_GRD_GAP:
-    'Colors show difference in how much $[gap] students learn each year.',
-  LEGEND_DESC_COH_GAP:
-    "Colors show difference in how much $[gap] students' test scores changed each year.",
-
   // Average test score gaps
   LEGEND_LOW_AVG_WB: ' ',
   LEGEND_HIGH_AVG_WB:
@@ -720,26 +706,34 @@ const LANG = {
   LEGEND_HIGH_MIN_WB: 'More Racial School Segregation  ▶',
 
   // Map Legend
-  LEGEND_MAP_AVG_LOW: '$[value] grade levels',
-  LEGEND_MAP_AVG_MID: 'national average',
-  LEGEND_MAP_AVG_HIGH: '+$[value] grade levels',
-  LEGEND_MAP_AVG_GAP_LOW: '$[value] grade levels',
-  LEGEND_MAP_AVG_GAP_MID: 'no gap',
-  LEGEND_MAP_AVG_GAP_HIGH: '+$[value] grade levels',
+  LEGEND_MAP_AVG: 'Average Test Scores for $[0]',
+  LEGEND_MAP_GRD: 'Learning Rates for $[0]',
+  LEGEND_MAP_COH: 'Trend in Test Scores for $[0]',
+  LEGEND_MAP_GAP_AVG: '$[0] in Average Test Scores',
+  LEGEND_MAP_GAP_GRD: '$[0] in Learning Rates',
+  LEGEND_MAP_GAP_COH: '$[0] in Test Score Trends',
 
-  LEGEND_MAP_GRD_LOW: 'learns $[value] less',
-  LEGEND_MAP_GRD_MID: 'national average',
-  LEGEND_MAP_GRD_HIGH: 'learns $[value] more',
-  LEGEND_MAP_GRD_GAP_LOW: '$[value] difference',
-  LEGEND_MAP_GRD_GAP_MID: 'no gap',
-  LEGEND_MAP_GRD_GAP_HIGH: '+$[value] difference',
+  // Text descriptions
+  LEGEND_DESC_AVG:
+    'in grade levels, relative to the U.S. average',
+  LEGEND_DESC_GRD:
+    'amount learned per grade, relative to U.S. average',
+  //'LEGEND_DESC_COH': 'Colors show how many grade levels $[demographic] students\' test scores changed per year from 2009 - 2016.',
+  LEGEND_DESC_COH:
+    'in grade levels, how much test scores change each year',
+  LEGEND_DESC_GAP_AVG:
+    'below zero = higher $[1] scores, above zero = higher $[0] scores',
+  LEGEND_DESC_GAP_GRD:
+    'below zero = $[1] learns more, above zero = $[0] learns more',
+  LEGEND_DESC_GAP_COH:
+    'below zero = gap is decreasing, above zero = gap is increasing',
 
-  LEGEND_MAP_COH_LOW: '$[value] grade levels',
-  LEGEND_MAP_COH_MID: 'no change',
-  LEGEND_MAP_COH_HIGH: '+$[value] grade levels',
-  LEGEND_MAP_COH_GAP_LOW: '$[value] grade levels',
-  LEGEND_MAP_COH_GAP_MID: 'no gap',
-  LEGEND_MAP_COH_GAP_HIGH: '+$[value] grade levels',
+  LEGEND_MID_AVG: 'U.S. average',
+  LEGEND_MID_GRD: 'U.S. average',
+  LEGEND_MID_COH: 'no change',
+  LEGEND_MID_GAP_AVG: '0',
+  LEGEND_MID_GAP_GRD: '0',
+  LEGEND_MID_GAP_COH: '0',
 
   LEGEND_CHART_INTERACTIVE:
     'Go to the expanded chart to explore interactively:',

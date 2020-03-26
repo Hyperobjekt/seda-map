@@ -332,7 +332,11 @@ export const getMetricDescription = metricId => {
 }
 
 export const getPrefixLang = (id, prefix = 'LABEL', props) => {
-  return getLang(prefix + '_' + id, props)
+  if (!id) return ''
+  if (typeof id === 'string') {
+    id = [id]
+  }
+  return getLang(prefix + '_' + id.join('_'), props)
 }
 
 /**

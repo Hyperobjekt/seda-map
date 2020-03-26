@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import clsx from 'clsx'
 import { makeStyles, useTheme } from '@material-ui/core'
 import useDataOptions from '../../hooks/useDataOptions'
@@ -12,10 +12,10 @@ import { getColorForVarNameValue } from '../../../../shared/selectors'
 const useStyles = makeStyles(theme => ({
   root: {
     position: 'absolute',
-    left: 24,
-    right: 64,
-    top: 24,
-    bottom: 24,
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
     pointerEvents: 'none'
   },
   hoverMarker: {
@@ -23,11 +23,13 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const SedaLocationMarkers = ({ ...props }) => {
+const SedaLocationMarkers = ({ className, ...props }) => {
   const region = useDataOptions(state => state.region)
   const locationIds = useDataOptions(state =>
     state.getLocationIdsForRegion()
   )
+  const getLocationIndex = id =>
+    locationIds.findIndex(l => l === id)
   const showHovered = useUiStore(state => state.showTooltip)
   const hoveredId = useUiStore(state => state.hovered)
   const getDataForId = useDataOptions(
@@ -68,33 +70,47 @@ const SedaLocationMarkers = ({ ...props }) => {
   const classes = useStyles()
   const theme = useTheme()
   return (
-    <div className={clsx('scatterplot__markers', classes.root)}>
+    <div
+      className={clsx(
+        'scatterplot__markers',
+        classes.root,
+        className
+      )}
+      {...props}>
       {hoveredCircle && (
         <ScatterplotMarker
           x={hoveredCircle.x}
           y={hoveredCircle.y}
           size={hoveredCircle.z}
+          zIndex={10}
           color={theme.palette.secondary.main}
           classes={{ marker: classes.hoverMarker }}
         />
       )}
-      {circles.map((c, i) => (
-        <ScatterplotMarker
-          key={c.id}
-          x={c.x}
-          y={c.y}
-          size={c.z}
-          label={i + 1}
-          color={theme.app.selectedColors[i]}
-          innerColor={getColorForVarNameValue(
-            c.data[yVar],
-            yVar,
-            region.id
-          )}
-          onMouseMove={e => setHovered(c.id, [e.pageX, e.pageY])}
-          onMouseLeave={e => setHovered(null)}
-        />
-      ))}
+      {circles
+        .sort((a, b) => (a.z > b.z ? -1 : 1))
+        .map((c, i) => (
+          <ScatterplotMarker
+            key={c.id}
+            x={c.x}
+            y={c.y}
+            size={c.z}
+            label={getLocationIndex(c.id) + 1}
+            zIndex={i + 1}
+            color={
+              theme.app.selectedColors[getLocationIndex(c.id)]
+            }
+            innerColor={getColorForVarNameValue(
+              c.data[yVar],
+              yVar,
+              region.id
+            )}
+            onMouseMove={e =>
+              setHovered(c.id, [e.pageX, e.pageY])
+            }
+            onMouseLeave={e => setHovered(null)}
+          />
+        ))}
     </div>
   )
 }
