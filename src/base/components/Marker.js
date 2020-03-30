@@ -5,10 +5,12 @@ import { makeStyles, Typography } from '@material-ui/core'
 
 const useStyles = makeStyles(theme => ({
   root: {
+    position: 'relative',
     border: props => `2px solid ${props.color}`,
     borderRadius: '100%',
-    transform: 'translate(-50%, -50%)',
-    boxShadow: `0 0 0 1.5px #fff, inset 0 0 0 1.5px #fff`
+    boxShadow: `0 0 0 1.5px #fff, inset 0 0 0 1.5px #fff`,
+    width: 18,
+    height: 18
   },
   label: {
     margin: 0,
@@ -32,7 +34,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const BaseMarker = ({
+const Marker = ({
   className,
   classes: overrides = {},
   color,
@@ -64,11 +66,17 @@ const BaseMarker = ({
   )
 }
 
-BaseMarker.propTypes = {
+Marker.propTypes = {
+  /** color for the marker outline */
   color: PropTypes.string,
+  /** color for the inside of the marker */
+  innerColor: PropTypes.string,
+  /** classname overrides */
+  classes: PropTypes.object,
+  /** classname for the root component */
   className: PropTypes.string,
-  children: PropTypes.node,
+  /** style object to apply to the root element */
   style: PropTypes.object
 }
 
-export default BaseMarker
+export default Marker

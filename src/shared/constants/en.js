@@ -3,12 +3,6 @@ const LANG = {
 
   // Header
   LOGO_ALT_TEXT: 'Educational Opportunity Project',
-  TAB_CONCEPT_AVG: 'Average Test Scores',
-  TAB_METRIC_AVG: 'reflect educational opportunity',
-  TAB_CONCEPT_GRD: 'Learning Rates',
-  TAB_METRIC_GRD: 'reflect school effectiveness',
-  TAB_CONCEPT_COH: 'Trends in Test Scores',
-  TAB_METRIC_COH: 'reflect educational opportunity changes',
 
   HEADER_TITLE_PREFIX: 'in $[0]',
   HEADER_TITLE_LARGEST: 'in the largest $[num] $[region]',
@@ -69,6 +63,22 @@ const LANG = {
 
   // Metric Labels
   LABEL_AVG: 'average test scores',
+  LABEL_GRD: 'learning rates',
+  LABEL_COH: 'trend in test scores',
+  LABEL_FRL: 'Free/Reduced Lunch',
+  LABEL_SES: 'Socioeconomic Status',
+  LABEL_SEG: 'school poverty',
+  LABEL_MIN: 'percent minority students in schools',
+
+  // Concepts that correspond to metric
+  LABEL_CONCEPT_AVG: 'educational opportunity',
+  LABEL_CONCEPT_GRD: 'school effectiveness',
+  LABEL_CONCEPT_COH: 'educational opportunity change',
+  LABEL_REFLECTS_AVG: 'reflects educational opportunity',
+  LABEL_REFLECTS_GRD: 'reflects school effectiveness',
+  LABEL_REFLECTS_COH: 'reflects educational opportunity change',
+
+  // Subgroup / Gap Labels
   LABEL_AVG_ALL: 'Average Test Scores',
   LABEL_AVG_W: "White students' average test scores",
   LABEL_AVG_B: "Black students' average test scores",
@@ -82,7 +92,6 @@ const LANG = {
   LABEL_AVG_WH: 'White / Hispanic Gap in Test Scores',
   LABEL_AVG_PN: 'Poor / Non-Poor Gap in Test Scores',
   LABEL_AVG_MF: 'Male / Female Gap in Test Scores',
-  LABEL_GRD: 'learning rates',
   LABEL_GRD_W: "White students' learning rates",
   LABEL_GRD_B: "Black students' learning rates",
   LABEL_GRD_A: "Asian students' learning rates",
@@ -95,7 +104,6 @@ const LANG = {
   LABEL_GRD_WH: 'White / Hispanic Gap in Learning Rates',
   LABEL_GRD_PN: 'Poor / Non-Poor Gap in Learning Rates',
   LABEL_GRD_MF: 'Male / Female Gap in Learning Rates',
-  LABEL_COH: 'trend in test scores',
   LABEL_COH_W: "White students' trend in test scores",
   LABEL_COH_H: "Hispanic students' trend in test scores",
   LABEL_COH_B: "Black students' trend in test scores",
@@ -108,16 +116,13 @@ const LANG = {
   LABEL_COH_WH: 'White / Hispanic Gap in Test Score Trends',
   LABEL_COH_PN: 'Poor / Non-Poor Gap in Test Score Trends',
   LABEL_COH_MF: 'Male / Female Gap in Test Score Trends',
-  LABEL_MIN: 'percent minority students in schools',
   LABEL_MIN_WB:
     'White / Black gap in Percent Minority Students in Schools',
   LABEL_MIN_WH:
     'White / Hispanic gap in Percent Minority Students in Schools',
-  LABEL_SEG: 'school poverty',
   LABEL_SEG_NP: 'poor - non-poor gap in school poverty',
   LABEL_SEG_WB: 'Black - White gap in school poverty',
   LABEL_SEG_WH: 'Hispanic - White gap in school poverty',
-  LABEL_SES: 'Socioeconomic Status',
   LABEL_SES_NO_REGION: 'socioeconomic status (SES)',
   LABEL_SES_REGION: '$[region] socioeconomic status (SES)',
   LABEL_SES_W: "White families' socioeconomic status (SES)",
@@ -130,27 +135,6 @@ const LANG = {
   LABEL_SES_NP: '$[region] socioeconomic status (SES)',
   LABEL_SES_WB: 'White - Black gap in socioeconomic status',
   LABEL_SES_WH: 'White - Hispanic gap in socioeconomic status',
-  LABEL_FRL: 'Free/Reduced Lunch',
-
-  // Short Metric Labels
-  LABEL_SHORT_AVG: 'scores',
-  LABEL_SHORT_GRD: 'rate',
-  LABEL_SHORT_COH: 'trend',
-  LABEL_SHORT_SES: 'SES',
-  LABEL_SHORT_FRL: 'Free Lunch',
-  LABEL_SHORT_SEG: '% Poverty',
-
-  LABEL_SHORT_AVG_GAP: 'scores',
-  LABEL_SHORT_GRD_GAP: 'rate',
-  LABEL_SHORT_COH_GAP: 'trend',
-  LABEL_SHORT_SEG_GAP: '% Poverty',
-  LABEL_SHORT_MIN_GAP: '% Minority',
-  LABEL_SHORT_SES_GAP: 'SES',
-
-  // Concepts that correspond to metric
-  LABEL_CONCEPT_AVG: 'educational opportunity',
-  LABEL_CONCEPT_GRD: 'school effectiveness',
-  LABEL_CONCEPT_COH: 'educational opportunity change',
 
   // Hints for metrics
   HINT_AVG:
@@ -219,11 +203,7 @@ const LANG = {
   LABEL_DISTRICTS_SINGULAR: 'school district',
   LABEL_SCHOOLS_SINGULAR: 'school',
 
-  LABEL_BY_SUBGROUP: '$[metric] by subgroup',
-  LABEL_DEMOGRAPHIC: 'Demographic or gap',
-  LABEL_REGION: 'Region',
-  LABEL_HIGHLIGHTED_STATE: 'Highlighted State',
-
+  // Gap Chart Label For Selection
   LABEL_GAP_INPUT: '$[dem1] - $[dem2] gap in',
 
   FILTER_PREFIX_STATES: 'Filter by state',
@@ -236,6 +216,7 @@ const LANG = {
   TOOLTIP_SUMMARY: 'Click on a location for more.',
   TOOLTIP_HINT: 'Click on a $[region] for more data.',
 
+  // Tooltip description for demographics
   TOOLTIP_CONTEXT_ALL: 'for all students',
   TOOLTIP_CONTEXT_W: 'for White students',
   TOOLTIP_CONTEXT_B: 'for Black students',
@@ -249,10 +230,8 @@ const LANG = {
   TOOLTIP_CONTEXT_WH: 'gap between White and Hispanic',
   TOOLTIP_CONTEXT_PN: 'gap between Poor and Non-poor',
   TOOLTIP_CONTEXT_MF: 'gap between make and female',
-  TOOLTIP_CONTEXT_AVG: 'Average test scores for:',
-  TOOLTIP_CONTEXT_GRD: 'Learning rates for:',
-  TOOLTIP_CONTEXT_COH: 'Trend in test scores for:',
 
+  // Description text below metric
   TOOLTIP_DESC_GRD_MID: 'equal to U.S. average',
   TOOLTIP_DESC_COH_MID: 'equal to U.S. average',
   TOOLTIP_DESC_AVG_MID: 'equal to U.S. average',
@@ -262,9 +241,7 @@ const LANG = {
   TOOLTIP_DESC_AVG_LOW: 'grades below U.S. average',
   TOOLTIP_DESC_GRD_LOW: 'less learned each year',
   TOOLTIP_DESC_COH_LOW: 'decrease in scores per year',
-
   TOOLTIP_DESC_FRL_HIGH: 'have free/reduced price lunch',
-
   TOOLTIP_DESC_SES_ULTRA_HIGH: 'very far above national average',
   TOOLTIP_DESC_SES_VERY_HIGH: 'far above national average',
   TOOLTIP_DESC_SES_HIGH: 'above U.S. average',
@@ -273,6 +250,7 @@ const LANG = {
   TOOLTIP_DESC_SES_VERY_LOW: 'far below national average',
   TOOLTIP_DESC_SES_ULTRA_LOW: 'very far below U.S. average',
 
+  // Tooltip hints
   TOOLTIP_HINT_HIDE: 'hide side panel',
   TOOLTIP_HINT_SHOW: 'show data options',
   TOOLTIP_HINT_METRIC: 'click to change metric',
@@ -282,6 +260,15 @@ const LANG = {
   TOOLTIP_HINT_LOCATION: 'click to view selected locations',
   TOOLTIP_HINT_CHART: 'click to toggle the chart preview',
 
+  TOOLTIP_SWITCH_AVG: 'Switch to Average Test Scores',
+  TOOLTIP_SWITCH_GRD: 'Switch to Learning Rates',
+  TOOLTIP_SWITCH_COH: 'Switch to Trends in Test Scores',
+  TOOLTIP_SWITCH_GAP_AVG:
+    'Switch to gaps in Average Test Scores',
+  TOOLTIP_SWITCH_GAP_GRD: 'Switch to gaps in Learning Rates',
+  TOOLTIP_SWITCH_GAP_COH: 'Switch to gaps in Test Score Trends',
+
+  // Panels
   PANEL_TITLE_METRIC: 'Educational Opportunity Metric',
   PANEL_TITLE_DEMOGRAPHIC: 'Subgroup / Gap',
   PANEL_TITLE_REGION: 'Region',
@@ -297,8 +284,10 @@ const LANG = {
   PANEL_LOCATION_SINGLE: 'One location selected',
   PANEL_LOCATION_NONE: 'No locations selected',
 
-  // Location Panel Headings
-  PANEL_HEADING: '$[metric] for $[region]',
+  // Location Selection Panel
+  LOCATIONS_ACTIVE_NONE:
+    'You have not selected any $[region]. Use the search above or select $[region] in the map or chart view.',
+  LOCATIONS_NONE: 'No $[region] selected.',
 
   // Location panel flags
   FLAG_SPED:
@@ -409,19 +398,6 @@ const LANG = {
   SUMMARY_SES_NONE: '',
   SUMMARY_FRL_NONE: '',
 
-  CALLOUT_AVG_OPP:
-    'How do average test scores show educational opportunity?',
-  CALLOUT_AVG_SES:
-    'How does socioeconomic status impact educational opportunity?',
-  CALLOUT_GRD:
-    'How do learning rates show school effectiveness?',
-  CALLOUT_COH:
-    'How does the average trend in test scores show changes in educational opportunity?',
-
-  BUTTON_GAP_WB: 'Explore the White / Black Gap',
-  BUTTON_GAP_WH: 'Explore the White / Hispanic Gap',
-  BUTTON_GAP_PN: 'Explore the Poor / Non-poor Gap',
-  BUTTON_GAP_MF: 'Explore the male / female Gap',
   BUTTON_DOWNLOAD_REPORT: 'Download Report',
 
   LOCATION_COMPARE_FEATURES_TITLE: '$[region] Comparison',

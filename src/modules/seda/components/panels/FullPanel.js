@@ -28,7 +28,7 @@ import { getFilterCount } from '../../../../shared/selectors/data'
 
 const useStyles = makeStyles(theme => ({
   root: {},
-  title: theme.typography.panelHeading,
+  title: theme.mixins.boldType,
   details: { padding: 0 },
   body: {
     padding: '4px 0'

@@ -48,7 +48,6 @@ export const getColorForVarNameValue = (
   }
   const range = getMetricRangeFromVarName(varName, region, type)
   const percent = getValuePositionInRange(value, range)
-  console.log('range n percent', range, percent)
 
   return isColorInvertedForVarName(varName)
     ? getChoroplethColorAtValue(1 - percent)

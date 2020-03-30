@@ -23,7 +23,7 @@ import {
 } from '@material-ui/core'
 import useUiStore from '../../hooks/useUiStore'
 
-const listItemStyle = { paddingLeft: 32, paddingRight: 24 }
+const listItemStyle = { paddingLeft: 44, paddingRight: 24 }
 
 const SedaActiveFilters = ({ filters = {}, ...props }) => {
   const prefixRegion = filters.prefix
@@ -113,7 +113,7 @@ const SedaFilterSelect = ({ onSelect }) => {
           <Typography
             style={{
               display: 'block',
-              padding: `0 24px 0 32px`
+              padding: `0 24px 0 44px`
             }}
             variant="caption">
             No filters currently applied. Add one of the filters

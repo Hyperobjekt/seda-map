@@ -9,8 +9,10 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import { MetricIcon } from '../icons'
 import useDataOptions from '../../hooks/useDataOptions'
 import clsx from 'clsx'
-import { getKeyMetrics } from '../../../../shared/selectors'
-import { getMetricDescription } from '../../../../shared/selectors/lang'
+import {
+  getKeyMetrics,
+  getMetricLabel
+} from '../../../../shared/selectors'
 const useStyles = makeStyles(theme => ({
   root: {
     paddingTop: 4,
@@ -29,7 +31,9 @@ const useStyles = makeStyles(theme => ({
 const SedaMetricSelect = ({ onSelect }) => {
   const theme = useTheme()
   const metrics = getKeyMetrics().map(m =>
-    Object.assign(m, { description: getMetricDescription(m.id) })
+    Object.assign(m, {
+      description: getMetricLabel(m.id, 'LABEL_REFLECTS')
+    })
   )
   const metric = useDataOptions(state => state.metric)
   const classes = useStyles()

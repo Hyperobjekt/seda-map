@@ -3,6 +3,7 @@ import {
   REGION_DOMAINS,
   ID_LENGTH_TO_REGION
 } from '../constants/regions'
+import { getFeatureProperty } from '.'
 
 /**
  * Gets the configuation for regions
@@ -68,4 +69,27 @@ export const getRegionFromFeature = feature => {
     return null
   }
   return getRegionFromFeatureId(feature.properties.id)
+}
+
+/**
+ * Returns the provided locations (features) array as an object
+ * with a key for each region and the corresponding locations.
+ * @param {*} locations
+ */
+export const getLocationsByRegion = locations =>
+  locations.reduce((obj, l) => {
+    const id = getFeatureProperty(l, 'id')
+    if (!id) return obj
+    const r = getRegionFromFeatureId(id)
+    if (!obj[r]) {
+      obj[r] = []
+    }
+    obj[r].push(l)
+    return obj
+  }, {})
+
+export const getLocationIdsForRegion = (region, locations) => {
+  return locations
+    .map(f => getFeatureProperty(f, 'id'))
+    .filter(id => id.length === region.idLength)
 }

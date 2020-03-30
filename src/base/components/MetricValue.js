@@ -17,10 +17,16 @@ const useStyles = makeStyles(theme => ({
   indicator: {
     fontSize: 16,
     '&.metric-value__indicator--above': {
-      color: theme.app.aboveColorAlt
+      color: props =>
+        props.invertColor
+          ? theme.app.belowColorAlt
+          : theme.app.aboveColorAlt
     },
     '&.metric-value__indicator--below': {
-      color: theme.app.belowColorAlt
+      color: props =>
+        props.invertColor
+          ? theme.app.aboveColorAlt
+          : theme.app.belowColorAlt
     }
   },
   number: {
@@ -28,6 +34,15 @@ const useStyles = makeStyles(theme => ({
     lineHeight: 1,
     color: props =>
       props.dark ? '#fff' : theme.palette.text.primary
+  },
+  unavailable: {
+    fontSize: theme.typography.pxToRem(14),
+    lineHeight: 1,
+    textAlign: 'center',
+    width: '100%',
+    display: 'block',
+    color: props =>
+      props.dark ? '#fff' : theme.palette.grey[500]
   },
   marginOfError: {
     color: props =>
@@ -39,16 +54,18 @@ const useStyles = makeStyles(theme => ({
 
 const MetricValue = ({
   value,
-  formatter = v => v,
+  formatter = v => Math.abs(v),
   dark = false,
   marginOfError,
   mid = 0,
+  invertColor = false,
   className,
   classes: overrides = {},
   ...props
 }) => {
   const direction = value < mid ? 'below' : 'above'
-  const classes = useStyles({ dark })
+  const classes = useStyles({ dark, invertColor })
+  const isNA = value === -999
   return (
     <div
       className={clsx(
@@ -58,7 +75,7 @@ const MetricValue = ({
         overrides.root
       )}
       {...props}>
-      {direction === 'above' && (
+      {!isNA && direction === 'above' && (
         <AboveIcon
           className={clsx(
             'metric-value__indicator',
@@ -68,7 +85,7 @@ const MetricValue = ({
           )}
         />
       )}
-      {direction === 'below' && (
+      {!isNA && direction === 'below' && (
         <BelowIcon
           className={clsx(
             'metric-value__indicator',
@@ -78,16 +95,19 @@ const MetricValue = ({
           )}
         />
       )}
-      <Typography
-        variant="h6"
-        className={clsx(
-          'metric-value__number',
-          classes.number,
-          overrides.number
-        )}>
-        {formatter(value, { abs: true })}
-      </Typography>
-      {marginOfError && (
+      {!isNA && (
+        <Typography
+          variant="h6"
+          component="span"
+          className={clsx(
+            'metric-value__number',
+            classes.number,
+            overrides.number
+          )}>
+          {formatter(value, { abs: true })}
+        </Typography>
+      )}
+      {!isNA && marginOfError && (
         <Typography
           variant="body2"
           className={clsx(
@@ -96,6 +116,18 @@ const MetricValue = ({
             overrides.marginOfError
           )}>
           {marginOfError}
+        </Typography>
+      )}
+      {isNA && (
+        <Typography
+          variant="h6"
+          component="span"
+          className={clsx(
+            'metric-value__unavailable',
+            classes.unavailable,
+            overrides.unavailable
+          )}>
+          N/A
         </Typography>
       )}
     </div>

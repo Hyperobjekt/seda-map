@@ -21,6 +21,7 @@
     "@material-ui/core": "^4.9.5",
     "@material-ui/icons": "^4.9.1",
     "@redux-beacon/google-tag-manager": "^1.0.1",
+    "@turf/bbox": "^6.0.1",
     "algoliasearch": "^3.32.0",
     "axios": "^0.18.1",
     "classnames": "^2.2.6",

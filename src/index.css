@@ -5,6 +5,17 @@
 @import 'css/templates/_index.css';
 @import 'css/pages/_index.css'; */
 
+button:hover .icon .filled,
+.MuiListItem-button:hover .icon .filled,
+.icon-label-button--active .icon .filled {
+  opacity: 1;
+}
+button:hover .icon .outline,
+.MuiListItem-button:hover .icon .outline,
+.icon-label-button--active .icon .outline {
+  opacity: 0;
+}
+
 .sandbox {
   display: flex;
   flex-direction: column;

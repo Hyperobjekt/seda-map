@@ -35,6 +35,10 @@ export const getFeatureProperty = (feature, propName) => {
   return null
 }
 
+export const getFeatureFromArray = (features, id) => {
+  return features.find(l => getFeatureProperty(l, 'id') === id)
+}
+
 /**
  * Gets the id of the hovered feature
  * @param {*} hovered
@@ -88,7 +92,8 @@ export {
   getRegionDomain,
   getSingularRegion,
   getSingularRegions,
-  getRegions
+  getRegions,
+  getLocationIdsForRegion
 } from './regions'
 export {
   getPositionForVarNameValue,

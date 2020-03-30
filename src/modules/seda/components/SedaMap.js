@@ -1,19 +1,15 @@
 import React, { useMemo, useEffect } from 'react'
 import { FlyToInterpolator } from 'react-map-gl'
+import WebMercatorViewport from 'viewport-mercator-project'
 import * as ease from 'd3-ease'
 import PropTypes from 'prop-types'
-import {
-  getMapViewport,
-  getLayers,
-  defaultMapStyle
-} from '../../map/selectors'
+import { getLayers, defaultMapStyle } from '../../map/selectors'
 import MapBase from '../../map/components/MapBase'
 import {
-  getHoveredId,
   getSelectedColors,
-  getScatterplotVars,
-  isVersusFromVarNames,
-  getFeatureProperty
+  getFeatureProperty,
+  getLocationIdsForRegion,
+  getFeatureFromArray
 } from '../../../shared/selectors'
 import { getLang } from '../../../shared/selectors/lang'
 import useMapStore from '../hooks/useMapStore'
@@ -22,6 +18,7 @@ import useUiStore from '../hooks/useUiStore'
 import { getStateViewportByFips } from '../../../shared/selectors/states'
 import SedaMapLegend from './SedaMapLegend'
 import { makeStyles } from '@material-ui/core'
+import bbox from '@turf/bbox'
 
 const selectedColors = getSelectedColors()
 
@@ -34,87 +31,75 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const SedaMap = props => {
-  // pull required data from store
+  /** viewport with center lat / lng, zoom, width, height */
   const viewport = useMapStore(state => state.viewport)
+  /** current region for the map */
   const region = useDataOptions(state => state.region)
-  const metric = useDataOptions(state => state.metric)
-  const demographic = useDataOptions(state => state.demographic)
-  const { prefix } = useDataOptions(state => state.filters)
-  const locationIds = useDataOptions(state =>
-    state.getLocationIdsForRegion()
+  /** current metric for the map */
+  const metric = useDataOptions(state => state.metric.id)
+  /** current demographic for the map */
+  const demographic = useDataOptions(
+    state => state.demographic.id
   )
+  /** currently active data filters */
+  const { prefix, largest } = useDataOptions(
+    state => state.filters
+  )
+  /** currently selected location ids */
+  const locations = useDataOptions(state => state.locations)
+  const locationIds = getLocationIdsForRegion(region, locations)
+  /** current active view (map, chart, or split) */
   const view = useUiStore(state => state.view)
+  /** id of the currently hovered location */
   const hoveredId = useUiStore(state => state.hovered)
-  const showHovered = useUiStore(state => state.showTooltip)
-
-  // pull required setters from store
+  /** id of the active location */
+  const activeLocationId = useDataOptions(
+    state => state.activeLocation
+  )
+  /** function to get active location */
+  const getActiveFeature = useDataOptions(
+    state => state.getActiveFeature
+  )
+  /** boolean determining if the hovered location should show */
+  const showHovered = useUiStore(state => state.showMarkers)
+  /** function for setting the map viewport */
   const setViewport = useMapStore(state => state.setViewport)
+  /** function for setting the hovered location */
   const setHovered = useUiStore(state => state.setHovered)
+  /** function to add a location to the selected locations */
   const addLocationFromFeature = useDataOptions(
     state => state.addLocationFromFeature
   )
-
-  // geography region based on map zoom level
-  const zoomLevel =
-    viewport.zoom > 11
-      ? 'school'
-      : viewport.zoom > 8
-      ? 'district'
-      : 'county'
-
-  // vars shown on the scatterplot for current selections
-  const vars = getScatterplotVars(
-    region.id,
-    metric.id,
-    demographic.id
-  )
-
-  // boolean determining is legend is visible
-  const showLegend =
-    view === 'map' || isVersusFromVarNames(vars.xVar, vars.yVar)
-
-  // state highlighted from filters
-  const highlightedState = null
-
-  // map layers for choropleths / dots
+  /** memoized array of choropleth and dot layers */
   const layers = useMemo(() => {
-    if (!metric || !demographic || !region) {
+    if (!metric || !demographic || !region.id) {
       return []
     }
-    return getLayers({
-      region: region.id,
-      metric: metric.id,
-      demographic: demographic.id,
-      highlightedState,
-      zoomLevel
-    })
-  }, [
-    region.id,
-    metric.id,
-    demographic.id,
-    highlightedState,
-    zoomLevel
-  ])
-
-  // handle hover
+    const context = { region: region.id, metric, demographic }
+    return getLayers(context)
+  }, [region, metric, demographic])
+  /** aria label for screen readers */
+  const ariaLabel = getLang('UI_MAP_SR', {
+    metric: getLang('LABEL_' + metric),
+    region: getLang('LABEL_' + region.id),
+    demographic: getLang('LABEL_STUDENTS_' + demographic)
+  })
+  /** object with class names for styling the component */
+  const classes = useStyles()
+  /** handler for map hover */
   const handleHover = (feature, coords) => {
     const id = getFeatureProperty(feature, 'id')
     setHovered(id, coords)
   }
-
+  /** handler for map click */
   const handleClick = feature => {
     addLocationFromFeature(feature)
   }
-
-  const ariaLabel = getLang('UI_MAP_SR', {
-    metric: getLang('LABEL_' + metric.id),
-    region: getLang('LABEL_' + region.id),
-    demographic: getLang('LABEL_STUDENTS_' + demographic.id)
-  })
-
+  /** handler for map load */
   const handleLoad = () => {
+    // inform global listener that map has loaded
     window.SEDA.trigger('map')
-    // zoom to US if needed
+    // zoom to US if needed once cover is shown
     setTimeout(() => {
       if (
         viewport.zoom === 3.5 &&
@@ -136,6 +121,7 @@ const SedaMap = props => {
     }, 1000)
   }
 
+  /** zoom to filtered location when filter is selected */
   useEffect(() => {
     if (!prefix) {
       return
@@ -151,7 +137,27 @@ const SedaMap = props => {
     }
   }, [prefix])
 
-  const classes = useStyles()
+  /** zoom to activated location */
+  useEffect(() => {
+    const data = getFeatureFromArray(locations, activeLocationId)
+    if (!data || !data.geometry) return
+    const { width, height } = viewport
+    const vp = new WebMercatorViewport({ width, height })
+    const featureBbox = bbox(data)
+    const bounds = [
+      [featureBbox[0], featureBbox[1]],
+      [featureBbox[2], featureBbox[3]]
+    ]
+    const newViewport = vp.fitBounds(bounds, {
+      padding: 20
+    })
+    setViewport({
+      ...newViewport,
+      transitionDuration: 3000,
+      transitionInterpolator: new FlyToInterpolator(),
+      transitionEasing: ease.easeCubic
+    })
+  }, [activeLocationId, locations])
 
   return (
     <MapBase

@@ -1,34 +1,10 @@
-import LANG from "./en";
-
-
-export const HEADER = {
-  tabs: [
-    {
-      id: 'avg',
-      icon: '/assets/img/avg.svg',
-      text: LANG['TAB_CONCEPT_AVG'],
-      subtext: LANG['TAB_METRIC_AVG'],
-    },
-    {
-      id: 'grd',
-      icon: '/assets/img/grd.svg',
-      text: LANG['TAB_CONCEPT_GRD'],
-      subtext: LANG['TAB_METRIC_GRD'],
-    },
-    {
-      id: 'coh',
-      icon: '/assets/img/coh.svg',
-      text: LANG['TAB_CONCEPT_COH'],
-      subtext: LANG['TAB_METRIC_COH'],
-    }
-  ]
-};
+import LANG from './en'
 
 export const FOOTER = {
   branding: {
     url: '#',
     alt: 'Stanford',
-    imgSrc:'https://placehold.it/200x40'
+    imgSrc: 'https://placehold.it/200x40'
   },
   links: [
     {
@@ -47,7 +23,7 @@ export const FOOTER = {
           id: 'link',
           label: LANG['FOOTER_SHARE_LINK']
         }
-      ],
+      ]
     },
     {
       id: 'share',
@@ -142,4 +118,3 @@ export const MENU = {
     }
   ]
 }
-

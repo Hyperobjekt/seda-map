@@ -28,14 +28,12 @@ const SedaLocationMarkers = ({ className, ...props }) => {
   const locationIds = useDataOptions(state =>
     state.getLocationIdsForRegion()
   )
-  const getLocationIndex = id =>
-    locationIds.findIndex(l => l === id)
-  const showHovered = useUiStore(state => state.showTooltip)
+  const showHovered = useUiStore(state => state.showMarkers)
+  /** TODO: put hovered into its own component to cut down rerenders */
   const hoveredId = useUiStore(state => state.hovered)
   const getDataForId = useDataOptions(
     state => state.getDataForId
   )
-  const locations = locationIds.map(id => getDataForId(id))
   const { xVar, yVar, zVar } = useDataOptions(state =>
     state.getScatterplotVars()
   )
@@ -45,6 +43,12 @@ const SedaLocationMarkers = ({ className, ...props }) => {
     yValToPosition,
     zValToSize
   } = useDataOptions(state => state.getXyzTransformers())
+
+  const getLocationIndex = id =>
+    locationIds.findIndex(l => l === id)
+
+  const locations = locationIds.map(id => getDataForId(id))
+
   // circles for selected areas
   const circles = getCircles({
     xVar,

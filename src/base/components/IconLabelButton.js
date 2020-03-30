@@ -39,7 +39,8 @@ const useStyles = makeStyles(theme => ({
     '& > svg.MuiSvgIcon-root': { fontSize: theme.spacing(4) }
   },
   activeIcon: {
-    color: theme.palette.primary.main
+    color: theme.palette.primary.main,
+    fill: theme.palette.primary.main
   }
 }))
 
@@ -62,7 +63,8 @@ const IconLabelButton = ({
         className,
         classes.root,
         {
-          [classes.active]: active
+          [classes.active]: active,
+          'icon-label-button--active': active
         }
       )}
       classes={{

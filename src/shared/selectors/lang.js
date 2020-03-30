@@ -327,10 +327,6 @@ export const getTooltipText = values => {
   return text !== '' ? text : getLang('DATA_UNAVAILABLE')
 }
 
-export const getMetricDescription = metricId => {
-  return getLang('TAB_METRIC_' + metricId.toUpperCase())
-}
-
 export const getPrefixLang = (id, prefix = 'LABEL', props) => {
   if (!id) return ''
   if (typeof id === 'string') {

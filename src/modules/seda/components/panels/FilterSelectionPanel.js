@@ -28,11 +28,11 @@ const useStyles = makeStyles(theme => ({
           : 'translateX(0)'
     }
   },
-  title: theme.typography.panelHeading,
+  title: theme.mixins.boldType,
   body: {
     padding: theme.spacing(1),
     '& > .MuiList-root .MuiButtonBase-root': {
-      paddingLeft: 40
+      paddingLeft: 44
     }
   }
 }))

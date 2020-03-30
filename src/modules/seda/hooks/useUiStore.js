@@ -6,20 +6,28 @@ const [useUiStore] = create(set => ({
   setView: view => set({ view }),
   // currently hovered id
   hovered: null,
-  setHovered: (hoveredId, coords) =>
+  setHovered: (
+    hoveredId,
+    coords,
+    options = { showTooltip: true, showMarkers: true }
+  ) =>
     hoveredId
       ? set(state => ({
           hovered: hoveredId,
           coords: coords ? coords : state.coords,
-          showTooltip: true
+          showTooltip: options.showTooltip,
+          showMarkers: options.showMarkers
         }))
-      : set({ showTooltip: false }),
+      : set({ showTooltip: false, showMarkers: false }),
   // x, y coords of tooltip
   coords: [0, 0],
   setCoords: coords => set({ coords }),
   // boolean determining tooltip visibility
   showTooltip: false,
   setShowTooltip: showTooltip => set({ showTooltip }),
+  // boolean determining if markers should be shown for hovered items
+  showMarkers: false,
+  setShowMarkers: showMarkers => set({ showMarkers }),
   // boolean determining if menu is open
   showMenu: false,
   toggleMenu: () =>
@@ -37,9 +45,7 @@ const [useUiStore] = create(set => ({
   condensed: false,
   toggleCondensed: () =>
     set(state => ({ condensed: !state.condensed })),
-  // active location
-  activeLocation: null,
-  setActiveLocation: activeLocation => set({ activeLocation }),
+
   // string determining which selection is currently active
   selection: null,
   setSelection: selection => set({ selection }),

@@ -102,7 +102,17 @@ const makeGetters = get => ({
     const idToName = get().getNameForId
     return getFiltersLang(filters, region, idToName)
   },
-  isDemographicGap: () => isGapDemographic(get().demographic.id)
+  isDemographicGap: () => isGapDemographic(get().demographic.id),
+  getActiveLocation: () => {
+    const id = get().activeLocation
+    const locations = get().locations
+    const i = locations.findIndex(
+      l => getFeatureProperty(l, 'id') === id
+    )
+    return i > -1
+      ? { ...locations[i].properties, id, index: i }
+      : {}
+  }
 })
 
 const makeSetters = set => ({
@@ -157,19 +167,53 @@ const [useDataOptions] = create((set, get, api) => ({
     largest: null
   },
   data: { districts: {} },
+  // active location id
+  activeLocation: null,
   loading: true,
   addLocationFromId: async id => {
     const region = getRegionFromFeatureId(id)
     const data = getDataForId(id, get().data[region])
     const feature = await loadFeatureFromCoords(data)
-    set(state => ({ locations: [...state.locations, feature] }))
+    set(state => ({
+      locations: [...state.locations, feature],
+      activeLocation: id
+    }))
   },
+
   addLocationFromChart: async location => {
     const feature = await loadFeatureFromCoords(location)
-    set(state => ({ locations: [...state.locations, feature] }))
+    set(state => ({
+      locations: [...state.locations, feature],
+      activeLocation: getFeatureProperty(feature, 'id')
+    }))
   },
   addLocationFromFeature: feature => {
-    set(state => ({ locations: [...state.locations, feature] }))
+    set(state => ({
+      locations: [...state.locations, feature],
+      activeLocation: getFeatureProperty(feature, 'id')
+    }))
+  },
+  removeLocation: location => {
+    let id
+    if (typeof location === 'string') {
+      id = location
+    }
+    if (typeof location === 'object') {
+      id = getFeatureProperty(location, 'id')
+    }
+    const newLocations = get().locations.filter(
+      l => getFeatureProperty(l, 'id') !== id
+    )
+    set({ locations: newLocations })
+  },
+  setActiveLocation: activeLocation => {
+    if (!activeLocation) return set({ activeLocation })
+    const region = getRegionFromFeatureId(activeLocation)
+    const changes = { activeLocation }
+    if (region !== get().region.id)
+      changes['region'] = getRegionById(region)
+    console.log('setting location', changes)
+    set(changes)
   },
   ...makeGetters(get),
   ...makeSetters(set)

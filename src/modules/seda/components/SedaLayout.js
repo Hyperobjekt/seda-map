@@ -14,7 +14,8 @@ import {
   CondensedPanel,
   SelectionPanel,
   FullPanel,
-  HelpPanel
+  HelpPanel,
+  LocationPanel
 } from './panels'
 import useDataOptions from '../hooks/useDataOptions'
 import SedaTooltip from './SedaTooltip'
@@ -49,7 +50,7 @@ const useStyles = makeStyles(theme => ({
 const SedaLayout = props => {
   const classes = useStyles()
   const showHelp = useUiStore(state => state.showHelp)
-  const activeLocation = useUiStore(
+  const activeLocation = useDataOptions(
     state => state.activeLocation
   )
   const condensed = useUiStore(state => state.condensed)
@@ -96,9 +97,13 @@ const SedaLayout = props => {
             }}
             open={filterPanel}
           />
-          <SidePanel open={activeLocation}>
-            Location Panel
-          </SidePanel>
+          <LocationPanel
+            open={activeLocation}
+            style={{
+              zIndex: 1000,
+              transform: 'translateX(-100%)'
+            }}
+          />
         </SidePanelGroup>
         <SplitView view={splitView} />
       </PageBody>

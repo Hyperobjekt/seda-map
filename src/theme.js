@@ -2,6 +2,8 @@ import { createMuiTheme } from '@material-ui/core/styles'
 
 const fontFamily =
   'maisonneue-book,lato,helvetica neue,Arial,sans-serif,-apple-system'
+const boldFontFamily =
+  'maisonneue-bold,lato,helvetica neue,Arial,sans-serif,-apple-system'
 const headerFontFamily =
   'sharpgrotesk-medium20, lato, helvetica neue, Arial, sans-serif, -apple-system'
 const condensedFontFamily =
@@ -99,6 +101,10 @@ const theme = createMuiTheme({
         borderRadius: borderRadius
       }
     },
+    boldType: {
+      fontFamily: boldFontFamily,
+      fontWeight: 'normal'
+    },
     hint: {
       display: 'block',
       marginTop: spacing(1),
@@ -140,6 +146,7 @@ const theme = createMuiTheme({
   app: {
     panelWidth: 360,
     condensedPanelWidth: 72,
+    boldFont: boldFontFamily,
     darkBackground: 'rgba(3, 18, 50, 0.94)',
     darkText: '#fff',
     altDarkText: altDarkText,
@@ -148,6 +155,7 @@ const theme = createMuiTheme({
     aboveColorAlt: '#40B875',
     belowColorAlt: '#57A5FF',
     highlightColor: highlightColor,
+    highlightColorAlt: '#cff5ff',
     selectedColors: [
       '#F46800',
       '#8C1AF4',
