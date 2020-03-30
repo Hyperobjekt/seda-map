@@ -289,11 +289,44 @@
         color: var(--primary);
       }
 
+      ul {
+        margin: 0;
+        padding: 0;
+      }
+      li {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
       /* button .icon {
         width: 14px;
         height: 14px;
         margin-left: 8px;
       } */
+      .blocker {
+        background: rgba(255, 255, 255, 0.9);
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 99999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .blocker__message {
+        padding: 16px;
+        border: 2px solid #ccc;
+        max-width: 300px;
+        background: #fff;
+      }
+      @media (min-width: 900px) {
+        .blocker {
+          display: none;
+        }
+      }
     </style>
   </head>
 
@@ -313,6 +346,12 @@
     <!-- End Google Tag Manager (noscript) -->
 
     <div id="root" class="hidden"></div>
+    <div class="blocker">
+      <div class="blocker__message">
+        Not yet supported at this resolution. Please preview on a
+        laptop / desktop screen.
+      </div>
+    </div>
     <script>
       // test for local storage support
       window.supportsLocalStorage = (function() {

@@ -11,7 +11,7 @@ import {
   Tooltip,
   Button
 } from '@material-ui/core'
-import { MetricIcon } from '../../icons'
+import { MetricIcon } from '../../../../icons'
 import {
   getDemographicLabel,
   getFormatterForVarName,

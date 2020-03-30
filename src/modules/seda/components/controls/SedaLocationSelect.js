@@ -1,9 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { makeStyles, useTheme } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
-import ListItemText from '@material-ui/core/ListItemText'
 import useDataOptions from '../../hooks/useDataOptions'
 import SearchInput from '../../../../base/components/SearchInput'
 import {
@@ -16,16 +15,14 @@ import {
 import { getStateName } from '../../../../shared/selectors/states'
 import {
   getSelectedColors,
-  getRegionFromFeatureId,
   getRegions,
   getRegionLabel,
-  getFeatureProperty,
-  getSizerFunctionForRegion
+  getFeatureProperty
 } from '../../../../shared/selectors'
 import LocationName from '../base/LocationName'
 import { getLocationsByRegion } from '../../../../shared/selectors/regions'
 import { getLang } from '../../../../shared/selectors/lang'
-import { CloseIcon } from '../icons'
+import { CloseIcon } from '../../../icons'
 import useUiStore from '../../hooks/useUiStore'
 
 const colors = getSelectedColors()

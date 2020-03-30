@@ -75,6 +75,11 @@ const theme = createMuiTheme({
   shape: {
     borderRadius: borderRadius
   },
+  breakpoints: {
+    values: {
+      md: 1024
+    }
+  },
   mixins: {
     fillSpace: {
       position: 'absolute',

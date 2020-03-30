@@ -8,7 +8,6 @@ import useResizeAware from 'react-resize-aware'
 import ReactMapGL, { NavigationControl } from 'react-map-gl'
 import PropTypes from 'prop-types'
 import usePrevious from '../../../shared/hooks/usePrevious'
-import ZoomToUSControl from './ZoomToControl'
 import mapboxgl from 'mapbox-gl/dist/mapbox-gl'
 import * as _debounce from 'lodash.debounce'
 import { defaultMapStyle } from '../selectors'
@@ -183,13 +182,7 @@ const MapBase = ({
   const handleViewportChange = vp => {
     if (!loaded) return
     if (vp.zoom && vp.zoom < 2) return
-    const newVp = { ...vp, ...getContainerSize(mapEl.current) }
-    if (!isSameViewport(viewport, newVp)) {
-      return onViewportChange({
-        ...vp,
-        ...getContainerSize(mapEl.current)
-      })
-    }
+    onViewportChange(vp)
   }
 
   // handler for feature hover
@@ -271,13 +264,6 @@ const MapBase = ({
         {...viewport}
         {...rest}>
         {children}
-        <div className="map__zoom">
-          <NavigationControl
-            showCompass={false}
-            onViewportChange={handleViewportChange}
-          />
-          <ZoomToUSControl title="Zoom to U.S." />
-        </div>
       </ReactMapGL>
     </div>
   )

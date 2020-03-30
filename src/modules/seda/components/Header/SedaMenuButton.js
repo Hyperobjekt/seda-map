@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { MenuIcon } from '../icons'
+import { MenuIcon } from '../../../icons'
 import { makeStyles, IconButton } from '@material-ui/core'
 import useUiStore from '../../hooks/useUiStore'
 

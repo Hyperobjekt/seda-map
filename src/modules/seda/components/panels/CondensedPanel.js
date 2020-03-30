@@ -11,12 +11,15 @@ import IconLabelButton from '../../../../base/components/IconLabelButton'
 import useDataOptions from '../../hooks/useDataOptions'
 
 import MenuOpen from '@material-ui/icons/MenuOpen'
-import PlaceIcon from '@material-ui/icons/Place'
-import MetricIcon from '../icons/MetricIcon'
-import LayersIcon from '@material-ui/icons/Layers'
-import ScatterplotIcon from '@material-ui/icons/ScatterPlot'
-import FilterIcon from '../icons/FilterIcon'
-import PeopleIcon from '@material-ui/icons/PeopleAlt'
+import {
+  MetricIcon,
+  FilterIcon,
+  SubgroupsIcon,
+  RegionsIcon,
+  ChartIcon,
+  LocationsIcon
+} from '../../../icons'
+
 import { getMetricLabel } from '../../../../shared/selectors'
 import {
   getPrefixLang,
@@ -106,7 +109,7 @@ const CondensedPanel = props => {
               />
             )
           }
-          icon={<LayersIcon style={{ fontSize: 32 }} />}
+          icon={<RegionsIcon style={{ fontSize: 32 }} />}
           onClick={() => setSelection('region')}
         />
         <IconLabelButton
@@ -127,7 +130,7 @@ const CondensedPanel = props => {
               />
             )
           }
-          icon={<PeopleIcon />}
+          icon={<SubgroupsIcon />}
           onClick={() => setSelection('demographic')}
         />
         <IconLabelButton
@@ -166,7 +169,7 @@ const CondensedPanel = props => {
             )
           }
           className={classes.button}
-          icon={<PlaceIcon />}
+          icon={<LocationsIcon />}
           onClick={() => setSelection('location')}
         />
         <Divider />
@@ -175,7 +178,7 @@ const CondensedPanel = props => {
             active={showChart}
             tooltip={getLang('TOOLTIP_HINT_CHART')}
             className={classes.button}
-            icon={<ScatterplotIcon />}
+            icon={<ChartIcon />}
             onClick={toggleChart}
           />
         )}

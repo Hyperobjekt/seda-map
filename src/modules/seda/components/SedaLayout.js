@@ -101,7 +101,13 @@ const SedaLayout = props => {
             open={activeLocation}
             style={{
               zIndex: 1000,
-              transform: 'translateX(-100%)'
+              transform: (() => {
+                if (condensed && activeLocation && selection)
+                  return 'translateX(-100%)'
+                if (condensed && activeLocation && !selection)
+                  return 'translateX(0)'
+                return 'translateX(-100%)'
+              })()
             }}
           />
         </SidePanelGroup>

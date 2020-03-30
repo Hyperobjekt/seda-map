@@ -2,11 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles, Typography } from '@material-ui/core'
 import clsx from 'clsx'
-import { theme } from '../../modules/scatterplot/echartTheme'
-import {
-  AboveIcon,
-  BelowIcon
-} from '../../modules/seda/components/icons'
+import { AboveIcon, BelowIcon } from '../../modules/icons'
 
 const useStyles = makeStyles(theme => ({
   root: {

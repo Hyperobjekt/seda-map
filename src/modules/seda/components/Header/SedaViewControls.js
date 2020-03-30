@@ -5,8 +5,10 @@ import {
   ButtonGroup,
   Button
 } from '@material-ui/core'
+import { useTheme } from '@material-ui/core/styles'
+import useMediaQuery from '@material-ui/core/useMediaQuery'
 import clsx from 'clsx'
-import { MapIcon, ChartIcon, SplitIcon } from '../icons'
+import { MapIcon, ChartIcon, SplitIcon } from '../../../icons'
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -28,12 +30,20 @@ const SedaViewControls = ({ classes: overrides, ...props }) => {
   const classes = useStyles()
   const view = useUiStore(state => state.view)
   const setView = useUiStore(state => state.setView)
+  const theme = useTheme()
+  const isLargeViewport = useMediaQuery(
+    theme.breakpoints.up('md')
+  )
+  /** no split view button on small viewports */
+  const viewButtons = isLargeViewport
+    ? buttons
+    : [buttons[0], buttons[1]]
   return (
     <ButtonGroup
       variant="outlined"
       className={clsx(classes.root)}
       {...props}>
-      {buttons.map(b => (
+      {viewButtons.map(b => (
         <Button
           key={b.id}
           className={clsx(classes.button, {

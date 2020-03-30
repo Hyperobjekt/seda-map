@@ -3,7 +3,9 @@ import { FlyToInterpolator } from 'react-map-gl'
 import WebMercatorViewport from 'viewport-mercator-project'
 import * as ease from 'd3-ease'
 import PropTypes from 'prop-types'
-import { getLayers, defaultMapStyle } from '../../map/selectors'
+import { NavigationControl } from 'react-map-gl'
+
+import { getLayers } from '../../map/selectors'
 import MapBase from '../../map/components/MapBase'
 import {
   getSelectedColors,
@@ -19,6 +21,7 @@ import { getStateViewportByFips } from '../../../shared/selectors/states'
 import SedaMapLegend from './SedaMapLegend'
 import { makeStyles } from '@material-ui/core'
 import bbox from '@turf/bbox'
+import { ZoomToControl } from '../../map'
 
 const selectedColors = getSelectedColors()
 
@@ -86,15 +89,18 @@ const SedaMap = props => {
   })
   /** object with class names for styling the component */
   const classes = useStyles()
+
   /** handler for map hover */
   const handleHover = (feature, coords) => {
     const id = getFeatureProperty(feature, 'id')
     setHovered(id, coords)
   }
+
   /** handler for map click */
   const handleClick = feature => {
     addLocationFromFeature(feature)
   }
+
   /** handler for map load */
   const handleLoad = () => {
     // inform global listener that map has loaded
@@ -120,6 +126,9 @@ const SedaMap = props => {
       }
     }, 1000)
   }
+
+  /** handler for zoom to U.S. */
+  const handleResetViewport = () => {}
 
   /** zoom to filtered location when filter is selected */
   useEffect(() => {
@@ -172,7 +181,16 @@ const SedaMap = props => {
       onLoad={handleLoad}
       onViewportChange={setViewport}
       onClick={handleClick}>
-      {props.children}
+      <div className="map__zoom">
+        <NavigationControl
+          showCompass={false}
+          onViewportChange={setViewport}
+        />
+        <ZoomToControl
+          title="Zoom to U.S."
+          onClick={handleResetViewport}
+        />
+      </div>
       <SedaMapLegend className={classes.legend} />
     </MapBase>
   )

@@ -6,7 +6,7 @@ import {
   RegionsIcon,
   SubgroupsIcon,
   LocationsIcon
-} from '../icons'
+} from '../../../icons'
 import { getPrefixLang } from '../../../../shared/selectors/lang'
 import useUiStore from '../../hooks/useUiStore'
 import useDataOptions from '../../hooks/useDataOptions'
