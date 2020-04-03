@@ -8,9 +8,7 @@ export { default as TrendsIcon } from './components/TrendsIcon'
 export {
   default as ActiveMetricIcon
 } from './components/ActiveMetricIcon'
-export {
-  default as FilterIcon
-} from '@material-ui/icons/FilterList'
+export { default as FilterIcon } from './components/FilterIcon'
 export { default as MetricIcon } from './components/MetricIcon'
 export { default as RegionsIcon } from './components/RegionsIcon'
 export {
@@ -27,3 +25,15 @@ export {
   default as FacebookIcon
 } from './components/FacebookIcon'
 export { default as TwitterIcon } from './components/TwitterIcon'
+export { default as RightIcon } from './components/RightIcon'
+export {
+  default as SidebarCloseIcon
+} from './components/SidebarCloseIcon'
+export {
+  default as SidebarOpenIcon
+} from './components/SidebarOpenIcon'
+export { default as ExpandIcon } from './components/ExpandIcon'
+export {
+  default as CollapseIcon
+} from './components/CollapseIcon'
+export { default as SearchIcon } from './components/SearchIcon'

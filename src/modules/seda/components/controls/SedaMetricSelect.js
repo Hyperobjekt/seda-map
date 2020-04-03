@@ -22,9 +22,17 @@ const useStyles = makeStyles(theme => ({
     borderRadius: theme.shape.borderRadius,
     '& .MuiListItemText-secondary': {
       fontSize: theme.typography.pxToRem(12)
+    },
+    '& .MuiListItemSecondaryAction-root': {
+      fontSize: theme.spacing(3)
     }
   },
-  active: theme.mixins.activeListButton
+  active: theme.mixins.activeListButton,
+  secondaryAction: {
+    pointerEvents: 'none',
+    fontSize: 24,
+    right: theme.spacing(3)
+  }
 }))
 
 const SedaMetricSelect = ({ onSelect }) => {
@@ -61,13 +69,15 @@ const SedaMetricSelect = ({ onSelect }) => {
               primary={m.label}
               secondary={m.description}
             />
-            <ListItemSecondaryAction>
+            <ListItemSecondaryAction
+              className={classes.secondaryAction}>
               <MetricIcon
-                color={
-                  m.id === metric.id
-                    ? theme.palette.primary.main
-                    : theme.palette.grey[500]
-                }
+                style={{
+                  color:
+                    m.id === metric.id
+                      ? theme.palette.primary.main
+                      : theme.palette.grey[500]
+                }}
                 metricId={m.id}
               />
             </ListItemSecondaryAction>

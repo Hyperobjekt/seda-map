@@ -1,7 +1,5 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import SearchIcon from '@material-ui/icons/Search'
-import CloseIcon from '@material-ui/icons/Close'
 
 import {
   InputAdornment,
@@ -10,6 +8,7 @@ import {
   TextField
 } from '@material-ui/core'
 import clsx from 'clsx'
+import { SearchIcon, CloseIcon } from '../../modules/icons'
 
 const useStyles = makeStyles(theme => ({
   root: {

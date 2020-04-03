@@ -10,14 +10,14 @@ import {
 import IconLabelButton from '../../../../base/components/IconLabelButton'
 import useDataOptions from '../../hooks/useDataOptions'
 
-import MenuOpen from '@material-ui/icons/MenuOpen'
 import {
   MetricIcon,
   FilterIcon,
   SubgroupsIcon,
   RegionsIcon,
   ChartIcon,
-  LocationsIcon
+  LocationsIcon,
+  SidebarOpenIcon
 } from '../../../icons'
 
 import { getMetricLabel } from '../../../../shared/selectors'
@@ -66,10 +66,9 @@ const CondensedPanel = props => {
           className={classes.button}
           tooltip={getLang('TOOLTIP_HINT_SHOW')}
           icon={
-            <MenuOpen
+            <SidebarOpenIcon
               style={{
-                fontSize: 32,
-                transform: `rotate(180deg)`
+                fontSize: 32
               }}
             />
           }

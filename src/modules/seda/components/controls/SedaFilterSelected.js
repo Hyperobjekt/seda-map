@@ -11,7 +11,6 @@ import {
   getRegionFromFeatureId,
   getRegionLabel
 } from '../../../../shared/selectors'
-import CloseIcon from '@material-ui/icons/Close'
 import AddIcon from '@material-ui/icons/Add'
 import { getLang } from '../../../../shared/selectors/lang'
 import {
@@ -22,6 +21,7 @@ import {
   IconButton
 } from '@material-ui/core'
 import useUiStore from '../../hooks/useUiStore'
+import CloseIcon from '../../../icons/components/CloseIcon'
 
 const listItemStyle = { paddingLeft: 44, paddingRight: 24 }
 

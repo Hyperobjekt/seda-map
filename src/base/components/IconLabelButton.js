@@ -36,7 +36,8 @@ const useStyles = makeStyles(theme => ({
     display: 'block',
     margin: 0,
     height: theme.spacing(4),
-    '& > svg.MuiSvgIcon-root': { fontSize: theme.spacing(4) }
+    '& > svg.MuiSvgIcon-root': { fontSize: theme.spacing(4) },
+    '& > svg.icon': { fontSize: theme.spacing(4) }
   },
   activeIcon: {
     color: theme.palette.primary.main,

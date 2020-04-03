@@ -16,7 +16,10 @@ const useStyles = makeStyles(theme => ({
     whiteSpace: 'nowrap'
   },
   active: {
-    color: theme.palette.primary.main
+    color: theme.palette.primary.main,
+    '& .icon .filled': {
+      opacity: 1
+    }
   }
 }))
 

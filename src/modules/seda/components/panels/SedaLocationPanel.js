@@ -8,7 +8,6 @@ import {
   SidePanelBody
 } from '../../../../base/components/Panels/SidePanel'
 import useDataOptions from '../../hooks/useDataOptions'
-import CloseIcon from '@material-ui/icons/Close'
 import LocationTable from './LocationPanel/LocationTable'
 import { getStateName } from '../../../../shared/selectors/states'
 import {
@@ -17,6 +16,7 @@ import {
   getGaps
 } from '../../../../shared/selectors'
 import LocationName from '../base/LocationName'
+import { CloseIcon } from '../../../icons'
 
 const colors = getSelectedColors()
 

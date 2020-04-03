@@ -13,9 +13,9 @@ import {
 } from '../../../../base/components/Panels/SidePanel'
 import useUiStore from '../../hooks/useUiStore'
 import { getPrefixLang } from '../../../../shared/selectors/lang'
-import CloseIcon from '@material-ui/icons/Close'
 import SedaFilterStateSelect from '../controls/SedaFilterStateSelect'
 import SedaFilterLargestSelect from '../controls/SedaFilterLargestSelect'
+import CloseIcon from '../../../icons/components/CloseIcon'
 
 const useStyles = makeStyles(theme => ({
   root: {

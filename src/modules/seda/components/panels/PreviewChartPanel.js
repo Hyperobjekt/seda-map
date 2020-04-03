@@ -6,8 +6,8 @@ import { makeStyles, Typography } from '@material-ui/core'
 import { getPreviewChartTitle } from '../../../../shared/selectors/lang'
 import useDataOptions from '../../hooks/useDataOptions'
 import useUiStore from '../../hooks/useUiStore'
-import CloseIcon from '@material-ui/icons/Close'
-import ExpandIcon from '@material-ui/icons/ExpandMore'
+import CloseIcon from '../../../icons/components/CloseIcon'
+import { ExpandIcon } from '../../../icons'
 const useStyles = makeStyles(theme => ({
   root: {
     boxShadow: props =>

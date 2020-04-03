@@ -19,9 +19,9 @@ import SedaRegionSelect from '../controls/SedaRegionSelect'
 
 import SedaLocationSelect from '../controls/SedaLocationSelect'
 import { getPrefixLang } from '../../../../shared/selectors/lang'
-import CloseIcon from '@material-ui/icons/Close'
 import SearchInput from '../../../../base/components/SearchInput'
 import SedaFilterSelect from '../controls/SedaFilterSelected'
+import { CloseIcon } from '../../../icons'
 
 const useStyles = makeStyles(theme => ({
   root: {

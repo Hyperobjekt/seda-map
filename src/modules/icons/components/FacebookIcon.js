@@ -1,17 +1,16 @@
 import React from 'react'
-import PropTypes from 'prop-types';
-import SvgIcon from '@material-ui/core/SvgIcon';
+import PropTypes from 'prop-types'
+import SvgIcon from '@material-ui/core/SvgIcon'
 
-const FacebookIcon = ({classes, ...props}) => {
+const FacebookIcon = ({ classes, ...props }) => {
   return (
-    <SvgIcon 
-      classes={{ 
+    <SvgIcon
+      classes={{
         root: 'svg-icon--facebook',
         ...classes
-      }} 
-      {...props}
-    >
-      <path d="M22.676 0H1.324C.593 0 0 .593 0 1.324v21.352C0 23.408.593 24 1.324 24h11.494v-9.294H9.689v-3.621h3.129V8.41c0-3.099 1.894-4.785 4.659-4.785 1.325 0 2.464.097 2.796.141v3.24h-1.921c-1.5 0-1.792.721-1.792 1.771v2.311h3.584l-.465 3.63H16.56V24h6.115c.733 0 1.325-.592 1.325-1.324V1.324C24 .593 23.408 0 22.676 0"/>
+      }}
+      {...props}>
+      <path d="M16.25 5H14C13.0054 5 12.0516 5.39509 11.3483 6.09835C10.6451 6.80161 10.25 7.75544 10.25 8.75V11H8V14H10.25V20H13.25V14H15.5L16.25 11H13.25V8.75C13.25 8.55109 13.329 8.36032 13.4697 8.21967C13.6103 8.07902 13.8011 8 14 8H16.25V5Z" />
     </SvgIcon>
   )
 }

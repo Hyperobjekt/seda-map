@@ -17,7 +17,6 @@ import {
 import useUiStore from '../../hooks/useUiStore'
 import useDataOptions from '../../hooks/useDataOptions'
 import clsx from 'clsx'
-import MenuOpen from '@material-ui/icons/MenuOpen'
 import SedaSelectionButton from '../controls/SedaSelectionButton'
 import {
   getLang,
@@ -25,6 +24,7 @@ import {
 } from '../../../../shared/selectors/lang'
 import PreviewChartPanel from './PreviewChartPanel'
 import { getFilterCount } from '../../../../shared/selectors/data'
+import { SidebarCloseIcon } from '../../../icons'
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -77,7 +77,7 @@ const FullPanel = props => {
           title={getLang('TOOLTIP_HINT_HIDE')}
           placement="right">
           <IconButton onClick={toggleCondensed}>
-            <MenuOpen />
+            <SidebarCloseIcon />
           </IconButton>
         </Tooltip>
       </SidePanelHeader>

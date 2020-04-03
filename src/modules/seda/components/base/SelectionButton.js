@@ -8,8 +8,8 @@ import {
   ListItemSecondaryAction
 } from '@material-ui/core'
 
-import ChevronRight from '@material-ui/icons/ChevronRight'
 import clsx from 'clsx'
+import { RightIcon } from '../../../icons'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -36,6 +36,8 @@ const useStyles = makeStyles(theme => ({
   },
   secondaryAction: {
     pointerEvents: 'none',
+    fontSize: 24,
+    right: theme.spacing(3),
     '& .MuiSvgIcon-root': {
       color: props =>
         props.active
@@ -51,7 +53,7 @@ const SelectionButton = ({
   icon,
   primary,
   secondary,
-  secondaryIcon = <ChevronRight />,
+  secondaryIcon = <RightIcon />,
   SecondaryActionProps = {},
   TextProps = {},
   classes: overrides = {},
