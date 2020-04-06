@@ -1,5 +1,4 @@
 import React from 'react'
-import useUiStore from '../../hooks/useUiStore'
 import {
   makeStyles,
   ButtonGroup,
@@ -9,6 +8,7 @@ import { useTheme } from '@material-ui/core/styles'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import clsx from 'clsx'
 import { MapIcon, ChartIcon, SplitIcon } from '../../../icons'
+import { useActiveView } from '../../hooks'
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -31,8 +31,7 @@ const buttons = [
 
 const SedaViewControls = ({ classes: overrides, ...props }) => {
   const classes = useStyles()
-  const view = useUiStore(state => state.view)
-  const setView = useUiStore(state => state.setView)
+  const [view, setView] = useActiveView()
   const theme = useTheme()
   const isLargeViewport = useMediaQuery(
     theme.breakpoints.up('md')

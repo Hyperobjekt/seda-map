@@ -32,7 +32,8 @@ const SidePanelHeader = ({
         'panel__header',
         classes.root,
         overrides.root
-      )}>
+      )}
+      {...props}>
       {children}
     </div>
   )

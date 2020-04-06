@@ -15,6 +15,7 @@ import {
 } from './demographics'
 import { getMetrics } from './metrics'
 import { getMidpointForVarName } from './data'
+import { getStateName } from './states'
 
 const isStringMatch = (s1, s2) =>
   s1 &&
@@ -456,7 +457,11 @@ export const getPreviewChartTitle = (xVar, yVar) => {
   )
 }
 
-export const getFiltersLang = (filters, region, idToName) => {
+export const getFiltersLang = (
+  filters,
+  region,
+  idToName = getStateName
+) => {
   const labels = []
   if (filters.prefix) {
     labels.push('Only ' + idToName(filters.prefix))

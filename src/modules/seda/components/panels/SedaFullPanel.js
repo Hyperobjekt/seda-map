@@ -3,9 +3,7 @@ import PropTypes from 'prop-types'
 import {
   Typography,
   makeStyles,
-  Button,
   IconButton,
-  useTheme,
   Tooltip
 } from '@material-ui/core'
 import {
@@ -14,17 +12,26 @@ import {
   SidePanelBody,
   SidePanelFooter
 } from '../../../../base/components/Panels'
-import useUiStore from '../../hooks/useUiStore'
-import useDataOptions from '../../hooks/useDataOptions'
 import clsx from 'clsx'
 import SedaSelectionButton from '../controls/SedaSelectionButton'
 import {
   getLang,
-  getLangWithSingleOrNone
+  getLangWithSingleOrNone,
+  getMetricLabel,
+  getRegionLabel,
+  getPrefixLang
 } from '../../../../shared/selectors/lang'
-import PreviewChartPanel from './PreviewChartPanel'
-import { getFilterCount } from '../../../../shared/selectors/data'
+import PreviewChartPanel from './SedaPreviewChartPanel'
 import { SidebarCloseIcon } from '../../../icons'
+import {
+  useCondensed,
+  useActiveSelection,
+  useLocationCount,
+  useChartVisible,
+  useActiveView,
+  useActiveOptionIds,
+  useActiveFilterLang
+} from '../../hooks'
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -34,7 +41,7 @@ const useStyles = makeStyles(theme => ({
     padding: '4px 0'
   },
   footerPanel: {
-    transition: 'transform 0.4s ease-in-out 0.2s',
+    transition: 'transform 0.3s ease-in-out',
     transformOrigin: 'left bottom'
   },
   footerCondensed: {
@@ -42,30 +49,26 @@ const useStyles = makeStyles(theme => ({
     left: 0,
     bottom: 0,
     transform: `translate(calc(100% + ${theme.app
-      .condensedPanelWidth + theme.spacing(3)}px), -24px)`
+      .condensedPanelWidth + theme.spacing(6)}px), -24px)`
   },
   footerCondensedHide: {
-    transform: 'scale(0.0001)'
+    position: 'absolute',
+    left: 0,
+    bottom: 0,
+    transform: `translate(calc(100% + ${theme.app
+      .condensedPanelWidth + theme.spacing(6)}px), 100%)`
   }
 }))
 
-const FullPanel = props => {
+const SedaFullPanel = props => {
   const classes = useStyles()
-  const view = useUiStore(state => state.view)
-  const condensed = useUiStore(state => state.condensed)
-  const toggleCondensed = useUiStore(
-    state => state.toggleCondensed
-  )
-  const locations = useDataOptions(state => state.locations)
-  const metric = useDataOptions(state => state.metric)
-  const region = useDataOptions(state => state.region)
-  const filters = useDataOptions(state => state.filters)
-  const selection = useUiStore(state => state.selection)
-  const demographic = useDataOptions(state => state.demographic)
-  const showChart = useUiStore(state => state.showChart)
-  const getActiveFiltersLang = useDataOptions(
-    state => state.getActiveFiltersLang
-  )
+  const [view] = useActiveView()
+  const [condensed, toggleCondensed] = useCondensed()
+  const [metricId, demId, regionId] = useActiveOptionIds()
+  const [selection] = useActiveSelection()
+  const [showChart] = useChartVisible()
+  const locationCount = useLocationCount()
+  const filterLabel = useActiveFilterLang()
   return (
     <SidePanel {...props}>
       <SidePanelHeader sticky>
@@ -85,48 +88,51 @@ const FullPanel = props => {
         <SedaSelectionButton
           active={selection === 'metric'}
           selectionId="metric"
-          value={metric.label}
+          value={getMetricLabel(metricId)}
         />
         <SedaSelectionButton
           active={selection === 'region'}
           selectionId="region"
-          value={region.label}
+          value={getRegionLabel(regionId)}
         />
         <SedaSelectionButton
           active={selection === 'demographic'}
           selectionId="demographic"
-          value={getLang('LABEL_STUDENTS_' + demographic.id)}
+          value={getPrefixLang(demId, 'LABEL_STUDENTS')}
         />
         <SedaSelectionButton
           active={selection === 'filter'}
           selectionId="filter"
-          value={getActiveFiltersLang()}
+          value={filterLabel}
         />
         <SedaSelectionButton
           active={selection === 'location'}
           selectionId="location"
           value={getLangWithSingleOrNone(
-            locations.length,
+            locationCount,
             'PANEL_LOCATION'
           )}
         />
       </SidePanelBody>
-      {view === 'map' && (
-        <SidePanelFooter sticky>
-          <PreviewChartPanel
-            className={clsx(classes.footerPanel, {
-              [classes.footerCondensed]:
-                condensed && showChart && view === 'map',
-              [classes.footerCondensedHide]:
-                condensed && !showChart && view === 'map'
-            })}
-          />
-        </SidePanelFooter>
-      )}
+      <SidePanelFooter
+        sticky
+        style={{
+          transition: `height 0.2s ease-in-out`,
+          height: view === 'map' ? (showChart ? 264 : 48) : 0
+        }}>
+        <PreviewChartPanel
+          className={clsx(classes.footerPanel, {
+            [classes.footerCondensed]:
+              condensed && showChart && view === 'map',
+            [classes.footerCondensedHide]:
+              condensed && !showChart && view === 'map'
+          })}
+        />
+      </SidePanelFooter>
     </SidePanel>
   )
 }
 
-FullPanel.propTypes = {}
+SedaFullPanel.propTypes = {}
 
-export default FullPanel
+export default SedaFullPanel

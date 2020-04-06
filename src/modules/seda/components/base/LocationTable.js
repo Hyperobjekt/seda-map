@@ -11,19 +11,19 @@ import {
   Tooltip,
   Button
 } from '@material-ui/core'
-import { MetricIcon } from '../../../../icons'
+import { MetricIcon } from '../../../icons'
 import {
   getDemographicLabel,
   getFormatterForVarName,
   getMetricLabel,
   isGapDemographic
-} from '../../../../../shared/selectors'
-import MetricValue from '../../../../../base/components/MetricValue'
+} from '../../../../shared/selectors'
+import MetricValue from '../../../../base/components/MetricValue'
 import clsx from 'clsx'
 import {
   getDescriptionForVarName,
   getLang
-} from '../../../../../shared/selectors/lang'
+} from '../../../../shared/selectors/lang'
 
 const useTooltipStyles = makeStyles(theme => ({
   root: {
@@ -101,7 +101,7 @@ const useStyles = makeStyles(theme => ({
 
 const TableHeaderButton = ({ metricId, tooltip, ...props }) => {
   const button = (
-    <IconButton square {...props}>
+    <IconButton {...props}>
       <MetricIcon metricId={metricId} />
     </IconButton>
   )
@@ -192,6 +192,7 @@ const LocationTable = ({
               </TableCell>
               {metrics.map(m => (
                 <TableCell
+                  key={`cell${m}`}
                   align="center"
                   className={clsx(classes.numberCell, {
                     [classes.activeCell]:

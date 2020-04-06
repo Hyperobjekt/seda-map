@@ -131,7 +131,7 @@ const MetricValue = ({
 }
 
 MetricValue.propTypes = {
-  value: PropTypes.number.isRequired
+  value: PropTypes.number
 }
 
 export default MetricValue

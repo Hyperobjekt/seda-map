@@ -1,15 +1,7 @@
-import React, { useCallback, useState, useRef } from 'react'
-import PropTypes from 'prop-types'
+import React, { useCallback, useRef } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import {
-  getScatterplotVars,
-  isVersusFromVarNames
-} from '../../../../shared/selectors'
-import * as _debounce from 'lodash.debounce'
-import { getStateFipsFromAbbr } from '../../../../shared/selectors/states'
-import Scatterplot from '../../../scatterplot/components/AltScatterplot'
-import useDataOptions from '../../hooks/useDataOptions'
-import useUiStore from '../../hooks/useUiStore'
+import { isVersusFromVarNames } from '../../../../shared/selectors'
+import ScatterplotBase from './SedaScatterplotBase'
 import clsx from 'clsx'
 import BookEnds from '../../../../base/components/BookEnds'
 import ArrowLeft from '@material-ui/icons/ArrowLeft'
@@ -21,6 +13,13 @@ import {
 } from '../../../../shared/selectors/lang'
 import { Typography } from '@material-ui/core'
 import SedaLocationMarkers from './SedaLocationMarkers'
+import {
+  useHovered,
+  useScatterplotVars,
+  useRegion,
+  useFilters,
+  useAddLocationById
+} from '../../hooks'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -71,15 +70,11 @@ const SedaScatterplot = () => {
   const timeoutRef = useRef(null)
 
   // pull required data from store
-  const region = useDataOptions(state => state.region)
-  const { xVar, yVar, zVar } = useDataOptions(state =>
-    state.getScatterplotVars()
-  )
-  const highlightedState = null
-  const setHovered = useUiStore(state => state.setHovered)
-  const addLocationFromId = useDataOptions(
-    state => state.addLocationFromId
-  )
+  const [region] = useRegion()
+  const [filters] = useFilters()
+  const [xVar, yVar, zVar] = useScatterplotVars()
+  const [, setHovered] = useHovered()
+  const addLocationFromId = useAddLocationById()
 
   // handle hover events
   const handleHover = useCallback(
@@ -113,10 +108,9 @@ const SedaScatterplot = () => {
     e => {
       // grab data from event
       const id = getLocatonIdFromEvent(e)
-      console.log(id, e)
       addLocationFromId(id)
     },
-    [addLocationFromId]
+    [useAddLocationById]
   )
 
   // handle errors loading data
@@ -127,16 +121,16 @@ const SedaScatterplot = () => {
   const [startLabelY, endLabelY] = getEndLabels(yVar)
   const classes = useStyles()
   return (
-    <Scatterplot
+    <ScatterplotBase
       xVar={xVar}
       yVar={yVar}
       zVar={zVar}
+      filters={filters}
       className={clsx(classes.root, {
         'scatterplot--versus': isVersus
       })}
-      region={region.id}
+      region={region}
       variant="map"
-      highlightedState={getStateFipsFromAbbr(highlightedState)}
       onHover={handleHover}
       onClick={handleClick}
       onError={handleError}>
@@ -156,7 +150,7 @@ const SedaScatterplot = () => {
           variant="body1"
           style={{ textTransform: 'capitalize' }}>
           {getLabelForVarName(xVar, {
-            region: getRegionLabel(region.id)
+            region: getRegionLabel(region)
           })}
         </Typography>
       </BookEnds>
@@ -177,11 +171,11 @@ const SedaScatterplot = () => {
           style={{ textTransform: 'capitalize' }}
           variant="body1">
           {getLabelForVarName(yVar, {
-            region: getRegionLabel(region.id)
+            region: getRegionLabel(region)
           })}
         </Typography>
       </BookEnds>
-    </Scatterplot>
+    </ScatterplotBase>
   )
 }
 

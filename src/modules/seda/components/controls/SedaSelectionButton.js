@@ -8,15 +8,14 @@ import {
   LocationsIcon
 } from '../../../icons'
 import { getPrefixLang } from '../../../../shared/selectors/lang'
-import useUiStore from '../../hooks/useUiStore'
-import useDataOptions from '../../hooks/useDataOptions'
 import SelectionButton from '../base/SelectionButton'
+import { useActiveSelection, useMetric } from '../../hooks'
 
 const SelectionIcon = ({ selectionId }) => {
-  const metric = useDataOptions(state => state.metric)
+  const [metric] = useMetric()
   switch (selectionId) {
     case 'metric':
-      return <MetricIcon metricId={metric.id} />
+      return <MetricIcon metricId={metric} />
     case 'demographic':
       return <SubgroupsIcon />
     case 'region':
@@ -36,8 +35,7 @@ const SedaSelectionButton = ({
   ...props
 }) => {
   const label = getPrefixLang(selectionId, 'PANEL_TITLE')
-  const selection = useUiStore(state => state.selection)
-  const setSelection = useUiStore(state => state.setSelection)
+  const [, setSelection] = useActiveSelection()
   return (
     <SelectionButton
       primary={label}
@@ -49,6 +47,11 @@ const SedaSelectionButton = ({
   )
 }
 
-SedaSelectionButton.propTypes = {}
+SedaSelectionButton.propTypes = {
+  /** identifier for what type of selection the button is for */
+  selectionId: PropTypes.string,
+  /** current value of the selection */
+  value: PropTypes.string
+}
 
 export default SedaSelectionButton

@@ -1,14 +1,12 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { makeStyles, IconButton } from '@material-ui/core'
+import { IconButton } from '@material-ui/core'
 
 import {
   SidePanel,
   SidePanelHeader,
   SidePanelBody
 } from '../../../../base/components/Panels/SidePanel'
-import useDataOptions from '../../hooks/useDataOptions'
-import LocationTable from './LocationPanel/LocationTable'
+import { LocationTable } from '../base'
 import { getStateName } from '../../../../shared/selectors/states'
 import {
   getSelectedColors,
@@ -17,32 +15,24 @@ import {
 } from '../../../../shared/selectors'
 import LocationName from '../base/LocationName'
 import { CloseIcon } from '../../../icons'
+import {
+  useActiveLocationData,
+  useMetric,
+  useDemographic,
+  useActiveLocation
+} from '../../hooks'
 
 const colors = getSelectedColors()
 
-const useStyles = makeStyles(theme => ({
-  root: {},
-  title: theme.typography.panelHeading
-}))
-
 const SedaLocationPanel = props => {
-  const classes = useStyles()
-  const getActiveLocation = useDataOptions(
-    state => state.getActiveLocation
-  )
-  const data = getActiveLocation()
-  const setActiveLocation = useDataOptions(
-    state => state.setActiveLocation
-  )
+  const data = useActiveLocationData()
+  const [, setActiveLocation] = useActiveLocation()
+  const [metric, setMetric] = useMetric()
+  const [demographic, setDemographic] = useDemographic()
+
   const metrics = ['avg', 'grd', 'coh']
-  const metricId = useDataOptions(state => state.metric.id)
-  const demId = useDataOptions(state => state.demographic.id)
   const demographics = getDemographics().map(d => d.id)
   const gaps = getGaps().map(d => d.id)
-  const setMetric = useDataOptions(state => state.setMetric)
-  const setDemographic = useDataOptions(
-    state => state.setDemographic
-  )
 
   const handleMetricSelect = e => {
     setMetric(e.currentTarget.value)
@@ -71,8 +61,8 @@ const SedaLocationPanel = props => {
           label={'Subgroups'}
           metrics={metrics}
           demographics={demographics}
-          activeMetric={metricId}
-          activeDemographic={demId}
+          activeMetric={metric}
+          activeDemographic={demographic}
           labelPrefix="LABEL_STUDENTS"
           onMetricSelect={handleMetricSelect}
           onDemographicSelect={handleDemographicSelect}
@@ -82,8 +72,8 @@ const SedaLocationPanel = props => {
           label={'Gaps'}
           metrics={metrics}
           demographics={gaps}
-          activeMetric={metricId}
-          activeDemographic={demId}
+          activeMetric={metric}
+          activeDemographic={demographic}
           onMetricSelect={handleMetricSelect}
           onDemographicSelect={handleDemographicSelect}
         />
@@ -91,7 +81,5 @@ const SedaLocationPanel = props => {
     </SidePanel>
   )
 }
-
-SedaLocationPanel.propTypes = {}
 
 export default SedaLocationPanel

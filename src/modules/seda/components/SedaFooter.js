@@ -3,14 +3,20 @@ import PropTypes from 'prop-types'
 import Footer from '../../../base/components/Footer'
 import { Button, makeStyles } from '@material-ui/core'
 import { getLang } from '../../../shared/selectors/lang'
-import { FacebookIcon, TwitterIcon } from '../../icons'
-import LinkIcon from '@material-ui/icons/Link'
-import CodeIcon from '@material-ui/icons/Code'
+import {
+  FacebookIcon,
+  TwitterIcon,
+  EmbedIcon,
+  LinkIcon
+} from '../../icons'
 import StanfordLogo from './StanfordLogo'
 import Tooltip from '@material-ui/core/Tooltip'
 import { onTwitterShare, onFacebookShare } from './share'
 import clsx from 'clsx'
-import useUiStore from '../hooks/useUiStore'
+import {
+  useLinkDialogVisibility,
+  useEmbedDialogVisibility
+} from '../hooks'
 
 const links = {
   id: 'share',
@@ -19,12 +25,12 @@ const links = {
     {
       id: 'facebook',
       label: getLang('FOOTER_SHARE_FACEBOOK'),
-      icon: <FacebookIcon style={{ fontSize: 16 }} />
+      icon: <FacebookIcon />
     },
     {
       id: 'twitter',
       label: getLang('FOOTER_SHARE_TWITTER'),
-      icon: <TwitterIcon style={{ fontSize: 16 }} />
+      icon: <TwitterIcon />
     },
     {
       id: 'link',
@@ -34,7 +40,7 @@ const links = {
     {
       id: 'embed',
       label: getLang('FOOTER_EMBED_LINK'),
-      icon: <CodeIcon />
+      icon: <EmbedIcon />
     }
   ]
 }
@@ -108,13 +114,8 @@ const useStyles = makeStyles(theme => ({
 const SedaFooter = () => {
   const shareUrl = window.location.href
 
-  const toggleLinkDialog = useUiStore(
-    state => state.toggleLinkDialog
-  )
-  const toggleEmbedDialog = useUiStore(
-    state => state.toggleEmbedDialog
-  )
-
+  const [, toggleLinkDialog] = useLinkDialogVisibility()
+  const [, toggleEmbedDialog] = useEmbedDialogVisibility()
   const classes = useStyles()
 
   const handleClick = item => {

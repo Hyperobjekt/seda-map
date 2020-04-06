@@ -1,10 +1,7 @@
-import React, { useCallback, useState, useRef } from 'react'
-import PropTypes from 'prop-types'
+import React, { useMemo } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { isVersusFromVarNames } from '../../../../shared/selectors'
-import { getStateFipsFromAbbr } from '../../../../shared/selectors/states'
-import Scatterplot from '../../../scatterplot/components/AltScatterplot'
-import useDataOptions from '../../hooks/useDataOptions'
+import ScatterplotBase from './SedaScatterplotBase'
 import clsx from 'clsx'
 import SedaLocationMarkers from './SedaLocationMarkers'
 import BookEnds from '../../../../base/components/BookEnds'
@@ -13,6 +10,11 @@ import {
   getLabelForVarName,
   getRegionLabel
 } from '../../../../shared/selectors/lang'
+import {
+  useRegion,
+  useScatterplotVars,
+  useFilters
+} from '../../hooks'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -49,26 +51,25 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const SedaScatterplotPreview = () => {
+const SedaScatterplotPreview = props => {
   // pull required data from store
-  const region = useDataOptions(state => state.region)
-  const { xVar, yVar, zVar } = useDataOptions(state =>
-    state.getScatterplotVars()
-  )
-  const highlightedState = null
+  const [region] = useRegion()
+  const [filters] = useFilters()
+  const [xVar, yVar, zVar] = useScatterplotVars()
   const isVersus = isVersusFromVarNames(xVar, yVar)
   const classes = useStyles()
   return (
-    <Scatterplot
+    <ScatterplotBase
       xVar={xVar}
       yVar={yVar}
       zVar={zVar}
       className={clsx(classes.root, {
         'scatterplot--versus': isVersus
       })}
-      region={region.id}
+      region={region}
+      filters={filters}
       variant="preview"
-      highlightedState={getStateFipsFromAbbr(highlightedState)}>
+      {...props}>
       <SedaLocationMarkers className={classes.markers} />
       <BookEnds
         style={{
@@ -94,7 +95,7 @@ const SedaScatterplotPreview = () => {
           }}
           variant="body1">
           {getLabelForVarName(yVar, {
-            region: getRegionLabel(region.id)
+            region: getRegionLabel(region)
           })}
         </Typography>
       </BookEnds>
@@ -117,11 +118,11 @@ const SedaScatterplotPreview = () => {
           }}
           variant="body1">
           {getLabelForVarName(xVar, {
-            region: getRegionLabel(region.id)
+            region: getRegionLabel(region)
           })}
         </Typography>
       </BookEnds>
-    </Scatterplot>
+    </ScatterplotBase>
   )
 }
 

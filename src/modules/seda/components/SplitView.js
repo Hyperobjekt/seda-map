@@ -1,11 +1,10 @@
 import React, { useRef, useState } from 'react'
-import { useTheme, makeStyles } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core'
 import SedaMap from './SedaMap'
 import { Scatterplot } from './scatterplot'
 import clsx from 'clsx'
 import { useSpring, animated } from 'react-spring'
 import { useDrag } from 'react-use-gesture'
-import SedaMapLegend from './SedaMapLegend'
 
 const getSplitRatio = (containerRef, dividerRef) => {
   const containerEl = containerRef.current

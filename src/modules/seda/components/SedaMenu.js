@@ -1,9 +1,9 @@
-import React from "react";
-import PropTypes from "prop-types";
-import useUiStore from "../hooks/useUiStore";
-import useSiteStore from "../hooks/useSiteStore";
-import { makeStyles, Button, useTheme, Drawer } from "@material-ui/core";
-import LinkCollection from "../../../base/components/LinkCollection";
+import React from 'react'
+import PropTypes from 'prop-types'
+import useSiteStore from '../hooks/useSiteStore'
+import { makeStyles, Button, Drawer } from '@material-ui/core'
+import LinkCollection from '../../../base/components/LinkCollection'
+import { useMenuVisibility } from '../hooks'
 
 const useStyles = makeStyles(theme => ({
   root: { width: theme.app.panelWidth },
@@ -14,20 +14,18 @@ const useStyles = makeStyles(theme => ({
   linkRoot: {},
   linkItem: {},
   link: {}
-}));
+}))
 
 const SedaMenu = ({ ...props }) => {
-  const classes = useStyles();
-  const links = useSiteStore(state => state.menu);
-  const showMenu = useUiStore(state => state.showMenu);
-  const toggleMenu = useUiStore(state => state.toggleMenu);
+  const classes = useStyles()
+  const links = useSiteStore(state => state.menu)
+  const [showMenu, toggleMenu] = useMenuVisibility()
   return (
     <Drawer
       open={showMenu}
       anchor="right"
       classes={{ root: classes.root, paper: classes.panelPaper }}
-      {...props}
-    >
+      {...props}>
       <div className={classes.header}>
         <Button onClick={toggleMenu}>Close</Button>
       </div>
@@ -40,9 +38,9 @@ const SedaMenu = ({ ...props }) => {
         links={links}
       />
     </Drawer>
-  );
-};
+  )
+}
 
-SedaMenu.propTypes = {};
+SedaMenu.propTypes = {}
 
-export default SedaMenu;
+export default SedaMenu

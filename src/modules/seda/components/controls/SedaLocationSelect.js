@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
-import useDataOptions from '../../hooks/useDataOptions'
 import SearchInput from '../../../../base/components/SearchInput'
 import {
   Typography,
@@ -23,7 +22,13 @@ import LocationName from '../base/LocationName'
 import { getLocationsByRegion } from '../../../../shared/selectors/regions'
 import { getLang } from '../../../../shared/selectors/lang'
 import { CloseIcon } from '../../../icons'
-import useUiStore from '../../hooks/useUiStore'
+import {
+  useActiveLocation,
+  useHovered,
+  useRegion,
+  useLocations,
+  useRemoveLocation
+} from '../../hooks'
 
 const colors = getSelectedColors()
 
@@ -112,16 +117,11 @@ const LocationList = ({
 }
 
 const SedaLocationSelect = ({ onSelect }) => {
-  const activeRegion = useDataOptions(state => state.region.id)
-  const locations = useDataOptions(state => state.locations)
-  const setActiveLocation = useDataOptions(
-    state => state.setActiveLocation
-  )
-  const removeLocation = useDataOptions(
-    state => state.removeLocation
-  )
-  const setRegion = useDataOptions(state => state.setRegion)
-  const setHovered = useUiStore(state => state.setHovered)
+  const removeLocation = useRemoveLocation()
+  const [activeRegion, setRegion] = useRegion()
+  const [locations, setLocations] = useLocations()
+  const [, setActiveLocation] = useActiveLocation()
+  const [, setHovered] = useHovered()
   const locationsByRegion = getLocationsByRegion(locations)
   const inactiveRegions = getRegions()
     .map(r => r.id)
@@ -186,6 +186,8 @@ const SedaLocationSelect = ({ onSelect }) => {
   )
 }
 
-SedaLocationSelect.propTypes = {}
+SedaLocationSelect.propTypes = {
+  onSelect: PropTypes.func
+}
 
 export default SedaLocationSelect

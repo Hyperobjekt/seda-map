@@ -16,12 +16,16 @@ import {
 } from '../../../shared/selectors'
 import { getStateName } from '../../../shared/selectors/states'
 import { Typography, makeStyles } from '@material-ui/core'
-import useUiStore from '../hooks/useUiStore'
 import clsx from 'clsx'
 import Tooltip from '../../../base/components/Tooltip'
-import debug from 'debug'
-import useDataOptions from '../hooks/useDataOptions'
 import MetricValue from '../../../base/components/MetricValue'
+import {
+  useDataForId,
+  useScatterplotVars,
+  useTooltipCoords,
+  useTooltipVisibility,
+  useHovered
+} from '../hooks'
 
 const useStatStyles = makeStyles(theme => ({
   root: {
@@ -83,31 +87,24 @@ const StatDetailed = ({ varName, value }) => {
   )
 }
 
-debug.enable('Tooltip')
-const log = debug('Tooltip')
-
 const useStyles = makeStyles(theme => ({
   hint: theme.mixins.hint
 }))
 
 const SedaTooltip = props => {
-  const hoveredId = useUiStore(state => state.hovered)
-  const showTooltip = useUiStore(state => state.showTooltip)
-  const region = getRegionFromFeatureId(hoveredId)
-  const [x, y] = useUiStore(state => state.coords)
-  const { xVar, yVar } = useDataOptions(state =>
-    state.getScatterplotVars()
-  )
-  const data = useDataOptions(state =>
-    state.getDataForId(hoveredId)
-  )
+  const [hoveredId] = useHovered()
+  const [showTooltip] = useTooltipVisibility()
+  const [[x, y]] = useTooltipCoords()
+  const [xVar, yVar] = useScatterplotVars()
+  const data = useDataForId(hoveredId)
 
+  const region = getRegionFromFeatureId(hoveredId)
   const isVersus = isVersusFromVarNames(xVar, yVar)
   const demographic = getDemographicForVarNames(xVar, yVar)
   const descriptionVars = isVersus
     ? [demographic + '_' + xVar.split('_')[1]]
     : [yVar, xVar]
-  const stateName = data.id ? getStateName(data.id) : ''
+  const stateName = data && data.id ? getStateName(data.id) : ''
 
   // add var to feature if missing
   if (isVersus && !data[descriptionVars[0]]) {
@@ -116,7 +113,7 @@ const SedaTooltip = props => {
 
   const classes = useStyles()
 
-  return (
+  return data ? (
     <Tooltip
       title={data.name}
       subtitle={stateName}
@@ -131,7 +128,7 @@ const SedaTooltip = props => {
         })}
       </Typography>
     </Tooltip>
-  )
+  ) : null
 }
 
 SedaTooltip.propTypes = {}

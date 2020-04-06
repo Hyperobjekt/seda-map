@@ -1,5 +1,14 @@
-export { default as CondensedPanel } from './CondensedPanel'
-export { default as FullPanel } from './FullPanel'
-export { default as HelpPanel } from './HelpPanel'
-export { default as LocationPanel } from './SedaLocationPanel'
-export { default as SelectionPanel } from './SelectionPanel'
+export {
+  default as SedaCondensedPanel
+} from './SedaCondensedPanel'
+export { default as SedaFullPanel } from './SedaFullPanel'
+export { default as SedaHelpPanel } from './SedaHelpPanel'
+export {
+  default as SedaLocationPanel
+} from './SedaLocationPanel'
+export {
+  default as SedaSelectionPanel
+} from './SedaSelectionPanel'
+export {
+  default as SedaFilterSelection
+} from './SedaFilterSelection'

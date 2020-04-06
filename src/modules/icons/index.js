@@ -5,9 +5,7 @@ export { default as SplitIcon } from './components/SplitIcon'
 export { default as ScoresIcon } from './components/ScoresIcon'
 export { default as RatesIcon } from './components/RatesIcon'
 export { default as TrendsIcon } from './components/TrendsIcon'
-export {
-  default as ActiveMetricIcon
-} from './components/ActiveMetricIcon'
+
 export { default as FilterIcon } from './components/FilterIcon'
 export { default as MetricIcon } from './components/MetricIcon'
 export { default as RegionsIcon } from './components/RegionsIcon'
@@ -37,3 +35,5 @@ export {
   default as CollapseIcon
 } from './components/CollapseIcon'
 export { default as SearchIcon } from './components/SearchIcon'
+export { default as LinkIcon } from './components/LinkIcon'
+export { default as EmbedIcon } from './components/EmbedIcon'

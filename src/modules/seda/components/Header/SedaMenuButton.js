@@ -1,8 +1,7 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { MenuIcon } from '../../../icons'
 import { makeStyles, IconButton } from '@material-ui/core'
-import useUiStore from '../../hooks/useUiStore'
+import { useMenuVisibility } from '../../hooks'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -12,16 +11,16 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const SedaMenuButton = props => {
-  const showMenu = useUiStore(state => state.showMenu)
-  const toggleMenu = useUiStore(state => state.toggleMenu)
+  const [, toggleMenu] = useMenuVisibility()
   const classes = useStyles()
   return (
-    <IconButton className={classes.root} onClick={toggleMenu}>
+    <IconButton
+      className={classes.root}
+      onClick={toggleMenu}
+      {...props}>
       <MenuIcon />
     </IconButton>
   )
 }
-
-SedaMenuButton.propTypes = {}
 
 export default SedaMenuButton

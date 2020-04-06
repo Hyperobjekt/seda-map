@@ -2,7 +2,6 @@ import React, { useMemo, useEffect } from 'react'
 import { FlyToInterpolator } from 'react-map-gl'
 import WebMercatorViewport from 'viewport-mercator-project'
 import * as ease from 'd3-ease'
-import PropTypes from 'prop-types'
 import { NavigationControl } from 'react-map-gl'
 
 import { getLayers } from '../../map/selectors'
@@ -14,14 +13,22 @@ import {
   getFeatureFromArray
 } from '../../../shared/selectors'
 import { getLang } from '../../../shared/selectors/lang'
-import useMapStore from '../hooks/useMapStore'
-import useDataOptions from '../hooks/useDataOptions'
-import useUiStore from '../hooks/useUiStore'
 import { getStateViewportByFips } from '../../../shared/selectors/states'
 import SedaMapLegend from './SedaMapLegend'
 import { makeStyles } from '@material-ui/core'
 import bbox from '@turf/bbox'
 import { ZoomToControl } from '../../map'
+import {
+  useActiveOptionIds,
+  useFilters,
+  useActiveView,
+  useLocations,
+  useHovered,
+  useMarkersVisibility,
+  useMapViewport,
+  useActiveLocation,
+  useAddLocation
+} from '../hooks'
 
 const selectedColors = getSelectedColors()
 
@@ -35,56 +42,35 @@ const useStyles = makeStyles(theme => ({
 
 const SedaMap = props => {
   /** viewport with center lat / lng, zoom, width, height */
-  const viewport = useMapStore(state => state.viewport)
-  /** current region for the map */
-  const region = useDataOptions(state => state.region)
-  /** current metric for the map */
-  const metric = useDataOptions(state => state.metric.id)
-  /** current demographic for the map */
-  const demographic = useDataOptions(
-    state => state.demographic.id
-  )
+  const [viewport, setViewport] = useMapViewport()
+  /** current options for the map */
+  const [metric, demographic, region] = useActiveOptionIds()
   /** currently active data filters */
-  const { prefix, largest } = useDataOptions(
-    state => state.filters
-  )
+  const [{ prefix, largest }] = useFilters()
   /** currently selected location ids */
-  const locations = useDataOptions(state => state.locations)
-  const locationIds = getLocationIdsForRegion(region, locations)
+  const [locations] = useLocations()
   /** current active view (map, chart, or split) */
-  const view = useUiStore(state => state.view)
+  const [view] = useActiveView()
   /** id of the currently hovered location */
-  const hoveredId = useUiStore(state => state.hovered)
+  const [hoveredId, setHovered] = useHovered()
   /** id of the active location */
-  const activeLocationId = useDataOptions(
-    state => state.activeLocation
-  )
-  /** function to get active location */
-  const getActiveFeature = useDataOptions(
-    state => state.getActiveFeature
-  )
+  const [activeLocationId] = useActiveLocation()
   /** boolean determining if the hovered location should show */
-  const showHovered = useUiStore(state => state.showMarkers)
-  /** function for setting the map viewport */
-  const setViewport = useMapStore(state => state.setViewport)
-  /** function for setting the hovered location */
-  const setHovered = useUiStore(state => state.setHovered)
+  const [showHovered] = useMarkersVisibility()
   /** function to add a location to the selected locations */
-  const addLocationFromFeature = useDataOptions(
-    state => state.addLocationFromFeature
-  )
+  const addLocation = useAddLocation()
   /** memoized array of choropleth and dot layers */
   const layers = useMemo(() => {
-    if (!metric || !demographic || !region.id) {
+    if (!metric || !demographic || !region) {
       return []
     }
-    const context = { region: region.id, metric, demographic }
+    const context = { region, metric, demographic }
     return getLayers(context)
   }, [region, metric, demographic])
   /** aria label for screen readers */
   const ariaLabel = getLang('UI_MAP_SR', {
     metric: getLang('LABEL_' + metric),
-    region: getLang('LABEL_' + region.id),
+    region: getLang('LABEL_' + region),
     demographic: getLang('LABEL_STUDENTS_' + demographic)
   })
   /** object with class names for styling the component */
@@ -98,7 +84,7 @@ const SedaMap = props => {
 
   /** handler for map click */
   const handleClick = feature => {
-    addLocationFromFeature(feature)
+    addLocation(feature)
   }
 
   /** handler for map load */
@@ -168,6 +154,8 @@ const SedaMap = props => {
     })
   }, [activeLocationId, locations])
 
+  const locationIds = getLocationIdsForRegion(region, locations)
+
   return (
     <MapBase
       selectedColors={selectedColors}
@@ -175,7 +163,9 @@ const SedaMap = props => {
       viewport={viewport}
       idMap={{}}
       selectedIds={locationIds}
-      hoveredId={showHovered && hoveredId}
+      hoveredId={
+        showHovered && hoveredId ? hoveredId : undefined
+      }
       ariaLabel={ariaLabel}
       onHover={handleHover}
       onLoad={handleLoad}
@@ -195,7 +185,5 @@ const SedaMap = props => {
     </MapBase>
   )
 }
-
-SedaMap.propTypes = {}
 
 export default SedaMap

@@ -1,69 +1,61 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { Page, PageBody } from '../../../base/components/Page'
 import { SedaHeader } from './header'
 import SedaMenu from './SedaMenu'
-import { makeStyles, Button } from '@material-ui/core'
-import {
-  SidePanel,
-  SidePanelGroup
-} from '../../../base/components/Panels/SidePanel'
+import { makeStyles } from '@material-ui/core'
+import { SidePanelGroup } from '../../../base/components/Panels/SidePanel'
 import { SplitView } from './SplitView'
-import useUiStore from '../hooks/useUiStore'
 import {
-  CondensedPanel,
-  SelectionPanel,
-  FullPanel,
-  HelpPanel,
-  LocationPanel
+  SedaCondensedPanel as CondensedPanel,
+  SedaSelectionPanel as SelectionPanel,
+  SedaFullPanel as FullPanel,
+  SedaFilterSelection as FilterSelectionPanel,
+  SedaHelpPanel as HelpPanel,
+  SedaLocationPanel as LocationPanel
 } from './panels'
-import useDataOptions from '../hooks/useDataOptions'
 import SedaTooltip from './SedaTooltip'
 import SedaFooter from './SedaFooter'
-import FilterSelectionPanel from './panels/FilterSelectionPanel'
+import {
+  useHelpVisibility,
+  useActiveLocation,
+  useCondensed,
+  useActiveView,
+  useActiveFilterSelection,
+  useActiveSelection
+} from '../hooks'
+import SedaPreviewChartPanel from './panels/SedaPreviewChartPanel'
+import { Scatterplot } from './scatterplot'
+import SedaScatterplotPreview from './scatterplot/SedaScatterplotPreview'
 
 const drawerWidth = 360
 
 const useStyles = makeStyles(theme => ({
   offset: theme.mixins.toolbar,
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing(3),
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
-    }),
-    marginLeft: -drawerWidth
-  },
-  contentShift: {
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen
-    }),
-    marginLeft: 0
-  },
   body: {
     overflow: 'hidden'
   }
 }))
 
-const SedaLayout = props => {
+const SedaLayout = () => {
   const classes = useStyles()
-  const showHelp = useUiStore(state => state.showHelp)
-  const activeLocation = useDataOptions(
-    state => state.activeLocation
-  )
-  const condensed = useUiStore(state => state.condensed)
-  const toggleCondensed = useUiStore(
-    state => state.toggleCondensed
-  )
-  const filterPanel = useUiStore(state => state.filterPanel)
-  const view = useUiStore(state => state.view)
-  const selection = useUiStore(state => state.selection)
+  const [showHelp] = useHelpVisibility()
+  const [activeLocation] = useActiveLocation()
+  const [condensed] = useCondensed()
+  const [filterPanel] = useActiveFilterSelection()
+  const [view] = useActiveView()
+  const [selection] = useActiveSelection()
 
   // determines the active portion of the split view
   const splitView =
     view === 'chart' ? 'right' : view === 'map' ? 'left' : view
+
+  // boolean that determines when full panel is shown
+  const isFullPanel =
+    !condensed && !selection && !activeLocation && !showHelp
+
+  // boolean that determines if condensed panel is shown
+  const isCondensedPanel =
+    condensed || selection || activeLocation || showHelp
   return (
     <Page>
       <SedaHeader />
@@ -71,26 +63,36 @@ const SedaLayout = props => {
       <SedaMenu />
       <PageBody classes={{ root: classes.body }}>
         <SidePanelGroup condensed={condensed} maxVisible={1}>
-          <HelpPanel open={showHelp} style={{ zIndex: 1001 }}>
+          <HelpPanel
+            className="panel--help"
+            open={showHelp}
+            style={{ zIndex: 1001 }}>
             Help Panel
           </HelpPanel>
           <CondensedPanel
+            className="panel--condensed"
             style={{ zIndex: 1000 }}
+            offset={showHelp ? 1 : 0}
             condensed
-            open={condensed}
+            open={isCondensedPanel}
           />
-
           <FullPanel
+            className="panel--full"
             style={{
-              zIndex: condensed || showHelp ? 998 : 999
+              zIndex: condensed || showHelp ? 998 : 999,
+              width: 384
             }}
-            open={!condensed}
+            offset={showHelp ? 1 : 0}
+            open={isFullPanel}
           />
           <SelectionPanel
+            className="panel--selection"
             style={{ zIndex: 999 }}
+            offset={1}
             open={selection}
           />
           <FilterSelectionPanel
+            className="panel--filter"
             style={{
               zIndex: 999,
               transform: 'translateX(-100%)'
@@ -98,16 +100,10 @@ const SedaLayout = props => {
             open={filterPanel}
           />
           <LocationPanel
+            className="panel--location"
             open={activeLocation}
             style={{
-              zIndex: 1000,
-              transform: (() => {
-                if (condensed && activeLocation && selection)
-                  return 'translateX(-100%)'
-                if (condensed && activeLocation && !selection)
-                  return 'translateX(0)'
-                return 'translateX(-100%)'
-              })()
+              zIndex: 1000
             }}
           />
         </SidePanelGroup>

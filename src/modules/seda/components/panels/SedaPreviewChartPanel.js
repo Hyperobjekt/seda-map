@@ -1,13 +1,15 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { ExpansionPanel } from '../../../../base/components/Panels'
 import { ScatterplotPreview } from '../scatterplot'
 import { makeStyles, Typography } from '@material-ui/core'
 import { getPreviewChartTitle } from '../../../../shared/selectors/lang'
-import useDataOptions from '../../hooks/useDataOptions'
-import useUiStore from '../../hooks/useUiStore'
-import CloseIcon from '../../../icons/components/CloseIcon'
-import { ExpandIcon } from '../../../icons'
+import { ExpandIcon, CloseIcon } from '../../../icons'
+import {
+  useChartVisible,
+  useScatterplotVars,
+  useCondensed
+} from '../../hooks'
+
 const useStyles = makeStyles(theme => ({
   root: {
     boxShadow: props =>
@@ -39,13 +41,14 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const PreviewChartPanel = ({ ...props }) => {
-  const detached = useUiStore(state => state.condensed)
-  const showChart = useUiStore(state => state.showChart)
-  const setShowChart = useUiStore(state => state.setShowChart)
-  const { xVar, yVar } = useDataOptions(state =>
-    state.getScatterplotVars()
-  )
+const SedaPreviewChartPanel = ({ ...props }) => {
+  /** panel is detached if in condensed mode */
+  const [detached] = useCondensed()
+  /** state of preview chart visibility */
+  const [showChart, setShowChart] = useChartVisible()
+  /** scatterplot variables */
+  const [xVar, yVar] = useScatterplotVars()
+  /** object containing class names */
   const classes = useStyles({ detached })
   return (
     <ExpansionPanel
@@ -54,7 +57,6 @@ const PreviewChartPanel = ({ ...props }) => {
       classes={classes}
       title={getPreviewChartTitle(xVar, yVar)}
       onChange={(e, expanded) => {
-        console.log('show chchc', e, expanded)
         setShowChart(expanded)
       }}
       expandIcon={
@@ -101,6 +103,4 @@ const PreviewChartPanel = ({ ...props }) => {
   )
 }
 
-PreviewChartPanel.propTypes = {}
-
-export default PreviewChartPanel
+export default SedaPreviewChartPanel

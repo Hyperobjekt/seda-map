@@ -32,6 +32,14 @@ const [useUiStore] = create(set => ({
   showMenu: false,
   toggleMenu: () =>
     set(state => ({ showMenu: !state.showMenu })),
+  // boolean determining if link dialog is open
+  showLinkDialog: false,
+  toggleLinkDialog: () =>
+    set(state => ({ showLinkDialog: !state.showLinkDialog })),
+  // boolean determining if link dialog is open
+  showEmbedDialog: false,
+  toggleEmbedDialog: () =>
+    set(state => ({ showEmbedDialog: !state.showEmbedDialog })),
   // boolean determining if help is open
   showHelp: false,
   toggleHelp: () =>

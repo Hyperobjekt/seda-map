@@ -1,33 +1,28 @@
-import React, {
-  useMemo,
-  useEffect,
-  useState,
-  useCallback
-} from 'react'
+import React, { useMemo, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import debug from 'debug'
 import ScatterplotBase, {
   fetchScatterplotVars,
   fetchReducedPair
-} from './ScatterplotBase'
-import { theme } from '../echartTheme'
-import { getBaseVars } from '../../../shared/selectors'
-import { getScatterplotOptions } from '../utils'
+} from '../../../scatterplot/components/ScatterplotBase'
+import { theme } from '../../../scatterplot/echartTheme'
+import { getBaseVars } from '../../../../shared/selectors'
+import { getScatterplotOptions } from '../../../scatterplot/utils'
 import {
   getLang,
   getLabelForVarName
-} from '../../../shared/selectors/lang'
+} from '../../../../shared/selectors/lang'
 import * as merge from 'deepmerge'
 import {
   getFeatureForId,
   getDataForId
-} from './ScatterplotBase/utils'
+} from '../../../scatterplot/components/ScatterplotBase/utils'
 import clsx from 'clsx'
-import useDataOptions from '../../seda/hooks/useDataOptions'
-import {
-  hasActiveFilters,
-  getFilteredIds
-} from '../../../shared/selectors/data'
+import { getFilteredIds } from '../../../../shared/selectors/data'
+import { useScatterplotData } from '../../hooks'
+
+const defaultFilters = { prefix: null, largest: null }
+const defaultHandler = () => {}
 
 const endpoint =
   process.env.REACT_APP_DATA_ENDPOINT + 'scatterplot/'
@@ -79,40 +74,35 @@ const getLocatonIdFromEvent = (e, data) => {
     : null
 }
 
-function Scatterplot({
+function SedaScatterplotBase({
   xVar,
   yVar,
   zVar,
   className,
   region,
   variant,
+  filters = defaultFilters,
   autoFetch = true,
   children,
-  onHover,
-  onClick,
-  onReady,
-  onError
+  onHover = defaultHandler,
+  onClick = defaultHandler,
+  onReady = defaultHandler,
+  onError = defaultHandler,
+  ...props
 }) {
   // scatterplot data store
-  const data = useDataOptions(state => state.data)
-  // function to set data
-  const setData = useDataOptions(state => state.setData)
-  // get filter prefix
-  const { prefix, largest } = useDataOptions(
-    state => state.filters
-  )
-  // scatterplot data for the current region
-  const regionData = data[region]
+  const [data, setData] = useScatterplotData()
   // store copy of scatterplot options
   const [options, setOptions] = useState({})
+  // scatterplot data for the current region
+  const regionData = data[region]
   // highlight ids based on filters
   const highlightIds = useMemo(() => {
-    return getFilteredIds(
-      regionData,
-      { prefix, largest },
-      zVar
-    ).slice(0, 3000)
-  }, [regionData, prefix, largest, zVar])
+    return getFilteredIds(regionData, filters, zVar).slice(
+      0,
+      3000
+    )
+  }, [regionData, filters.prefix, filters.largest, zVar])
   // get list of vars needed to render current options
   const neededVars = getMissingVarNames(regionData, [
     xVar,
@@ -124,7 +114,9 @@ function Scatterplot({
   // this is required as sometimes names are not available
   useEffect(() => {
     if (!autoFetch || neededVars.length === 0) return
-    const promises = [fetchVariables(neededVars, region, prefix)]
+    const promises = [
+      fetchVariables(neededVars, region, filters.prefix)
+    ]
     if (region === 'schools') {
       promises.push(fetchSchoolPair(xVar, yVar))
     }
@@ -138,14 +130,17 @@ function Scatterplot({
 
   // fetch any additional school level data for highlighted states
   useEffect(() => {
-    if (!autoFetch || region !== 'schools' || !prefix) return
-    fetchVariables([xVar, yVar, zVar], 'schools', prefix).then(
-      data => {
-        setData(data, 'schools')
-        return data
-      }
-    )
-  }, [xVar, yVar, zVar, region, prefix, setData])
+    if (!autoFetch || region !== 'schools' || !filters.prefix)
+      return
+    fetchVariables(
+      [xVar, yVar, zVar],
+      'schools',
+      filters.prefix
+    ).then(data => {
+      setData(data, 'schools')
+      return data
+    })
+  }, [xVar, yVar, zVar, region, filters.prefix, setData])
 
   useEffect(() => {
     if (neededVars.length !== 0) return
@@ -175,7 +170,8 @@ function Scatterplot({
         xVar: getLabelForVarName(xVar),
         yVar: getLabelForVarName(yVar)
       })}
-      className={clsx('scatterplot', className)}>
+      className={clsx('scatterplot', className)}
+      {...props}>
       <ScatterplotBase
         theme={theme}
         loading={neededVars.length !== 0}
@@ -190,7 +186,7 @@ function Scatterplot({
   )
 }
 
-Scatterplot.propTypes = {
+SedaScatterplotBase.propTypes = {
   xVar: PropTypes.string,
   yVar: PropTypes.string,
   zVar: PropTypes.string,
@@ -207,4 +203,4 @@ Scatterplot.propTypes = {
   error: PropTypes.string
 }
 
-export default Scatterplot
+export default SedaScatterplotBase

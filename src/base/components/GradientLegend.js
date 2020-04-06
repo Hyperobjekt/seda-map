@@ -168,6 +168,7 @@ const GradientLegend = ({
           )}>
           {tickArray.map((v, i) => (
             <div
+              key={`tick${i}`}
               className={clsx(
                 'gradient-legend__tick',
                 'gradient-legend__tick--' + v,

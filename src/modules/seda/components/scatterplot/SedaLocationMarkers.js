@@ -1,14 +1,21 @@
 import React from 'react'
 import clsx from 'clsx'
 import { makeStyles, useTheme } from '@material-ui/core'
-import useDataOptions from '../../hooks/useDataOptions'
-import useUiStore from '../../hooks/useUiStore'
 import {
   getCircles,
   getCircle
 } from '../../../scatterplot/utils'
 import ScatterplotMarker from '../../../scatterplot/components/ScatterplotMarker'
 import { getColorForVarNameValue } from '../../../../shared/selectors'
+import {
+  useScatterplotVars,
+  useHovered,
+  useLocationsData,
+  useDataForId,
+  useRegion,
+  useMarkersVisibility,
+  useXyzTransformers
+} from '../../hooks'
 const useStyles = makeStyles(theme => ({
   root: {
     position: 'absolute',
@@ -24,38 +31,27 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const SedaLocationMarkers = ({ className, ...props }) => {
-  const region = useDataOptions(state => state.region)
-  const locationIds = useDataOptions(state =>
-    state.getLocationIdsForRegion()
-  )
-  const showHovered = useUiStore(state => state.showMarkers)
-  /** TODO: put hovered into its own component to cut down rerenders */
-  const hoveredId = useUiStore(state => state.hovered)
-  const getDataForId = useDataOptions(
-    state => state.getDataForId
-  )
-  const { xVar, yVar, zVar } = useDataOptions(state =>
-    state.getScatterplotVars()
-  )
-  const setHovered = useUiStore(state => state.setHovered)
-  const {
-    xValToPosition,
-    yValToPosition,
-    zValToSize
-  } = useDataOptions(state => state.getXyzTransformers())
+  const [region] = useRegion()
+  const [showHovered] = useMarkersVisibility()
+  const [xVar, yVar, zVar] = useScatterplotVars()
+  const [hoveredId, setHovered] = useHovered()
+  const hoveredData = useDataForId(hoveredId)
+  const [xValToPos, yValToPos, zValToSize] = useXyzTransformers()
+  const locations = useLocationsData()
 
+  const locationIds = locations
+    .filter(l => l.region === region)
+    .map(l => l.id)
   const getLocationIndex = id =>
     locationIds.findIndex(l => l === id)
-
-  const locations = locationIds.map(id => getDataForId(id))
 
   // circles for selected areas
   const circles = getCircles({
     xVar,
     yVar,
     zVar,
-    xValueToPercent: xValToPosition,
-    yValueToPercent: yValToPosition,
+    xValueToPercent: xValToPos,
+    yValueToPercent: yValToPos,
     zValueToRadius: zValToSize,
     data: locations
   })
@@ -66,10 +62,10 @@ const SedaLocationMarkers = ({ className, ...props }) => {
       xVar,
       yVar,
       zVar,
-      xValueToPercent: xValToPosition,
-      yValueToPercent: yValToPosition,
+      xValueToPercent: xValToPos,
+      yValueToPercent: yValToPos,
       zValueToRadius: zValToSize,
-      data: getDataForId(hoveredId)
+      data: hoveredData
     })
   const classes = useStyles()
   const theme = useTheme()
@@ -107,7 +103,7 @@ const SedaLocationMarkers = ({ className, ...props }) => {
             innerColor={getColorForVarNameValue(
               c.data[yVar],
               yVar,
-              region.id
+              region
             )}
             onMouseMove={e =>
               setHovered(c.id, [e.pageX, e.pageY])

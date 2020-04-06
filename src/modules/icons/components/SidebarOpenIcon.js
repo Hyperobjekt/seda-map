@@ -5,23 +5,23 @@ const SidebarOpenIcon = ({ ...props }) => {
   return (
     <Icon {...props}>
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        fillRule="evenodd"
         d="M17.6464 8.64645C17.8417 8.45118 18.1583 8.45118 18.3536 8.64645L21.3536 11.6464C21.5488 11.8417 21.5488 12.1583 21.3536 12.3536L18.3536 15.3536C18.1583 15.5488 17.8417 15.5488 17.6464 15.3536C17.4512 15.1583 17.4512 14.8417 17.6464 14.6464L20.2929 12L17.6464 9.35355C17.4512 9.15829 17.4512 8.84171 17.6464 8.64645Z"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        fillRule="evenodd"
         d="M2.5 7C2.5 6.72386 2.72386 6.5 3 6.5H16C16.2761 6.5 16.5 6.72386 16.5 7C16.5 7.27614 16.2761 7.5 16 7.5H3C2.72386 7.5 2.5 7.27614 2.5 7Z"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        fillRule="evenodd"
         d="M2.5 12C2.5 11.7239 2.72386 11.5 3 11.5H12C12.2761 11.5 12.5 11.7239 12.5 12C12.5 12.2761 12.2761 12.5 12 12.5H3C2.72386 12.5 2.5 12.2761 2.5 12Z"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        fillRule="evenodd"
         d="M2.5 17C2.5 16.7239 2.72386 16.5 3 16.5H16C16.2761 16.5 16.5 16.7239 16.5 17C16.5 17.2761 16.2761 17.5 16 17.5H3C2.72386 17.5 2.5 17.2761 2.5 17Z"
       />
     </Icon>

@@ -31,6 +31,76 @@ export const getDotSize = () => DOT_SIZES
 export const getBaseVarsByRegion = () => REGION_BASE_VARS
 
 /**
+ * Gets the vars for the map section
+ */
+export const getMapVars = (region, metric, demographic) => {
+  if (region === 'schools') {
+    return {
+      yVar: 'all_' + metric,
+      xVar: 'all_frl',
+      zVar: 'all_sz'
+    }
+  }
+  const useAll = ['m', 'f', 'p', 'np'].indexOf(demographic) > -1
+  return {
+    yVar: demographic + '_' + metric,
+    xVar: useAll ? 'all_ses' : demographic + '_ses',
+    zVar: demographic + '_sz'
+  }
+}
+
+/**
+ * Returns x,y,z variable names for the versus scatterplot
+ * @param {string} metric  (metric id)
+ * @param {string} demographic (gap demographic id)
+ */
+export const getVersusVarNames = (metric, demographic) => {
+  let dem1 = demographic[0]
+  let dem2 = demographic[1]
+  // if poor / non-poor, get correct demographic and order
+  if (dem2 === 'n') {
+    dem1 = 'np'
+    dem2 = 'p'
+  }
+  return [
+    dem2 + '_' + metric,
+    dem1 + '_' + metric,
+    demographic + '_sz'
+  ]
+}
+
+/**
+ * Returns the x,y,z variables for the current selection
+ * @param {string} region id
+ * @param {string} metric id
+ * @param {string} demographic id
+ * @param {string} type ("chart" or "map")
+ */
+export const getVarNames = (
+  region,
+  metric,
+  demographic,
+  type = 'chart'
+) => {
+  // schools always use "all" subgroup
+  if (region === 'schools') {
+    return ['all_' + metric, 'all_frl', 'all_sz']
+  }
+  // default chart for gap demographics should be versus
+  if (type === 'chart' && isGapDemographic(demographic)) {
+    return getVersusVarNames(metric, demographic)
+  }
+  // use "all" SES option for the following demographics
+  const useAll =
+    ['m', 'f', 'p', 'np', 'a'].indexOf(demographic) > -1
+  return [
+    useAll ? 'all_ses' : demographic + '_ses',
+    demographic + '_' + metric,
+    demographic + '_sz'
+  ]
+}
+
+/**
  * Gets the variables for the chart section
  * @param {string} region
  * @param {string} metric
@@ -41,33 +111,15 @@ export const getScatterplotVars = (
   metric,
   demographic
 ) => {
-  if (region === 'schools') {
-    return {
-      yVar: 'all_' + metric,
-      xVar: 'all_frl',
-      zVar: 'all_sz'
-    }
-  }
-  if (isGapDemographic(demographic)) {
-    let dem1 = demographic[0]
-    let dem2 = demographic[1]
-    // if poor / non-poor, get correct demographic and order
-    if (dem2 === 'n') {
-      dem1 = 'np'
-      dem2 = 'p'
-    }
-    return {
-      yVar: dem2 + '_' + metric,
-      xVar: dem1 + '_' + metric,
-      zVar: demographic + '_sz'
-    }
-  }
-  const useAll =
-    ['m', 'f', 'p', 'np', 'a'].indexOf(demographic) > -1
+  const [xVar, yVar, zVar] = getVarNames(
+    region,
+    metric,
+    demographic
+  )
   return {
-    yVar: demographic + '_' + metric,
-    xVar: useAll ? 'all_ses' : demographic + '_ses',
-    zVar: demographic + '_sz'
+    yVar,
+    xVar,
+    zVar
   }
 }
 

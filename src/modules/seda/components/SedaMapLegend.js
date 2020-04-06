@@ -13,42 +13,47 @@ import {
   getPrefixLang,
   getDemographicLabel
 } from '../../../shared/selectors/lang'
-import useDataOptions from '../hooks/useDataOptions'
 import { getValuePositionInRange } from '../../../shared/utils'
-import useMapStore from '../hooks/useMapStore'
-import useUiStore from '../hooks/useUiStore'
+import {
+  useMapVars,
+  useDataForId,
+  useHovered,
+  useRegion,
+  useMarkersVisibility,
+  useMapSize,
+  useDemographicType
+} from '../hooks'
 
 const SedaMapLegend = props => {
   /** variable to show on the map */
-  const { yVar } = useDataOptions(state => state.getMapVars())
+  const [, yVar] = useMapVars()
   /** id of the hovered location */
-  const hovered = useUiStore(state => state.hovered)
+  const [hovered] = useHovered()
   /** boolean determining if hovered location should show */
-  const showHovered = useUiStore(state => state.showMarkers)
-  /** function to grab the data for a given id  */
-  const getData = useDataOptions(state => state.getDataForId)
+  const [showHovered] = useMarkersVisibility()
   /** data for hovered id, if any */
-  const hoveredData = hovered ? getData(hovered) : null
+  const hoveredData = useDataForId(hovered)
   /** boolean determining f the current demographic is a gap or not */
-  const isGap = useDataOptions(state => state.isDemographicGap())
+  const isGap = useDemographicType() === 'gap'
+  /** current map region */
+  const [region] = useRegion()
+  /** width of the map viewport */
+  const [width] = useMapSize()
+
   /** boolean determinng if the scale is inverted for the given var */
   const inverted = getInvertedFromVarName(yVar)
-  /** width of the map viewport */
-  const width = useMapStore(state => state.viewport.width)
   /** metric id for the current map var */
   const metric = getMetricIdFromVarName(yVar)
   /** demographic id for the current map var */
   const demographic = getDemographicIdFromVarName(yVar)
-  /** current map region */
-  const region = useDataOptions(state => state.region)
   /** choroppleth colors for gradient (reversed if gap) */
   const colors = isGap
     ? [...getChoroplethColors()].reverse()
     : getChoroplethColors()
   /** range of values for start color to end color */
-  const colorRange = getRange(yVar, region.id, 'map')
+  const colorRange = getRange(yVar, region, 'map')
   /** range of values to label on min / max in the legend */
-  const labelRange = getRange(yVar, region.id)
+  const labelRange = getRange(yVar, region)
   /** number between 0 - 1 determining where the diverging point is on the scale */
   const midPosition = getValuePositionInRange(
     (colorRange[1] + colorRange[0]) / 2,

@@ -1,9 +1,7 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import {
   Typography,
   makeStyles,
-  Button,
   IconButton
 } from '@material-ui/core'
 
@@ -12,28 +10,22 @@ import {
   SidePanelHeader,
   SidePanelBody
 } from '../../../../base/components/Panels/SidePanel'
-import useUiStore from '../../hooks/useUiStore'
 import SedaMetricSelect from '../controls/SedaMetricSelect'
 import SedaDemographicSelect from '../controls/SedaDemographicSelect'
 import SedaRegionSelect from '../controls/SedaRegionSelect'
 
 import SedaLocationSelect from '../controls/SedaLocationSelect'
 import { getPrefixLang } from '../../../../shared/selectors/lang'
-import SearchInput from '../../../../base/components/SearchInput'
 import SedaFilterSelect from '../controls/SedaFilterSelected'
 import { CloseIcon } from '../../../icons'
+import {
+  useCondensed,
+  useActiveSelection,
+  useHelpVisibility
+} from '../../hooks'
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    '&.panel--open': {
-      transform: props =>
-        props.condensed
-          ? props.showHelp
-            ? `translateX(${theme.app.condensedPanelWidth}px)`
-            : `translateX(0)`
-          : 'translateX(-100%)'
-    }
-  },
+  root: {},
   title: theme.mixins.boldType,
   body: {
     padding: theme.spacing(1),
@@ -43,15 +35,16 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const SelectionComponent = ({ selectionId }) => {
-  const setSelection = useUiStore(state => state.setSelection)
-  switch (selectionId) {
+const SelectionComponent = ({
+  type,
+  clearSelection,
+  ...props
+}) => {
+  switch (type) {
     case 'metric':
       return (
         <>
-          <SedaMetricSelect
-            onSelect={() => setSelection(null)}
-          />
+          <SedaMetricSelect onSelect={clearSelection} />
           <Typography
             style={{ display: 'block', padding: 16 }}
             variant="caption">
@@ -62,15 +55,9 @@ const SelectionComponent = ({ selectionId }) => {
         </>
       )
     case 'demographic':
-      return (
-        <SedaDemographicSelect
-          onSelect={() => setSelection(null)}
-        />
-      )
+      return <SedaDemographicSelect onSelect={clearSelection} />
     case 'region':
-      return (
-        <SedaRegionSelect onSelect={() => setSelection(null)} />
-      )
+      return <SedaRegionSelect onSelect={clearSelection} />
     case 'filter':
       return <SedaFilterSelect />
     case 'location':
@@ -80,13 +67,14 @@ const SelectionComponent = ({ selectionId }) => {
   }
 }
 
-const SelectionPanel = props => {
-  const condensed = useUiStore(state => state.condensed)
-  const showHelp = useUiStore(state => state.showHelp)
-  const selection = useUiStore(state => state.selection)
-  const setSelection = useUiStore(state => state.setSelection)
+const SedaSelectionPanel = props => {
+  const [condensed] = useCondensed()
+  const [showHelp] = useHelpVisibility()
+  const [selection, setSelection] = useActiveSelection()
   const panelTitle = getPrefixLang(selection, 'PANEL_TITLE')
   const classes = useStyles({ condensed, showHelp })
+
+  const handleCloseSelection = () => setSelection(null)
 
   return (
     <SidePanel classes={{ root: classes.root }} {...props}>
@@ -94,17 +82,18 @@ const SelectionPanel = props => {
         <Typography className={classes.title}>
           {panelTitle}
         </Typography>
-        <IconButton onClick={() => setSelection(null)}>
+        <IconButton onClick={handleCloseSelection}>
           <CloseIcon />
         </IconButton>
       </SidePanelHeader>
       <SidePanelBody classes={{ root: classes.body }}>
-        <SelectionComponent selectionId={selection} />
+        <SelectionComponent
+          type={selection}
+          clearSelection={handleCloseSelection}
+        />
       </SidePanelBody>
     </SidePanel>
   )
 }
 
-SelectionPanel.propTypes = {}
-
-export default SelectionPanel
+export default SedaSelectionPanel

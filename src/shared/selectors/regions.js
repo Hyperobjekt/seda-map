@@ -93,3 +93,20 @@ export const getLocationIdsForRegion = (region, locations) => {
     .map(f => getFeatureProperty(f, 'id'))
     .filter(id => id.length === region.idLength)
 }
+
+/**
+ * Get the size filter for region
+ * @param {*} regionId
+ */
+export const getSizesForRegion = regionId => {
+  switch (regionId) {
+    case 'counties':
+      return [10, 50, 100, 500]
+    case 'districts':
+      return [10, 50, 100, 500, 1000]
+    case 'schools':
+      return [50, 100, 500, 1000, 5000]
+    default:
+      return []
+  }
+}

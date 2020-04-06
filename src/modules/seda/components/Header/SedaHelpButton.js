@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles, Button } from '@material-ui/core'
-import useUiStore from '../../hooks/useUiStore'
 import clsx from 'clsx'
+import { useHelpVisibility } from '../../hooks'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -16,8 +16,7 @@ const SedaHelpButton = ({
   ...props
 }) => {
   const classes = useStyles()
-  const showHelp = useUiStore(state => state.showHelp)
-  const toggleHelp = useUiStore(state => state.toggleHelp)
+  const [, toggleHelp] = useHelpVisibility()
   return (
     <Button
       variant="outlined"
@@ -29,6 +28,8 @@ const SedaHelpButton = ({
   )
 }
 
-SedaHelpButton.propTypes = {}
+SedaHelpButton.propTypes = {
+  classes: PropTypes.object
+}
 
 export default SedaHelpButton

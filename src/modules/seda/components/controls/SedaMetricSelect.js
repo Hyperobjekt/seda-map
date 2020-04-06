@@ -6,12 +6,12 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import { MetricIcon } from '../../../icons'
-import useDataOptions from '../../hooks/useDataOptions'
 import clsx from 'clsx'
 import {
   getKeyMetrics,
   getMetricLabel
 } from '../../../../shared/selectors'
+import { useMetric } from '../../hooks'
 const useStyles = makeStyles(theme => ({
   root: {
     paddingTop: 4,
@@ -37,16 +37,15 @@ const useStyles = makeStyles(theme => ({
 
 const SedaMetricSelect = ({ onSelect }) => {
   const theme = useTheme()
+  const [metric, setMetric] = useMetric()
+  const classes = useStyles()
   const metrics = getKeyMetrics().map(m =>
     Object.assign(m, {
       description: getMetricLabel(m.id, 'LABEL_REFLECTS')
     })
   )
-  const metric = useDataOptions(state => state.metric)
-  const classes = useStyles()
-  const setMetric = useDataOptions(state => state.setMetric)
   const handleClick = metricId => {
-    if (metric.id !== metricId) {
+    if (metric !== metricId) {
       setMetric(metricId)
       onSelect && onSelect(metricId)
     }
@@ -60,7 +59,7 @@ const SedaMetricSelect = ({ onSelect }) => {
         return (
           <ListItem
             className={clsx(classes.button, {
-              [classes.active]: m.id === metric.id
+              [classes.active]: m.id === metric
             })}
             button
             key={m.id}
@@ -74,7 +73,7 @@ const SedaMetricSelect = ({ onSelect }) => {
               <MetricIcon
                 style={{
                   color:
-                    m.id === metric.id
+                    m.id === metric
                       ? theme.palette.primary.main
                       : theme.palette.grey[500]
                 }}
@@ -88,6 +87,8 @@ const SedaMetricSelect = ({ onSelect }) => {
   )
 }
 
-SedaMetricSelect.propTypes = {}
+SedaMetricSelect.propTypes = {
+  onSelect: PropTypes.func
+}
 
 export default SedaMetricSelect

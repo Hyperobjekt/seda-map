@@ -5,6 +5,7 @@ import * as d3array from 'd3-array'
 import * as merge from 'deepmerge'
 import { extendScatterplotStyle } from './style'
 import { getStateAbbr } from '../../../../shared/selectors/states'
+import { getRegionFromFeatureId } from '../../../../shared/selectors'
 
 function FetchException(message, urls, err) {
   this.message = message
@@ -433,7 +434,11 @@ export const getDataForId = (id, data) => {
       }
       return acc
     },
-    { id, state: getStateAbbr(id) }
+    {
+      id,
+      state: getStateAbbr(id),
+      region: getRegionFromFeatureId(id)
+    }
   )
 }
 

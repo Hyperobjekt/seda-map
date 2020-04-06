@@ -1,6 +1,9 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { Typography, makeStyles, Button } from '@material-ui/core'
+import {
+  Typography,
+  makeStyles,
+  IconButton
+} from '@material-ui/core'
 import { ExpansionPanel } from '../../../../base/components/Panels'
 
 import {
@@ -8,24 +11,31 @@ import {
   SidePanelHeader,
   SidePanelBody
 } from '../../../../base/components/Panels/SidePanel'
-import useUiStore from '../../hooks/useUiStore'
 import { getLang } from '../../../../shared/selectors/lang'
+import { useHelpVisibility } from '../../hooks'
+import { CloseIcon } from '../../../icons'
 
 const useStyles = makeStyles(theme => ({
   root: {},
   title: theme.typography.panelHeading
 }))
 
-const topics = new Array(12).fill().map((n, i) => `HELP_HOW_Q${i + 1}`)
+const topics = new Array(12)
+  .fill()
+  .map((n, i) => `HELP_HOW_Q${i + 1}`)
 
-const HelpPanel = props => {
+const SedaHelpPanel = props => {
   const classes = useStyles()
-  const toggleHelp = useUiStore(state => state.toggleHelp)
+  const [, toggleHelp] = useHelpVisibility()
   return (
     <SidePanel {...props}>
       <SidePanelHeader sticky>
-        <Typography className={classes.title}>Help Panel</Typography>
-        <Button onClick={toggleHelp}>Hide</Button>
+        <Typography className={classes.title}>
+          Help Panel
+        </Typography>
+        <IconButton onClick={toggleHelp}>
+          <CloseIcon />
+        </IconButton>
       </SidePanelHeader>
       <SidePanelBody>
         {topics.map((t, i) => (
@@ -42,6 +52,4 @@ const HelpPanel = props => {
   )
 }
 
-HelpPanel.propTypes = {}
-
-export default HelpPanel
+export default SedaHelpPanel

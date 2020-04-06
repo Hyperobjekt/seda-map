@@ -1,15 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { makeStyles, useTheme } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
-import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
-import Divider from '@material-ui/core/Divider'
-import useDataOptions from '../../hooks/useDataOptions'
 import clsx from 'clsx'
 import { getAllStates } from '../../../../shared/selectors/states'
+import { useFilters } from '../../hooks'
 
 const statesList = getAllStates()
 
@@ -25,8 +22,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const SedaFilterStateSelect = ({ onSelect, ...props }) => {
-  const filters = useDataOptions(state => state.filters)
-  const setFilter = useDataOptions(state => state.setFilter)
+  const [filters, , setFilter] = useFilters()
   const classes = useStyles()
 
   const handleClick = (stateId, e) => {
@@ -53,6 +49,8 @@ const SedaFilterStateSelect = ({ onSelect, ...props }) => {
   )
 }
 
-SedaFilterStateSelect.propTypes = {}
+SedaFilterStateSelect.propTypes = {
+  onSelect: PropTypes.func
+}
 
 export default SedaFilterStateSelect

@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import {
   Typography,
   makeStyles,
@@ -11,11 +10,16 @@ import {
   SidePanelHeader,
   SidePanelBody
 } from '../../../../base/components/Panels/SidePanel'
-import useUiStore from '../../hooks/useUiStore'
 import { getPrefixLang } from '../../../../shared/selectors/lang'
 import SedaFilterStateSelect from '../controls/SedaFilterStateSelect'
 import SedaFilterLargestSelect from '../controls/SedaFilterLargestSelect'
-import CloseIcon from '../../../icons/components/CloseIcon'
+import { CloseIcon } from '../../../icons'
+import {
+  useCondensed,
+  useHelpVisibility,
+  useActiveFilterSelection,
+  useActiveSelection
+} from '../../hooks'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -37,34 +41,32 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const SelectionComponent = ({ selectionId }) => {
-  const setFilterPanel = useUiStore(
-    state => state.setFilterPanel
-  )
-  const setSelection = useUiStore(state => state.setSelection)
-  const handleSelect = () => {
-    setFilterPanel(null)
-    setSelection(null)
-  }
+const SelectionComponent = ({ selectionId, onSelect }) => {
   switch (selectionId) {
     case 'state':
-      return <SedaFilterStateSelect onSelect={handleSelect} />
+      return <SedaFilterStateSelect onSelect={onSelect} />
     case 'largest':
-      return <SedaFilterLargestSelect onSelect={handleSelect} />
+      return <SedaFilterLargestSelect onSelect={onSelect} />
     default:
       return null
   }
 }
 
-const FilterSelectionPanel = props => {
-  const condensed = useUiStore(state => state.condensed)
-  const showHelp = useUiStore(state => state.showHelp)
-  const filterPanel = useUiStore(state => state.filterPanel)
-  const setFilterPanel = useUiStore(
-    state => state.setFilterPanel
-  )
+const SedaFilterSelection = props => {
+  const [condensed] = useCondensed()
+  const [showHelp] = useHelpVisibility()
+  const [
+    filterPanel,
+    setFilterPanel
+  ] = useActiveFilterSelection()
+  const [, setSelection] = useActiveSelection()
   const panelTitle = getPrefixLang(filterPanel, 'PANEL_TITLE')
   const classes = useStyles({ condensed, showHelp })
+
+  const handleClear = () => {
+    setFilterPanel(null)
+    setSelection(null)
+  }
 
   return (
     <SidePanel classes={{ root: classes.root }} {...props}>
@@ -77,12 +79,13 @@ const FilterSelectionPanel = props => {
         </IconButton>
       </SidePanelHeader>
       <SidePanelBody classes={{ root: classes.body }}>
-        <SelectionComponent selectionId={filterPanel} />
+        <SelectionComponent
+          selectionId={filterPanel}
+          onSelect={handleClear}
+        />
       </SidePanelBody>
     </SidePanel>
   )
 }
 
-FilterSelectionPanel.propTypes = {}
-
-export default FilterSelectionPanel
+export default SedaFilterSelection

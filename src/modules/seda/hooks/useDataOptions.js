@@ -86,33 +86,8 @@ const makeGetters = get => ({
     const region = getRegionFromFeatureId(id)
     return getFeatureForId(id, get().data[region])
   },
-  getNameForId: id => {
-    if (!id) return ''
-    const region = getRegionFromFeatureId(id)
-    switch (region) {
-      case 'states':
-        return getStateName(id)
-      default:
-        return getDataForId(id, get().data[region])['name']
-    }
-  },
-  getActiveFiltersLang: () => {
-    const filters = get().filters
-    const region = get().region
-    const idToName = get().getNameForId
-    return getFiltersLang(filters, region, idToName)
-  },
-  isDemographicGap: () => isGapDemographic(get().demographic.id),
-  getActiveLocation: () => {
-    const id = get().activeLocation
-    const locations = get().locations
-    const i = locations.findIndex(
-      l => getFeatureProperty(l, 'id') === id
-    )
-    return i > -1
-      ? { ...locations[i].properties, id, index: i }
-      : {}
-  }
+
+  isDemographicGap: () => isGapDemographic(get().demographic.id)
 })
 
 const makeSetters = set => ({
@@ -170,41 +145,22 @@ const [useDataOptions] = create((set, get, api) => ({
   // active location id
   activeLocation: null,
   loading: true,
-  addLocationFromId: async id => {
+  addLocationFromId: async (id, setActive = true) => {
     const region = getRegionFromFeatureId(id)
     const data = getDataForId(id, get().data[region])
     const feature = await loadFeatureFromCoords(data)
     set(state => ({
       locations: [...state.locations, feature],
-      activeLocation: id
+      ...(setActive && { activeLocation: id })
     }))
   },
-
-  addLocationFromChart: async location => {
-    const feature = await loadFeatureFromCoords(location)
+  addLocation: (feature, setActive = true) => {
     set(state => ({
       locations: [...state.locations, feature],
-      activeLocation: getFeatureProperty(feature, 'id')
+      ...(setActive && {
+        activeLocation: getFeatureProperty(feature, 'id')
+      })
     }))
-  },
-  addLocationFromFeature: feature => {
-    set(state => ({
-      locations: [...state.locations, feature],
-      activeLocation: getFeatureProperty(feature, 'id')
-    }))
-  },
-  removeLocation: location => {
-    let id
-    if (typeof location === 'string') {
-      id = location
-    }
-    if (typeof location === 'object') {
-      id = getFeatureProperty(location, 'id')
-    }
-    const newLocations = get().locations.filter(
-      l => getFeatureProperty(l, 'id') !== id
-    )
-    set({ locations: newLocations })
   },
   setActiveLocation: activeLocation => {
     if (!activeLocation) return set({ activeLocation })

@@ -4,9 +4,9 @@ import { makeStyles } from '@material-ui/core/styles'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
-import useDataOptions from '../../hooks/useDataOptions'
 import clsx from 'clsx'
 import { getRegions } from '../../../../shared/selectors'
+import { useRegion } from '../../hooks'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -20,12 +20,13 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const SedaRegionSelect = ({ onSelect, ...props }) => {
-  const regions = getRegions()
-  const region = useDataOptions(state => state.region)
+  const [region, setRegion] = useRegion()
   const classes = useStyles()
-  const setRegion = useDataOptions(state => state.setRegion)
+
+  const regions = getRegions()
+
   const handleClick = regionId => {
-    if (region.id !== regionId) {
+    if (region !== regionId) {
       setRegion(regionId)
       onSelect && onSelect(regionId)
     }
@@ -34,12 +35,13 @@ const SedaRegionSelect = ({ onSelect, ...props }) => {
   return (
     <List
       classes={{ root: classes.root }}
-      aria-label="region selection">
+      aria-label="region selection"
+      {...props}>
       {regions.map((m, i) => {
         return (
           <ListItem
             className={clsx(classes.button, {
-              [classes.active]: m.id === region.id
+              [classes.active]: m.id === region
             })}
             button
             key={m.id}
@@ -52,6 +54,8 @@ const SedaRegionSelect = ({ onSelect, ...props }) => {
   )
 }
 
-SedaRegionSelect.propTypes = {}
+SedaRegionSelect.propTypes = {
+  onSelect: PropTypes.func
+}
 
 export default SedaRegionSelect

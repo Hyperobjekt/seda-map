@@ -35,6 +35,18 @@ export const getFeatureProperty = (feature, propName) => {
   return null
 }
 
+/**
+ * Returns if the provided object is a feature
+ * @param {*} feature
+ */
+export const isFeature = feature => {
+  return (
+    feature &&
+    typeof feature === 'object' &&
+    feature.hasOwnProperty('properties')
+  )
+}
+
 export const getFeatureFromArray = (features, id) => {
   return features.find(l => getFeatureProperty(l, 'id') === id)
 }
@@ -51,6 +63,7 @@ export const getHoveredId = hovered =>
 export { getMapVars } from './map'
 export {
   getScatterplotVars,
+  getVarNames,
   getSizerFunctionForRegion,
   getDotSize,
   getBaseVars
@@ -93,7 +106,8 @@ export {
   getSingularRegion,
   getSingularRegions,
   getRegions,
-  getLocationIdsForRegion
+  getLocationIdsForRegion,
+  getSizesForRegion
 } from './regions'
 export {
   getPositionForVarNameValue,

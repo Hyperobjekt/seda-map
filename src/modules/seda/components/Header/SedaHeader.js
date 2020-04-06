@@ -11,7 +11,6 @@ import SedaHelpButton from './SedaHelpButton'
 import SedaMenuButton from './SedaMenuButton'
 import SedaViewControls from './SedaViewControls'
 import SearchInput from '../../../../base/components/SearchInput'
-import useDataOptions from '../../hooks/useDataOptions'
 import {
   getLang,
   getMetricLabel,
@@ -21,6 +20,8 @@ import {
 } from '../../../../shared/selectors/lang'
 import { isGapDemographic } from '../../../../shared/selectors'
 import DetailedTooltip from '../base/DetailedTooltip'
+import { useActiveOptionIds, useFilters } from '../../hooks'
+import { getStateName } from '../../../../shared/selectors/states'
 
 const useLogoStyles = makeStyles(theme => ({
   root: {
@@ -96,13 +97,15 @@ const getTitleFromSelections = ({
   region,
   parentLocation = 'U.S.'
 }) => {
-  const isGap = isGapDemographic(demographic.id)
-  const metricConcept = getPrefixLang(metric.id, `LABEL_CONCEPT`)
+  const isGap = isGapDemographic(demographic)
+  const metricConcept = getPrefixLang(metric, `LABEL_CONCEPT`)
   return isGap
-    ? `${metricConcept} Gaps in ${parentLocation} ${
-        region.label
-      }`
-    : `${metricConcept} in ${parentLocation} ${region.label}`
+    ? `${metricConcept} Gaps in ${parentLocation} ${getRegionLabel(
+        region
+      )}`
+    : `${metricConcept} in ${parentLocation} ${getRegionLabel(
+        region
+      )}`
 }
 
 /**
@@ -112,7 +115,7 @@ const getTitleFromSelections = ({
  * @param {string} regionLabel
  * @param {function} idToName (function to transform id to name)
  */
-const getFilterLabel = (filters, regionLabel, idToName) => {
+const getFilterLabel = (filters, regionLabel) => {
   const labels = []
   if (filters.largest) {
     labels.push(
@@ -126,17 +129,10 @@ const getFilterLabel = (filters, regionLabel, idToName) => {
 }
 
 const Subtitle = ({ metric, demographic, region, filters }) => {
-  const metricLabel = getMetricLabel(metric.id)
-  const regionLabel = getRegionLabel(region.id)
-  const getNameForId = useDataOptions(
-    state => state.getNameForId
-  )
-  const filterLabel = getFilterLabel(
-    filters,
-    regionLabel,
-    getNameForId
-  )
-  const metricTooltip = getMetricLabel(metric.id, 'HINT')
+  const metricLabel = getMetricLabel(metric)
+  const regionLabel = getRegionLabel(region)
+  const filterLabel = getFilterLabel(filters, regionLabel)
+  const metricTooltip = getMetricLabel(metric, 'HINT')
   const classes = useSubtitleStyles()
   const MetricLabel = (
     <Tooltip
@@ -152,10 +148,10 @@ const Subtitle = ({ metric, demographic, region, filters }) => {
     </Tooltip>
   )
   const studentLabel = getDemographicLabel(
-    demographic.id,
+    demographic,
     'LABEL_STUDENTS'
   )
-  const isGap = isGapDemographic(demographic.id)
+  const isGap = isGapDemographic(demographic)
   return isGap ? (
     <>
       shown by {studentLabel}' {MetricLabel}
@@ -173,7 +169,7 @@ const useHeaderStyles = makeStyles(theme => ({
     color: theme.palette.text.primary
   },
   logo: {
-    marginRight: theme.spacing(2)
+    marginRight: theme.spacing(3)
   },
   heading: {
     fontSize: theme.typography.pxToRem(16),
@@ -184,24 +180,23 @@ const useHeaderStyles = makeStyles(theme => ({
   },
   subheading: {
     color: theme.palette.text.secondary
+  },
+  toolbar: {
+    paddingLeft: theme.spacing(3)
   }
 }))
 
 const SedaHeader = ({ onMenuClick }) => {
-  const metric = useDataOptions(state => state.metric)
-  const demographic = useDataOptions(state => state.demographic)
-  const region = useDataOptions(state => state.region)
-  const filters = useDataOptions(state => state.filters)
-  const getNameForId = useDataOptions(
-    state => state.getNameForId
-  )
+  const [metricId, demId, regionId] = useActiveOptionIds()
+  const [filters] = useFilters()
+  const stateName = filters.prefix
+    ? getStateName(filters.prefix)
+    : undefined
   const heading = getTitleFromSelections({
-    metric,
-    demographic,
-    region,
-    parentLocation: filters.prefix
-      ? getNameForId(filters.prefix)
-      : undefined
+    metric: metricId,
+    demographic: demId,
+    region: regionId,
+    parentLocation: stateName
   })
   const classes = useHeaderStyles()
   return (
@@ -214,7 +209,10 @@ const SedaHeader = ({ onMenuClick }) => {
       </Typography>
       <Typography className={classes.subheading} variant="body2">
         <Subtitle
-          {...{ metric, demographic, region, filters }}
+          metric={metricId}
+          demographic={demId}
+          region={regionId}
+          filters={filters}
         />
       </Typography>
     </PageHeader>

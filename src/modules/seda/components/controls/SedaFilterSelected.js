@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
-import useDataOptions from '../../hooks/useDataOptions'
 import clsx from 'clsx'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
@@ -20,23 +19,24 @@ import {
   Button,
   IconButton
 } from '@material-ui/core'
-import useUiStore from '../../hooks/useUiStore'
-import CloseIcon from '../../../icons/components/CloseIcon'
+import { CloseIcon } from '../../../icons'
+import {
+  useActiveFilterSelection,
+  useRegion,
+  useNameForId,
+  useFilters
+} from '../../hooks'
 
 const listItemStyle = { paddingLeft: 44, paddingRight: 24 }
 
-const SedaActiveFilters = ({ filters = {}, ...props }) => {
+const SedaActiveFilters = ({ ...props }) => {
+  const [filters, , setFilter] = useFilters()
   const prefixRegion = filters.prefix
     ? getRegionFromFeatureId(filters.prefix)
     : null
-  const region = useDataOptions(state => state.region)
-  const setFilter = useDataOptions(state => state.setFilter)
-  const getNameForId = useDataOptions(
-    state => state.getNameForId
-  )
-  const setFilterPanel = useUiStore(
-    state => state.setFilterPanel
-  )
+  const [region] = useRegion()
+  const prefixName = useNameForId(filters.prefix)
+  const [, setFilterPanel] = useActiveFilterSelection()
 
   return (
     <>
@@ -50,7 +50,7 @@ const SedaActiveFilters = ({ filters = {}, ...props }) => {
               prefixRegion,
               'FILTER_PREFIX'
             )}
-            secondary={getNameForId(filters.prefix)}
+            secondary={prefixName}
           />
           <ListItemSecondaryAction>
             <IconButton
@@ -69,7 +69,7 @@ const SedaActiveFilters = ({ filters = {}, ...props }) => {
             primary={getLang('FILTER_LARGEST')}
             secondary={getLang('FILTER_LARGEST_SELECTION', {
               num: filters.largest,
-              region: getRegionLabel(region.id)
+              region: getRegionLabel(region)
             })}
           />
           <ListItemSecondaryAction>
@@ -91,11 +91,9 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const SedaFilterSelect = ({ onSelect }) => {
-  const filters = useDataOptions(state => state.filters)
+  const [filters] = useFilters()
   const filterCount = getFilterCount(filters)
-  const setFilterPanel = useUiStore(
-    state => state.setFilterPanel
-  )
+  const [, setFilterPanel] = useActiveFilterSelection()
   const classes = useStyles()
 
   return (
@@ -108,7 +106,7 @@ const SedaFilterSelect = ({ onSelect }) => {
         }
         aria-label="list of active filters">
         {filterCount > 0 ? (
-          <SedaActiveFilters filters={filters} />
+          <SedaActiveFilters />
         ) : (
           <Typography
             style={{
@@ -155,6 +153,8 @@ const SedaFilterSelect = ({ onSelect }) => {
   )
 }
 
-SedaFilterSelect.propTypes = {}
+SedaFilterSelect.propTypes = {
+  onSelect: PropTypes.func
+}
 
 export default SedaFilterSelect
