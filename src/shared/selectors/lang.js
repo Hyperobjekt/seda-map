@@ -464,7 +464,7 @@ export const getFiltersLang = (
     labels.push(
       getLang('FILTER_LARGEST_SELECTION', {
         num: filters.largest,
-        region: getRegionLabel(region.id)
+        region: getRegionLabel(region)
       })
     )
   }

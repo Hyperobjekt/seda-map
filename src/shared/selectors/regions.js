@@ -91,7 +91,7 @@ export const getLocationsByRegion = locations =>
 export const getLocationIdsForRegion = (region, locations) => {
   return locations
     .map(f => getFeatureProperty(f, 'id'))
-    .filter(id => id.length === region.idLength)
+    .filter(id => id.length === getRegionById(region).idLength)
 }
 
 /**

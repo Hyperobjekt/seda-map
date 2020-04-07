@@ -426,6 +426,9 @@ export const getScatterplotOptions = props => {
  * @param {*} data
  */
 export const getDataForId = (id, data) => {
+  if (!data) {
+    return null
+  }
   return Object.keys(data).reduce(
     (acc, curr) => {
       // only add data if it exists

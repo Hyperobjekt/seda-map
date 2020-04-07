@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Paper, Typography, makeStyles } from '@material-ui/core'
 import clsx from 'clsx'
-import GradientLegend from '../../../base/components/GradientLegend'
+import GradientLegend from '../../../shared/components/GradientLegend'
 
 const useStyles = makeStyles(theme => ({
   root: {

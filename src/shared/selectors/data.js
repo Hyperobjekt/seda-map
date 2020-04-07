@@ -162,7 +162,8 @@ export const getFilterCount = filters => {
  * @param {*} sizeVar
  */
 export const getFilteredIds = (data, filters = {}, sizeVar) => {
-  if (!hasActiveFilters(filters) || !data) return []
+  if (!hasActiveFilters(filters) || !data || !data['name'])
+    return []
   let ids = Object.keys(data['name'])
   if (filters.prefix) {
     ids = getPrefixIds(ids, filters.prefix)

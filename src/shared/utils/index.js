@@ -164,6 +164,7 @@ export const stripHtml = html => {
   return tmp.textContent || tmp.innerText || ''
 }
 
+// Gets closest parent of element with selector
 // https://gomakethings.com/how-to-get-the-closest-parent-element-with-a-matching-selector-using-vanilla-javascript/
 export const getClosest = (elem, selector) => {
   // Element.matches() polyfill

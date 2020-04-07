@@ -1,0 +1,586 @@
+import shallow from 'zustand/shallow'
+import useDataOptions from './useDataOptions'
+import useUiStore from './useUiStore'
+import {
+  getVarNames,
+  getFeatureProperty,
+  getSizesForRegion,
+  getRegionFromFeatureId,
+  isGapDemographic,
+  getMetricRangeFromVarName,
+  getSizerFunctionForRegion,
+  getDemographicForVarNames
+} from '../../../shared/selectors'
+import { getFiltersLang } from '../../../shared/selectors/lang'
+import { getDataForId } from '../../scatterplot/components/ScatterplotBase/utils'
+import {
+  getStateName,
+  getStateAbbr
+} from '../../../shared/selectors/states'
+import useMapStore from './useMapStore'
+import { getValuePercentInRange } from '../../scatterplot/utils'
+import { useCallback } from 'react'
+import { formatNumber } from '../../../shared/utils'
+
+/**
+ * Provides the current values for metric, demographic, and region
+ * @returns {[string, string, string]} [metricId, demographicId, regionId]
+ */
+export const useActiveOptionIds = () => {
+  return useDataOptions(
+    state => [state.metric, state.demographic, state.region],
+    shallow
+  )
+}
+
+/**
+ * Provides the current metric id and setter
+ * @returns {[string, function]} [metricId, setMetric]
+ */
+export const useMetric = () => {
+  return useDataOptions(
+    state => [state.metric, state.setMetric],
+    shallow
+  )
+}
+
+/**
+ * Provides the current demographic id and setter
+ * @returns {[string, function]} [demographicId, setDemographic]
+ */
+export const useDemographic = () => {
+  return useDataOptions(
+    state => [state.demographic, state.setDemographic],
+    shallow
+  )
+}
+
+/**
+ * Provides the type of demographic currently active
+ * @returns {string} `gap` or `single`
+ */
+export const useDemographicType = () => {
+  return useDataOptions(state =>
+    isGapDemographic(state.demographic) ? 'gap' : 'single'
+  )
+}
+
+/**
+ * Provides the current region id and setter
+ * @returns {[string, function]} [regionId, setRegion]
+ */
+export const useRegion = () => {
+  return useDataOptions(
+    state => [state.region, state.setRegion],
+    shallow
+  )
+}
+
+/**
+ * Provides the filter size options for the current region
+ * @returns {Array<number>}
+ */
+export const useRegionFilterSizes = () => {
+  return useDataOptions(
+    state => getSizesForRegion(state.region),
+    shallow
+  )
+}
+
+/**
+ * Provides the id of the hovered location and setter
+ * @returns {[string, function]} [ hoveredId, setHovered ]
+ */
+export const useHovered = () => {
+  return useUiStore(
+    state => [state.hovered, state.setHovered],
+    shallow
+  )
+}
+
+/**
+ * Provides an object of current filters and setters
+ * @returns {[{prefix, largest}, function, function]} [ filters, setFilters, setSingleFilter ]
+ */
+export const useFilters = () => {
+  return useDataOptions(
+    state => [state.filters, state.setFilters, state.setFilter],
+    shallow
+  )
+}
+
+/**
+ * Provides a human readable string for the current filter selections
+ * @returns {string}
+ */
+export const useActiveFilterLang = () => {
+  return useDataOptions(state => {
+    const filters = state.filters
+    const region = state.region
+    return getFiltersLang(filters, region)
+  })
+}
+
+/**
+ * User Interface
+ * ---------
+ * Interactions with store for user interface control
+ */
+
+/**
+ * Pulls condensed on/off value and setter
+ * @returns {[boolean, Function]} [ isCondensed, toggleCondensed ]
+ */
+export const useCondensed = () =>
+  useUiStore(
+    state => [state.condensed, state.toggleCondensed],
+    shallow
+  )
+
+/**
+ * Provides boolean and setter that determines if
+ * markers should show for the hovered location.
+ * Markers include map outline, scatterplot dot outline,
+ * and map legend tick.
+ * @returns {[boolean, Function]} [ showMarkers, setShowMarkers ]
+ */
+export const useMarkersVisibility = () => {
+  return useUiStore(
+    state => [state.showMarkers, state.setShowMarkers],
+    shallow
+  )
+}
+
+/**
+ * Provides preview chart visible value and toggle function
+ * @returns {[boolean, Function]} [ showChart, toggleChart ]
+ */
+export const useChartVisible = () => {
+  return useUiStore(
+    state => [state.showChart, state.toggleChart],
+    shallow
+  )
+}
+
+/**
+ * Provides site menu visible value and toggle function
+ * @returns {[boolean, Function]}  [ showMenu, toggleMenu ]
+ */
+export const useMenuVisibility = () => {
+  return useUiStore(
+    state => [state.showMenu, state.toggleMenu],
+    shallow
+  )
+}
+
+/**
+ * Provides help panel visible value and toggle function
+ * @returns {[boolean, Function]}  [ showHelp, toggleHelp ]
+ */
+export const useHelpVisibility = () => {
+  return useUiStore(
+    state => [state.showHelp, state.toggleHelp],
+    shallow
+  )
+}
+
+/**
+ * Provides link dialog visible value and toggle function
+ * @returns {[boolean, Function]} [ showLinkDialog, toggleLinkDialog ]
+ */
+export const useLinkDialogVisibility = () => {
+  return useUiStore(
+    state => [state.showLinkDialog, state.toggleLinkDialog],
+    shallow
+  )
+}
+
+/**
+ * Provides embed dialog visible value and toggle function
+ * @returns {[boolean, Function]} [ showEmbedDialog, toggleEmbedDialog ]
+ */
+export const useEmbedDialogVisibility = () => {
+  return useUiStore(
+    state => [state.showEmbedDialog, state.toggleEmbedDialog],
+    shallow
+  )
+}
+
+/**
+ * Provides the currently active filter selection panel value
+ * ("prefix" or "largest", null for no panel) and setter function
+ * @returns [string, function]
+ */
+export const useActiveFilterSelection = () => {
+  return useUiStore(
+    state => [state.filterPanel, state.setFilterPanel],
+    shallow
+  )
+}
+
+/**
+ * Provides the currently active selection panel value
+ * ('metric', 'region', 'demographic', 'filter', 'location',
+ * or null for no panel) and setter function
+ * @returns [string, function]
+ */
+export const useActiveSelection = () => {
+  return useUiStore(
+    state => [state.selection, state.setSelection],
+    shallow
+  )
+}
+
+/**
+ * Value and setter for current view ("map", "chart", or "split")
+ * @returns [string, function]
+ */
+export const useActiveView = () => {
+  return useUiStore(
+    state => [state.view, state.setView],
+    shallow
+  )
+}
+
+/**
+ * Tooltip
+ * ---------
+ * Interactions with data store for tooltip
+ */
+
+/**
+ * Provides tooltip visible value and setter function
+ * @returns {[boolean, Function]} [ showTooltip, setShowTooltip ]
+ */
+export const useTooltipVisibility = () => {
+  return useUiStore(
+    state => [state.showTooltip, state.setShowTooltip],
+    shallow
+  )
+}
+
+/**
+ * Provides the screen coordinates of the tooltip and setter function
+ * @returns {[[number, number], Function]} [ [x, y], setCoords ]
+ */
+export const useTooltipCoords = () => {
+  return useUiStore(
+    state => [state.coords, state.setCoords],
+    shallow
+  )
+}
+
+/**
+ * Scatterplot
+ * ---------
+ * Interactions with data store for scatterplot
+ */
+
+/**
+ * Provides data used for the scatterplot and setter
+ * @returns {[Object, function]}
+ */
+export const useScatterplotData = () => {
+  return useDataOptions(
+    state => [state.data, state.setData],
+    shallow
+  )
+}
+
+/**
+ * Provides x, y, z scatterplot variables for current data options
+ * @returns {[string, string, string]} [xVar, yVar, zVar]
+ */
+export const useScatterplotVars = () => {
+  return useDataOptions(
+    state =>
+      getVarNames(
+        state.region,
+        state.metric,
+        state.demographic,
+        'chart'
+      ),
+    shallow
+  )
+}
+
+/**
+ * Provides functions for positioning and sizing
+ * based on x, y, z values
+ * @returns {[function, function, function]} [xValueToPercent, yValueToPercent, zValueToRadius]
+ */
+export const useXyzTransformers = () => {
+  const [xVar, yVar] = useScatterplotVars()
+  const [region] = useRegion()
+  const invertX = region === 'schools'
+  const xRange = getMetricRangeFromVarName(xVar, region)
+  const yRange = getMetricRangeFromVarName(yVar, region)
+  // function that converts xValue to the % position on the scale
+  const xValToPosition = val =>
+    getValuePercentInRange(val, xRange, invertX)
+  // function that converts yValue to the % position on the scale
+  const yValToPosition = val =>
+    100 - getValuePercentInRange(val, yRange)
+  // function that converts z value to circle radius in px
+  const dem = getDemographicForVarNames(xVar, yVar)
+  const zValToSize = getSizerFunctionForRegion(region, dem)
+  // return transformers
+  return [xValToPosition, yValToPosition, zValToSize]
+}
+
+/**
+ * Maps
+ * ---------
+ * Interactions with data store for map
+ */
+
+/**
+ * Provides map vars for current state
+ * @returns {[string, string]} [secondaryVar, choroplethVar]
+ */
+export const useMapVars = () => {
+  return useDataOptions(
+    state =>
+      getVarNames(
+        state.region,
+        state.metric,
+        state.demographic,
+        'map'
+      ),
+    shallow
+  )
+}
+
+/**
+ * Provides pixel dimensions of the map viewport
+ * @returns {[number, number]} [width, height]
+ */
+export const useMapSize = () => {
+  return useMapStore(
+    state => [state.viewport.width, state.viewport.height],
+    shallow
+  )
+}
+
+/**
+ * Provides map viewport value and setter
+ * @returns {[object, function]} [viewport, setViewport]
+ */
+export const useMapViewport = () => {
+  return useMapStore(
+    state => [state.viewport, state.setViewport],
+    shallow
+  )
+}
+
+export const useFlyToState = () => {
+  return useMapStore(state => state.flyToState)
+}
+
+export const useFlyToFeature = () => {
+  return useMapStore(state => state.flyToFeature)
+}
+
+export const useFlyToReset = () => {
+  return useMapStore(state => state.flyToReset)
+}
+
+/**
+ * Locations
+ * ---------
+ * Interactions with data store for locations
+ */
+
+/**
+ * Grabs an array of features for locations and a setter from the store
+ * @returns {[Array<Feature>, Function]>}
+ */
+export const useLocations = () =>
+  useDataOptions(
+    state => [state.locations, state.setLocations],
+    shallow
+  )
+
+/**
+ * Provides all current locations as an array of object data
+ * @returns {[Array<LocationData>]}
+ */
+export const useLocationsData = () => {
+  return useDataOptions(
+    state =>
+      state.locations.map(l => ({
+        ...getDataForId(
+          getFeatureProperty(l, 'id'),
+          state.data[state.region]
+        ),
+        ...l.properties
+      })),
+    shallow
+  )
+}
+
+/**
+ * Grabs the active location ID and setter
+ * @returns {[string, Function]}
+ */
+export const useActiveLocation = () =>
+  useDataOptions(
+    state => [state.activeLocation, state.setActiveLocation],
+    shallow
+  )
+
+/**
+ * Pulls an object containing all of the data for the active locations
+ * @returns {LocationData} LocationData object
+ */
+export const useActiveLocationData = () => {
+  return useDataOptions(state => {
+    const id = state.activeLocation
+    const locations = state.locations
+    const i = locations.findIndex(
+      l => getFeatureProperty(l, 'id') === id
+    )
+    return i > -1
+      ? { ...locations[i].properties, id, index: i }
+      : {}
+  }, shallow)
+}
+
+/**
+ * Pulls an object containing the GeoJSON feature for the active location
+ * @returns {GeojsonFeature} LocationFeature object
+ */
+export const useActiveLocationFeature = () => {
+  return useDataOptions(state => {
+    const id = state.activeLocation
+    const locations = state.locations
+    return id
+      ? locations.find(l => getFeatureProperty(l, 'id') === id)
+      : null
+  })
+}
+
+/**
+ * Provides count of current locations
+ * @returns {number}
+ */
+export const useLocationCount = () => {
+  return useDataOptions(state => state.locations.length)
+}
+
+/**
+ * Provides a function for adding location (GeoJSON features) to
+ * the selected locations list
+ * @returns {function}
+ */
+export const useAddLocation = () => {
+  return useDataOptions(state => state.addLocation)
+}
+
+/**
+ * Provides a function for adding location (id strings) to
+ * the selected locations list
+ * @returns {function}
+ */
+export const useAddLocationById = () => {
+  return useDataOptions(state => state.addLocationFromId)
+}
+
+/**
+ * Provides a function for removing locations from
+ * the selected locations list
+ * @returns {function}
+ */
+export const useRemoveLocation = () => {
+  const [locations, setLocations] = useLocations()
+  return useCallback(
+    location => {
+      const id =
+        typeof location === 'string'
+          ? location
+          : location && typeof location === 'object'
+          ? getFeatureProperty(location, 'id')
+          : null
+      if (!id)
+        throw new Error('tried to remove invalid location')
+      const newLocations = locations.filter(
+        l => getFeatureProperty(l, 'id') !== id
+      )
+      setLocations(newLocations)
+    },
+    [locations, setLocations]
+  )
+}
+
+/**
+ * Provides data from the store for the given ID
+ * @param {string} id
+ * @returns {LocationData} LocationData object
+ */
+export const useDataForId = id => {
+  return useDataOptions(state => {
+    if (!id) return null
+    const region = getRegionFromFeatureId(id)
+    return getDataForId(id, state.data[region])
+  })
+}
+
+/**
+ * Provides name for the given id
+ * @param {string} id
+ * @returns {string}
+ */
+export const useNameForId = id => {
+  return useDataOptions(state => {
+    if (!id) return ''
+    const region = getRegionFromFeatureId(id)
+    switch (region) {
+      case 'states':
+        return getStateName(id)
+      default:
+        return getDataForId(id, state.data[region])['name']
+    }
+  })
+}
+
+const getFilterRoute = filters => {
+  let route = filters.prefix
+    ? getStateAbbr(filters.prefix)
+    : 'us'
+  if (filters.largest) {
+    route += '+' + filters.largest
+  }
+  return route
+}
+
+const getLocationsRoute = locations => {
+  let locationsRoute = ''
+  return locationsRoute
+}
+
+const getViewportRoute = viewport => {
+  return [
+    formatNumber(viewport.zoom),
+    formatNumber(viewport.latitude),
+    formatNumber(viewport.longitude)
+  ].join('/')
+}
+
+export const useRouterParams = () => {
+  const view = useUiStore(state => state.view)
+  const viewportRoute = useMapStore(state =>
+    getViewportRoute(state.viewport)
+  )
+  return useDataOptions(state =>
+    [
+      view,
+      getFilterRoute(state.filters),
+      state.region,
+      state.metric,
+      state.secondary,
+      state.demographic,
+      viewportRoute,
+      getLocationsRoute(state.locations)
+    ].join('/')
+  )
+}
