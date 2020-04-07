@@ -125,6 +125,20 @@ MapLegend.defaultProps = {
   markerFormatter: v => v
 }
 
-MapLegend.propTypes = {}
+MapLegend.propTypes = {
+  layout: PropTypes.string,
+  primary: PropTypes.string,
+  secondary: PropTypes.string,
+  labelRange: PropTypes.array,
+  labelFormatter: PropTypes.func,
+  colorRange: PropTypes.array,
+  midLabel: PropTypes.string,
+  colors: PropTypes.array,
+  midPosition: PropTypes.number,
+  markerPosition: PropTypes.number,
+  className: PropTypes.string,
+  classes: PropTypes.object,
+  footer: PropTypes.node
+}
 
 export default MapLegend

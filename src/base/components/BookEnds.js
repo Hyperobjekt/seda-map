@@ -106,6 +106,17 @@ const BookEnds = ({
   )
 }
 
-BookEnds.propTypes = {}
+BookEnds.propTypes = {
+  startLabel: PropTypes.any,
+  endLabel: PropTypes.any,
+  startIcon: PropTypes.node,
+  endIcon: PropTypes.node,
+  onStartClick: PropTypes.func,
+  onEndClick: PropTypes.func,
+  vertical: PropTypes.bool,
+  midPosition: PropTypes.number,
+  className: PropTypes.string,
+  classes: PropTypes.object
+}
 
 export default BookEnds

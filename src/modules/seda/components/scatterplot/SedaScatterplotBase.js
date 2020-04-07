@@ -13,10 +13,6 @@ import {
   getLabelForVarName
 } from '../../../../shared/selectors/lang'
 import * as merge from 'deepmerge'
-import {
-  getFeatureForId,
-  getDataForId
-} from '../../../scatterplot/components/ScatterplotBase/utils'
 import clsx from 'clsx'
 import { getFilteredIds } from '../../../../shared/selectors/data'
 import { useScatterplotData } from '../../hooks'
@@ -59,21 +55,6 @@ const fetchSchoolPair = (xVar, yVar) => {
   return fetchReducedPair(endpoint, xVar, yVar)
 }
 
-const getLocatonIdFromEvent = (e, data) => {
-  // index of the id property in the scatterplot data
-  const idIndex = 3
-  // get the data array for the hovered location
-  const hoverData =
-    e && e.data && e.data.hasOwnProperty('value')
-      ? e.data['value']
-      : e.data
-  const id = hoverData ? hoverData[idIndex] : null
-  // get the data from the state for the location
-  return hoverData && e.type === 'mouseover'
-    ? getFeatureForId(id, data)
-    : null
-}
-
 function SedaScatterplotBase({
   xVar,
   yVar,
@@ -102,7 +83,7 @@ function SedaScatterplotBase({
       0,
       3000
     )
-  }, [regionData, filters.prefix, filters.largest, zVar])
+  }, [regionData, filters, zVar])
   // get list of vars needed to render current options
   const neededVars = getMissingVarNames(regionData, [
     xVar,
@@ -126,7 +107,7 @@ function SedaScatterplotBase({
     })
     // disable lint, this doesn't need to fire when onData changes
     // eslint-disable-next-line
-  }, [region, xVar, yVar, zVar, neededVars])
+  }, [region, xVar, yVar, zVar, filters.prefix, neededVars])
 
   // fetch any additional school level data for highlighted states
   useEffect(() => {
@@ -140,7 +121,15 @@ function SedaScatterplotBase({
       setData(data, 'schools')
       return data
     })
-  }, [xVar, yVar, zVar, region, filters.prefix, setData])
+  }, [
+    xVar,
+    yVar,
+    zVar,
+    region,
+    autoFetch,
+    filters.prefix,
+    setData
+  ])
 
   useEffect(() => {
     if (neededVars.length !== 0) return
@@ -158,6 +147,7 @@ function SedaScatterplotBase({
     zVar,
     region,
     variant,
+    neededVars.length,
     highlightIds,
     regionData
   ])

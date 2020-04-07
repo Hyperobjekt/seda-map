@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import classNames from 'classnames'
 import Marker from '../../../base/components/Marker'
 import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core'

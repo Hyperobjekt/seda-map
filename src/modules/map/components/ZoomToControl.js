@@ -7,6 +7,7 @@ export const ZoomToControl = ({ title, ...props }) => {
       <button
         className="mapboxgl-ctrl-icon mapboxgl-ctrl-us"
         title={title}
+        {...props}
       />
     </div>
   )

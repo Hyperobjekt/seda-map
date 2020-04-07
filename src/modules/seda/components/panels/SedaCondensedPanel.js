@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { makeStyles, Divider } from '@material-ui/core'
 import {
   SidePanel,
@@ -219,7 +218,5 @@ const SedaCondensedPanel = props => {
     </SidePanel>
   )
 }
-
-SedaCondensedPanel.propTypes = {}
 
 export default SedaCondensedPanel

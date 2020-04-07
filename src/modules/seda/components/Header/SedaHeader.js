@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { PageHeader } from '../../../../base/components/Page'
 import SedaLogo from './SedaLogo'
 import {
@@ -186,7 +185,7 @@ const useHeaderStyles = makeStyles(theme => ({
   }
 }))
 
-const SedaHeader = ({ onMenuClick }) => {
+const SedaHeader = props => {
   const [metricId, demId, regionId] = useActiveOptionIds()
   const [filters] = useFilters()
   const stateName = filters.prefix
@@ -203,7 +202,8 @@ const SedaHeader = ({ onMenuClick }) => {
     <PageHeader
       classes={classes}
       LogoComponent={<HeaderLogo />}
-      ActionsComponent={<HeaderActions />}>
+      ActionsComponent={<HeaderActions />}
+      {...props}>
       <Typography className={classes.heading} variant="h1">
         {heading}
       </Typography>
@@ -218,7 +218,5 @@ const SedaHeader = ({ onMenuClick }) => {
     </PageHeader>
   )
 }
-
-SedaHeader.propTypes = {}
 
 export default SedaHeader

@@ -110,7 +110,7 @@ const SedaScatterplot = () => {
       const id = getLocatonIdFromEvent(e)
       addLocationFromId(id)
     },
-    [useAddLocationById]
+    [addLocationFromId]
   )
 
   // handle errors loading data

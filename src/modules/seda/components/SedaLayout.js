@@ -23,11 +23,6 @@ import {
   useActiveFilterSelection,
   useActiveSelection
 } from '../hooks'
-import SedaPreviewChartPanel from './panels/SedaPreviewChartPanel'
-import { Scatterplot } from './scatterplot'
-import SedaScatterplotPreview from './scatterplot/SedaScatterplotPreview'
-
-const drawerWidth = 360
 
 const useStyles = makeStyles(theme => ({
   offset: theme.mixins.toolbar,

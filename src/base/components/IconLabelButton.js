@@ -88,7 +88,14 @@ const IconLabelButton = ({
   )
 }
 
-IconLabelButton.propTypes = {}
+IconLabelButton.propTypes = {
+  icon: PropTypes.node,
+  className: PropTypes.string,
+  classes: PropTypes.object,
+  active: PropTypes.bool,
+  tooltip: PropTypes.any,
+  placement: PropTypes.string
+}
 IconLabelButton.defaultProps = {
   classes: {},
   placement: 'right'

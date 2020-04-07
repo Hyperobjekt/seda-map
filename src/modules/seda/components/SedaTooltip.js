@@ -1,5 +1,4 @@
-import React, { useMemo } from 'react'
-import PropTypes from 'prop-types'
+import React from 'react'
 import {
   getTooltipMetricLang,
   getMetricLabel,
@@ -119,7 +118,8 @@ const SedaTooltip = props => {
       subtitle={stateName}
       show={showTooltip}
       x={x}
-      y={y}>
+      y={y}
+      {...props}>
       <StatDetailed varName={yVar} value={data[yVar]} />
       <StatDetailed varName={xVar} value={data[xVar]} />
       <Typography className={classes.hint} variant="caption">
@@ -130,7 +130,5 @@ const SedaTooltip = props => {
     </Tooltip>
   ) : null
 }
-
-SedaTooltip.propTypes = {}
 
 export default SedaTooltip

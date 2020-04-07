@@ -5,24 +5,12 @@ import React, {
   useState
 } from 'react'
 import useResizeAware from 'react-resize-aware'
-import ReactMapGL, { NavigationControl } from 'react-map-gl'
+import ReactMapGL from 'react-map-gl'
 import PropTypes from 'prop-types'
 import usePrevious from '../../../shared/hooks/usePrevious'
 import mapboxgl from 'mapbox-gl/dist/mapbox-gl'
-import * as _debounce from 'lodash.debounce'
 import { defaultMapStyle } from '../selectors'
-/**
- * Returns the width and height of the provided element
- */
-const getContainerSize = el => {
-  if (!el) {
-    return { width: 400, height: 400 }
-  }
-  return {
-    width: el.clientWidth,
-    height: el.clientHeight
-  }
-}
+import { getClosest } from '../../../shared/utils'
 
 /**
  * Returns an array of layer ids for layers that have the
@@ -48,12 +36,6 @@ const getUpdatedMapStyle = (style, layers) => {
     )
   )
 }
-
-const isSameViewport = (vp1, vp2) =>
-  ['width', 'height', 'latitude', 'longitude', 'zoom'].reduce(
-    (acc, curr) => (acc ? vp1[curr] === vp2[curr] : false),
-    true
-  )
 
 const MapBase = ({
   style = defaultMapStyle,
@@ -200,8 +182,18 @@ const MapBase = ({
   }
 
   // handler for feature click
-  const handleClick = ({ features }) =>
-    features && features.length > 0 && onClick(features[0])
+  const handleClick = ({ features, srcEvent, ...rest }) => {
+    // was the click on a control
+    const isControl = getClosest(
+      srcEvent.target,
+      '.mapboxgl-ctrl-group'
+    )
+    // activate feature if one was clicked and this isn't a control click
+    features &&
+      features.length > 0 &&
+      !isControl &&
+      onClick(features[0])
+  }
 
   useEffect(() => {
     onViewportChange({

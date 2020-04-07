@@ -119,7 +119,7 @@ const LocationList = ({
 const SedaLocationSelect = ({ onSelect }) => {
   const removeLocation = useRemoveLocation()
   const [activeRegion, setRegion] = useRegion()
-  const [locations, setLocations] = useLocations()
+  const [locations] = useLocations()
   const [, setActiveLocation] = useActiveLocation()
   const [, setHovered] = useHovered()
   const locationsByRegion = getLocationsByRegion(locations)

@@ -7,13 +7,7 @@ import {
 } from '.'
 
 import LANG from '../constants/en'
-import { getRegions } from './regions'
-import {
-  getDemographics,
-  getGaps,
-  isVersusFromVarNames
-} from './demographics'
-import { getMetrics } from './metrics'
+import { isVersusFromVarNames } from './demographics'
 import { getMidpointForVarName } from './data'
 import { getStateName } from './states'
 

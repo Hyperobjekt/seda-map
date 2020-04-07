@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import useSiteStore from '../hooks/useSiteStore'
 import { makeStyles, Button, Drawer } from '@material-ui/core'
 import LinkCollection from '../../../base/components/LinkCollection'
@@ -40,7 +39,5 @@ const SedaMenu = ({ ...props }) => {
     </Drawer>
   )
 }
-
-SedaMenu.propTypes = {}
 
 export default SedaMenu

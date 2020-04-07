@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import {
   Typography,
   makeStyles,
@@ -132,7 +131,5 @@ const SedaFullPanel = props => {
     </SidePanel>
   )
 }
-
-SedaFullPanel.propTypes = {}
 
 export default SedaFullPanel

@@ -10,8 +10,7 @@ import {
   getMidpointForVarName,
   isVersusFromVarNames,
   getDemographicForVarNames,
-  getFormatterForVarName,
-  getSelectedColors
+  getFormatterForVarName
 } from '../../shared/selectors'
 import { getLang } from '../../shared/selectors/lang'
 import { getCSSVariable, formatNumber } from '../../shared/utils'

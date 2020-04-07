@@ -30,7 +30,9 @@ const DetailedTooltip = ({
 }) => {
   const classes = useTooltipStyles()
   return (
-    <div className={clsx('panel-tooltip', classes.root)}>
+    <div
+      className={clsx('panel-tooltip', classes.root)}
+      {...props}>
       {primary && (
         <Typography className={classes.primary} variant="body1">
           {primary}
@@ -50,6 +52,12 @@ const DetailedTooltip = ({
       )}
     </div>
   )
+}
+
+DetailedTooltip.propTypes = {
+  primary: PropTypes.string,
+  secondary: PropTypes.string,
+  hint: PropTypes.string
 }
 
 export default DetailedTooltip

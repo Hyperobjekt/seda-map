@@ -53,10 +53,10 @@ const SelectionButton = ({
   icon,
   primary,
   secondary,
-  secondaryIcon = <RightIcon />,
-  SecondaryActionProps = {},
-  TextProps = {},
-  classes: overrides = {},
+  secondaryIcon,
+  SecondaryActionProps,
+  TextProps,
+  classes: overrides,
   ...props
 }) => {
   const classes = useStyles({ small, active })
@@ -101,6 +101,23 @@ const SelectionButton = ({
   )
 }
 
-SelectionButton.propTypes = {}
+SelectionButton.defaultProps = {
+  secondaryIcon: <RightIcon />,
+  SecondaryActionProps: {},
+  TextProps: {},
+  classes: {}
+}
+
+SelectionButton.propTypes = {
+  small: PropTypes.bool,
+  active: PropTypes.bool,
+  icon: PropTypes.node,
+  primary: PropTypes.string,
+  secondary: PropTypes.string,
+  secondaryIcon: PropTypes.node,
+  SecondaryActionProps: PropTypes.object,
+  TextProps: PropTypes.object,
+  classes: PropTypes.object
+}
 
 export default SelectionButton

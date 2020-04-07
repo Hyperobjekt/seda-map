@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { isVersusFromVarNames } from '../../../../shared/selectors'
 import ScatterplotBase from './SedaScatterplotBase'
