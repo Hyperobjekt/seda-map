@@ -1,9 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 
 import {
   InputAdornment,
-  Input,
   makeStyles,
   TextField
 } from '@material-ui/core'
@@ -23,17 +22,17 @@ const useStyles = makeStyles(theme => ({
 
 const SearchInput = ({
   classes: overrides,
-  condensed,
+  onChange,
+  onClear,
+  inputProps,
   ...props
 }) => {
-  const [searchText, setSearchText] = useState('')
-  const classes = useStyles({ condensed })
+  const classes = useStyles()
   return (
     <TextField
       variant="outlined"
       className={clsx('search', classes.root, overrides.root)}
       InputProps={{
-        value: searchText,
         classes: {
           input: clsx(
             'search__input',
@@ -43,23 +42,30 @@ const SearchInput = ({
         },
         endAdornment: (
           <InputAdornment position="end">
-            {searchText ? (
-              <CloseIcon onClick={() => setSearchText('')} />
+            {inputProps.value ? (
+              <CloseIcon onClick={onClear} />
             ) : (
               <SearchIcon />
             )}
           </InputAdornment>
-        )
+        ),
+        inputProps
       }}
-      onChange={e => setSearchText(e.target.value)}
+      onChange={onChange}
       {...props}
     />
   )
 }
 
-SearchInput.propTypes = {}
+SearchInput.propTypes = {
+  classes: PropTypes.object,
+  onChange: PropTypes.func,
+  onClear: PropTypes.func,
+  inputProps: PropTypes.object
+}
 SearchInput.defaultProps = {
-  classes: {}
+  classes: {},
+  inputProps: {}
 }
 
 export default SearchInput

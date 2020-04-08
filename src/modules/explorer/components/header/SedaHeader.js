@@ -9,7 +9,6 @@ import {
 import SedaHelpButton from './SedaHelpButton'
 import SedaMenuButton from './SedaMenuButton'
 import SedaViewControls from './SedaViewControls'
-import SearchInput from '../../../../shared/components/SearchInput'
 import {
   getLang,
   getMetricLabel,
@@ -21,6 +20,7 @@ import { isGapDemographic } from '../../../../shared/selectors'
 import DetailedTooltip from '../base/DetailedTooltip'
 import { useActiveOptionIds, useFilters } from '../../hooks'
 import { getStateName } from '../../../../shared/selectors/states'
+import SedaSearch from '../SedaSearch'
 
 const useLogoStyles = makeStyles(theme => ({
   root: {
@@ -65,9 +65,8 @@ const HeaderActions = ({ ...props }) => {
   const classes = useActionStyles()
   return (
     <div className={classes.root} {...props}>
-      <SearchInput
+      <SedaSearch
         classes={{ root: classes.searchRoot }}
-        condensed
         placeholder="find a place"
       />
       <SedaViewControls className={classes.viewControls} />

@@ -79,7 +79,7 @@ LocationName.propTypes = {
   /** parent location (e.g. state name) */
   parentLocation: PropTypes.string,
   /** label for the location */
-  label: PropTypes.string
+  label: PropTypes.any
 }
 
 export default LocationName

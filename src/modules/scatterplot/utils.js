@@ -421,7 +421,6 @@ const getPreviewOverlayForVarName = (varName, axis = 'y') => {
   const lines = createLines(positions, axis, midPoint)
   const overlay = getOverlay([], lines)
   overlay.markLine.data = overlay.markLine.data.map(l => {
-    console.log(l)
     return [
       {
         ...l[0],

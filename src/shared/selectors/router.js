@@ -1,11 +1,11 @@
 import * as _debounce from 'lodash.debounce'
 import * as polylabel from 'polylabel'
-import { push } from 'connected-react-router'
-import { history } from '../store'
-import {
-  getRegionFromFeatureId,
-  getRegionFromFeature
-} from '../shared/selectors'
+import { getRegionFromFeatureId, getRegionFromFeature } from '.'
+
+const push = newRoute => {
+  window.location.hash = newRoute
+}
+
 /**
  * Variables stored in the root, in order
  */
@@ -51,7 +51,7 @@ export const getLocationFromFeature = feature => {
  * @param {string} locations contains comma separated id,lat,lon,
  *  with multuple locations concatenated with a '+'.
  *  e.g. "12019,28.89,-81.17+12015,27.83,-82.61"
- * @returns {Array<{id, lat, lon }>}
+ * @returns {[{id, lat, lon }]}
  */
 export const parseLocationsString = locations => {
   if (!locations) {
@@ -94,7 +94,9 @@ const getLocationCountByRegion = locations => {
   if (!locations) {
     return { counties: 0, districts: 0, schools: 0 }
   }
-  const featureIds = locations.split('+').map(l => l.split(',')[0])
+  const featureIds = locations
+    .split('+')
+    .map(l => l.split(',')[0])
   return featureIds.reduce(
     (acc, curr) => {
       acc[getRegionFromFeatureId(curr)]++
@@ -141,7 +143,10 @@ export const addFeatureToPathname = (pathname, feature) => {
   const baseLocations =
     counts[region] < 6
       ? currentRoute.locations
-      : removeFirstLocationForRegion(currentRoute.locations, region)
+      : removeFirstLocationForRegion(
+          currentRoute.locations,
+          region
+        )
   const locations = baseLocations
     ? baseLocations + '+' + getLocationFromFeature(feature)
     : getLocationFromFeature(feature)
@@ -153,7 +158,10 @@ export const addFeatureToPathname = (pathname, feature) => {
  * @param {string} pathname
  * @param {string} locationId
  */
-export const removeLocationFromPathname = (pathname, locationId) => {
+export const removeLocationFromPathname = (
+  pathname,
+  locationId
+) => {
   const params = getParamsFromPathname(pathname)
   const locations = parseLocationsString(params.locations)
   const newLocations = locations.filter(l => l.id !== locationId)
@@ -167,7 +175,10 @@ export const removeLocationFromPathname = (pathname, locationId) => {
  * @param {string} path
  * @returns {object} e.g. { region: 'counties', metric: 'avg', ... }
  */
-export const getParamsFromPathname = (path, routeVars = DEFAULT_ROUTEVARS) => {
+export const getParamsFromPathname = (
+  path,
+  routeVars = DEFAULT_ROUTEVARS
+) => {
   return path
     .substring(1, path.length)
     .split('/')
@@ -210,7 +221,9 @@ export const getViewportFromRoute = ({ params }) =>
   ['latitude', 'longitude', 'zoom'].reduce(
     (acc, curr) => ({
       ...acc,
-      [curr]: parseFloat(params[curr !== 'zoom' ? curr.substr(0, 3) : curr])
+      [curr]: parseFloat(
+        params[curr !== 'zoom' ? curr.substr(0, 3) : curr]
+      )
     }),
     {}
   )
@@ -246,12 +259,14 @@ const areNewUpdates = (params, updates) => {
  */
 export const updateRoute = (updates, routeVars) => {
   if (updates && updates['highlightedState']) {
-    updates['highlightedState'] = updates['highlightedState'].toLowerCase()
+    updates['highlightedState'] = updates[
+      'highlightedState'
+    ].toLowerCase()
   }
   const path = window.location.hash.substr(1)
   const params = getParamsFromPathname(path)
   areNewUpdates(params, updates) &&
-    history.push(getPathnameFromParams(params, updates, routeVars))
+    push(getPathnameFromParams(params, updates, routeVars))
 }
 
 /**
@@ -274,9 +289,9 @@ export const updateViewportRoute = _debounce(vp => {
   }
 }, 1000)
 
-export const updateRegionInRoute = (dispatch, pathname, region) => {
+export const updateRegionInRoute = (pathname, region) => {
   const currentRoute = getParamsFromPathname(pathname)
-  dispatch(push(getPathnameFromParams(currentRoute, { region })))
+  push(getPathnameFromParams(currentRoute, { region }))
 }
 
 const isFeatureInPathname = (feature, pathname) => {
@@ -286,25 +301,26 @@ const isFeatureInPathname = (feature, pathname) => {
 
 /**
  * Pushes a location to the route based on a feature
- * @param {*} dispatch
  * @param {string} pathname
  * @param {object} feature
  */
-export const addFeatureToRoute = (dispatch, pathname, feature) => {
+export const addFeatureToRoute = (pathname, feature) => {
   if (isFeatureInPathname(feature, pathname)) {
     return
   }
   const newRoute = addFeatureToPathname(pathname, feature)
-  dispatch(push(newRoute))
+  push(newRoute)
 }
 
 /**
  * Pushes a location to the route based on a feature
- * @param {*} dispatch
  * @param {string} pathname
  * @param {object} feature
  */
-export const removeFeatureFromRoute = (dispatch, pathname, feature) => {
-  const newRoute = removeLocationFromPathname(pathname, feature.properties.id)
-  dispatch(push(newRoute))
+export const removeFeatureFromRoute = (pathname, feature) => {
+  const newRoute = removeLocationFromPathname(
+    pathname,
+    feature.properties.id
+  )
+  push(newRoute)
 }

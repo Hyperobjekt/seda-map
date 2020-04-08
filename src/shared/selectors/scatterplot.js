@@ -84,7 +84,7 @@ export const getVarNames = (
 ) => {
   // schools always use "all" subgroup
   if (region === 'schools') {
-    return ['all_' + metric, 'all_frl', 'all_sz']
+    return ['all_frl', 'all_' + metric, 'all_sz']
   }
   // default chart for gap demographics should be versus
   if (type === 'chart' && isGapDemographic(demographic)) {

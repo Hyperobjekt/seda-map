@@ -96,7 +96,6 @@ const SedaMap = props => {
 
   /** handler for zoom to U.S. */
   const handleResetViewport = e => {
-    console.log(e)
     e.preventDefault()
     flyToReset()
   }

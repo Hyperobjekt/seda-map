@@ -13,11 +13,17 @@ const useIconStyles = makeStyles(theme => ({
   }
 }))
 
-const Icon = ({ color, size = 24, children, ...props }) => {
+const Icon = ({
+  color,
+  size = 24,
+  className,
+  children,
+  ...props
+}) => {
   const classes = useIconStyles()
   return (
     <svg
-      className={clsx('icon', classes.root)}
+      className={clsx('icon', classes.root, className)}
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

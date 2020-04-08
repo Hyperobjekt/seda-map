@@ -381,6 +381,10 @@ export const useFlyToFeature = () => {
   return useMapStore(state => state.flyToFeature)
 }
 
+export const useFlyToLatLon = () => {
+  return useMapStore(state => state.flyToLatLon)
+}
+
 export const useFlyToReset = () => {
   return useMapStore(state => state.flyToReset)
 }
@@ -486,6 +490,10 @@ export const useAddLocationById = () => {
   return useDataOptions(state => state.addLocationFromId)
 }
 
+export const useAddLocationsByRoute = () => {
+  return useDataOptions(state => state.addLocationsFromRoute)
+}
+
 /**
  * Provides a function for removing locations from
  * the selected locations list
@@ -543,6 +551,12 @@ export const useNameForId = id => {
   })
 }
 
+/**
+ * Routes
+ * ---------
+ * Interactions with data store for routing
+ */
+
 const getFilterRoute = filters => {
   let route = filters.prefix
     ? getStateAbbr(filters.prefix)
@@ -582,5 +596,23 @@ export const useRouterParams = () => {
       viewportRoute,
       getLocationsRoute(state.locations)
     ].join('/')
+  )
+}
+
+export const useError = () => {
+  return useDataOptions(
+    state => [state.error, state.setError],
+    shallow
+  )
+}
+
+/**
+ * Provides site menu visible value and toggle function
+ * @returns {[boolean, Function]}  [ showMenu, toggleMenu ]
+ */
+export const useErrorVisibility = () => {
+  return useDataOptions(
+    state => [state.showError, state.setShowError],
+    shallow
   )
 }

@@ -23,6 +23,7 @@ import {
   useActiveFilterSelection,
   useActiveSelection
 } from '../hooks'
+import SedaError from './SedaError'
 
 const useStyles = makeStyles(theme => ({
   offset: theme.mixins.toolbar,
@@ -106,6 +107,14 @@ const SedaLayout = () => {
       </PageBody>
       <SedaFooter />
       <SedaTooltip />
+      <SedaError
+        style={{
+          position: 'absolute',
+          bottom: 64,
+          right: 24,
+          zIndex: 999
+        }}
+      />
     </Page>
   )
 }

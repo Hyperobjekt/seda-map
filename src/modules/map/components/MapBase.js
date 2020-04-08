@@ -2,7 +2,8 @@ import React, {
   useEffect,
   useMemo,
   useRef,
-  useState
+  useState,
+  useCallback
 } from 'react'
 import useResizeAware from 'react-resize-aware'
 import ReactMapGL from 'react-map-gl'
@@ -11,7 +12,7 @@ import usePrevious from '../../../shared/hooks/usePrevious'
 import mapboxgl from 'mapbox-gl/dist/mapbox-gl'
 import { defaultMapStyle } from '../selectors'
 import { getClosest } from '../../../shared/utils'
-
+import { DEFAULT_VIEWPORT } from '../constants'
 /**
  * Returns an array of layer ids for layers that have the
  * interactive property set to true
@@ -38,15 +39,15 @@ const getUpdatedMapStyle = (style, layers) => {
 }
 
 const MapBase = ({
-  style = defaultMapStyle,
-  attributionControl = true,
+  style,
+  attributionControl,
   hoveredId,
   selectedIds,
-  layers = [],
-  viewport = {},
+  layers,
+  viewport,
   children,
   idMap,
-  selectedColors = ['#00ff00'],
+  selectedColors,
   ariaLabel,
   onViewportChange,
   onHover,
@@ -82,29 +83,30 @@ const MapBase = ({
    * @param {string} featureId
    * @param {object} state
    */
-  const setFeatureState = (featureId, state) => {
-    if (!loaded) {
-      return
-    }
-    const layer = layers.find(
-      l => l.hasFeatureId && l.hasFeatureId(featureId)
-    )
-    if (!layer || !featureId || !mapRef.current) {
-      return
-    }
-    const id =
-      idMap && idMap[featureId] ? idMap[featureId] : featureId
-    currentMap &&
-      currentMap.setFeatureState &&
-      currentMap.setFeatureState(
-        {
-          source: layer.style.get('source'),
-          sourceLayer: layer.style.get('source-layer'),
-          id
-        },
-        state
+  const setFeatureState = useCallback(
+    (featureId, state) => {
+      if (!loaded) return
+      const layer = layers.find(
+        l => l.hasFeatureId && l.hasFeatureId(featureId)
       )
-  }
+      if (!layer || !featureId || !mapRef.current) {
+        return
+      }
+      const id =
+        idMap && idMap[featureId] ? idMap[featureId] : featureId
+      currentMap &&
+        currentMap.setFeatureState &&
+        currentMap.setFeatureState(
+          {
+            source: layer.style.get('source'),
+            sourceLayer: layer.style.get('source-layer'),
+            id
+          },
+          state
+        )
+    },
+    [layers, idMap, currentMap, loaded]
+  )
 
   // update map style layers when layers change
   const mapStyle = useMemo(
@@ -160,12 +162,16 @@ const MapBase = ({
     }
   }
 
-  // handler for viewport change
-  const handleViewportChange = vp => {
-    if (!loaded) return
-    if (vp.zoom && vp.zoom < 2) return
-    onViewportChange(vp)
-  }
+  // handler for viewport change, debounced to prevent
+  // race errors
+  const handleViewportChange = useCallback(
+    (vp, options = {}) => {
+      if (!loaded) return
+      if (vp.zoom && vp.zoom < 2) return
+      onViewportChange(vp)
+    },
+    [onViewportChange, loaded]
+  )
 
   // handler for feature hover
   const handleHover = ({ features, point, srcEvent }) => {
@@ -259,6 +265,15 @@ const MapBase = ({
       </ReactMapGL>
     </div>
   )
+}
+
+MapBase.defaultProps = {
+  style: defaultMapStyle,
+  idMap: {},
+  viewport: DEFAULT_VIEWPORT,
+  layers: [],
+  attributionControl: true,
+  selectedColors: ['#00ff00']
 }
 
 MapBase.propTypes = {

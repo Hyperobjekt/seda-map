@@ -6,14 +6,63 @@ import bbox from '@turf/bbox'
 
 import { DEFAULT_VIEWPORT } from '../../map/constants'
 import { getStateViewportByFips } from '../../../shared/selectors/states'
+import {
+  getRegionFromFeatureId,
+  getFeatureProperty
+} from '../../../shared/selectors'
+
+const getZoomLevelForFeature = feature => {
+  const id = getFeatureProperty(feature, 'id')
+  if (!id) return 9
+  const region = getRegionFromFeatureId(id)
+  switch (region) {
+    case 'states':
+      return 3
+    case 'counties':
+      return 6
+    case 'districts':
+      return 9
+    case 'cities':
+      return 12
+    case 'schools':
+      return 14
+    default:
+      return 9
+  }
+}
+
+const getFeatureGeometryType = feature => {
+  if (!feature.geometry || !feature.geometry.type) return null
+  return feature.geometry.type
+}
+
+const getViewportForFeature = (feature, initialViewport) => {
+  const type = getFeatureGeometryType(feature)
+  if (!type) return {}
+  if (type === 'Point') {
+    const [longitude, latitude] = feature.geometry.coordinates
+    const zoom = getZoomLevelForFeature(feature)
+    return {
+      latitude,
+      longitude,
+      zoom
+    }
+  }
+  const featureBbox = bbox(feature)
+  const bounds = [
+    [featureBbox[0], featureBbox[1]],
+    [featureBbox[2], featureBbox[3]]
+  ]
+  return getViewportForBounds(bounds, initialViewport)
+}
 
 const getViewportForBounds = (
   bounds,
   baseViewport,
   options = {}
 ) => {
-  const width = baseViewport.width || 400
-  const height = baseViewport.height || 300
+  const width = baseViewport.width
+  const height = baseViewport.height
   const padding = options.padding || 20
   const vp = new WebMercatorViewport({
     width,
@@ -21,7 +70,9 @@ const getViewportForBounds = (
   }).fitBounds(bounds, { padding })
   return {
     ...baseViewport,
-    ...vp
+    latitude: vp.latitude,
+    longitude: vp.longitude,
+    zoom: vp.zoom
   }
 }
 
@@ -32,19 +83,13 @@ const [useMapStore] = create((set, get, api) => ({
       viewport: { ...state.viewport, ...viewport }
     })),
   flyToFeature: feature => {
-    const featureBbox = bbox(feature)
-    const bounds = [
-      [featureBbox[0], featureBbox[1]],
-      [featureBbox[2], featureBbox[3]]
-    ]
-    set(state => ({
-      viewport: {
-        ...getViewportForBounds(bounds, state.viewport),
-        transitionDuration: 3000,
-        transitionInterpolator: new FlyToInterpolator(),
-        transitionEasing: ease.easeCubic
-      }
-    }))
+    const viewport = {
+      ...getViewportForFeature(feature, get().viewport),
+      transitionDuration: 3000,
+      transitionInterpolator: new FlyToInterpolator(),
+      transitionEasing: ease.easeCubic
+    }
+    set(state => ({ viewport }))
   },
   flyToBounds: bounds => {
     set(state => ({

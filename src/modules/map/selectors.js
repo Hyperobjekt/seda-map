@@ -343,6 +343,10 @@ export const getChoroplethLayer = ({
     }
   })
 
+/**
+ * Gets choropleth layer based on current context
+ * @param {*} context { metric, demographic, region}
+ */
 export const getChoroplethLayers = context => {
   return [
     {

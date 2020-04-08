@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
-import SearchInput from '../../../../shared/components/SearchInput'
 import {
   Typography,
   ListSubheader,
@@ -29,6 +28,7 @@ import {
   useLocations,
   useRemoveLocation
 } from '../../hooks'
+import SedaSearch from '../SedaSearch'
 
 const colors = getSelectedColors()
 
@@ -154,7 +154,10 @@ const SedaLocationSelect = ({ onSelect }) => {
 
   return (
     <div style={{ padding: '4px 0', width: '100%' }}>
-      <SearchInput placeholder="Find a county, district, or school" />
+      <SedaSearch
+        indices={['counties', 'districts', 'schools']}
+        placeholder="Find a county, district, or school"
+      />
       <LocationList
         title={getRegionLabel(activeRegion)}
         locations={locationsByRegion[activeRegion]}

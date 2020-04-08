@@ -1,7 +1,8 @@
 import axios from 'axios'
-import { parseLocationsString } from '../../modules/router'
+import { parseLocationsString } from '../selectors/router'
 
-const FLAGGED_ENDPOINT = process.env.REACT_APP_DATA_ENDPOINT + 'flagged/'
+const FLAGGED_ENDPOINT =
+  process.env.REACT_APP_DATA_ENDPOINT + 'flagged/'
 
 /**
  * Returns the feature with an id property that matches the
@@ -13,7 +14,9 @@ const FLAGGED_ENDPOINT = process.env.REACT_APP_DATA_ENDPOINT + 'flagged/'
 const getFeatureFromCollection = (id, collection) => {
   const feature = collection.find(f => f.properties.id === id)
   if (!feature) {
-    throw new Error('feature ' + id + ' not found from tilequery API')
+    throw new Error(
+      'feature ' + id + ' not found from tilequery API'
+    )
   }
   return feature
 }
@@ -48,10 +51,16 @@ const getTilequeryUrl = (region, lat, lon) =>
  */
 export const loadFeatureFromCoords = ({ id, lat, lon }) => {
   const region =
-    id.length === 5 ? 'counties' : id.length === 12 ? 'schools' : 'districts'
-  return axios.get(getTilequeryUrl(region, lat, lon)).then(res => {
-    return getFeatureFromCollection(id, res.data.features)
-  })
+    id.length === 5
+      ? 'counties'
+      : id.length === 12
+      ? 'schools'
+      : 'districts'
+  return axios
+    .get(getTilequeryUrl(region, lat, lon))
+    .then(res => {
+      return getFeatureFromCollection(id, res.data.features)
+    })
 }
 
 /**
