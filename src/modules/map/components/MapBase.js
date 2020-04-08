@@ -85,25 +85,25 @@ const MapBase = ({
    */
   const setFeatureState = useCallback(
     (featureId, state) => {
-      if (!loaded) return
+      if (
+        !loaded ||
+        !featureId ||
+        !currentMap ||
+        !currentMap.setFeatureState
+      )
+        return
       const layer = layers.find(
         l => l.hasFeatureId && l.hasFeatureId(featureId)
       )
-      if (!layer || !featureId || !mapRef.current) {
-        return
+      const id = idMap[featureId] ? idMap[featureId] : featureId
+      if (layer) {
+        const source = {
+          source: layer.style.get('source'),
+          sourceLayer: layer.style.get('source-layer'),
+          id
+        }
+        currentMap.setFeatureState(source, state)
       }
-      const id =
-        idMap && idMap[featureId] ? idMap[featureId] : featureId
-      currentMap &&
-        currentMap.setFeatureState &&
-        currentMap.setFeatureState(
-          {
-            source: layer.style.get('source'),
-            sourceLayer: layer.style.get('source-layer'),
-            id
-          },
-          state
-        )
     },
     [layers, idMap, currentMap, loaded]
   )

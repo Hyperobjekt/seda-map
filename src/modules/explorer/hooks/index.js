@@ -373,6 +373,17 @@ export const useMapViewport = () => {
   )
 }
 
+/**
+ * Returns an ID map from feature ID to location ID
+ * and method for adding id's to the map
+ */
+export const useIdMap = () => {
+  return useMapStore(
+    state => [state.idMap, state.addToIdMap],
+    shallow
+  )
+}
+
 export const useFlyToState = () => {
   return useMapStore(state => state.flyToState)
 }
@@ -415,7 +426,8 @@ export const useLocationsData = () => {
       state.locations.map(l => ({
         ...getDataForId(
           getFeatureProperty(l, 'id'),
-          state.data[state.region]
+          state.data[state.region],
+          state.featureData
         ),
         ...l.properties
       })),
@@ -529,7 +541,11 @@ export const useDataForId = id => {
   return useDataOptions(state => {
     if (!id) return null
     const region = getRegionFromFeatureId(id)
-    return getDataForId(id, state.data[region])
+    return getDataForId(
+      id,
+      state.data[region],
+      state.featureData
+    )
   })
 }
 
@@ -546,7 +562,11 @@ export const useNameForId = id => {
       case 'states':
         return getStateName(id)
       default:
-        return getDataForId(id, state.data[region])['name']
+        return getDataForId(
+          id,
+          state.data[region],
+          state.featureData
+        )['name']
     }
   })
 }

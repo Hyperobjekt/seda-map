@@ -425,29 +425,22 @@ export const getScatterplotOptions = props => {
  * @param {*} id
  * @param {*} data
  */
-export const getDataForId = (id, data) => {
-  if (!data) {
-    return null
-  }
-  return Object.keys(data).reduce(
-    (acc, curr) => {
-      // only add data if it exists
-      if (data[curr][id] || data[curr][id] === 0) {
-        acc[curr] = data[curr][id]
-      }
-      return acc
-    },
-    {
-      id,
-      state: getStateAbbr(id),
-      region: getRegionFromFeatureId(id)
-    }
-  )
-}
-
-export const getFeatureForId = (id, data) => {
-  return {
+export const getDataForId = (id, data, featureData = {}) => {
+  if (!data && !featureData) return null
+  data = data || {}
+  featureData = featureData || {}
+  const feature = featureData[id] || {}
+  const base = {
     id,
-    properties: getDataForId(id, data)
+    state: getStateAbbr(id),
+    region: getRegionFromFeatureId(id),
+    ...feature
   }
+  return Object.keys(data).reduce((acc, curr) => {
+    // only add data if it exists
+    if (data[curr][id] || data[curr][id] === 0) {
+      acc[curr] = data[curr][id]
+    }
+    return acc
+  }, base)
 }

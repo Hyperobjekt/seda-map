@@ -22,8 +22,11 @@ import {
   useFlyToState,
   useFlyToFeature,
   useFlyToReset,
-  useActiveLocationFeature
+  useActiveLocationFeature,
+  useIdMap
 } from '../hooks'
+import useDataOptions from '../hooks/useDataOptions'
+import { REGION_TO_ID_LENGTH } from '../../../shared/constants/regions'
 
 const selectedColors = getSelectedColors()
 
@@ -53,6 +56,10 @@ const SedaMap = props => {
   /** function to add a location to the selected locations */
   const addLocation = useAddLocation()
 
+  const addFeatureData = useDataOptions(
+    state => state.addFeatureData
+  )
+  const [idMap, addToIdMap] = useIdMap()
   const flyToState = useFlyToState()
   const flyToFeature = useFlyToFeature()
   const flyToReset = useFlyToReset()
@@ -76,6 +83,12 @@ const SedaMap = props => {
   /** handler for map hover */
   const handleHover = (feature, coords) => {
     const id = getFeatureProperty(feature, 'id')
+    if (id && id !== hoveredId) {
+      addFeatureData(feature.properties)
+      // add schools to the ID map
+      id.length === REGION_TO_ID_LENGTH['schools'] &&
+        addToIdMap(feature.id, id)
+    }
     setHovered(id, coords)
   }
 
@@ -120,7 +133,7 @@ const SedaMap = props => {
       selectedColors={selectedColors}
       layers={layers}
       viewport={viewport}
-      idMap={{}}
+      idMap={idMap}
       selectedIds={locationIds}
       hoveredId={
         showHovered && hoveredId ? hoveredId : undefined

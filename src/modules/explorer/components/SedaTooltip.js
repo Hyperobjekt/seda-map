@@ -96,8 +96,9 @@ const SedaTooltip = props => {
   const [[x, y]] = useTooltipCoords()
   const [xVar, yVar] = useScatterplotVars()
   const data = useDataForId(hoveredId)
-
   const region = getRegionFromFeatureId(hoveredId)
+  // force free lunch secondary metric for schools
+  const secondaryVar = region === 'schools' ? 'all_frl' : xVar
   const isVersus = isVersusFromVarNames(xVar, yVar)
   const demographic = getDemographicForVarNames(xVar, yVar)
   const descriptionVars = isVersus
@@ -121,7 +122,10 @@ const SedaTooltip = props => {
       y={y}
       {...props}>
       <StatDetailed varName={yVar} value={data[yVar]} />
-      <StatDetailed varName={xVar} value={data[xVar]} />
+      <StatDetailed
+        varName={secondaryVar}
+        value={data[secondaryVar]}
+      />
       <Typography className={classes.hint} variant="caption">
         {getLang('TOOLTIP_HINT', {
           region: getSingularRegion(region)

@@ -69,6 +69,19 @@ const makeSetters = (set, get) => ({
       })
     )
   },
+
+  addFeatureData: featureData => {
+    if (get().featureData.hasOwnProperty(featureData.id)) return
+    set(state => {
+      const newState = {
+        featureData: {
+          ...state.featureData,
+          [featureData.id]: featureData
+        }
+      }
+      return newState
+    })
+  },
   addLocationFromId: async (id, setActive = true) => {
     const region = getRegionFromFeatureId(id)
     const data = getDataForId(id, get().data[region])
@@ -133,6 +146,8 @@ const [useDataOptions] = create((set, get, api) => ({
   region: defaultRegion,
   secondary: defaultSecondary,
   locations: [],
+  featureData: {},
+  idMap: {},
   filters: {
     prefix: null,
     largest: null

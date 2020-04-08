@@ -78,10 +78,20 @@ const getViewportForBounds = (
 
 const [useMapStore] = create((set, get, api) => ({
   viewport: DEFAULT_VIEWPORT,
+  idMap: {},
   setViewport: viewport =>
     set(state => ({
       viewport: { ...state.viewport, ...viewport }
     })),
+  addToIdMap: (featureId, locationId) => {
+    if (get().idMap.hasOwnProperty(featureId)) return
+    set(state => ({
+      idMap: {
+        ...state.idMap,
+        [locationId]: featureId
+      }
+    }))
+  },
   flyToFeature: feature => {
     const viewport = {
       ...getViewportForFeature(feature, get().viewport),

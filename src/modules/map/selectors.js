@@ -94,7 +94,7 @@ export const getCircleHighlightLayer = ({ layerId, region }) =>
     minzoom: getCircleMinZoom(region),
     interactive: false,
     layout: {
-      visibility: region === 'schools' ? 'visible' : 'none'
+      visibility: 'visible'
     },
     paint: {
       'circle-color': 'rgba(0,0,0,0)',
@@ -138,7 +138,8 @@ export const getCircleLayer = ({
     'source-layer': 'schools',
     type: 'circle',
     minzoom: getCircleMinZoom(region),
-    interactive: region === 'schools',
+    // interactive: region === 'schools',
+    interactive: true,
     layout: {
       visibility: demographic === 'all' ? 'visible' : 'none'
     },
