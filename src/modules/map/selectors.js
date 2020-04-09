@@ -320,7 +320,7 @@ export const getChoroplethLayer = ({
     source: 'composite',
     'source-layer': region === 'schools' ? 'districts' : region,
     type: 'fill',
-    interactive: region !== 'schools',
+    interactive: true,
     paint: {
       'fill-color': getFillStyle(
         [demographic, metric].join('_'),

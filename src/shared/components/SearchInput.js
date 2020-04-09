@@ -25,6 +25,7 @@ const SearchInput = ({
   onChange,
   onClear,
   inputProps,
+  TextFieldProps,
   ...props
 }) => {
   const classes = useStyles()
@@ -52,6 +53,7 @@ const SearchInput = ({
         inputProps
       }}
       onChange={onChange}
+      {...TextFieldProps}
       {...props}
     />
   )
@@ -65,7 +67,8 @@ SearchInput.propTypes = {
 }
 SearchInput.defaultProps = {
   classes: {},
-  inputProps: {}
+  inputProps: {},
+  TextFieldProps: {}
 }
 
 export default SearchInput

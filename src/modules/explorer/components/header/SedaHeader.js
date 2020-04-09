@@ -66,7 +66,9 @@ const HeaderActions = ({ ...props }) => {
   return (
     <div className={classes.root} {...props}>
       <SedaSearch
-        classes={{ root: classes.searchRoot }}
+        TextFieldProps={{
+          classes: { root: classes.searchRoot }
+        }}
         placeholder="find a place"
       />
       <SedaViewControls className={classes.viewControls} />

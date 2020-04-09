@@ -41,6 +41,7 @@ const AutoComplete = ({
   currentRefinement,
   refine,
   multiSection,
+  TextFieldProps,
   inputProps,
   onSuggestionSelected: onSelected,
   onSelectedClear: onClear,
@@ -92,7 +93,8 @@ const AutoComplete = ({
       renderInputComponent={inputProps =>
         renderInputComponent(inputProps, {
           onClear: handleClear,
-          value
+          value,
+          TextFieldProps
         })
       }
       renderSectionTitle={renderSectionTitle}

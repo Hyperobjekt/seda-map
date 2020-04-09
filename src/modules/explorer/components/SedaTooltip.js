@@ -23,7 +23,8 @@ import {
   useScatterplotVars,
   useTooltipCoords,
   useTooltipVisibility,
-  useHovered
+  useHovered,
+  useRegion
 } from '../hooks'
 
 const useStatStyles = makeStyles(theme => ({
@@ -90,15 +91,22 @@ const useStyles = makeStyles(theme => ({
   hint: theme.mixins.hint
 }))
 
+const getSecondaryVar = (activeRegion, featureRegion) =>
+  featureRegion === 'schools' ? 'all_frl' : 'all_ses'
+
 const SedaTooltip = props => {
   const [hoveredId] = useHovered()
   const [showTooltip] = useTooltipVisibility()
   const [[x, y]] = useTooltipCoords()
   const [xVar, yVar] = useScatterplotVars()
+  const [region] = useRegion()
   const data = useDataForId(hoveredId)
-  const region = getRegionFromFeatureId(hoveredId)
+  const featureRegion = getRegionFromFeatureId(hoveredId)
   // force free lunch secondary metric for schools
-  const secondaryVar = region === 'schools' ? 'all_frl' : xVar
+  const secondaryVar =
+    region === featureRegion
+      ? xVar
+      : getSecondaryVar(region, featureRegion)
   const isVersus = isVersusFromVarNames(xVar, yVar)
   const demographic = getDemographicForVarNames(xVar, yVar)
   const descriptionVars = isVersus

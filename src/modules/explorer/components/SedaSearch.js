@@ -11,6 +11,7 @@ const getPropFromHit = (hit = {}, propName) => {
 const SedaSearch = ({
   indices,
   inputProps,
+  TextFieldProps,
   placeholder,
   ...props
 }) => {
@@ -40,6 +41,7 @@ const SedaSearch = ({
       onSelectedClear={handleCleared}
       indices={indices}
       inputProps={{ ...inputProps, placeholder }}
+      TextFieldProps={TextFieldProps}
       {...props}
     />
   )
