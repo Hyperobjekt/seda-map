@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from 'react'
+import React, { useMemo, useEffect, useRef } from 'react'
 import { NavigationControl } from 'react-map-gl'
 import { getLayers } from '../../map/selectors'
 import MapBase from '../../map/components/MapBase'
@@ -27,6 +27,7 @@ import {
 } from '../hooks'
 import useDataOptions from '../hooks/useDataOptions'
 import { REGION_TO_ID_LENGTH } from '../../../shared/constants/regions'
+import useMapStore from '../hooks/useMapStore'
 
 const selectedColors = getSelectedColors()
 
@@ -55,7 +56,6 @@ const SedaMap = props => {
   const [showHovered] = useMarkersVisibility()
   /** function to add a location to the selected locations */
   const addLocation = useAddLocation()
-
   const addFeatureData = useDataOptions(
     state => state.addFeatureData
   )
@@ -63,6 +63,7 @@ const SedaMap = props => {
   const flyToState = useFlyToState()
   const flyToFeature = useFlyToFeature()
   const flyToReset = useFlyToReset()
+  const isLoaded = useRef(false)
   /** memoized array of choropleth and dot layers */
   const layers = useMemo(() => {
     if (!metric || !demographic || !region) {
@@ -102,9 +103,10 @@ const SedaMap = props => {
     // inform global listener that map has loaded
     window.SEDA.trigger('map')
     // zoom to US if needed once cover is shown
-    setTimeout(() => {
-      flyToReset()
-    }, 1000)
+    // setTimeout(() => {
+    //   flyToReset()
+    // }, 1000)
+    isLoaded.current = true
   }
 
   /** handler for zoom to U.S. */
@@ -115,13 +117,14 @@ const SedaMap = props => {
 
   /** zoom to filtered location when filter is selected */
   useEffect(() => {
-    if (!prefix || prefix.length !== 2) return
+    if (!prefix || prefix.length !== 2 || !isLoaded.current)
+      return
     flyToState(prefix)
   }, [prefix, flyToState])
 
   /** zoom to activated location */
   useEffect(() => {
-    if (activeFeature) {
+    if (activeFeature && isLoaded.current) {
       flyToFeature(activeFeature)
     }
   }, [activeFeature, flyToFeature])

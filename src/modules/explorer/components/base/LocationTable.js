@@ -167,7 +167,7 @@ const LocationTable = ({
                 onClick={onMetricSelect}
                 className={classes.headerButton}
                 metricId={m}
-                tooltip={getMetricLabel(m)}
+                tooltip={getMetricLabel(m, 'TOOLTIP_SWITCH')}
               />
             </TableCell>
           ))}

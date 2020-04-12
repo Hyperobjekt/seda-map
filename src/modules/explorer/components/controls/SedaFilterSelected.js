@@ -7,7 +7,7 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import { getFilterCount } from '../../../../shared/selectors/data'
 import {
-  getRegionFromFeatureId,
+  getRegionFromLocationId,
   getRegionLabel
 } from '../../../../shared/selectors'
 import AddIcon from '@material-ui/icons/Add'
@@ -32,7 +32,7 @@ const listItemStyle = { paddingLeft: 44, paddingRight: 24 }
 const SedaActiveFilters = ({ ...props }) => {
   const [filters, , setFilter] = useFilters()
   const prefixRegion = filters.prefix
-    ? getRegionFromFeatureId(filters.prefix)
+    ? getRegionFromLocationId(filters.prefix)
     : null
   const [region] = useRegion()
   const prefixName = useNameForId(filters.prefix)

@@ -16,7 +16,7 @@ import {
 import { getValuePositionInRange } from '../../../shared/utils'
 import {
   useMapVars,
-  useDataForId,
+  useLocationData,
   useHovered,
   useRegion,
   useMarkersVisibility,
@@ -32,7 +32,7 @@ const SedaMapLegend = props => {
   /** boolean determining if hovered location should show */
   const [showHovered] = useMarkersVisibility()
   /** data for hovered id, if any */
-  const hoveredData = useDataForId(hovered)
+  const hoveredData = useLocationData(hovered)
   /** boolean determining f the current demographic is a gap or not */
   const isGap = useDemographicType() === 'gap'
   /** current map region */

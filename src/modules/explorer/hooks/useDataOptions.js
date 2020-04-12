@@ -7,8 +7,15 @@ import {
   loadFeatureFromCoords,
   loadFeaturesFromRoute
 } from '../../../shared/utils/tilequery'
-import { getRegionFromFeatureId } from '../../../shared/selectors'
+import { getRegionFromLocationId } from '../../../shared/selectors'
 import { getDataForId } from '../../scatterplot/components/ScatterplotBase/utils'
+import {
+  getParamsFromPathname,
+  isEmptyRoute,
+  isValidExplorerRoute,
+  getLocationFromFeature
+} from '../../../shared/selectors/router'
+import { getStateFipsFromAbbr } from '../../../shared/selectors/states'
 
 const isFeatureInLocations = (feature, locations) => {
   const featureId = getFeatureProperty(feature, 'id')
@@ -19,6 +26,23 @@ const isFeatureInLocations = (feature, locations) => {
   )
 }
 
+/**
+ * Adds the route string to the feature
+ * @param {*} feature
+ * @returns {GeoJsonFeature}
+ */
+const addLocationStringToFeature = feature => {
+  const locationString = getLocationFromFeature(feature)
+  feature.properties['route'] = locationString
+  return feature
+}
+
+/**
+ * Adds any missing features to the locations array
+ * @param {*} locations
+ * @param {*} features
+ * @returns {Array<GeoJsonFeature>}
+ */
 const getUpdatedLocations = (locations, features) => {
   if (!Array.isArray(features)) {
     features = [features]
@@ -26,7 +50,7 @@ const getUpdatedLocations = (locations, features) => {
   return features.reduce((loc, feature) => {
     return isFeatureInLocations(feature, loc)
       ? loc
-      : [...loc, feature]
+      : [...loc, addLocationStringToFeature(feature)]
   }, locations)
 }
 
@@ -35,11 +59,17 @@ const defaultSecondary = 'ses'
 const defaultDemographic = 'all'
 const defaultRegion = 'counties'
 
+/**
+ * Gets state changes required to activate location
+ * @param {*} activeLocation
+ * @param {*} currentRegion
+ * @returns {object}
+ */
 const getChangesForActiveLocation = (
   activeLocation,
   currentRegion
 ) => {
-  const region = getRegionFromFeatureId(activeLocation)
+  const region = getRegionFromLocationId(activeLocation)
   const changes = { activeLocation }
   if (region !== currentRegion) changes['region'] = region
   return changes
@@ -69,7 +99,7 @@ const makeSetters = (set, get) => ({
       })
     )
   },
-
+  // adds a feature to the object containing data for hovered / selected features
   addFeatureData: featureData => {
     if (get().featureData.hasOwnProperty(featureData.id)) return
     set(state => {
@@ -83,7 +113,7 @@ const makeSetters = (set, get) => ({
     })
   },
   addLocationFromId: async (id, setActive = true) => {
-    const region = getRegionFromFeatureId(id)
+    const region = getRegionFromLocationId(id)
     const data = getDataForId(id, get().data[region])
     const feature = await loadFeatureFromCoords(data)
     set(state => ({
@@ -137,6 +167,22 @@ const makeSetters = (set, get) => ({
       get().region
     )
     set(changes)
+  },
+  setOptionsFromRoute: params => {
+    const filters = params['filter'].split('+')
+    const prefix =
+      filters[0] === 'us'
+        ? null
+        : getStateFipsFromAbbr(filters[0])
+    const largest = filters.length > 1 ? filters[1] : null
+    console.log('setting from route', params, prefix, largest)
+    set({
+      region: params['region'],
+      metric: params['metric'],
+      secondary: params['secondary'],
+      demographic: params['demographic'],
+      filters: { prefix, largest }
+    })
   }
 })
 

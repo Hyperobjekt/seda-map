@@ -11,7 +11,7 @@ import {
   useScatterplotVars,
   useHovered,
   useLocationsData,
-  useDataForId,
+  useLocationData,
   useRegion,
   useMarkersVisibility,
   useXyzTransformers
@@ -35,7 +35,7 @@ const SedaLocationMarkers = ({ className, ...props }) => {
   const [showHovered] = useMarkersVisibility()
   const [xVar, yVar, zVar] = useScatterplotVars()
   const [hoveredId, setHovered] = useHovered()
-  const hoveredData = useDataForId(hoveredId)
+  const hoveredData = useLocationData(hoveredId)
   const [xValToPos, yValToPos, zValToSize] = useXyzTransformers()
   const locations = useLocationsData()
 

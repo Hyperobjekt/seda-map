@@ -7,14 +7,19 @@ import bbox from '@turf/bbox'
 import { DEFAULT_VIEWPORT } from '../../map/constants'
 import { getStateViewportByFips } from '../../../shared/selectors/states'
 import {
-  getRegionFromFeatureId,
+  getRegionFromLocationId,
   getFeatureProperty
 } from '../../../shared/selectors'
+import {
+  isEmptyRoute,
+  isValidExplorerRoute,
+  getParamsFromPathname
+} from '../../../shared/selectors/router'
 
 const getZoomLevelForFeature = feature => {
   const id = getFeatureProperty(feature, 'id')
   if (!id) return 9
-  const region = getRegionFromFeatureId(id)
+  const region = getRegionFromLocationId(id)
   switch (region) {
     case 'states':
       return 3
@@ -77,12 +82,14 @@ const getViewportForBounds = (
 }
 
 const [useMapStore] = create((set, get, api) => ({
+  loaded: false,
   viewport: DEFAULT_VIEWPORT,
   idMap: {},
   setViewport: viewport =>
     set(state => ({
       viewport: { ...state.viewport, ...viewport }
     })),
+  setLoaded: loaded => set({ loaded }),
   addToIdMap: (featureId, locationId) => {
     if (get().idMap.hasOwnProperty(featureId)) return
     set(state => ({
@@ -143,6 +150,16 @@ const [useMapStore] = create((set, get, api) => ({
         transitionDuration: 3000,
         transitionInterpolator: new FlyToInterpolator(),
         transitionEasing: ease.easeCubic
+      }
+    }))
+  },
+  setViewportFromRoute: params => {
+    set(state => ({
+      viewport: {
+        ...state.viewport,
+        zoom: params.zoom,
+        latitude: params.lat,
+        longitude: params.lon
       }
     }))
   }

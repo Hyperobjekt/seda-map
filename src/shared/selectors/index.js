@@ -100,7 +100,7 @@ export {
 } from './metrics'
 export {
   getRegionFromFeature,
-  getRegionFromFeatureId,
+  getRegionFromLocationId,
   getRegionById,
   getRegionDomain,
   getSingularRegion,

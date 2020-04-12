@@ -29,6 +29,7 @@ import {
   useRemoveLocation
 } from '../../hooks'
 import SedaSearch from '../SedaSearch'
+import SedaLocationName from '../location/SedaLocationName'
 
 const colors = getSelectedColors()
 
@@ -87,11 +88,8 @@ const LocationList = ({
               onMouseLeave={e => onLocationHover(null, e)}
               onClick={e => onLocationClick(l, e)}
               {...ListItemProps}>
-              <LocationName
-                name={l.properties.name}
-                parentLocation={getStateName(l.properties.id)}
-                color={active && colors[i]}
-                label={active && i + 1}
+              <SedaLocationName
+                locationId={getFeatureProperty(l, 'id')}
                 markerPosition="left"
                 small
               />
@@ -173,7 +171,6 @@ const SedaLocationSelect = ({ onSelect }) => {
           title={getRegionLabel(r)}
           locations={locationsByRegion[r]}
           emptyMessage={getLang('LOCATIONS_NONE', { region: r })}
-          ListItemProps={{ style: { paddingLeft: 44 } }}
           {...bind}>
           <ListItem style={{ paddingLeft: 44 }}>
             <Button

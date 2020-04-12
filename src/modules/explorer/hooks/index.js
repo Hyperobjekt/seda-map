@@ -5,7 +5,7 @@ import {
   getVarNames,
   getFeatureProperty,
   getSizesForRegion,
-  getRegionFromFeatureId,
+  getRegionFromLocationId,
   isGapDemographic,
   getMetricRangeFromVarName,
   getSizerFunctionForRegion,
@@ -452,13 +452,13 @@ export const useActiveLocation = () =>
 export const useActiveLocationData = () => {
   return useDataOptions(state => {
     const id = state.activeLocation
-    const locations = state.locations
-    const i = locations.findIndex(
-      l => getFeatureProperty(l, 'id') === id
+    if (!id) return {}
+    const region = getRegionFromLocationId(id)
+    return getDataForId(
+      id,
+      state.data[region],
+      state.featureData
     )
-    return i > -1
-      ? { ...locations[i].properties, id, index: i }
-      : {}
   }, shallow)
 }
 
@@ -482,6 +482,40 @@ export const useActiveLocationFeature = () => {
  */
 export const useLocationCount = () => {
   return useDataOptions(state => state.locations.length)
+}
+
+/**
+ * Provides data from the store for the given ID
+ * @param {string} id
+ * @returns {LocationData} LocationData object
+ */
+export const useLocationData = id => {
+  return useDataOptions(state => {
+    if (!id) return null
+    const region = getRegionFromLocationId(id)
+    return getDataForId(
+      id,
+      state.data[region],
+      state.featureData
+    )
+  })
+}
+
+/**
+ * Provides the index of the location based on region type,
+ * used for location markers
+ * @param {*} id
+ * @returns {number}
+ */
+export const useLocationNumber = id => {
+  return useDataOptions(state => {
+    const index = state.locations
+      .filter(
+        l => getFeatureProperty(l, 'id').length === id.length
+      )
+      .findIndex(l => getFeatureProperty(l, 'id') === id)
+    return index + 1
+  })
 }
 
 /**
@@ -533,23 +567,6 @@ export const useRemoveLocation = () => {
 }
 
 /**
- * Provides data from the store for the given ID
- * @param {string} id
- * @returns {LocationData} LocationData object
- */
-export const useDataForId = id => {
-  return useDataOptions(state => {
-    if (!id) return null
-    const region = getRegionFromFeatureId(id)
-    return getDataForId(
-      id,
-      state.data[region],
-      state.featureData
-    )
-  })
-}
-
-/**
  * Provides name for the given id
  * @param {string} id
  * @returns {string}
@@ -557,7 +574,7 @@ export const useDataForId = id => {
 export const useNameForId = id => {
   return useDataOptions(state => {
     if (!id) return ''
-    const region = getRegionFromFeatureId(id)
+    const region = getRegionFromLocationId(id)
     switch (region) {
       case 'states':
         return getStateName(id)
@@ -577,9 +594,14 @@ export const useNameForId = id => {
  * Interactions with data store for routing
  */
 
+/**
+ * Gets a route string for filters
+ * @param {*} filters
+ * @returns {string}
+ */
 const getFilterRoute = filters => {
   let route = filters.prefix
-    ? getStateAbbr(filters.prefix)
+    ? getStateAbbr(filters.prefix).toLowerCase()
     : 'us'
   if (filters.largest) {
     route += '+' + filters.largest
@@ -587,11 +609,23 @@ const getFilterRoute = filters => {
   return route
 }
 
+/**
+ * Gets a route string for locations
+ * @param {*} locations
+ * @returns {string}
+ */
 const getLocationsRoute = locations => {
-  let locationsRoute = ''
+  let locationsRoute = locations
+    .map(l => l.properties.route)
+    .join('+')
   return locationsRoute
 }
 
+/**
+ * Gets a route string for viewport
+ * @param {*} viewport
+ * @returns {string}
+ */
 const getViewportRoute = viewport => {
   return [
     formatNumber(viewport.zoom),
@@ -600,6 +634,10 @@ const getViewportRoute = viewport => {
   ].join('/')
 }
 
+/**
+ * Gets the route string for the current options
+ * @returns {string}
+ */
 export const useRouterParams = () => {
   const view = useUiStore(state => state.view)
   const viewportRoute = useMapStore(state =>
@@ -618,6 +656,11 @@ export const useRouterParams = () => {
     ].join('/')
   )
 }
+
+/**
+ * Error Hooks
+ * ---
+ */
 
 export const useError = () => {
   return useDataOptions(

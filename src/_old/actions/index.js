@@ -5,7 +5,7 @@ import {
 } from '../shared/utils/tilequery'
 import {
   getFeatureProperty,
-  getRegionFromFeatureId,
+  getRegionFromLocationId,
   getRegionFromFeature,
   getPredictedValue
 } from '../shared/selectors'
@@ -324,7 +324,7 @@ export const loadRouteLocations = (
       dispatch(onLoadFeaturesSuccess(features))
       dispatch(addToFeatureIdMap(features))
       features.forEach(f => {
-        const featureRegion = getRegionFromFeatureId(
+        const featureRegion = getRegionFromLocationId(
           f.properties.id
         )
         dispatch(addSelectedFeature(f, featureRegion))
@@ -518,7 +518,7 @@ export const handleLocationActivation = (feature, source) => (
   dispatch(
     addSelectedFeature(
       feature,
-      getRegionFromFeatureId(feature.properties.id)
+      getRegionFromLocationId(feature.properties.id)
     )
   )
   dispatch(setActiveLocation(feature, source))

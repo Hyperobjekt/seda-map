@@ -62,23 +62,20 @@ export const getDemographicForVarNames = (xVar, yVar) => {
   const dem1 = getDemographicIdFromVarName(xVar)
   const dem2 = getDemographicIdFromVarName(yVar)
   // same dem for x and y
-  if (dem1 === dem2) {
-    return dem1
-  }
+  if (dem1 === dem2) return dem1
   // all on X, but different on Y
-  if (dem1 === 'all') {
-    return dem2
-  }
-
-  // two different dems on x and y, must be gap
-
-  // special case for poor / non-poor gap
+  if (dem1 === 'all') return dem2
+  // special case for poor / non-poor gap, due to bug in pipeline
   if (
     (dem1 === 'p' && dem2 === 'np') ||
     (dem1 === 'np' && dem2 === 'p') ||
     (dem1 === 'np' && dem2 === 'pn')
   ) {
     return 'pn'
+  }
+  // make sure proper ordering of demograpic
+  if (dem2 === 'w' || dem2 === 'm') {
+    return dem2 + dem1
   }
   // return default gap
   return dem1 + dem2

@@ -4,7 +4,7 @@ import classNames from 'classnames'
 import LocationItem from './LocationItem'
 import {
   getFeatureProperty,
-  getRegionFromFeatureId,
+  getRegionFromLocationId,
   getMetricRange
 } from '../../../shared/selectors'
 import { getLang } from '../../../shared/selectors/lang'
@@ -12,7 +12,8 @@ import { LocationStatDiverging } from './LocationStats'
 import { formatNumber } from '../../../shared/utils'
 import { ButtonBase } from '@material-ui/core'
 
-const statToLabel = s => getLang('LABEL_SHORT_' + s.split('_')[1])
+const statToLabel = s =>
+  getLang('LABEL_SHORT_' + s.split('_')[1])
 
 const LocationComparisonItem = ({
   idx,
@@ -28,7 +29,12 @@ const LocationComparisonItem = ({
   return (
     <LocationItem idx={idx} feature={feature}>
       {metrics.map(m => {
-        const range = getMetricRange(m, demographic, region, 'map') || [-1, 1]
+        const range = getMetricRange(
+          m,
+          demographic,
+          region,
+          'map'
+        ) || [-1, 1]
         return (
           <LocationStatDiverging
             key={m}
@@ -78,7 +84,7 @@ const LocationList = ({
   if (!feature || !feature.properties) {
     return null
   }
-  const region = getRegionFromFeatureId(feature.properties.id)
+  const region = getRegionFromLocationId(feature.properties.id)
   return (
     <div className={classNames('location-list', className)}>
       {others.map((f, i) => {

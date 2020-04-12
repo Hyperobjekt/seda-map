@@ -24,6 +24,7 @@ import {
   useActiveSelection
 } from '../hooks'
 import SedaError from './SedaError'
+import SedaRouteManager from './SedaRouteManager'
 
 const useStyles = makeStyles(theme => ({
   offset: theme.mixins.toolbar,
@@ -54,6 +55,7 @@ const SedaLayout = () => {
     condensed || selection || activeLocation || showHelp
   return (
     <Page>
+      <SedaRouteManager />
       <SedaHeader />
       <div className={classes.offset} />
       <SedaMenu />

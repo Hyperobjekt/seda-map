@@ -10,7 +10,7 @@ import {
   getDemographicForVarNames,
   getMidpointForVarName,
   getFormatterForVarName,
-  getRegionFromFeatureId,
+  getRegionFromLocationId,
   getSingularRegion
 } from '../../../shared/selectors'
 import { getStateName } from '../../../shared/selectors/states'
@@ -19,7 +19,7 @@ import clsx from 'clsx'
 import Tooltip from '../../../shared/components/Tooltip'
 import MetricValue from '../../../shared/components/MetricValue'
 import {
-  useDataForId,
+  useLocationData,
   useScatterplotVars,
   useTooltipCoords,
   useTooltipVisibility,
@@ -100,8 +100,8 @@ const SedaTooltip = props => {
   const [[x, y]] = useTooltipCoords()
   const [xVar, yVar] = useScatterplotVars()
   const [region] = useRegion()
-  const data = useDataForId(hoveredId)
-  const featureRegion = getRegionFromFeatureId(hoveredId)
+  const data = useLocationData(hoveredId)
+  const featureRegion = getRegionFromLocationId(hoveredId)
   // force free lunch secondary metric for schools
   const secondaryVar =
     region === featureRegion

@@ -7,8 +7,8 @@ import {
   getMapVars,
   getDemographicIdFromVarName,
   getGapDemographics
-} from '../../../shared/selectors'
-import { getStateFipsFromAbbr } from '../../../shared/selectors/states'
+} from '../../../../shared/selectors'
+import { getStateFipsFromAbbr } from '../../../../shared/selectors/states'
 import {
   loadLocation,
   onHoverFeature,
@@ -16,14 +16,14 @@ import {
   onScatterplotLoaded,
   onScatterplotError,
   onSecondaryChange
-} from '../actions'
-import Scatterplot from './Scatterplot'
+} from '../../../scatterplot/actions'
+import Scatterplot from '../../../scatterplot/components/Scatterplot'
 import SedaLocationMarkers from './SedaLocationMarkers'
 // import { GapTypeInlineMenu } from '../../../components/seda/SedaSelectControls'
 import {
   getLabel,
   getLang
-} from '../../../shared/selectors/lang'
+} from '../../../../shared/selectors/lang'
 
 const SedaGapChart = ({
   region,

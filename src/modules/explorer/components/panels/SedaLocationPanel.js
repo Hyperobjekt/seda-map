@@ -11,7 +11,8 @@ import { getStateName } from '../../../../shared/selectors/states'
 import {
   getSelectedColors,
   getDemographics,
-  getGaps
+  getGaps,
+  getRegionFromLocationId
 } from '../../../../shared/selectors'
 import LocationName from '../base/LocationName'
 import { CloseIcon } from '../../../icons'
@@ -21,18 +22,36 @@ import {
   useDemographic,
   useActiveLocation
 } from '../../hooks'
+import SedaLocationName from '../location/SedaLocationName'
 
 const colors = getSelectedColors()
 
+const getDemographicsForRegion = region => {
+  return region === 'schools'
+    ? ['all']
+    : getDemographics().map(d => d.id)
+}
+
+const getSecondaryMetricsForRegion = region => {
+  return region === 'schools' ? ['frl'] : ['ses', 'seg', 'min']
+}
+
+const getGapsForRegion = region => {
+  return region === 'schools' ? [] : getGaps().map(d => d.id)
+}
+
 const SedaLocationPanel = props => {
   const data = useActiveLocationData()
-  const [, setActiveLocation] = useActiveLocation()
+  console.log('active location data', data)
+  const [activeLocation, setActiveLocation] = useActiveLocation()
   const [metric, setMetric] = useMetric()
   const [demographic, setDemographic] = useDemographic()
+  const region = getRegionFromLocationId(activeLocation)
 
   const metrics = ['avg', 'grd', 'coh']
-  const demographics = getDemographics().map(d => d.id)
-  const gaps = getGaps().map(d => d.id)
+  const secondary = getSecondaryMetricsForRegion(region)
+  const demographics = getDemographicsForRegion(region)
+  const gaps = getGapsForRegion(region)
 
   const handleMetricSelect = e => {
     setMetric(e.currentTarget.value)
@@ -44,12 +63,7 @@ const SedaLocationPanel = props => {
     <SidePanel {...props}>
       <SidePanelHeader sticky>
         {data['id'] && (
-          <LocationName
-            name={data['name']}
-            parentLocation={getStateName(data['id'])}
-            label={data['index'] + 1}
-            color={colors[data['index']]}
-          />
+          <SedaLocationName locationId={data['id']} />
         )}
         <IconButton onClick={() => setActiveLocation(null)}>
           <CloseIcon />
@@ -67,16 +81,18 @@ const SedaLocationPanel = props => {
           onMetricSelect={handleMetricSelect}
           onDemographicSelect={handleDemographicSelect}
         />
-        <LocationTable
-          data={data}
-          label={'Gaps'}
-          metrics={metrics}
-          demographics={gaps}
-          activeMetric={metric}
-          activeDemographic={demographic}
-          onMetricSelect={handleMetricSelect}
-          onDemographicSelect={handleDemographicSelect}
-        />
+        {gaps.length > 0 && (
+          <LocationTable
+            data={data}
+            label={'Gaps'}
+            metrics={metrics}
+            demographics={gaps}
+            activeMetric={metric}
+            activeDemographic={demographic}
+            onMetricSelect={handleMetricSelect}
+            onDemographicSelect={handleDemographicSelect}
+          />
+        )}
       </SidePanelBody>
     </SidePanel>
   )

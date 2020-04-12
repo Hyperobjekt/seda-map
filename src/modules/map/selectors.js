@@ -1,7 +1,7 @@
 import { fromJS } from 'immutable'
 import MAP_STYLE from './style'
 import {
-  getRegionFromFeatureId,
+  getRegionFromLocationId,
   getChoroplethColors,
   getDemographicIdFromVarName,
   getMetricIdFromVarName,
@@ -294,7 +294,7 @@ const isChoroplethId = id => {
   if (!id) {
     return false
   }
-  const featureRegion = getRegionFromFeatureId(id)
+  const featureRegion = getRegionFromLocationId(id)
   return (
     featureRegion === 'districts' || featureRegion === 'counties'
   )
@@ -304,7 +304,7 @@ const isCircleId = id => {
   if (!id) {
     return false
   }
-  const featureRegion = getRegionFromFeatureId(id)
+  const featureRegion = getRegionFromLocationId(id)
   return featureRegion === 'schools'
 }
 

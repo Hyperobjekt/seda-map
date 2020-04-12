@@ -14,7 +14,7 @@ import { LocationStatList } from './LocationStats'
 import {
   getFeatureProperty,
   getMetricRange,
-  getRegionFromFeatureId,
+  getRegionFromLocationId,
   getPredictedValue,
   valueToLowMidHigh
 } from '../../../shared/selectors'
@@ -39,7 +39,7 @@ const LocationMetric = ({
   if (!feature) {
     return null
   }
-  const region = getRegionFromFeatureId(feature.properties.id)
+  const region = getRegionFromLocationId(feature.properties.id)
   const range = getMetricRange(metric, 'all', region, 'map')
   const statToLabel = s => getLang('LABEL_' + s.split('_')[0])
   return (
@@ -153,7 +153,7 @@ export const LocationAvgSection = ({
     return null
   }
   const name = getFeatureProperty(feature, 'name')
-  const region = getRegionFromFeatureId(
+  const region = getRegionFromLocationId(
     getFeatureProperty(feature, 'id')
   )
 
@@ -214,7 +214,7 @@ export const LocationGrdSection = ({
   }
   const name = getFeatureProperty(feature, 'name')
   const value = getFeatureProperty(feature, 'all_grd')
-  const region = getRegionFromFeatureId(
+  const region = getRegionFromLocationId(
     getFeatureProperty(feature, 'id')
   )
   const sesValue =
@@ -275,7 +275,7 @@ export const LocationCohSection = ({
   }
   const name = getFeatureProperty(feature, 'name')
   const value = getFeatureProperty(feature, 'all_coh')
-  const region = getRegionFromFeatureId(
+  const region = getRegionFromLocationId(
     getFeatureProperty(feature, 'id')
   )
 

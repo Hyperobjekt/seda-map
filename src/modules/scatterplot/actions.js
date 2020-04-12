@@ -1,5 +1,5 @@
 import { loadFeatureFromCoords } from '../../shared/utils/tilequery'
-import { getRegionFromFeatureId } from '../../shared/selectors'
+import { getRegionFromLocationId } from '../../shared/selectors'
 
 export const setExplorerSecondary = secondaryId => ({
   type: 'SET_EXPLORER_SECONDARY',
@@ -146,7 +146,10 @@ export const handleLocationActivation = (feature, source) => (
   getState
 ) => {
   dispatch(
-    addSelectedFeature(feature, getRegionFromFeatureId(feature.properties.id))
+    addSelectedFeature(
+      feature,
+      getRegionFromLocationId(feature.properties.id)
+    )
   )
   dispatch(setActiveLocation(feature, source))
 }

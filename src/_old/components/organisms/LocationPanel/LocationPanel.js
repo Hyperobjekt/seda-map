@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import Panel from '../../molecules/Panel'
 import {
-  getRegionFromFeatureId,
+  getRegionFromLocationId,
   getSelectedColors,
   getSingularRegion,
   getRegionFromFeature,
@@ -138,7 +138,7 @@ const LocationPanel = ({
     feature && feature.properties
       ? feature.properties.name
       : null
-  const region = getRegionFromFeatureId(id)
+  const region = getRegionFromLocationId(id)
   // handler to toggle expand on / off
   const toggleExpanded = itemId =>
     setExpanded(

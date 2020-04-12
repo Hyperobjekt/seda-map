@@ -1,4 +1,9 @@
 import create from 'zustand'
+import {
+  isValidExplorerRoute,
+  isEmptyRoute,
+  getParamsFromPathname
+} from '../../../shared/selectors/router'
 
 const [useUiStore] = create(set => ({
   // current view of the data
@@ -59,7 +64,10 @@ const [useUiStore] = create(set => ({
   setSelection: selection => set({ selection }),
   // string to determine which filter selection is active
   filterPanel: null,
-  setFilterPanel: filterPanel => set({ filterPanel })
+  setFilterPanel: filterPanel => set({ filterPanel }),
+  setViewFromRoute: params => {
+    set({ view: params.view })
+  }
 }))
 
 export default useUiStore

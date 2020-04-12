@@ -4,7 +4,7 @@ import classNames from 'classnames'
 import {
   getFeatureProperty,
   getPositionForVarNameValue,
-  getRegionFromFeatureId,
+  getRegionFromLocationId,
   getColorForVarNameValue,
   getMetricIdFromVarName,
   getMetricRangeFromVarName,
@@ -32,7 +32,7 @@ const getMetricValueToPosition = metricId => {
 }
 
 export const LocationStatSummary = ({ feature, varName }) => {
-  const region = getRegionFromFeatureId(feature.properties.id)
+  const region = getRegionFromLocationId(feature.properties.id)
   const metricId = getMetricIdFromVarName(varName)
   const value = getFeatureProperty(feature, varName)
   const color = getColorForVarNameValue(value, varName, region)
@@ -76,7 +76,7 @@ export const LocationStatDiverging = ({
   showLabels = false,
   ...rest
 }) => {
-  const region = getRegionFromFeatureId(feature.properties.id)
+  const region = getRegionFromLocationId(feature.properties.id)
   const metricId = getMetricIdFromVarName(varName)
   const isGap = isGapVarName(varName)
   const value = getFeatureProperty(feature, varName)

@@ -1,6 +1,6 @@
 import * as _debounce from 'lodash.debounce'
 import * as polylabel from 'polylabel'
-import { getRegionFromFeatureId, getRegionFromFeature } from '.'
+import { getRegionFromLocationId, getRegionFromFeature } from '.'
 
 const push = newRoute => {
   window.location.hash = newRoute
@@ -11,7 +11,7 @@ const push = newRoute => {
  */
 const DEFAULT_ROUTEVARS = [
   'view',
-  'highlightedState',
+  'filter',
   'region',
   'metric',
   'secondary',
@@ -21,6 +21,52 @@ const DEFAULT_ROUTEVARS = [
   'lon',
   'locations'
 ]
+
+/**
+ * strip "#" and "/" from beginning and end
+ * @param {*} route
+ */
+export const getStrippedRoute = route =>
+  route.replace(/^#[\/]+/g, '').replace(/\/$/g, '')
+
+export const isEmptyRoute = route =>
+  getStrippedRoute(route).length === 0
+
+const isValidView = view =>
+  ['map', 'chart', 'split'].indexOf(view) > -1
+
+const isValidRegion = region =>
+  ['states', 'counties', 'districts', 'schools'].indexOf(
+    region
+  ) > -1
+
+const isValidDemographic = demographic => demographic.length < 4
+
+const isValidMetric = metric =>
+  ['avg', 'grd', 'coh'].indexOf(metric) > -1
+
+const isValidSecondary = secondary =>
+  ['ses', 'frl', 'seg', 'min'].indexOf(secondary) > -1
+
+const isValidViewport = (zoom, lat, lon) =>
+  !isNaN(zoom) && !isNaN(lat) && !isNaN(lon)
+
+const isValidFilter = filter => Boolean(filter)
+
+export const isValidExplorerRoute = (route, vars) => {
+  const path = getStrippedRoute(route)
+  if (path.length === 0) return true
+  const params = getParamsFromPathname(path, vars)
+  return (
+    isValidView(params.view) &&
+    isValidFilter(params.filter) &&
+    isValidRegion(params.region) &&
+    isValidMetric(params.metric) &&
+    isValidSecondary(params.secondary) &&
+    isValidDemographic(params.demographic) &&
+    isValidViewport(params.zoom, params.lat, params.lon)
+  )
+}
 
 /**
  * Gets a route string to represent the feature
@@ -99,7 +145,7 @@ const getLocationCountByRegion = locations => {
     .map(l => l.split(',')[0])
   return featureIds.reduce(
     (acc, curr) => {
-      acc[getRegionFromFeatureId(curr)]++
+      acc[getRegionFromLocationId(curr)]++
       return acc
     },
     { counties: 0, districts: 0, schools: 0 }
@@ -121,7 +167,7 @@ const removeFirstLocationForRegion = (locations, region) => {
   return locations
     .split('+')
     .map(l => {
-      const r = getRegionFromFeatureId(l.split(',')[0])
+      const r = getRegionFromLocationId(l.split(',')[0])
       if (isRemoved || r !== region) return l
       isRemoved = true
       return null
@@ -179,16 +225,18 @@ export const getParamsFromPathname = (
   path,
   routeVars = DEFAULT_ROUTEVARS
 ) => {
-  return path
-    .substring(1, path.length)
-    .split('/')
-    .reduce(
-      (acc, curr, i) => ({
-        ...acc,
-        [routeVars[i]]: curr
-      }),
-      {}
-    )
+  // strip starting "#" and "/" chars
+  const route = path.replace(/^#\/+/g, '')
+  return route.split('/').reduce(
+    (acc, curr, i) => ({
+      ...acc,
+      [routeVars[i]]:
+        ['zoom', 'lat', 'lon'].indexOf(routeVars[i]) > -1
+          ? parseFloat(curr)
+          : curr
+    }),
+    {}
+  )
 }
 
 /**

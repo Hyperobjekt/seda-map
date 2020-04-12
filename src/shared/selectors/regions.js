@@ -50,7 +50,7 @@ export const intToRegionId = (value, region) => {
  * Gets the region that corresponds to the provided ID
  * @param {string} id
  */
-export const getRegionFromFeatureId = id => {
+export const getRegionFromLocationId = id => {
   if (!id) {
     return null
   }
@@ -68,7 +68,7 @@ export const getRegionFromFeature = feature => {
   if (!feature || !feature.properties) {
     return null
   }
-  return getRegionFromFeatureId(feature.properties.id)
+  return getRegionFromLocationId(feature.properties.id)
 }
 
 /**
@@ -80,7 +80,7 @@ export const getLocationsByRegion = locations =>
   locations.reduce((obj, l) => {
     const id = getFeatureProperty(l, 'id')
     if (!id) return obj
-    const r = getRegionFromFeatureId(id)
+    const r = getRegionFromLocationId(id)
     if (!obj[r]) {
       obj[r] = []
     }

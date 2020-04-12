@@ -66,13 +66,13 @@ export default SedaSearch
 //   onRouteUpdates,
 //   onSearchSelection
 // } from '../../actions'
-// import { getRegionFromFeatureId } from '../../shared/selectors'
+// import { getRegionFromLocationId } from '../../shared/selectors'
 // import Search from '../molecules/Search'
 // import { getStateAbbrFromName } from '../../shared/selectors/states'
 
 // const mapDispatchToProps = dispatch => ({
 //   onSuggestionSelected: hit => {
-//     const region = getRegionFromFeatureId(hit.id) || 'schools'
+//     const region = getRegionFromLocationId(hit.id) || 'schools'
 //     const state = getStateAbbrFromName(hit.state_name)
 //     const routeUpdates = {}
 //     if (hit) {
