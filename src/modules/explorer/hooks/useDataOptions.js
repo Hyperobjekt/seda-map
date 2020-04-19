@@ -105,6 +105,7 @@ const makeSetters = (set, get) => ({
   setLoading: loading => set({ loading }),
   setError: error => set({ error }),
   setShowError: showError => set({ showError }),
+  setDataLoading: dataLoading => set({ dataLoading }),
   setData: (data, region) => {
     set(
       produce(state => {
@@ -223,6 +224,7 @@ const [useDataOptions] = create((set, get, api) => ({
     prefix: null,
     largest: null
   },
+  dataLoading: false,
   data: { districts: {} },
   activeLocation: null,
   loading: true,

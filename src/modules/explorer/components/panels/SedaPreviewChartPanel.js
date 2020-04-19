@@ -2,13 +2,13 @@ import React from 'react'
 import { ExpansionPanel } from '../../../../shared/components/Panels'
 import { ScatterplotPreview } from '../scatterplot'
 import { makeStyles, Typography } from '@material-ui/core'
-import { getPreviewChartTitle } from '../../../../shared/selectors/lang'
 import { ExpandIcon, CloseIcon } from '../../../icons'
 import {
   useChartVisible,
   useScatterplotVars,
   useCondensed
 } from '../../hooks'
+import { getPreviewChartTitle } from '../../../scatterplot/utils'
 
 const useStyles = makeStyles(theme => ({
   root: {

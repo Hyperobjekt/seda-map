@@ -12,13 +12,164 @@ import {
   getDemographicForVarNames,
   getFormatterForVarName,
   getColorForVarNameValue,
-  getSelectedColors
+  getSelectedColors,
+  getDemographicIdFromVarName,
+  getSingularRegion,
+  getGapDemographics
 } from '../../shared/selectors'
-import { getLang } from '../../shared/selectors/lang'
-import { getCSSVariable, formatNumber } from '../../shared/utils'
-import { getScatterplotOptions as getScatterplotBaseOptions } from './components/ScatterplotBase/utils'
 
-/** UTILS */
+import {
+  getCSSVariable,
+  formatNumber,
+  titleCase
+} from '../../shared/utils'
+import { getScatterplotOptions as getScatterplotBaseOptions } from './components/ScatterplotBase/utils'
+import {
+  getSplitVarNameLabels,
+  getLang,
+  getPrefixLang,
+  getMetricLabel,
+  getDemographicLabel
+} from '../../shared/selectors/lang'
+import { getStateName } from '../../shared/selectors/states'
+
+/**
+ * Returns the title for the preview chart
+ * @param {*} xVar
+ * @param {*} yVar
+ */
+export const getPreviewChartTitle = (xVar, yVar) => {
+  const isVersus = isVersusFromVarNames(xVar, yVar)
+  if (!isVersus)
+    return (
+      getMetricLabel(yVar, 'LABEL_CONCEPT') +
+      ' vs. ' +
+      getMetricLabel(xVar)
+    )
+  return (
+    getMetricLabel(yVar, 'LABEL_CONCEPT') +
+    ' (' +
+    getDemographicLabel(yVar) +
+    ' vs. ' +
+    getDemographicLabel(xVar) +
+    ')'
+  )
+}
+
+/**
+ * Returns the title for the main chart
+ * @param {*} xVar
+ * @param {*} yVar
+ */
+export const getChartTitle = (xVar, yVar, region) => {
+  const isVersus = isVersusFromVarNames(xVar, yVar)
+  const primary = isVersus
+    ? getDemographicIdFromVarName(yVar)
+    : yVar
+  // only need metric for secondary var if not vs.
+  const secondary = isVersus
+    ? xVar
+    : getMetricIdFromVarName(xVar)
+  return (
+    titleCase(getPrefixLang(primary, 'LABEL')) +
+    ' vs. ' +
+    titleCase(getPrefixLang(secondary, 'LABEL')) +
+    ' by ' +
+    titleCase(getPrefixLang(region, 'LABEL_SINGULAR'))
+  )
+}
+
+/** Helper to grab location ID from chart events */
+export const getLocatonIdFromEvent = e => {
+  // index of the id property in the scatterplot data
+  const idIndex = 3
+  // get the data array for the hovered location
+  const hoverData =
+    e && e.data && e.data.hasOwnProperty('value')
+      ? e.data['value']
+      : e.data
+  const id = hoverData ? hoverData[idIndex] : null
+  // get the data from the state for the location
+  return id
+}
+
+/**
+ * Helper to grab event coordinates from chart events
+ * @param {*} e event
+ * @returns {[number, number]} [x, y]
+ */
+export const getCoordsFromEvent = e => [
+  e.event.event.pageX,
+  e.event.event.pageY
+]
+
+/**
+ * Checks if the event has a marker as a related event
+ * @param {*} e
+ */
+export const isMarkerRelated = e => {
+  return !e.event.event.relatedTarget
+    ? false
+    : !e.event.event.relatedTarget.classList.contains('marker')
+}
+
+/**
+ * Returns array of footnote strings
+ * @param {string} xVar
+ * @param {string} yVar
+ * @param {string} region
+ */
+export const getFootnotes = (xVar, yVar, region, filters) => {
+  const footnotes = []
+  const [xDem, xMetric] = getSplitVarNameLabels(xVar)
+  const [yDem, yMetric] = getSplitVarNameLabels(yVar)
+  const regionSingular = getSingularRegion(region)
+  const fixCase = s => s[0].toUpperCase() + s.substring(1)
+
+  // add notes for vs charts
+  if (isVersusFromVarNames(xVar, yVar)) {
+    footnotes.push(
+      getLang('FOOTNOTE_CHART_VS', { yDem, xDem, region }),
+      getLang('FOOTNOTE_CHART_VS2', { yDem, xDem, region })
+    )
+  }
+  // add notes for gap charts
+  if (isGapVarName(yVar)) {
+    const demId = getDemographicIdFromVarName(yVar)
+    const gapDems = getGapDemographics(demId).map(v =>
+      getPrefixLang(v, 'LABEL_STUDENTS')
+    )
+    const context = {
+      yDem: gapDems[0],
+      yMetric,
+      xDem: gapDems[1],
+      xMetric,
+      region
+    }
+    footnotes.push(getLang('FOOTNOTE_CHART_GAP', context))
+  }
+  // add filter footnote
+  if (filters.prefix || filters.largest) {
+    const largest = filters.largest
+      ? `Largest ${filters.largest}`
+      : 'All'
+    const parentLocation = filters.prefix
+      ? getStateName(filters.prefix)
+      : 'U.S.'
+    footnotes.push(
+      getLang('FOOTNOTE_CHART_FILTER', {
+        region,
+        largest,
+        parentLocation
+      })
+    )
+  }
+  // add circle size note
+  footnotes.push(
+    getLang('FOOTNOTE_CHART_SIZE', { region: regionSingular })
+  )
+  return footnotes.map(v => fixCase(v))
+}
 
 /** Returns an amount for how much to increment each step for the axis overlay */
 const getIncrementForVarName = (varName, region) => {
@@ -226,7 +377,7 @@ const getAxisLabel = ({
           color: '#757575',
           borderWidth: 0,
           borderColor: 'rgba(0,0,0,0)',
-          backgroundColor: 'rgba(255,255,255,1)',
+          backgroundColor: '#fafafa',
           textBorderColor: 'transparent',
           textBorderWidth: 0,
           lineHeight: axis === 'y' ? 18 : 12
@@ -272,7 +423,7 @@ const getAxisLine = ({
   const endPosition =
     axis === 'y'
       ? { x: end || '100%', yAxis: position }
-      : { y: end || '100%', xAxis: position }
+      : { y: end || '97%', xAxis: position }
   return [
     {
       ...startPosition,
@@ -321,10 +472,9 @@ const createLabels = (
     return {
       value: axis === 'y' ? [0, pos] : [pos, 0],
       axis: axis,
-      y: '97%',
+      y: '98%',
       name: label,
       visualMap: false,
-
       midPoint: pos === midPoint
     }
   })

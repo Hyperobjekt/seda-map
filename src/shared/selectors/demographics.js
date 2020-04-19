@@ -46,7 +46,11 @@ export const getDemographicFromVarName = varName => {
   return dem ? dem : getGapById(id)
 }
 
-/** Extracts the demographics from a gap identifier */
+/**
+ * Extracts the demographics from a gap identifier
+ * @param {*} demId
+ * @returns {[string, string]} [dem1, dem2]
+ */
 export const getGapDemographics = demId => {
   if (demId === 'pn') {
     return ['np', 'p']

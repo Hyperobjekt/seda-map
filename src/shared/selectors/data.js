@@ -168,7 +168,7 @@ export const getFilteredIds = (data, filters = {}, sizeVar) => {
   if (filters.prefix) {
     ids = getPrefixIds(ids, filters.prefix)
   }
-  if (filters.largest) {
+  if (filters.largest && data && data[sizeVar]) {
     ids = ids
       .sort((a, b) =>
         data[sizeVar][a] > data[sizeVar][b] ? -1 : 1

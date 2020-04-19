@@ -14,52 +14,18 @@ import {
 } from '../../hooks'
 import { SplitView } from '../base/SplitView'
 import useUiStore from '../../hooks/useUiStore'
-import { getChartTitle } from '../../../../shared/selectors/lang'
-import { Typography, Button } from '@material-ui/core'
+import { Typography } from '@material-ui/core'
+import {
+  getFootnotes,
+  getLocatonIdFromEvent,
+  getCoordsFromEvent,
+  getChartTitle,
+  isMarkerRelated
+} from '../../../scatterplot/utils'
+import Footnotes from '../base/Footnotes'
 
 /** Breakpoint where gap chart is split vs overlay */
 const SPLIT_BREAKPOINT = 1024
-
-/** Helper to grab location ID from chart events */
-const getLocatonIdFromEvent = e => {
-  // index of the id property in the scatterplot data
-  const idIndex = 3
-  // get the data array for the hovered location
-  const hoverData =
-    e && e.data && e.data.hasOwnProperty('value')
-      ? e.data['value']
-      : e.data
-  const id = hoverData ? hoverData[idIndex] : null
-  // get the data from the state for the location
-  return id
-}
-
-/**
- * Helper to grab event coordinates from chart events
- * @param {*} e event
- * @returns {[number, number]} [x, y]
- */
-const getCoordsFromEvent = e => [
-  e.event.event.pageX,
-  e.event.event.pageY
-]
-
-/**
- * Checks if the event has a marker as a related event
- * @param {*} e
- */
-const isMarkerRelated = e => {
-  return !e.event.event.relatedTarget
-    ? false
-    : !e.event.event.relatedTarget.classList.contains('marker')
-}
-
-/**
- *
- * @param {*} xVar
- * @param {*} yVar
- */
-const getFootnotes = (xVar, yVar) => {}
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -89,23 +55,16 @@ const useStyles = makeStyles(theme => ({
       fontSize: theme.typography.pxToRem(12),
       lineHeight: 1.25,
       whiteSpace: 'normal',
-      background: '#fafafa'
+      background: theme.palette.background.default
     }
   },
   footnote: {
     position: 'absolute',
     left: 0,
-    right: 0,
+    right: -1 * theme.spacing(6),
     bottom: -64,
-    padding: `${theme.spacing(1)}px ${theme.spacing(2)}px`,
-    fontSize: 11,
-    color: '#888',
-    lineHeight: 1.25,
-    whiteSpace: 'normal',
-    height: 44,
-    '& span': {
-      marginRight: 4
-    }
+    padding: `0 ${theme.spacing(2)}px`,
+    height: 44
   },
   toggleButton: {
     display: 'block',
@@ -186,6 +145,7 @@ const SedaScatterplot = () => {
   const isVersus = isVersusFromVarNames(xVar, yVar)
 
   const classes = useStyles()
+
   return (
     <div className={clsx(classes.root)}>
       {resizeListener}
@@ -204,7 +164,11 @@ const SedaScatterplot = () => {
             onHover={handleHover}
             onClick={handleClick}
             onError={handleError}>
-            <div className={clsx(classes.header)}>
+            <div
+              className={clsx(
+                'scatterplot__header',
+                classes.header
+              )}>
               <Typography variant="h6" color="textSecondary">
                 {getChartTitle(xVar, yVar, region)}{' '}
                 {!isSplit && isVersus && (
@@ -216,18 +180,15 @@ const SedaScatterplot = () => {
                 )}
               </Typography>
             </div>
-            <Typography className={clsx(classes.footnote)}>
-              <span>
-                Dotted line indicates no gap (White = Hispanic).
-              </span>
-              <span>
-                Circles above dotted line indicate gap favoring
-                White students.
-              </span>
-              <span>
-                Circle size reflects number of assessments.
-              </span>
-            </Typography>
+            <Footnotes
+              footnotes={getFootnotes(
+                xVar,
+                yVar,
+                region,
+                filters
+              )}
+              className={classes.footnote}
+            />
           </ScatterplotBase>
         }
         RightComponent={
@@ -250,11 +211,20 @@ const SedaScatterplot = () => {
                     <button
                       className={classes.toggleButton}
                       onClick={() => setShowGapChart(false)}>
-                      Show White vs. Black
+                      Show Versus
                     </button>
                   )}
                 </Typography>
               </div>
+              <Footnotes
+                footnotes={getFootnotes(
+                  xGapVar,
+                  yGapVar,
+                  region,
+                  filters
+                )}
+                className={classes.footnote}
+              />
             </ScatterplotBase>
           ) : (
             <></>

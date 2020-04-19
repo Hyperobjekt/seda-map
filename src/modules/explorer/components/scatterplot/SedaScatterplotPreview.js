@@ -54,10 +54,6 @@ const useStyles = makeStyles(theme => ({
   },
   yAxis: {
     right: -20,
-    '& .book-end__contentContainer': {
-      transform: 'rotate(-90deg)',
-      transformOrigin: 'left bottom'
-    },
     '& .MuiTypography-root': { width: 200 }
   },
   markers: {
@@ -86,6 +82,7 @@ const SedaScatterplotPreview = props => {
       classes={classes}
       region={region}
       filters={filters}
+      autoFetch={false}
       variant="preview"
       {...props}
     />

@@ -142,15 +142,6 @@ export const getLang = (key = '', props = {}) => {
     : LANG[key]
 }
 
-/**
- * Gets the label for the provided metric ID
- * @param {string} id
- * @return {string}
- */
-export const getLabel = id => {
-  return getLang('LABEL_' + id.toUpperCase())
-}
-
 /** Split a lang string at the vars formatted as $[var] */
 export const splitLang = text =>
   text.split(/(\$\[[a-zA-Z0-9_]*\])/)
@@ -282,6 +273,16 @@ export const getDescriptionForVarName = (varName, value) => {
 }
 
 /**
+ * Pulls the demographic and metric labels from a var name
+ * @param {*} varName
+ * @param {*} prefix
+ * @returns {[string, string]} [demographicLabel, metricLabel]
+ */
+export const getSplitVarNameLabels = (varName, prefix) => {
+  return varName.split('_').map(v => getPrefixLang(v, prefix))
+}
+
+/**
  * Returns string label for provided `varName`
  */
 export const getLabelForVarName = (
@@ -343,7 +344,7 @@ export const getMetricLabel = (id, prefix = 'LABEL') => {
     // this is a var name, grab the metric portion
     id = id.split('_')[1]
   }
-  return getLang(prefix + '_' + id)
+  return getPrefixLang(id, prefix)
 }
 
 /**
@@ -382,7 +383,7 @@ export const getDemographicLabel = (id, prefix = 'LABEL') => {
     // this is a var name, grab the metric portion
     id = id.split('_')[0]
   }
-  return getLang(prefix + '_' + id)
+  return getPrefixLang(id, prefix)
 }
 
 /**
@@ -391,7 +392,7 @@ export const getDemographicLabel = (id, prefix = 'LABEL') => {
  * @returns {string}
  */
 export const getRegionLabel = (id, prefix = 'LABEL') => {
-  return getLang(prefix + '_' + id)
+  return getPrefixLang(id, prefix)
 }
 
 export const getSingleOrNoneQuantifier = num =>
@@ -436,52 +437,6 @@ export const getLangDiverging = (
 export const getTooltipMetricLang = (varName, value) =>
   getLangDiverging(varName, value, 'TOOLTIP_DESC')
 
-/**
- * Returns the title for the preview chart
- * @param {*} xVar
- * @param {*} yVar
- */
-export const getPreviewChartTitle = (xVar, yVar) => {
-  const isVersus = isVersusFromVarNames(xVar, yVar)
-  if (!isVersus)
-    return (
-      getMetricLabel(yVar, 'LABEL_CONCEPT') +
-      ' vs. ' +
-      getMetricLabel(xVar)
-    )
-  return (
-    getMetricLabel(yVar, 'LABEL_CONCEPT') +
-    ' (' +
-    getDemographicLabel(yVar) +
-    ' vs. ' +
-    getDemographicLabel(xVar) +
-    ')'
-  )
-}
-
-/**
- * Returns the title for the main chart
- * @param {*} xVar
- * @param {*} yVar
- */
-export const getChartTitle = (xVar, yVar, region) => {
-  const isVersus = isVersusFromVarNames(xVar, yVar)
-  const primary = isVersus
-    ? getDemographicIdFromVarName(yVar)
-    : yVar
-  // only need metric for secondary var if not vs.
-  const secondary = isVersus
-    ? xVar
-    : getMetricIdFromVarName(xVar)
-  return (
-    titleCase(getPrefixLang(primary, 'LABEL')) +
-    ' vs. ' +
-    titleCase(getPrefixLang(secondary, 'LABEL')) +
-    ' by ' +
-    titleCase(getPrefixLang(region, 'LABEL_SINGULAR'))
-  )
-}
-
 export const getFiltersLang = (
   filters,
   region,
@@ -489,7 +444,7 @@ export const getFiltersLang = (
 ) => {
   const labels = []
   if (filters.prefix) {
-    labels.push('Only ' + idToName(filters.prefix))
+    labels.push('In ' + idToName(filters.prefix))
   }
   if (filters.largest) {
     labels.push(

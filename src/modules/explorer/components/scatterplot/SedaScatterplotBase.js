@@ -27,6 +27,7 @@ import {
 import ScatterplotAxis from '../../../scatterplot/components/ScatterplotAxis'
 import SedaLocationMarkers from './SedaLocationMarkers'
 import { makeStyles, Typography } from '@material-ui/core'
+import { getCSSVariable } from '../../../../shared/utils'
 
 // scatterplot width / height where left / right hints are not shown
 const LABEL_BREAKPOINT = 500
@@ -68,25 +69,28 @@ const fetchSchoolPair = (xVar, yVar) => {
 
 const useStyles = makeStyles(theme => ({
   markers: {
-    top: 24,
-    left: 24,
-    bottom: 40,
-    right: 64
+    top: `var(--sp-top)`,
+    right: 'var(--sp-right)',
+    bottom: 'var(--sp-bottom)',
+    left: 'var(--sp-left)'
   },
   axis: {
     position: 'absolute'
   },
   xAxis: {
-    bottom: -24,
+    bottom: `calc(-1 * var(--sp-bottom))`,
     left: 0,
-    right: -64,
+    right: 0,
     width: 'auto'
   },
   yAxis: {
-    right: -32,
+    right: `calc(-0.5 * var(--sp-right))`,
     top: 0,
     bottom: 0,
     width: 0
+  },
+  centerLabelX: {
+    marginLeft: 'calc(0.5 * var(--sp-right))'
   },
   endLabels: {
     color: theme.palette.grey[600],
@@ -111,8 +115,6 @@ function SedaScatterplotBase({
   onError,
   ...props
 }) {
-  console.log('render', variant)
-
   // track size of scatterplot
   const [resizeListener, sizes] = useResizeAware()
 
@@ -256,7 +258,8 @@ function SedaScatterplotBase({
           overrides.xAxis
         )}
         classes={{
-          labelContainer: classes.endLabels
+          labelContainer: classes.endLabels,
+          contentContainer: classes.centerLabelX
         }}
         minLabel={startLabelX}
         maxLabel={endLabelX}

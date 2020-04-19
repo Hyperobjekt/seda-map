@@ -621,6 +621,17 @@ const LANG = {
   LEGEND_SHORT_LOW_FRL: 'high poverty',
   LEGEND_SHORT_HIGH_FRL: 'low poverty',
 
+  FOOTNOTE_CHART_SIZE:
+    'Circle size reflects number of students.',
+  FOOTNOTE_CHART_VS:
+    'Dotted line indicates no gap ($[yDem] = $[xDem]).',
+  FOOTNOTE_CHART_VS2:
+    '$[region] above dotted line indicate a gap favoring $[yDem] students.',
+  FOOTNOTE_CHART_GAP:
+    '$[region] above or to the right of the "no gap" line have a gap favoring $[yDem].',
+  FOOTNOTE_CHART_FILTER:
+    '$[largest] $[region] in $[parentLocation] are highlighted.',
+
   // Average test score gaps
   LEGEND_LOW_AVG_WB: ' ',
   LEGEND_HIGH_AVG_WB: ' ',
@@ -643,17 +654,13 @@ const LANG = {
 
   // Trend in scores gaps
   LEGEND_LOW_COH_WB: ' ',
-  LEGEND_HIGH_COH_WB:
-    "Larger gap (White students' scores improve more)",
+  LEGEND_HIGH_COH_WB: ' ',
   LEGEND_LOW_COH_WH: ' ',
-  LEGEND_HIGH_COH_WH:
-    "Larger gap (White students' scores improve more)",
+  LEGEND_HIGH_COH_WH: ' ',
   LEGEND_LOW_COH_PN: ' ',
-  LEGEND_HIGH_COH_PN:
-    "Larger gap (non-poor students' scores improve more)",
+  LEGEND_HIGH_COH_PN: ' ',
   LEGEND_LOW_COH_MF: ' ',
-  LEGEND_HIGH_COH_MF:
-    "Larger gap (male students' scores improve more)",
+  LEGEND_HIGH_COH_MF: ' ',
 
   // SES gaps
   LEGEND_LOW_SES_WB: ' ',
