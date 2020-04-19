@@ -6,10 +6,7 @@ import {
   getFeatureProperty,
   getSizesForRegion,
   getRegionFromLocationId,
-  isGapDemographic,
-  getMetricRangeFromVarName,
-  getSizerFunctionForRegion,
-  getDemographicForVarNames
+  isGapDemographic
 } from '../../../shared/selectors'
 import { getFiltersLang } from '../../../shared/selectors/lang'
 import { getDataForId } from '../../scatterplot/components/ScatterplotBase/utils'
@@ -18,7 +15,6 @@ import {
   getStateAbbr
 } from '../../../shared/selectors/states'
 import useMapStore from './useMapStore'
-import { getValuePercentInRange } from '../../scatterplot/utils'
 import { useCallback } from 'react'
 import { formatNumber } from '../../../shared/utils'
 

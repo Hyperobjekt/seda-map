@@ -16,6 +16,21 @@ export const getMetricById = id =>
   getMetrics().find(m => m.id === id)
 
 /**
+ * Gets the secondary metric ids available for the demographic
+ * @param {*} dem
+ */
+export const getSecondaryForDemographic = dem => {
+  const metrics = {
+    ses: ['wb', 'wh'],
+    seg: ['wb', 'wh', 'pn'],
+    min: ['wb', 'wh']
+  }
+  return Object.keys(metrics).filter(
+    m => metrics[m].indexOf(dem) > -1
+  )
+}
+
+/**
  * Returns the metric id portion of the variable name
  */
 export const getMetricIdFromVarName = varName =>

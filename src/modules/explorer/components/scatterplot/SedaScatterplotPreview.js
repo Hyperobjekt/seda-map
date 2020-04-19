@@ -3,13 +3,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { isVersusFromVarNames } from '../../../../shared/selectors'
 import ScatterplotBase from './SedaScatterplotBase'
 import clsx from 'clsx'
-import SedaLocationMarkers from './SedaLocationMarkers'
-import BookEnds from '../../../../shared/components/BookEnds'
-import { Typography } from '@material-ui/core'
-import {
-  getLabelForVarName,
-  getRegionLabel
-} from '../../../../shared/selectors/lang'
+
 import {
   useRegion,
   useScatterplotVars,

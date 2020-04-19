@@ -1,14 +1,10 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { makeStyles, Typography } from '@material-ui/core'
+import { Typography } from '@material-ui/core'
 import FlexStack from '../../../shared/components/FlexStack'
 import BookEnds from '../../../shared/components/BookEnds'
 import ArrowLeft from '@material-ui/icons/ArrowLeft'
 import ArrowRight from '@material-ui/icons/ArrowRight'
 import clsx from 'clsx'
-const useStyles = makeStyles(theme => ({
-  root: {}
-}))
 
 const ScatterplotAxis = ({
   minLabel,
@@ -16,6 +12,7 @@ const ScatterplotAxis = ({
   showLabels = true,
   label,
   className,
+  children,
   ...props
 }) => {
   return (
@@ -40,8 +37,9 @@ const ScatterplotAxis = ({
       {...props}>
       <Typography
         variant="body2"
+        component="div"
         style={{ textTransform: 'capitalize' }}>
-        {label}
+        {label} {children}
       </Typography>
     </BookEnds>
   )

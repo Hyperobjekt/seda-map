@@ -1,5 +1,5 @@
 import React from 'react'
-import { makeStyles, useTheme } from '@material-ui/core'
+import { useTheme } from '@material-ui/core'
 import {
   getCircles,
   getCircle,
@@ -11,11 +11,9 @@ import {
   getSizerFunctionForRegion
 } from '../../../../shared/selectors'
 import {
-  useScatterplotVars,
   useHovered,
   useLocationsData,
   useLocationData,
-  useRegion,
   useMarkersVisibility
 } from '../../hooks'
 import ScatterplotOverlay from '../../../scatterplot/components/ScatterplotOverlay'
@@ -41,20 +39,6 @@ export const getXyzTransformers = (xVar, yVar, region) => {
   // return transformers
   return [xValToPosition, yValToPosition, zValToSize]
 }
-
-const useStyles = makeStyles(theme => ({
-  root: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    pointerEvents: 'none'
-  },
-  hoverMarker: {
-    pointerEvents: 'none'
-  }
-}))
 
 const SedaLocationMarkers = ({
   xVar,

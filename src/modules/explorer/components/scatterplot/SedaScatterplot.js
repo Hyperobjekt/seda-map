@@ -1,16 +1,20 @@
 import React, { useCallback, useRef, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import { isVersusFromVarNames } from '../../../../shared/selectors'
+import {
+  isVersusFromVarNames,
+  getDemographicIdFromVarName,
+  getSecondaryForDemographic
+} from '../../../../shared/selectors'
 import ScatterplotBase from './SedaScatterplotBase'
 import clsx from 'clsx'
 import useResizeAware from 'react-resize-aware'
 
 import {
-  useHovered,
   useScatterplotVars,
   useRegion,
   useFilters,
-  useAddLocationById
+  useAddLocationById,
+  useSecondary
 } from '../../hooks'
 import { SplitView } from '../base/SplitView'
 import useUiStore from '../../hooks/useUiStore'
@@ -23,6 +27,8 @@ import {
   isMarkerRelated
 } from '../../../scatterplot/utils'
 import Footnotes from '../base/Footnotes'
+import LinkButton from '../../../../shared/components/LinkButton'
+import SedaGenericSelect from '../controls/SedaGenericSelect'
 
 /** Breakpoint where gap chart is split vs overlay */
 const SPLIT_BREAKPOINT = 1024
@@ -67,18 +73,7 @@ const useStyles = makeStyles(theme => ({
     height: 44
   },
   toggleButton: {
-    display: 'block',
-    padding: 0,
-    margin: '0 auto',
-    color: theme.palette.primary.main,
-    textDecoration: 'underline',
-    border: 0,
-    fontSize: 12,
-    background: 'none',
-    '&:focus': {
-      outline: 'none',
-      boxShadow: `0 2px 0 ${theme.palette.primary.main}`
-    }
+    display: 'block'
   }
 }))
 
@@ -94,6 +89,7 @@ const SedaScatterplot = () => {
   const [filters] = useFilters()
   const [xVar, yVar, zVar] = useScatterplotVars()
   const [xGapVar, yGapVar, zGapVar] = useScatterplotVars('gap')
+  const [, setSecondary] = useSecondary()
   const setHovered = useUiStore(state => state.setHovered)
   const addLocationFromId = useAddLocationById()
 
@@ -139,10 +135,11 @@ const SedaScatterplot = () => {
     [addLocationFromId]
   )
 
-  // handle errors loading data
-  const handleError = () => {}
-
   const isVersus = isVersusFromVarNames(xVar, yVar)
+  const gapDem = getDemographicIdFromVarName(yGapVar)
+  const secondaryMetrics = getSecondaryForDemographic(gapDem)
+  const hasSecondaryChart =
+    isVersus && secondaryMetrics.length > 0
 
   const classes = useStyles()
 
@@ -162,8 +159,7 @@ const SedaScatterplot = () => {
             region={region}
             variant="map"
             onHover={handleHover}
-            onClick={handleClick}
-            onError={handleError}>
+            onClick={handleClick}>
             <div
               className={clsx(
                 'scatterplot__header',
@@ -171,12 +167,12 @@ const SedaScatterplot = () => {
               )}>
               <Typography variant="h6" color="textSecondary">
                 {getChartTitle(xVar, yVar, region)}{' '}
-                {!isSplit && isVersus && (
-                  <button
+                {!isSplit && hasSecondaryChart && (
+                  <LinkButton
                     className={classes.toggleButton}
                     onClick={() => setShowGapChart(true)}>
                     Show gap vs. other metrics
-                  </button>
+                  </LinkButton>
                 )}
               </Typography>
             </div>
@@ -192,7 +188,7 @@ const SedaScatterplot = () => {
           </ScatterplotBase>
         }
         RightComponent={
-          isVersus ? (
+          hasSecondaryChart ? (
             <ScatterplotBase
               className={clsx('scatterplot--gap', classes.chart)}
               xVar={xGapVar}
@@ -201,21 +197,37 @@ const SedaScatterplot = () => {
               filters={filters}
               region={region}
               variant="map"
+              axisChildren={
+                <SedaGenericSelect
+                  style={{
+                    position: 'relative',
+                    zIndex: 1000,
+                    display: 'inline-block'
+                  }}
+                  items={secondaryMetrics}
+                  onSelect={m => setSecondary(m)}>
+                  Change
+                </SedaGenericSelect>
+              }
               onHover={handleHover}
-              onClick={handleClick}
-              onError={handleError}>
-              <div className={clsx(classes.header)}>
+              onClick={handleClick}>
+              <div
+                className={clsx(
+                  'scatterplot__header',
+                  classes.header
+                )}>
                 <Typography variant="h6" color="textSecondary">
                   {getChartTitle(xGapVar, yGapVar, region)}{' '}
                   {!isSplit && isVersus && (
-                    <button
+                    <LinkButton
                       className={classes.toggleButton}
                       onClick={() => setShowGapChart(false)}>
                       Show Versus
-                    </button>
+                    </LinkButton>
                   )}
                 </Typography>
               </div>
+
               <Footnotes
                 footnotes={getFootnotes(
                   xGapVar,
@@ -231,9 +243,9 @@ const SedaScatterplot = () => {
           )
         }
         view={
-          isSplit && isVersus
+          isSplit && hasSecondaryChart
             ? 'split'
-            : showGapChart && isVersus
+            : showGapChart && hasSecondaryChart
             ? 'right'
             : 'left'
         }

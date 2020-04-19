@@ -20,7 +20,6 @@ import { getLang } from '../../../../shared/selectors/lang'
 import { CloseIcon } from '../../../icons'
 import {
   useActiveLocation,
-  useHovered,
   useRegion,
   useLocations,
   useRemoveLocation

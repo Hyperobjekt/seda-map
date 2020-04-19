@@ -7,11 +7,8 @@ import {
 } from '.'
 
 import LANG from '../constants/en'
-import { isVersusFromVarNames } from './demographics'
 import { getMidpointForVarName } from './data'
 import { getStateName } from './states'
-import { getMetricFromVarName } from './metrics'
-import { titleCase } from '../utils'
 
 const isStringMatch = (s1, s2) =>
   s1 &&

@@ -49,12 +49,12 @@ const getGapsForRegion = region => {
 
 const SedaLocationPanel = props => {
   const data = useActiveLocationData()
-  debugger
   const [activeLocation, setActiveLocation] = useActiveLocation()
   const [metric, setMetric] = useMetric()
   const [demographic, setDemographic] = useDemographic()
   const region = getRegionFromLocationId(activeLocation)
   const secondary = getSecondaryMetricsForRegion(region)
+  console.log(secondary)
 
   const metrics = ['avg', 'grd', 'coh']
   const demographics = getDemographicsForRegion(region)

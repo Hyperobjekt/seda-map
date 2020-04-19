@@ -96,7 +96,8 @@ export {
   getMetricById,
   getMetrics,
   getMetricRange,
-  getKeyMetrics
+  getKeyMetrics,
+  getSecondaryForDemographic
 } from './metrics'
 export {
   getRegionFromFeature,

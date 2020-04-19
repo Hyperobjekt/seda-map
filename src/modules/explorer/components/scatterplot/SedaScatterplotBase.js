@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, useState } from 'react'
+import React, { useMemo, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import useResizeAware from 'react-resize-aware'
 
@@ -26,8 +26,7 @@ import {
 } from '../../../../shared/selectors/lang'
 import ScatterplotAxis from '../../../scatterplot/components/ScatterplotAxis'
 import SedaLocationMarkers from './SedaLocationMarkers'
-import { makeStyles, Typography } from '@material-ui/core'
-import { getCSSVariable } from '../../../../shared/utils'
+import { makeStyles } from '@material-ui/core'
 
 // scatterplot width / height where left / right hints are not shown
 const LABEL_BREAKPOINT = 500
@@ -68,6 +67,9 @@ const fetchSchoolPair = (xVar, yVar) => {
 }
 
 const useStyles = makeStyles(theme => ({
+  root: {
+    position: 'relative'
+  },
   markers: {
     top: `var(--sp-top)`,
     right: 'var(--sp-right)',
@@ -108,6 +110,7 @@ function SedaScatterplotBase({
   variant,
   filters,
   autoFetch,
+  axisChildren,
   children,
   onHover,
   onClick,
@@ -225,7 +228,7 @@ function SedaScatterplotBase({
         xVar: getLabelForVarName(xVar),
         yVar: getLabelForVarName(yVar)
       })}
-      className={clsx('scatterplot', className)}
+      className={clsx('scatterplot', classes.root, className)}
       {...props}>
       {resizeListener}
       <ScatterplotBase
@@ -266,8 +269,9 @@ function SedaScatterplotBase({
         showLabels={showLabelsX}
         label={getLabelForVarName(xVar, {
           region: getRegionLabel(region)
-        })}
-      />
+        })}>
+        {axisChildren}
+      </ScatterplotAxis>
       <ScatterplotAxis
         className={clsx(
           'scatterplot__axis--y',

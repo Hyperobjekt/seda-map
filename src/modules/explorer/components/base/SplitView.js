@@ -10,11 +10,9 @@ const getSplitRatio = (containerRef, dividerRef) => {
   if (!containerEl || !dividerEl) return 0.5
   const contRect = containerEl.getBoundingClientRect()
   const divRect = dividerEl.getBoundingClientRect()
-  console.log(contRect, divRect)
   const midPoint = divRect.left + divRect.width / 2
   const ratio =
     (midPoint - contRect.left) / (contRect.right - contRect.left)
-  console.log(midPoint, contRect.left, contRect.right, ratio)
   return ratio
 }
 
@@ -42,7 +40,14 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    height: '100%'
+    height: '100%',
+    overflow: 'auto'
+  },
+  component: {
+    position: 'relative',
+    width: '100%',
+    height: '100%',
+    minWidth: 320
   },
   left: {
     width: props =>
@@ -85,6 +90,7 @@ export const SplitView = ({
   minWidth = 360,
   ...props
 }) => {
+  console.log('split view', view)
   const rootRef = useRef(null)
   const dividerRef = useRef(null)
   const [splitRatio, setSplitRatio] = useState(initialSplit)
@@ -139,7 +145,13 @@ export const SplitView = ({
             classes.side,
             classes.left
           )}>
-          {LeftComponent}
+          <div
+            className={clsx(
+              'split-view__component',
+              classes.component
+            )}>
+            {LeftComponent}
+          </div>
         </div>
         <div
           className={clsx(
@@ -148,7 +160,13 @@ export const SplitView = ({
             classes.side,
             classes.right
           )}>
-          {RightComponent}
+          <div
+            className={clsx(
+              'split-view__component',
+              classes.component
+            )}>
+            {RightComponent}
+          </div>
         </div>
       </div>
       <animated.div
