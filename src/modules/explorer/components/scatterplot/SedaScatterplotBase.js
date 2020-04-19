@@ -1,24 +1,35 @@
 import React, { useMemo, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
+import useResizeAware from 'react-resize-aware'
+
 import debug from 'debug'
 import ScatterplotBase, {
   fetchScatterplotVars,
   fetchReducedPair
 } from '../../../scatterplot/components/ScatterplotBase'
 import { theme } from '../../../scatterplot/echartTheme'
-import { getBaseVars } from '../../../../shared/selectors'
-import { getScatterplotOptions } from '../../../scatterplot/utils'
 import {
-  getLang,
-  getLabelForVarName
-} from '../../../../shared/selectors/lang'
+  getBaseVars,
+  isVersusFromVarNames
+} from '../../../../shared/selectors'
+import { getScatterplotOptions } from '../../../scatterplot/utils'
+
 import * as merge from 'deepmerge'
 import clsx from 'clsx'
 import { getFilteredIds } from '../../../../shared/selectors/data'
 import { useScatterplotData } from '../../hooks'
+import {
+  getLang,
+  getLegendEndLabelsForVarName as getEndLabels,
+  getLabelForVarName,
+  getRegionLabel
+} from '../../../../shared/selectors/lang'
+import ScatterplotAxis from '../../../scatterplot/components/ScatterplotAxis'
+import SedaLocationMarkers from './SedaLocationMarkers'
+import { makeStyles, Typography } from '@material-ui/core'
 
-const defaultFilters = { prefix: null, largest: null }
-const defaultHandler = () => {}
+// scatterplot width / height where left / right hints are not shown
+const LABEL_BREAKPOINT = 500
 
 const endpoint =
   process.env.REACT_APP_DATA_ENDPOINT + 'scatterplot/'
@@ -55,28 +66,67 @@ const fetchSchoolPair = (xVar, yVar) => {
   return fetchReducedPair(endpoint, xVar, yVar)
 }
 
+const useStyles = makeStyles(theme => ({
+  markers: {
+    top: 24,
+    left: 24,
+    bottom: 40,
+    right: 64
+  },
+  axis: {
+    position: 'absolute'
+  },
+  xAxis: {
+    bottom: -24,
+    left: 0,
+    right: -64,
+    width: 'auto'
+  },
+  yAxis: {
+    right: -32,
+    top: 0,
+    bottom: 0,
+    width: 0
+  },
+  endLabels: {
+    color: theme.palette.grey[600],
+    fontSize: theme.typography.pxToRem(12)
+  }
+}))
+
 function SedaScatterplotBase({
   xVar,
   yVar,
   zVar,
   className,
+  classes: overrides,
   region,
   variant,
-  filters = defaultFilters,
-  autoFetch = true,
+  filters,
+  autoFetch,
   children,
-  onHover = defaultHandler,
-  onClick = defaultHandler,
-  onReady = defaultHandler,
-  onError = defaultHandler,
+  onHover,
+  onClick,
+  onReady,
+  onError,
   ...props
 }) {
+  console.log('render', variant)
+
+  // track size of scatterplot
+  const [resizeListener, sizes] = useResizeAware()
+
   // scatterplot data store
   const [data, setData] = useScatterplotData()
+
   // store copy of scatterplot options
-  const [options, setOptions] = useState({})
+  // const [options, setOptions] = useState({})
+
   // scatterplot data for the current region
   const regionData = data[region]
+
+  const isVersus = isVersusFromVarNames(xVar, yVar)
+
   // highlight ids based on filters
   const highlightIds = useMemo(() => {
     return getFilteredIds(regionData, filters, zVar).slice(
@@ -84,6 +134,16 @@ function SedaScatterplotBase({
       3000
     )
   }, [regionData, filters, zVar])
+
+  const showLabelsX =
+    sizes && !isVersus && sizes.width > LABEL_BREAKPOINT
+
+  const showLabelsY =
+    sizes && !isVersus && sizes.height > LABEL_BREAKPOINT
+
+  // classnames for markers and axis
+  const classes = useStyles()
+
   // get list of vars needed to render current options
   const neededVars = getMissingVarNames(regionData, [
     xVar,
@@ -131,8 +191,8 @@ function SedaScatterplotBase({
     setData
   ])
 
-  useEffect(() => {
-    if (neededVars.length !== 0) return
+  const options = useMemo(() => {
+    if (neededVars.length !== 0) return {}
     const newOptions = getScatterplotOptions(
       variant,
       regionData,
@@ -140,7 +200,7 @@ function SedaScatterplotBase({
       highlightIds,
       region
     )
-    setOptions(newOptions)
+    return newOptions
   }, [
     xVar,
     yVar,
@@ -152,6 +212,9 @@ function SedaScatterplotBase({
     regionData
   ])
 
+  const [startLabelX, endLabelX] = getEndLabels(xVar)
+  const [startLabelY, endLabelY] = getEndLabels(yVar)
+
   return (
     <div
       role="img"
@@ -162,6 +225,7 @@ function SedaScatterplotBase({
       })}
       className={clsx('scatterplot', className)}
       {...props}>
+      {resizeListener}
       <ScatterplotBase
         theme={theme}
         loading={neededVars.length !== 0}
@@ -172,8 +236,66 @@ function SedaScatterplotBase({
         onReady={onReady}
       />
       {children}
+      <SedaLocationMarkers
+        className={clsx(
+          'scatterplot__markers',
+          classes.markers,
+          overrides.markers
+        )}
+        xVar={xVar}
+        yVar={yVar}
+        zVar={zVar}
+        region={region}
+      />
+      <ScatterplotAxis
+        className={clsx(
+          'scatterplot__axis--x',
+          classes.axis,
+          classes.xAxis,
+          overrides.axis,
+          overrides.xAxis
+        )}
+        classes={{
+          labelContainer: classes.endLabels
+        }}
+        minLabel={startLabelX}
+        maxLabel={endLabelX}
+        showLabels={showLabelsX}
+        label={getLabelForVarName(xVar, {
+          region: getRegionLabel(region)
+        })}
+      />
+      <ScatterplotAxis
+        className={clsx(
+          'scatterplot__axis--y',
+          classes.axis,
+          classes.yAxis,
+          overrides.axis,
+          overrides.yAxis
+        )}
+        classes={{
+          labelContainer: classes.endLabels
+        }}
+        vertical
+        minLabel={startLabelY}
+        maxLabel={endLabelY}
+        showLabels={showLabelsY}
+        label={getLabelForVarName(yVar, {
+          region: getRegionLabel(region)
+        })}
+      />
     </div>
   )
+}
+
+SedaScatterplotBase.defaultProps = {
+  classes: {},
+  filters: { prefix: null, largest: null },
+  autoFetch: true,
+  onHover: () => {},
+  onClick: () => {},
+  onReady: () => {},
+  onError: () => {}
 }
 
 SedaScatterplotBase.propTypes = {

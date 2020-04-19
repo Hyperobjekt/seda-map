@@ -27,7 +27,7 @@ const DEFAULT_ROUTEVARS = [
  * @param {*} route
  */
 export const getStrippedRoute = route =>
-  route.replace(/^#[\/]+/g, '').replace(/\/$/g, '')
+  route.replace(/^#[/]+/g, '').replace(/\/$/g, '')
 
 export const isEmptyRoute = route =>
   getStrippedRoute(route).length === 0

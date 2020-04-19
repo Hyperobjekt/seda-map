@@ -10,7 +10,9 @@ import {
   getMidpointForVarName,
   isVersusFromVarNames,
   getDemographicForVarNames,
-  getFormatterForVarName
+  getFormatterForVarName,
+  getColorForVarNameValue,
+  getSelectedColors
 } from '../../shared/selectors'
 import { getLang } from '../../shared/selectors/lang'
 import { getCSSVariable, formatNumber } from '../../shared/utils'
@@ -753,7 +755,10 @@ export const getCircle = ({
   xValueToPercent,
   yValueToPercent,
   zValueToRadius,
-  data
+  data,
+  region,
+  index,
+  ...props
 }) => {
   const MIN_OVERLAY_SIZE = 8
   if (!data) {
@@ -776,7 +781,17 @@ export const getCircle = ({
       zValueToRadius && hasVal(zVal)
         ? Math.max(MIN_OVERLAY_SIZE, zValueToRadius(zVal))
         : MIN_OVERLAY_SIZE,
-    data: data
+    outerColor: hasVal(index)
+      ? getSelectedColors()[index]
+      : '#f00',
+    label: hasVal(index) ? index + 1 : '',
+    innerColor: getColorForVarNameValue(
+      data[yVar],
+      yVar,
+      region
+    ),
+    data: data,
+    ...props
   }
 }
 
@@ -787,7 +802,7 @@ export const getCircles = ({ data, ...props }) => {
   if (!data) return {}
   // add circles for selected items
   return data
-    .map(d => getCircle({ data: d, ...props }))
+    .map((d, i) => getCircle({ data: d, index: i, ...props }))
     .filter(f => f !== null)
 }
 

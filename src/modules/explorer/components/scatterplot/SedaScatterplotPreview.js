@@ -35,13 +35,30 @@ const useStyles = makeStyles(theme => ({
       borderColor: theme.palette.divider
     }
   },
-  axisLabels: {
-    textAlign: 'center',
-    fontSize: 12,
-    color: '#888'
+  axis: {
+    '& .MuiTypography-root': {
+      textTransform: 'capitalize',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      textAlign: 'center',
+      fontSize: 12,
+      color: theme.palette.grey[500]
+    }
   },
-  axisLabelsY: {
-    width: 200
+  xAxis: {
+    bottom: -20,
+    '& .book-end__contentContainer': {
+      width: '100%'
+    }
+  },
+  yAxis: {
+    right: -20,
+    '& .book-end__contentContainer': {
+      transform: 'rotate(-90deg)',
+      transformOrigin: 'left bottom'
+    },
+    '& .MuiTypography-root': { width: 200 }
   },
   markers: {
     top: 0,
@@ -66,63 +83,12 @@ const SedaScatterplotPreview = props => {
       className={clsx(classes.root, {
         'scatterplot--versus': isVersus
       })}
+      classes={classes}
       region={region}
       filters={filters}
       variant="preview"
-      {...props}>
-      <SedaLocationMarkers className={classes.markers} />
-      <BookEnds
-        style={{
-          position: 'absolute',
-          right: -12,
-          top: 0,
-          bottom: 0,
-          width: 0
-        }}
-        classes={{
-          contentContainer: clsx(
-            classes.axisLabels,
-            classes.axisLabelsY
-          )
-        }}
-        vertical>
-        <Typography
-          style={{
-            textTransform: 'capitalize',
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis'
-          }}
-          variant="body1">
-          {getLabelForVarName(yVar, {
-            region: getRegionLabel(region)
-          })}
-        </Typography>
-      </BookEnds>
-      <BookEnds
-        style={{
-          position: 'absolute',
-          right: 0,
-          left: 0,
-          bottom: -20
-        }}
-        classes={{
-          contentContainer: clsx(classes.axisLabels)
-        }}>
-        <Typography
-          style={{
-            textTransform: 'capitalize',
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis'
-          }}
-          variant="body1">
-          {getLabelForVarName(xVar, {
-            region: getRegionLabel(region)
-          })}
-        </Typography>
-      </BookEnds>
-    </ScatterplotBase>
+      {...props}
+    />
   )
 }
 

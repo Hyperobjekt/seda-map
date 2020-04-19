@@ -172,7 +172,7 @@ const useHeaderStyles = makeStyles(theme => ({
     marginRight: theme.spacing(3)
   },
   heading: {
-    fontSize: theme.typography.pxToRem(16),
+    fontSize: theme.typography.pxToRem(14),
     textTransform: 'capitalize',
     whiteSpace: 'nowrap',
     overflow: 'hidden',

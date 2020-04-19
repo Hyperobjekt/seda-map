@@ -1,18 +1,10 @@
-import React, { useCallback, useRef } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { isVersusFromVarNames } from '../../../../shared/selectors'
 import ScatterplotBase from './SedaScatterplotBase'
 import clsx from 'clsx'
-import BookEnds from '../../../../shared/components/BookEnds'
-import ArrowLeft from '@material-ui/icons/ArrowLeft'
-import ArrowRight from '@material-ui/icons/ArrowRight'
-import {
-  getLegendEndLabelsForVarName as getEndLabels,
-  getLabelForVarName,
-  getRegionLabel
-} from '../../../../shared/selectors/lang'
-import { Typography } from '@material-ui/core'
-import SedaLocationMarkers from './SedaLocationMarkers'
+import useResizeAware from 'react-resize-aware'
+
 import {
   useHovered,
   useScatterplotVars,
@@ -20,23 +12,15 @@ import {
   useFilters,
   useAddLocationById
 } from '../../hooks'
+import { SplitView } from '../base/SplitView'
+import useUiStore from '../../hooks/useUiStore'
+import { getChartTitle } from '../../../../shared/selectors/lang'
+import { Typography, Button } from '@material-ui/core'
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    position: 'relative',
-    width: '100%',
-    height: `calc(100% - ${theme.spacing(8)}px)`,
-    marginRight: theme.spacing(8),
-    marginBottom: theme.spacing(8)
-  },
-  markers: {
-    top: 24,
-    left: 24,
-    bottom: 24,
-    right: 64
-  }
-}))
+/** Breakpoint where gap chart is split vs overlay */
+const SPLIT_BREAKPOINT = 1024
 
+/** Helper to grab location ID from chart events */
 const getLocatonIdFromEvent = e => {
   // index of the id property in the scatterplot data
   const idIndex = 3
@@ -50,6 +34,11 @@ const getLocatonIdFromEvent = e => {
   return id
 }
 
+/**
+ * Helper to grab event coordinates from chart events
+ * @param {*} e event
+ * @returns {[number, number]} [x, y]
+ */
 const getCoordsFromEvent = e => [
   e.event.event.pageX,
   e.event.event.pageY
@@ -65,16 +54,94 @@ const isMarkerRelated = e => {
     : !e.event.event.relatedTarget.classList.contains('marker')
 }
 
+/**
+ *
+ * @param {*} xVar
+ * @param {*} yVar
+ */
+const getFootnotes = (xVar, yVar) => {}
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    position: 'relative',
+    width: '100%',
+    height: '100%',
+    userSelect: 'none'
+  },
+  chart: {
+    position: 'absolute',
+    top: theme.spacing(5),
+    left: 0,
+    right: theme.spacing(8),
+    bottom: theme.spacing(8)
+  },
+  header: {
+    position: 'absolute',
+    padding: theme.spacing(2),
+    left: theme.spacing(0.5),
+    top: -1 * theme.spacing(5),
+    right: -1 * theme.spacing(6),
+    textAlign: 'center',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    '& .MuiTypography-root': {
+      fontSize: theme.typography.pxToRem(12),
+      lineHeight: 1.25,
+      whiteSpace: 'normal',
+      background: '#fafafa'
+    }
+  },
+  footnote: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: -64,
+    padding: `${theme.spacing(1)}px ${theme.spacing(2)}px`,
+    fontSize: 11,
+    color: '#888',
+    lineHeight: 1.25,
+    whiteSpace: 'normal',
+    height: 44,
+    '& span': {
+      marginRight: 4
+    }
+  },
+  toggleButton: {
+    display: 'block',
+    padding: 0,
+    margin: '0 auto',
+    color: theme.palette.primary.main,
+    textDecoration: 'underline',
+    border: 0,
+    fontSize: 12,
+    background: 'none',
+    '&:focus': {
+      outline: 'none',
+      boxShadow: `0 2px 0 ${theme.palette.primary.main}`
+    }
+  }
+}))
+
 const SedaScatterplot = () => {
   // ref to track the timeout that clears the tooltip
   const timeoutRef = useRef(null)
+
+  // track size of chart area
+  const [resizeListener, sizes] = useResizeAware()
 
   // pull required data from store
   const [region] = useRegion()
   const [filters] = useFilters()
   const [xVar, yVar, zVar] = useScatterplotVars()
-  const [, setHovered] = useHovered()
+  const [xGapVar, yGapVar, zGapVar] = useScatterplotVars('gap')
+  const setHovered = useUiStore(state => state.setHovered)
   const addLocationFromId = useAddLocationById()
+
+  // track state for split view of charts
+  const [showGapChart, setShowGapChart] = useState(false)
+
+  const isSplit = sizes && sizes.width > SPLIT_BREAKPOINT
 
   // handle hover events
   const handleHover = useCallback(
@@ -117,65 +184,95 @@ const SedaScatterplot = () => {
   const handleError = () => {}
 
   const isVersus = isVersusFromVarNames(xVar, yVar)
-  const [startLabelX, endLabelX] = getEndLabels(xVar)
-  const [startLabelY, endLabelY] = getEndLabels(yVar)
+
   const classes = useStyles()
   return (
-    <ScatterplotBase
-      xVar={xVar}
-      yVar={yVar}
-      zVar={zVar}
-      filters={filters}
-      className={clsx(classes.root, {
-        'scatterplot--versus': isVersus
-      })}
-      region={region}
-      variant="map"
-      onHover={handleHover}
-      onClick={handleClick}
-      onError={handleError}>
-      <SedaLocationMarkers className={classes.markers} />
-      <BookEnds
+    <div className={clsx(classes.root)}>
+      {resizeListener}
+      <SplitView
+        LeftComponent={
+          <ScatterplotBase
+            className={clsx(classes.chart, {
+              'scatterplot--versus': isVersus
+            })}
+            xVar={xVar}
+            yVar={yVar}
+            zVar={zVar}
+            filters={filters}
+            region={region}
+            variant="map"
+            onHover={handleHover}
+            onClick={handleClick}
+            onError={handleError}>
+            <div className={clsx(classes.header)}>
+              <Typography variant="h6" color="textSecondary">
+                {getChartTitle(xVar, yVar, region)}{' '}
+                {!isSplit && isVersus && (
+                  <button
+                    className={classes.toggleButton}
+                    onClick={() => setShowGapChart(true)}>
+                    Show gap vs. other metrics
+                  </button>
+                )}
+              </Typography>
+            </div>
+            <Typography className={clsx(classes.footnote)}>
+              <span>
+                Dotted line indicates no gap (White = Hispanic).
+              </span>
+              <span>
+                Circles above dotted line indicate gap favoring
+                White students.
+              </span>
+              <span>
+                Circle size reflects number of assessments.
+              </span>
+            </Typography>
+          </ScatterplotBase>
+        }
+        RightComponent={
+          isVersus ? (
+            <ScatterplotBase
+              className={clsx('scatterplot--gap', classes.chart)}
+              xVar={xGapVar}
+              yVar={yGapVar}
+              zVar={zGapVar}
+              filters={filters}
+              region={region}
+              variant="map"
+              onHover={handleHover}
+              onClick={handleClick}
+              onError={handleError}>
+              <div className={clsx(classes.header)}>
+                <Typography variant="h6" color="textSecondary">
+                  {getChartTitle(xGapVar, yGapVar, region)}{' '}
+                  {!isSplit && isVersus && (
+                    <button
+                      className={classes.toggleButton}
+                      onClick={() => setShowGapChart(false)}>
+                      Show White vs. Black
+                    </button>
+                  )}
+                </Typography>
+              </div>
+            </ScatterplotBase>
+          ) : (
+            <></>
+          )
+        }
+        view={
+          isSplit && isVersus
+            ? 'split'
+            : showGapChart && isVersus
+            ? 'right'
+            : 'left'
+        }
         style={{
-          position: 'absolute',
-          bottom: -40,
-          left: 0,
-          right: 0
+          width: '100%',
+          height: '100%'
         }}
-        startLabel={startLabelX}
-        endLabel={endLabelX}
-        startIcon={<ArrowLeft />}
-        endIcon={<ArrowRight />}>
-        <Typography
-          variant="body1"
-          style={{ textTransform: 'capitalize' }}>
-          {getLabelForVarName(xVar, {
-            region: getRegionLabel(region)
-          })}
-        </Typography>
-      </BookEnds>
-      <BookEnds
-        style={{
-          position: 'absolute',
-          right: -40,
-          top: 0,
-          bottom: 0,
-          width: 0
-        }}
-        vertical
-        startLabel={startLabelY}
-        endLabel={endLabelY}
-        startIcon={<ArrowLeft />}
-        endIcon={<ArrowRight />}>
-        <Typography
-          style={{ textTransform: 'capitalize' }}
-          variant="body1">
-          {getLabelForVarName(yVar, {
-            region: getRegionLabel(region)
-          })}
-        </Typography>
-      </BookEnds>
-    </ScatterplotBase>
+      />
+    </div>
   )
 }
 

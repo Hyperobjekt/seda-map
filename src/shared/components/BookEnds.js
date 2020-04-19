@@ -1,11 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
-import {
-  makeStyles,
-  Button,
-  Typography
-} from '@material-ui/core'
+import { makeStyles } from '@material-ui/core'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -45,10 +41,6 @@ const useStyles = makeStyles(theme => ({
 const BookEnds = ({
   startLabel,
   endLabel,
-  startIcon,
-  endIcon,
-  onStartClick,
-  onEndClick,
   vertical,
   midPosition,
   children,
@@ -57,7 +49,6 @@ const BookEnds = ({
   ...props
 }) => {
   const classes = useStyles({ vertical })
-  const Tag = onStartClick || onEndClick ? Button : 'div'
   return (
     <div
       className={clsx(
@@ -68,7 +59,7 @@ const BookEnds = ({
         { [classes.vertical]: vertical }
       )}
       {...props}>
-      <Tag
+      <div
         className={clsx(
           'book-end__labelContainer',
           'book-end__start',
@@ -76,11 +67,9 @@ const BookEnds = ({
           classes.start,
           overrides.labelContainer,
           overrides.start
-        )}
-        onClick={onStartClick}>
-        {startIcon}
-        <Typography variant="body2">{startLabel}</Typography>
-      </Tag>
+        )}>
+        {startLabel}
+      </div>
       <div
         className={clsx(
           'book-end__contentContainer',
@@ -89,7 +78,7 @@ const BookEnds = ({
         )}>
         {children}
       </div>
-      <Tag
+      <div
         className={clsx(
           'book-end__labelContainer',
           'book-end__end',
@@ -97,11 +86,9 @@ const BookEnds = ({
           classes.end,
           overrides.labelContainer,
           overrides.end
-        )}
-        onClick={onEndClick}>
-        <Typography variant="body2">{endLabel}</Typography>
-        {endIcon}
-      </Tag>
+        )}>
+        {endLabel}
+      </div>
     </div>
   )
 }
@@ -109,10 +96,6 @@ const BookEnds = ({
 BookEnds.propTypes = {
   startLabel: PropTypes.any,
   endLabel: PropTypes.any,
-  startIcon: PropTypes.node,
-  endIcon: PropTypes.node,
-  onStartClick: PropTypes.func,
-  onEndClick: PropTypes.func,
   vertical: PropTypes.bool,
   midPosition: PropTypes.number,
   className: PropTypes.string,

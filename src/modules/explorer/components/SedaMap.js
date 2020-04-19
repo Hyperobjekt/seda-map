@@ -27,7 +27,6 @@ import {
 } from '../hooks'
 import useDataOptions from '../hooks/useDataOptions'
 import { REGION_TO_ID_LENGTH } from '../../../shared/constants/regions'
-import useMapStore from '../hooks/useMapStore'
 
 const selectedColors = getSelectedColors()
 

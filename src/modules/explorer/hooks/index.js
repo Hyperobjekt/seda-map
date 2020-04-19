@@ -45,6 +45,17 @@ export const useMetric = () => {
 }
 
 /**
+ * Provides the secondary metric id and setter
+ * @returns {[string, function]} [metricId, setMetric]
+ */
+export const useSecondary = () => {
+  return useDataOptions(
+    state => [state.secondary, state.setSecondary],
+    shallow
+  )
+}
+
+/**
  * Provides the current demographic id and setter
  * @returns {[string, function]} [demographicId, setDemographic]
  */
@@ -291,41 +302,36 @@ export const useScatterplotData = () => {
  * Provides x, y, z scatterplot variables for current data options
  * @returns {[string, string, string]} [xVar, yVar, zVar]
  */
-export const useScatterplotVars = () => {
+export const useScatterplotVars = (type = 'chart') => {
   return useDataOptions(
     state =>
       getVarNames(
         state.region,
         state.metric,
+        state.secondary,
         state.demographic,
-        'chart'
+        type
       ),
     shallow
   )
 }
 
 /**
- * Provides functions for positioning and sizing
- * based on x, y, z values
- * @returns {[function, function, function]} [xValueToPercent, yValueToPercent, zValueToRadius]
+ * Provides x, y, z scatterplot variables for current data options
+ * @returns {[string, string, string]} [xVar, yVar, zVar]
  */
-export const useXyzTransformers = () => {
-  const [xVar, yVar] = useScatterplotVars()
-  const [region] = useRegion()
-  const invertX = region === 'schools'
-  const xRange = getMetricRangeFromVarName(xVar, region)
-  const yRange = getMetricRangeFromVarName(yVar, region)
-  // function that converts xValue to the % position on the scale
-  const xValToPosition = val =>
-    getValuePercentInRange(val, xRange, invertX)
-  // function that converts yValue to the % position on the scale
-  const yValToPosition = val =>
-    100 - getValuePercentInRange(val, yRange)
-  // function that converts z value to circle radius in px
-  const dem = getDemographicForVarNames(xVar, yVar)
-  const zValToSize = getSizerFunctionForRegion(region, dem)
-  // return transformers
-  return [xValToPosition, yValToPosition, zValToSize]
+export const useScatterplotGapVars = () => {
+  return useDataOptions(
+    state =>
+      getVarNames(
+        state.region,
+        state.metric,
+        state.secondary,
+        state.demographic,
+        'chart'
+      ),
+    shallow
+  )
 }
 
 /**
@@ -344,6 +350,7 @@ export const useMapVars = () => {
       getVarNames(
         state.region,
         state.metric,
+        state.secondary,
         state.demographic,
         'map'
       ),
@@ -454,11 +461,13 @@ export const useActiveLocationData = () => {
     const id = state.activeLocation
     if (!id) return {}
     const region = getRegionFromLocationId(id)
-    return getDataForId(
+    const data = getDataForId(
       id,
       state.data[region],
       state.featureData
     )
+    console.log(data, state.featureData)
+    return data
   }, shallow)
 }
 

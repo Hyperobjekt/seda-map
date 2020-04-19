@@ -69,6 +69,27 @@ export const getVersusVarNames = (metric, demographic) => {
   ]
 }
 
+export const getMetricVarName = (
+  metric,
+  demographic = 'all'
+) => {
+  return demographic + '_' + metric
+}
+
+export const getSecondaryVarName = (secondary, demographic) => {
+  // use "all" SES option for the following demographics
+  if (secondary === 'ses') {
+    const useAll =
+      ['m', 'f', 'p', 'np', 'a'].indexOf(demographic) > -1
+    return useAll ? 'all_ses' : demographic + '_ses'
+  }
+  return demographic + '_' + secondary
+}
+
+export const getSizeVarName = demographic => {
+  return demographic + '_sz'
+}
+
 /**
  * Returns the x,y,z variables for the current selection
  * @param {string} region id
@@ -79,6 +100,7 @@ export const getVersusVarNames = (metric, demographic) => {
 export const getVarNames = (
   region,
   metric,
+  secondary = 'ses',
   demographic,
   type = 'chart'
 ) => {
@@ -90,13 +112,22 @@ export const getVarNames = (
   if (type === 'chart' && isGapDemographic(demographic)) {
     return getVersusVarNames(metric, demographic)
   }
-  // use "all" SES option for the following demographics
-  const useAll =
-    ['m', 'f', 'p', 'np', 'a'].indexOf(demographic) > -1
   return [
-    useAll ? 'all_ses' : demographic + '_ses',
-    demographic + '_' + metric,
-    demographic + '_sz'
+    getSecondaryVarName(secondary, demographic),
+    getMetricVarName(metric, demographic),
+    getSizeVarName(demographic)
+  ]
+}
+
+export const getGapVarNames = (
+  metric,
+  secondary,
+  demographic
+) => {
+  return [
+    getSecondaryVarName(secondary, demographic),
+    getMetricVarName(metric, demographic),
+    getSizeVarName(demographic)
   ]
 }
 
@@ -114,6 +145,7 @@ export const getScatterplotVars = (
   const [xVar, yVar, zVar] = getVarNames(
     region,
     metric,
+    'ses',
     demographic
   )
   return {

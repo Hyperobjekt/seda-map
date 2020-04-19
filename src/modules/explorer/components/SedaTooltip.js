@@ -115,7 +115,7 @@ const SedaTooltip = props => {
   const stateName = data && data.id ? getStateName(data.id) : ''
 
   // add var to feature if missing
-  if (isVersus && !data[descriptionVars[0]]) {
+  if (isVersus && data && !data[descriptionVars[0]]) {
     data[descriptionVars[0]] = data[yVar] - data[xVar]
   }
 

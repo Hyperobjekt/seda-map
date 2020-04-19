@@ -69,7 +69,7 @@ const SedaMapLegend = props => {
         )
       : null
   /** primary label for the map legend */
-  const primary = getPrefixLang([metric, demographic], 'LABEL')
+  const primary = getPrefixLang([demographic, metric], 'LABEL')
 
   /** array containing demographic labels (for gaps) */
   const dems = getGapDemographics(demographic).map(v =>

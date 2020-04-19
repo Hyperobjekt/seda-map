@@ -1,9 +1,4 @@
 import create from 'zustand'
-import {
-  isValidExplorerRoute,
-  isEmptyRoute,
-  getParamsFromPathname
-} from '../../../shared/selectors/router'
 
 const [useUiStore] = create(set => ({
   // current view of the data

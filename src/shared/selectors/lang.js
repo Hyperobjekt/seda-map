@@ -10,6 +10,8 @@ import LANG from '../constants/en'
 import { isVersusFromVarNames } from './demographics'
 import { getMidpointForVarName } from './data'
 import { getStateName } from './states'
+import { getMetricFromVarName } from './metrics'
+import { titleCase } from '../utils'
 
 const isStringMatch = (s1, s2) =>
   s1 &&
@@ -282,11 +284,12 @@ export const getDescriptionForVarName = (varName, value) => {
 /**
  * Returns string label for provided `varName`
  */
-export const getLabelForVarName = (varName, context = {}) => {
-  const [demographic, metric] = varName.split('_')
-  return demographic === 'all'
-    ? getLang('LABEL_' + metric, context)
-    : getLang('LABEL_' + metric + '_' + demographic, context)
+export const getLabelForVarName = (
+  varName,
+  context = {},
+  prefix = 'LABEL'
+) => {
+  return getPrefixLang(varName, prefix, context)
 }
 
 /**
@@ -433,6 +436,11 @@ export const getLangDiverging = (
 export const getTooltipMetricLang = (varName, value) =>
   getLangDiverging(varName, value, 'TOOLTIP_DESC')
 
+/**
+ * Returns the title for the preview chart
+ * @param {*} xVar
+ * @param {*} yVar
+ */
 export const getPreviewChartTitle = (xVar, yVar) => {
   const isVersus = isVersusFromVarNames(xVar, yVar)
   if (!isVersus)
@@ -448,6 +456,29 @@ export const getPreviewChartTitle = (xVar, yVar) => {
     ' vs. ' +
     getDemographicLabel(xVar) +
     ')'
+  )
+}
+
+/**
+ * Returns the title for the main chart
+ * @param {*} xVar
+ * @param {*} yVar
+ */
+export const getChartTitle = (xVar, yVar, region) => {
+  const isVersus = isVersusFromVarNames(xVar, yVar)
+  const primary = isVersus
+    ? getDemographicIdFromVarName(yVar)
+    : yVar
+  // only need metric for secondary var if not vs.
+  const secondary = isVersus
+    ? xVar
+    : getMetricIdFromVarName(xVar)
+  return (
+    titleCase(getPrefixLang(primary, 'LABEL')) +
+    ' vs. ' +
+    titleCase(getPrefixLang(secondary, 'LABEL')) +
+    ' by ' +
+    titleCase(getPrefixLang(region, 'LABEL_SINGULAR'))
   )
 }
 

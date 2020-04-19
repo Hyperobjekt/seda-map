@@ -9,14 +9,15 @@ import {
 } from '../../../shared/utils/tilequery'
 import { getRegionFromLocationId } from '../../../shared/selectors'
 import { getDataForId } from '../../scatterplot/components/ScatterplotBase/utils'
-import {
-  getParamsFromPathname,
-  isEmptyRoute,
-  isValidExplorerRoute,
-  getLocationFromFeature
-} from '../../../shared/selectors/router'
+import { getLocationFromFeature } from '../../../shared/selectors/router'
 import { getStateFipsFromAbbr } from '../../../shared/selectors/states'
 
+/**
+ * Returns true if the feature is in the provided locations array
+ * @param {*} feature
+ * @param {*} locations
+ * @returns {boolean}
+ */
 const isFeatureInLocations = (feature, locations) => {
   const featureId = getFeatureProperty(feature, 'id')
   return (
@@ -52,6 +53,18 @@ const getUpdatedLocations = (locations, features) => {
       ? loc
       : [...loc, addLocationStringToFeature(feature)]
   }, locations)
+}
+
+/**
+ * Gets an object with all of the provided features' data
+ * with the ID as the key
+ * @param {Array<GeoJsonFeature} an array of features
+ */
+const getFeatureData = features => {
+  return features.reduce((obj, feature) => {
+    obj[feature.properties.id] = feature.properties
+    return obj
+  }, {})
 }
 
 const defaultMetric = 'avg'
@@ -113,13 +126,21 @@ const makeSetters = (set, get) => ({
     })
   },
   addLocationFromId: async (id, setActive = true) => {
+    console.log('adding from id')
     const region = getRegionFromLocationId(id)
     const data = getDataForId(id, get().data[region])
     const feature = await loadFeatureFromCoords(data)
-    set(state => ({
-      locations: getUpdatedLocations(state.locations, feature),
-      ...(setActive && { activeLocation: id })
-    }))
+
+    set(state => {
+      return {
+        locations: getUpdatedLocations(state.locations, feature),
+        featureData: {
+          ...state.featureData,
+          ...getFeatureData([feature])
+        },
+        ...(setActive && { activeLocation: id })
+      }
+    })
   },
   addLocationsFromRoute: async (route, setActive = true) => {
     try {
@@ -137,6 +158,10 @@ const makeSetters = (set, get) => ({
           state.locations,
           features
         ),
+        featureData: {
+          ...state.featureData,
+          ...getFeatureData(features)
+        },
         ...(setActive && changes)
       }))
     } catch (err) {

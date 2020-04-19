@@ -4,6 +4,7 @@ import {
   ID_LENGTH_TO_REGION
 } from '../constants/regions'
 import { getFeatureProperty } from '.'
+import { getPrefixLang } from './lang'
 
 /**
  * Gets the configuation for regions
@@ -18,11 +19,14 @@ export const getRegionById = id =>
 
 /** Gets regions with singular name (e.g. "county" instead of "counties") */
 export const getSingularRegions = () =>
-  REGIONS.map(r => ({ id: r.id, label: r.singular }))
+  REGIONS.map(r => ({
+    id: r.id,
+    label: getPrefixLang(r.id, 'LABEL_SINGULAR')
+  }))
 
 /** Gets a region with singular name (e.g. "county" instead of "counties") */
 export const getSingularRegion = rId =>
-  rId ? REGIONS.find(r => rId === r.id).singular : ''
+  rId ? getPrefixLang(rId, 'LABEL_SINGULAR') : ''
 
 /** Gets the domain for the given region */
 export const getRegionDomain = (demographic, region) =>

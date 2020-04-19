@@ -10,14 +10,11 @@ import {
   IconButton,
   Button
 } from '@material-ui/core'
-import { getStateName } from '../../../../shared/selectors/states'
 import {
-  getSelectedColors,
   getRegions,
   getRegionLabel,
   getFeatureProperty
 } from '../../../../shared/selectors'
-import LocationName from '../base/LocationName'
 import { getLocationsByRegion } from '../../../../shared/selectors/regions'
 import { getLang } from '../../../../shared/selectors/lang'
 import { CloseIcon } from '../../../icons'
@@ -30,8 +27,7 @@ import {
 } from '../../hooks'
 import SedaSearch from '../SedaSearch'
 import SedaLocationName from '../location/SedaLocationName'
-
-const colors = getSelectedColors()
+import useUiStore from '../../hooks/useUiStore'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -119,7 +115,7 @@ const SedaLocationSelect = ({ onSelect }) => {
   const [activeRegion, setRegion] = useRegion()
   const [locations] = useLocations()
   const [, setActiveLocation] = useActiveLocation()
-  const [, setHovered] = useHovered()
+  const setHovered = useUiStore(state => state.setHovered)
   const locationsByRegion = getLocationsByRegion(locations)
   const inactiveRegions = getRegions()
     .map(r => r.id)

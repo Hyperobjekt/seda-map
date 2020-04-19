@@ -19,7 +19,8 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     justifyContent: 'center',
     color: props => props.color,
-    fontSize: 14,
+    fontSize: 12,
+    lineHeight: 1,
     ...theme.mixins.fillSpace,
     '&:before': {
       content: props =>

@@ -10,11 +10,6 @@ import {
   getRegionFromLocationId,
   getFeatureProperty
 } from '../../../shared/selectors'
-import {
-  isEmptyRoute,
-  isValidExplorerRoute,
-  getParamsFromPathname
-} from '../../../shared/selectors/router'
 
 const getZoomLevelForFeature = feature => {
   const id = getFeatureProperty(feature, 'id')

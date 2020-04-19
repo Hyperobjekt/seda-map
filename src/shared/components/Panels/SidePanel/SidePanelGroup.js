@@ -44,7 +44,7 @@ const setChildPositions = (
     // only set panel positions
     // if (child.type.name !== "Panel") return child
     // only set position if panel is open
-    if (!child.props.open) return child
+    if (!child || !child.props.open) return child
     // get left offset
     const baseStyle = child.props.style || {}
     const style = {

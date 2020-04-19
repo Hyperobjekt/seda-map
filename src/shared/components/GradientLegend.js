@@ -80,10 +80,8 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.text.secondary
   },
   startLabel: {
-    '& .MuiTypography-root': {
-      fontSize: 11,
-      lineHeight: '12px'
-    },
+    fontSize: 11,
+    lineHeight: '12px',
     transform: 'translateX(-50%)'
   },
   midLabel: {
@@ -91,10 +89,8 @@ const useStyles = makeStyles(theme => ({
     lineHeight: '12px'
   },
   endLabel: {
-    '& .MuiTypography-root': {
-      fontSize: 11,
-      lineHeight: '12px'
-    },
+    fontSize: 11,
+    lineHeight: '12px',
     transform: 'translateX(50%)'
   }
 }))

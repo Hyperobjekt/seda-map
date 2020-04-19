@@ -10,14 +10,19 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import { getLang } from '../../../shared/selectors/lang'
-import { getScatterplotVars, getMapVars } from '../../../shared/selectors'
+import {
+  getScatterplotVars,
+  getMapVars
+} from '../../../shared/selectors'
 import { InputAdornment, IconButton } from '@material-ui/core'
 import CopyIcon from '@material-ui/icons/FileCopy'
 import copy from 'copy-to-clipboard'
 import { toggleEmbedDialog } from '../../../actions'
 import { onShare } from '../Share/actions'
 
-const BASE_URL = `${window.location.origin}${window.location.pathname}`
+const BASE_URL = `${window.location.origin}${
+  window.location.pathname
+}`
 
 const getSecondaryChartsForDemographic = dem => {
   switch (dem) {
@@ -53,7 +58,11 @@ const getChartEmbedLink = ({
   metric,
   locations
 }) => {
-  const { xVar, yVar, zVar } = getScatterplotVars(region, metric, demographic)
+  const { xVar, yVar, zVar } = getScatterplotVars(
+    region,
+    metric,
+    demographic
+  )
   return locations
     ? `${BASE_URL}#/embed/chart/${highlightedState}/${region}/${xVar}/${yVar}/${zVar}/${locations}`
     : `${BASE_URL}#/embed/chart/${highlightedState}/${region}/${xVar}/${yVar}/${zVar}`
@@ -67,7 +76,11 @@ const getSecondaryChartEmbedLink = ({
   locations,
   secondary
 }) => {
-  let { xVar, yVar, zVar } = getMapVars(region, metric, demographic)
+  let { xVar, yVar, zVar } = getMapVars(
+    region,
+    metric,
+    demographic
+  )
   if (xVar.split('_')[0] === 'pn') {
     // HACK: poor / non-poor gap in school poverty has different name
     xVar = 'np_seg'
@@ -83,13 +96,21 @@ const getEmbedCode = link => {
   return `<iframe src="${link}" style="width:720px;height:405px;max-width:100%;" frameborder="0"></iframe>`
 }
 
-function EmbedDialog({ open, onClose, onCopy, secondaryChart, ...rest }) {
+function EmbedDialog({
+  open,
+  onClose,
+  onCopy,
+  secondaryChart,
+  ...rest
+}) {
   const [copied, setCopied] = React.useState('')
   const mapLink = getMapEmbedLink(rest)
   const chartLink = getChartEmbedLink(rest)
   const mapEmbedCode = getEmbedCode(mapLink)
   const chartEmbedCode = getEmbedCode(chartLink)
-  const secondaryMetrics = getSecondaryChartsForDemographic(rest.demographic)
+  const secondaryMetrics = getSecondaryChartsForDemographic(
+    rest.demographic
+  )
   const secondaryChartLink = secondaryMetrics
     ? getSecondaryChartEmbedLink({ ...rest })
     : null
@@ -112,7 +133,10 @@ function EmbedDialog({ open, onClose, onCopy, secondaryChart, ...rest }) {
       <DialogContent>
         <DialogContentText>
           {getLang('EMBED_MAP_INSTRUCTIONS')}{' '}
-          <a href={mapLink} target="_blank" rel="noopener noreferrer">
+          <a
+            href={mapLink}
+            target="_blank"
+            rel="noopener noreferrer">
             {getLang('EMBED_MAP_PREVIEW')}
           </a>
         </DialogContentText>
@@ -146,7 +170,10 @@ function EmbedDialog({ open, onClose, onCopy, secondaryChart, ...rest }) {
         <DialogContentText>
           <br />
           {getLang('EMBED_CHART_INSTRUCTIONS')}{' '}
-          <a href={chartLink} target="_blank" rel="noopener noreferrer">
+          <a
+            href={chartLink}
+            target="_blank"
+            rel="noopener noreferrer">
             {getLang('EMBED_CHART_PREVIEW')}
           </a>
         </DialogContentText>
@@ -212,7 +239,9 @@ function EmbedDialog({ open, onClose, onCopy, secondaryChart, ...rest }) {
               }}
             />
             {copied === 'secondary' && (
-              <span className="embed-dialog__copied">Copied!</span>
+              <span className="embed-dialog__copied">
+                Copied!
+              </span>
             )}
           </>
         )}

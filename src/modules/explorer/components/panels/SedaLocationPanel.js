@@ -7,14 +7,11 @@ import {
   SidePanelBody
 } from '../../../../shared/components/Panels/SidePanel'
 import { LocationTable } from '../base'
-import { getStateName } from '../../../../shared/selectors/states'
 import {
-  getSelectedColors,
   getDemographics,
   getGaps,
   getRegionFromLocationId
 } from '../../../../shared/selectors'
-import LocationName from '../base/LocationName'
 import { CloseIcon } from '../../../icons'
 import {
   useActiveLocationData,
@@ -24,32 +21,42 @@ import {
 } from '../../hooks'
 import SedaLocationName from '../location/SedaLocationName'
 
-const colors = getSelectedColors()
-
+/**
+ * Gets available demographics for region
+ * @param {*} region
+ */
 const getDemographicsForRegion = region => {
   return region === 'schools'
     ? ['all']
     : getDemographics().map(d => d.id)
 }
 
+/**
+ * Gets the secondary metrics for the region
+ * @param {*} region
+ */
 const getSecondaryMetricsForRegion = region => {
   return region === 'schools' ? ['frl'] : ['ses', 'seg', 'min']
 }
 
+/**
+ * Gets available gaps for region
+ * @param {*} region
+ */
 const getGapsForRegion = region => {
   return region === 'schools' ? [] : getGaps().map(d => d.id)
 }
 
 const SedaLocationPanel = props => {
   const data = useActiveLocationData()
-  console.log('active location data', data)
+  debugger
   const [activeLocation, setActiveLocation] = useActiveLocation()
   const [metric, setMetric] = useMetric()
   const [demographic, setDemographic] = useDemographic()
   const region = getRegionFromLocationId(activeLocation)
+  const secondary = getSecondaryMetricsForRegion(region)
 
   const metrics = ['avg', 'grd', 'coh']
-  const secondary = getSecondaryMetricsForRegion(region)
   const demographics = getDemographicsForRegion(region)
   const gaps = getGapsForRegion(region)
 

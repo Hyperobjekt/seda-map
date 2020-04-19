@@ -1,7 +1,5 @@
 import React, { useRef, useState } from 'react'
 import { makeStyles } from '@material-ui/core'
-import SedaMap from './SedaMap'
-import { Scatterplot } from './scatterplot'
 import clsx from 'clsx'
 import { useSpring, animated } from 'react-spring'
 import { useDrag } from 'react-use-gesture'
@@ -80,9 +78,10 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export const SplitView = ({
-  children,
+  LeftComponent,
+  RightComponent,
   view,
-  splitRatio: initialSplit = 0.333,
+  splitRatio: initialSplit = 0.5,
   minWidth = 360,
   ...props
 }) => {
@@ -94,7 +93,7 @@ export const SplitView = ({
   const blockerProps = useSpring({
     opacity: resizing ? 0.666 : 0,
     zIndex: 10,
-    pointerEvents: resizing ? 'all' : 'none'
+    pointerEvents: 'none'
   })
 
   // Set the drag hook and define component movement based on gesture data
@@ -109,6 +108,11 @@ export const SplitView = ({
         setSplitRatio(newRatio)
         setPosition(0)
         setResizing(false)
+      }
+    },
+    {
+      eventOptions: {
+        capture: true
       }
     }
   )
@@ -135,7 +139,7 @@ export const SplitView = ({
             classes.side,
             classes.left
           )}>
-          <SedaMap />
+          {LeftComponent}
         </div>
         <div
           className={clsx(
@@ -144,7 +148,7 @@ export const SplitView = ({
             classes.side,
             classes.right
           )}>
-          <Scatterplot />
+          {RightComponent}
         </div>
       </div>
       <animated.div

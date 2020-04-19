@@ -1,21 +1,47 @@
 import React from 'react'
-import clsx from 'clsx'
 import { makeStyles, useTheme } from '@material-ui/core'
 import {
   getCircles,
-  getCircle
+  getCircle,
+  getValuePercentInRange
 } from '../../../scatterplot/utils'
-import ScatterplotMarker from '../../../scatterplot/components/ScatterplotMarker'
-import { getColorForVarNameValue } from '../../../../shared/selectors'
+import {
+  getMetricRangeFromVarName,
+  getDemographicForVarNames,
+  getSizerFunctionForRegion
+} from '../../../../shared/selectors'
 import {
   useScatterplotVars,
   useHovered,
   useLocationsData,
   useLocationData,
   useRegion,
-  useMarkersVisibility,
-  useXyzTransformers
+  useMarkersVisibility
 } from '../../hooks'
+import ScatterplotOverlay from '../../../scatterplot/components/ScatterplotOverlay'
+
+/**
+ * Provides functions for positioning and sizing
+ * based on x, y, z values
+ * @returns {[function, function, function]} [xValueToPercent, yValueToPercent, zValueToRadius]
+ */
+export const getXyzTransformers = (xVar, yVar, region) => {
+  const invertX = region === 'schools'
+  const xRange = getMetricRangeFromVarName(xVar, region)
+  const yRange = getMetricRangeFromVarName(yVar, region)
+  // function that converts xValue to the % position on the scale
+  const xValToPosition = val =>
+    getValuePercentInRange(val, xRange, invertX)
+  // function that converts yValue to the % position on the scale
+  const yValToPosition = val =>
+    100 - getValuePercentInRange(val, yRange)
+  // function that converts z value to circle radius in px
+  const dem = getDemographicForVarNames(xVar, yVar)
+  const zValToSize = getSizerFunctionForRegion(region, dem)
+  // return transformers
+  return [xValToPosition, yValToPosition, zValToSize]
+}
+
 const useStyles = makeStyles(theme => ({
   root: {
     position: 'absolute',
@@ -30,88 +56,71 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const SedaLocationMarkers = ({ className, ...props }) => {
-  const [region] = useRegion()
+const SedaLocationMarkers = ({
+  xVar,
+  yVar,
+  zVar,
+  region,
+  ...props
+}) => {
   const [showHovered] = useMarkersVisibility()
-  const [xVar, yVar, zVar] = useScatterplotVars()
   const [hoveredId, setHovered] = useHovered()
   const hoveredData = useLocationData(hoveredId)
-  const [xValToPos, yValToPos, zValToSize] = useXyzTransformers()
   const locations = useLocationsData()
+  const theme = useTheme()
+  const canRender = xVar && yVar && zVar && region
 
-  const locationIds = locations
-    .filter(l => l.region === region)
-    .map(l => l.id)
-  const getLocationIndex = id =>
-    locationIds.findIndex(l => l === id)
+  // if props are not ready, don't render
+  if (!canRender) return null
 
-  // circles for selected areas
-  const circles = getCircles({
+  const [xValToPos, yValToPos, zValToSize] = getXyzTransformers(
+    xVar,
+    yVar,
+    region
+  )
+
+  // base props for circles
+  const circleProps = {
     xVar,
     yVar,
     zVar,
+    region,
     xValueToPercent: xValToPos,
     yValueToPercent: yValToPos,
-    zValueToRadius: zValToSize,
+    zValueToRadius: zValToSize
+  }
+
+  // circles for selected locations
+  const circles = getCircles({
+    ...circleProps,
     data: locations
   })
+
+  // circle for hovered location
   const hoveredCircle =
     hoveredId &&
     showHovered &&
     getCircle({
-      xVar,
-      yVar,
-      zVar,
-      xValueToPercent: xValToPos,
-      yValueToPercent: yValToPos,
-      zValueToRadius: zValToSize,
+      ...circleProps,
       data: hoveredData
     })
-  const classes = useStyles()
-  const theme = useTheme()
+  // set the hovered circle color from theme
+  if (hoveredCircle)
+    hoveredCircle['outerColor'] = theme.palette.secondary.main
+
+  // handler for hover on circle
+  const handleHover = (circle, e) => {
+    const id = circle ? circle.id : null
+    setHovered(id, [e.pageX, e.pageY])
+  }
+
   return (
-    <div
-      className={clsx(
-        'scatterplot__markers',
-        classes.root,
-        className
-      )}
-      {...props}>
-      {hoveredCircle && (
-        <ScatterplotMarker
-          x={hoveredCircle.x}
-          y={hoveredCircle.y}
-          size={hoveredCircle.z}
-          zIndex={10}
-          color={theme.palette.secondary.main}
-          classes={{ marker: classes.hoverMarker }}
-        />
-      )}
-      {circles
-        .sort((a, b) => (a.z > b.z ? -1 : 1))
-        .map((c, i) => (
-          <ScatterplotMarker
-            key={c.id}
-            x={c.x}
-            y={c.y}
-            size={c.z}
-            label={getLocationIndex(c.id) + 1}
-            zIndex={i + 1}
-            color={
-              theme.app.selectedColors[getLocationIndex(c.id)]
-            }
-            innerColor={getColorForVarNameValue(
-              c.data[yVar],
-              yVar,
-              region
-            )}
-            onMouseMove={e =>
-              setHovered(c.id, [e.pageX, e.pageY])
-            }
-            onMouseLeave={e => setHovered(null)}
-          />
-        ))}
-    </div>
+    <ScatterplotOverlay
+      hoveredCircle={hoveredCircle}
+      otherCircles={circles}
+      onHover={handleHover}
+      {...props}
+    />
   )
 }
 

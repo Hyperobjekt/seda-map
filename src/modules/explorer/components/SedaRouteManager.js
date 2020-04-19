@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import useDebounce from '../../../shared/hooks/useDebounce'
 import { useRouterParams } from '../hooks'
 import useDataOptions from '../hooks/useDataOptions'
@@ -55,6 +55,7 @@ const SedaRouteManager = props => {
       }
     }
     loadRoute()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // this component doesn't render anything
