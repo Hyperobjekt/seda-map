@@ -50,7 +50,7 @@ const [useUiStore] = create(set => ({
   toggleChart: () =>
     set(state => ({ showChart: !state.showChart })),
   // boolean determining if controls are condensed
-  condensed: false,
+  condensed: true,
   toggleCondensed: () =>
     set(state => ({ condensed: !state.condensed })),
 
