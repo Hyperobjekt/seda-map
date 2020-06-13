@@ -1,32 +1,30 @@
 import React, { useMemo, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import useResizeAware from 'react-resize-aware'
-
+import clsx from 'clsx'
+import * as merge from 'deepmerge'
 import debug from 'debug'
+import { makeStyles } from '@material-ui/core'
+
 import ScatterplotBase, {
-  fetchScatterplotVars,
-  fetchReducedPair
-} from '../../../scatterplot/components/ScatterplotBase'
-import { theme } from '../../../scatterplot/echartTheme'
+  ScatterplotAxis
+} from '../../../scatterplot'
+import { theme } from './echartTheme'
 import {
   getBaseVars,
   isVersusFromVarNames
-} from '../../../../shared/selectors'
-import { getScatterplotOptions } from '../../../scatterplot/utils'
-
-import * as merge from 'deepmerge'
-import clsx from 'clsx'
-import { getFilteredIds } from '../../../../shared/selectors/data'
+} from '../../selectors'
+import { fetchScatterplotVars, fetchReducedPair } from './utils'
+import { getScatterplotOptions } from './style'
+import { getFilteredIds } from '../../selectors/data'
 import { useScatterplotData } from '../../hooks'
 import {
   getLang,
   getLegendEndLabelsForVarName as getEndLabels,
   getLabelForVarName,
   getRegionLabel
-} from '../../../../shared/selectors/lang'
-import ScatterplotAxis from '../../../scatterplot/components/ScatterplotAxis'
+} from '../../selectors/lang'
 import SedaLocationMarkers from './SedaLocationMarkers'
-import { makeStyles } from '@material-ui/core'
 
 // scatterplot width / height where left / right hints are not shown
 const LABEL_BREAKPOINT = 500

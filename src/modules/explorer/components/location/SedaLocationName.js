@@ -4,13 +4,13 @@ import { LocationName } from '../base'
 import {
   getSelectedColors,
   getRegionFromLocationId
-} from '../../../../shared/selectors'
+} from '../../selectors'
 import {
   useLocationData,
   useLocationNumber,
   useRegion
 } from '../../hooks'
-import { getStateName } from '../../../../shared/selectors/states'
+import { getStateName } from '../../../../shared/utils/states'
 
 const selectedColors = getSelectedColors()
 

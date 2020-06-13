@@ -17,13 +17,13 @@ import {
   getFormatterForVarName,
   getMetricLabel,
   isGapDemographic
-} from '../../../../shared/selectors'
+} from '../../selectors'
 import MetricValue from '../../../../shared/components/MetricValue'
 import clsx from 'clsx'
 import {
   getDescriptionForVarName,
   getLang
-} from '../../../../shared/selectors/lang'
+} from '../../selectors/lang'
 
 const useTooltipStyles = makeStyles(theme => ({
   root: {

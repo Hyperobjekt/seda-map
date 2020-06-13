@@ -4,12 +4,12 @@ import {
   getCircles,
   getCircle,
   getValuePercentInRange
-} from '../../../scatterplot/utils'
+} from './utils'
 import {
   getMetricRangeFromVarName,
   getDemographicForVarNames,
   getSizerFunctionForRegion
-} from '../../../../shared/selectors'
+} from '../../selectors'
 import {
   useHovered,
   useLocationsData,

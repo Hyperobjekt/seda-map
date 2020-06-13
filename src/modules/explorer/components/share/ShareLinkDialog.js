@@ -12,7 +12,7 @@ import CopyIcon from '@material-ui/icons/FileCopy'
 import copy from 'copy-to-clipboard'
 import { toggleLinkShareDialog } from './actions'
 import { onShare } from './actions'
-import { getLang } from '../../../../shared/selectors/lang'
+import { getLang } from '../../selectors/lang'
 
 export const ShareLinkDialog = ({
   open,

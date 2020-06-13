@@ -1,16 +1,47 @@
+import axios from 'axios'
 import create from 'zustand'
 import produce from 'immer'
 import * as merge from 'deepmerge'
 
-import { getFeatureProperty } from '../../../shared/selectors'
+import {
+  getFeatureProperty,
+  getRegionFromLocationId
+} from '../selectors'
 import {
   loadFeatureFromCoords,
-  loadFeaturesFromRoute
+  loadFeaturesFromCoords
 } from '../../../shared/utils/tilequery'
-import { getRegionFromLocationId } from '../../../shared/selectors'
-import { getDataForId } from '../../scatterplot/components/ScatterplotBase/utils'
-import { getLocationFromFeature } from '../../../shared/selectors/router'
-import { getStateFipsFromAbbr } from '../../../shared/selectors/states'
+import { getDataForId } from '../utils'
+import {
+  getLocationFromFeature,
+  parseLocationsString
+} from '../selectors/router'
+import { getStateFipsFromAbbr } from '../../../shared/utils/states'
+
+const FLAGGED_ENDPOINT =
+  process.env.REACT_APP_DATA_ENDPOINT + 'flagged/'
+
+/**
+ * Loads map features based on a string of locations
+ * @param {string} locations locations formed as `{id},{lat},{lon}` separated by a `+`
+ * @returns {Promise<Array<Feature>>}
+ */
+export const loadFeaturesFromRoute = locations =>
+  loadFeaturesFromCoords(parseLocationsString(locations))
+
+/**
+ * Loads map features from location parameter
+ * @param {*} params
+ * @returns {Promise<Array<Feature>>}
+ */
+export const loadFeaturesFromRouteParams = params =>
+  params.locations
+    ? loadFeaturesFromRoute(params.locations)
+    : Promise.resolve([])
+
+export const loadFlaggedData = type => {
+  return axios.get(FLAGGED_ENDPOINT + type + '.json')
+}
 
 /**
  * Returns true if the feature is in the provided locations array

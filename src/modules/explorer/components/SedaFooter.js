@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Footer from '../../../shared/components/Footer'
 import { Button, makeStyles } from '@material-ui/core'
-import { getLang } from '../../../shared/selectors/lang'
+import { getLang } from '../selectors/lang'
 import {
   FacebookIcon,
   TwitterIcon,

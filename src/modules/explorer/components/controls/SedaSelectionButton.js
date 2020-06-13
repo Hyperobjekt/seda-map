@@ -7,7 +7,7 @@ import {
   SubgroupsIcon,
   LocationsIcon
 } from '../../../icons'
-import { getPrefixLang } from '../../../../shared/selectors/lang'
+import { getPrefixLang } from '../../selectors/lang'
 import SelectionButton from '../base/SelectionButton'
 import { useActiveSelection, useMetric } from '../../hooks'
 

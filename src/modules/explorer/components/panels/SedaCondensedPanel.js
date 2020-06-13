@@ -17,14 +17,14 @@ import {
   SidebarOpenIcon
 } from '../../../icons'
 
-import { getMetricLabel } from '../../../../shared/selectors'
+import { getMetricLabel } from '../../selectors'
 import {
   getPrefixLang,
   getLang,
   getRegionLabel,
   getDemographicLabel,
   getLangWithSingleOrNone
-} from '../../../../shared/selectors/lang'
+} from '../../selectors/lang'
 import DetailedTooltip from '../base/DetailedTooltip'
 import clsx from 'clsx'
 import {

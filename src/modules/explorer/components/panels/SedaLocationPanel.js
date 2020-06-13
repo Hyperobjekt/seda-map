@@ -11,7 +11,7 @@ import {
   getDemographics,
   getGaps,
   getRegionFromLocationId
-} from '../../../../shared/selectors'
+} from '../../selectors'
 import { CloseIcon } from '../../../icons'
 import {
   useActiveLocationData,

@@ -1,5 +1,5 @@
 import React from 'react'
-import MapLegend from '../../map/components/MapLegend'
+import { MapLegend } from '../../../map'
 import {
   getChoroplethColors,
   getMetricRangeFromVarName as getRange,
@@ -8,21 +8,21 @@ import {
   getFormatterForVarName,
   getGapDemographics,
   getInvertedFromVarName
-} from '../../../shared/selectors'
+} from '../../selectors'
 import {
   getPrefixLang,
   getDemographicLabel
-} from '../../../shared/selectors/lang'
-import { getValuePositionInRange } from '../../../shared/utils'
+} from '../../selectors/lang'
 import {
   useMapVars,
   useLocationData,
   useHovered,
   useRegion,
   useMarkersVisibility,
-  useMapSize,
   useDemographicType
-} from '../hooks'
+} from '../../hooks'
+import { getValuePositionInRange } from '../../../../shared/utils'
+import { useMapSize } from '../../../map'
 
 const SedaMapLegend = props => {
   /** variable to show on the map */

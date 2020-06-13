@@ -4,7 +4,7 @@ import {
   getMetricLabel,
   getDemographicLabel,
   getLang
-} from '../../../shared/selectors/lang'
+} from '../selectors/lang'
 import {
   isVersusFromVarNames,
   getDemographicForVarNames,
@@ -12,8 +12,8 @@ import {
   getFormatterForVarName,
   getRegionFromLocationId,
   getSingularRegion
-} from '../../../shared/selectors'
-import { getStateName } from '../../../shared/selectors/states'
+} from '../selectors'
+import { getStateName } from '../../../shared/utils/states'
 import { Typography, makeStyles } from '@material-ui/core'
 import clsx from 'clsx'
 import Tooltip from '../../../shared/components/Tooltip'

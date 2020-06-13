@@ -11,7 +11,7 @@ import {
   SidePanelHeader,
   SidePanelBody
 } from '../../../../shared/components/Panels/SidePanel'
-import { getLang } from '../../../../shared/selectors/lang'
+import { getLang } from '../../selectors/lang'
 import { useHelpVisibility } from '../../hooks'
 import { CloseIcon } from '../../../icons'
 

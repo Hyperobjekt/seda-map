@@ -3,7 +3,7 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import LinkButton from '../../../../shared/components/LinkButton'
 import { makeId } from '../../../../shared/utils'
-import { getPrefixLang } from '../../../../shared/selectors/lang'
+import { getPrefixLang } from '../../selectors/lang'
 
 export default function SedaGenericSelect({
   items,

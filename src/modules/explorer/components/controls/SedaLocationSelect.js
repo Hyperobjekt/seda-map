@@ -14,9 +14,9 @@ import {
   getRegions,
   getRegionLabel,
   getFeatureProperty
-} from '../../../../shared/selectors'
-import { getLocationsByRegion } from '../../../../shared/selectors/regions'
-import { getLang } from '../../../../shared/selectors/lang'
+} from '../../selectors'
+import { getLocationsByRegion } from '../../selectors/regions'
+import { getLang } from '../../selectors/lang'
 import { CloseIcon } from '../../../icons'
 import {
   useActiveLocation,

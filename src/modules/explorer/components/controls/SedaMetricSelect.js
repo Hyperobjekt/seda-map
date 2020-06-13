@@ -7,10 +7,7 @@ import ListItemText from '@material-ui/core/ListItemText'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import { MetricIcon } from '../../../icons'
 import clsx from 'clsx'
-import {
-  getKeyMetrics,
-  getMetricLabel
-} from '../../../../shared/selectors'
+import { getKeyMetrics, getMetricLabel } from '../../selectors'
 import { useMetric } from '../../hooks'
 const useStyles = makeStyles(theme => ({
   root: {

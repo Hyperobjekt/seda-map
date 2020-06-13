@@ -12,7 +12,7 @@ import {
   formatPercent,
   formatNumber,
   getPositionFromValue
-} from '../utils'
+} from '../../../shared/utils'
 
 // values provided by SEDA team for calulation distance from regression
 const FUNC_VARS = {

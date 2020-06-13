@@ -8,7 +8,7 @@ import {
 
 import LANG from '../constants/en'
 import { getMidpointForVarName } from './data'
-import { getStateName } from './states'
+import { getStateName } from '../../../shared/utils/states'
 
 const isStringMatch = (s1, s2) =>
   s1 &&

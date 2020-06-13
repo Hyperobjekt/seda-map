@@ -9,11 +9,8 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import { getLang } from '../../../shared/selectors/lang'
-import {
-  getScatterplotVars,
-  getMapVars
-} from '../../../shared/selectors'
+import { getLang } from '../selectors/lang'
+import { getScatterplotVars, getMapVars } from '../selectors'
 import { InputAdornment, IconButton } from '@material-ui/core'
 import CopyIcon from '@material-ui/icons/FileCopy'
 import copy from 'copy-to-clipboard'

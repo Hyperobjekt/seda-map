@@ -4,7 +4,7 @@ import {
   isVersusFromVarNames,
   getDemographicIdFromVarName,
   getSecondaryForDemographic
-} from '../../../../shared/selectors'
+} from '../../selectors'
 import ScatterplotBase from './SedaScatterplotBase'
 import clsx from 'clsx'
 import useResizeAware from 'react-resize-aware'
@@ -19,16 +19,15 @@ import {
 import { SplitView } from '../base/SplitView'
 import useUiStore from '../../hooks/useUiStore'
 import { Typography } from '@material-ui/core'
-import {
-  getFootnotes,
-  getLocatonIdFromEvent,
-  getCoordsFromEvent,
-  getChartTitle,
-  isMarkerRelated
-} from '../../../scatterplot/utils'
 import Footnotes from '../base/Footnotes'
 import LinkButton from '../../../../shared/components/LinkButton'
 import SedaGenericSelect from '../controls/SedaGenericSelect'
+import { getFootnotes, getChartTitle } from './lang'
+import {
+  getLocatonIdFromEvent,
+  getCoordsFromEvent,
+  isMarkerRelated
+} from './utils'
 
 /** Breakpoint where gap chart is split vs overlay */
 const SPLIT_BREAKPOINT = 1024

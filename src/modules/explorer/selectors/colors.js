@@ -6,7 +6,7 @@ import {
 import { interpolateRgbBasis } from 'd3-interpolate'
 import { isGapVarName } from './demographics'
 import { getMetricRangeFromVarName } from './data'
-import { getValuePositionInRange } from '../utils'
+import { getValuePositionInRange } from '../../../shared/utils'
 
 /**
  * Gets the configuration for selected colors

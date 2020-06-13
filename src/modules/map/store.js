@@ -1,35 +1,12 @@
 import create from 'zustand'
+import shallow from 'zustand/shallow'
 import { FlyToInterpolator } from 'react-map-gl'
 import WebMercatorViewport from 'viewport-mercator-project'
 import * as ease from 'd3-ease'
 import bbox from '@turf/bbox'
 
-import { DEFAULT_VIEWPORT } from '../../map/constants'
-import { getStateViewportByFips } from '../../../shared/selectors/states'
-import {
-  getRegionFromLocationId,
-  getFeatureProperty
-} from '../../../shared/selectors'
-
-const getZoomLevelForFeature = feature => {
-  const id = getFeatureProperty(feature, 'id')
-  if (!id) return 9
-  const region = getRegionFromLocationId(id)
-  switch (region) {
-    case 'states':
-      return 3
-    case 'counties':
-      return 6
-    case 'districts':
-      return 9
-    case 'cities':
-      return 12
-    case 'schools':
-      return 14
-    default:
-      return 9
-  }
-}
+import { DEFAULT_VIEWPORT } from './constants'
+import { getStateViewportByFips } from './utils'
 
 const getFeatureGeometryType = feature => {
   if (!feature.geometry || !feature.geometry.type) return null
@@ -41,11 +18,10 @@ const getViewportForFeature = (feature, initialViewport) => {
   if (!type) return {}
   if (type === 'Point') {
     const [longitude, latitude] = feature.geometry.coordinates
-    const zoom = getZoomLevelForFeature(feature)
     return {
       latitude,
       longitude,
-      zoom
+      zoom: 14
     }
   }
   const featureBbox = bbox(feature)
@@ -78,12 +54,14 @@ const getViewportForBounds = (
 
 const [useMapStore] = create((set, get, api) => ({
   loaded: false,
+  resetViewport: DEFAULT_VIEWPORT,
   viewport: DEFAULT_VIEWPORT,
   idMap: {},
   setViewport: viewport =>
     set(state => ({
       viewport: { ...state.viewport, ...viewport }
     })),
+  setResetViewport: resetViewport => set({ resetViewport }),
   setLoaded: loaded => set({ loaded }),
   addToIdMap: (featureId, locationId) => {
     if (get().idMap.hasOwnProperty(featureId)) return
@@ -141,7 +119,7 @@ const [useMapStore] = create((set, get, api) => ({
     set(state => ({
       viewport: {
         ...state.viewport,
-        ...DEFAULT_VIEWPORT,
+        ...state.resetViewport,
         transitionDuration: 3000,
         transitionInterpolator: new FlyToInterpolator(),
         transitionEasing: ease.easeCubic
@@ -159,5 +137,54 @@ const [useMapStore] = create((set, get, api) => ({
     }))
   }
 }))
+
+/**
+ * Provides pixel dimensions of the map viewport
+ * @returns {[number, number]} [width, height]
+ */
+export const useMapSize = () => {
+  return useMapStore(
+    state => [state.viewport.width, state.viewport.height],
+    shallow
+  )
+}
+
+/**
+ * Provides map viewport value and setter
+ * @returns {[object, function]} [viewport, setViewport]
+ */
+export const useMapViewport = () => {
+  return useMapStore(
+    state => [state.viewport, state.setViewport],
+    shallow
+  )
+}
+
+/**
+ * Returns an ID map from feature ID to location ID
+ * and method for adding id's to the map
+ */
+export const useIdMap = () => {
+  return useMapStore(
+    state => [state.idMap, state.addToIdMap],
+    shallow
+  )
+}
+
+export const useFlyToState = () => {
+  return useMapStore(state => state.flyToState)
+}
+
+export const useFlyToFeature = () => {
+  return useMapStore(state => state.flyToFeature)
+}
+
+export const useFlyToLatLon = () => {
+  return useMapStore(state => state.flyToLatLon)
+}
+
+export const useFlyToReset = () => {
+  return useMapStore(state => state.flyToReset)
+}
 
 export default useMapStore

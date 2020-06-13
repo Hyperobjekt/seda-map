@@ -15,7 +15,7 @@ import SedaDemographicSelect from '../controls/SedaDemographicSelect'
 import SedaRegionSelect from '../controls/SedaRegionSelect'
 
 import SedaLocationSelect from '../controls/SedaLocationSelect'
-import { getPrefixLang } from '../../../../shared/selectors/lang'
+import { getPrefixLang } from '../../selectors/lang'
 import SedaFilterSelect from '../controls/SedaFilterSelected'
 import { CloseIcon } from '../../../icons'
 import {

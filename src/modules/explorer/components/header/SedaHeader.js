@@ -15,11 +15,11 @@ import {
   getDemographicLabel,
   getRegionLabel,
   getPrefixLang
-} from '../../../../shared/selectors/lang'
-import { isGapDemographic } from '../../../../shared/selectors'
+} from '../../selectors/lang'
+import { isGapDemographic } from '../../selectors'
 import DetailedTooltip from '../base/DetailedTooltip'
 import { useActiveOptionIds, useFilters } from '../../hooks'
-import { getStateName } from '../../../../shared/selectors/states'
+import { getStateName } from '../../../../shared/utils/states'
 import SedaSearch from '../SedaSearch'
 
 const useLogoStyles = makeStyles(theme => ({

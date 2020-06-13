@@ -3,12 +3,12 @@ import useDebounce from '../../../shared/hooks/useDebounce'
 import { useRouterParams } from '../hooks'
 import useDataOptions from '../hooks/useDataOptions'
 import useUiStore from '../hooks/useUiStore'
-import useMapStore from '../hooks/useMapStore'
 import {
   isEmptyRoute,
   isValidExplorerRoute,
   getParamsFromPathname
-} from '../../../shared/selectors/router'
+} from '../selectors/router'
+import { useMapStore } from '../../map'
 
 const SedaRouteManager = props => {
   // track if initial route has loaded

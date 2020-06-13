@@ -1,5 +1,5 @@
 import create from 'zustand'
-import { getLang } from '../../../shared/selectors/lang'
+import { getLang } from '../selectors/lang'
 
 const [useSiteStore] = create(set => ({
   title: getLang('LOGO_ALT_TEXT'),

@@ -9,7 +9,7 @@ import { useActiveView } from '../hooks'
 import SedaError from './SedaError'
 import SedaRouteManager from './SedaRouteManager'
 import SedaScatterplot from './scatterplot/SedaScatterplot'
-import SedaMap from './SedaMap'
+import SedaMap from './map'
 import { SplitView } from './base/SplitView'
 import SedaPanelGroup from './panels/SedaPanelGroup'
 

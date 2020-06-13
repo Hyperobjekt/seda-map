@@ -7,16 +7,16 @@ import {
   getSizesForRegion,
   getRegionFromLocationId,
   isGapDemographic
-} from '../../../shared/selectors'
-import { getFiltersLang } from '../../../shared/selectors/lang'
-import { getDataForId } from '../../scatterplot/components/ScatterplotBase/utils'
+} from '../selectors'
+import { getFiltersLang } from '../selectors/lang'
+import { getDataForId } from '../utils'
 import {
   getStateName,
   getStateAbbr
-} from '../../../shared/selectors/states'
-import useMapStore from './useMapStore'
+} from '../../../shared/utils/states'
 import { useCallback } from 'react'
 import { formatNumber } from '../../../shared/utils'
+import { useMapStore } from '../../map'
 
 /**
  * Provides the current values for metric, demographic, and region
@@ -331,12 +331,6 @@ export const useScatterplotGapVars = () => {
 }
 
 /**
- * Maps
- * ---------
- * Interactions with data store for map
- */
-
-/**
  * Provides map vars for current state
  * @returns {[string, string]} [secondaryVar, choroplethVar]
  */
@@ -352,55 +346,6 @@ export const useMapVars = () => {
       ),
     shallow
   )
-}
-
-/**
- * Provides pixel dimensions of the map viewport
- * @returns {[number, number]} [width, height]
- */
-export const useMapSize = () => {
-  return useMapStore(
-    state => [state.viewport.width, state.viewport.height],
-    shallow
-  )
-}
-
-/**
- * Provides map viewport value and setter
- * @returns {[object, function]} [viewport, setViewport]
- */
-export const useMapViewport = () => {
-  return useMapStore(
-    state => [state.viewport, state.setViewport],
-    shallow
-  )
-}
-
-/**
- * Returns an ID map from feature ID to location ID
- * and method for adding id's to the map
- */
-export const useIdMap = () => {
-  return useMapStore(
-    state => [state.idMap, state.addToIdMap],
-    shallow
-  )
-}
-
-export const useFlyToState = () => {
-  return useMapStore(state => state.flyToState)
-}
-
-export const useFlyToFeature = () => {
-  return useMapStore(state => state.flyToFeature)
-}
-
-export const useFlyToLatLon = () => {
-  return useMapStore(state => state.flyToLatLon)
-}
-
-export const useFlyToReset = () => {
-  return useMapStore(state => state.flyToReset)
 }
 
 /**

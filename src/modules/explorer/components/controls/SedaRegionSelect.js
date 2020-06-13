@@ -5,7 +5,7 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import clsx from 'clsx'
-import { getRegions } from '../../../../shared/selectors'
+import { getRegions } from '../../selectors'
 import { useRegion } from '../../hooks'
 
 const useStyles = makeStyles(theme => ({

@@ -10,7 +10,7 @@ import {
   SidePanelHeader,
   SidePanelBody
 } from '../../../../shared/components/Panels/SidePanel'
-import { getPrefixLang } from '../../../../shared/selectors/lang'
+import { getPrefixLang } from '../../selectors/lang'
 import SedaFilterStateSelect from '../controls/SedaFilterStateSelect'
 import SedaFilterLargestSelect from '../controls/SedaFilterLargestSelect'
 import { CloseIcon } from '../../../icons'

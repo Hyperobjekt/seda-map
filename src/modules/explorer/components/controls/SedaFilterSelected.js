@@ -5,13 +5,13 @@ import clsx from 'clsx'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
-import { getFilterCount } from '../../../../shared/selectors/data'
+import { getFilterCount } from '../../selectors/data'
 import {
   getRegionFromLocationId,
   getRegionLabel
-} from '../../../../shared/selectors'
+} from '../../selectors'
 import AddIcon from '@material-ui/icons/Add'
-import { getLang } from '../../../../shared/selectors/lang'
+import { getLang } from '../../selectors/lang'
 import {
   ListItemSecondaryAction,
   Typography,

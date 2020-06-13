@@ -5,7 +5,7 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import clsx from 'clsx'
-import { getAllStates } from '../../../../shared/selectors/states'
+import { getAllStates } from '../../../../shared/utils/states'
 import { useFilters } from '../../hooks'
 
 const statesList = getAllStates()

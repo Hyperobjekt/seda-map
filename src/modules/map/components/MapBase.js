@@ -6,13 +6,16 @@ import React, {
   useCallback
 } from 'react'
 import useResizeAware from 'react-resize-aware'
-import ReactMapGL from 'react-map-gl'
+import mapboxgl from 'mapbox-gl/dist/mapbox-gl'
+import ReactMapGL, { NavigationControl } from 'react-map-gl'
+import { fromJS } from 'immutable'
 import PropTypes from 'prop-types'
 import usePrevious from '../../../shared/hooks/usePrevious'
-import mapboxgl from 'mapbox-gl/dist/mapbox-gl'
 import { defaultMapStyle } from '../selectors'
-import { getClosest } from '../../../shared/utils'
-import { DEFAULT_VIEWPORT } from '../constants'
+import { getClosest } from '../utils'
+import { useMapViewport, useFlyToReset } from '../store'
+import ZoomToControl from './ZoomToControl'
+import useMapStore from '../store'
 /**
  * Returns an array of layer ids for layers that have the
  * interactive property set to true
@@ -27,15 +30,20 @@ const getInteractiveLayerIds = layers =>
  * @param {Map} style immutable Map of the base mapboxgl style
  * @param {array} layers list of layer objects containing style and z order
  */
-const getUpdatedMapStyle = (style, layers) => {
-  return style.set(
-    'layers',
-    layers.reduce(
-      (newLayers, layer) =>
-        newLayers.splice(layer.z, 0, layer.style),
-      style.get('layers')
-    )
+const getUpdatedMapStyle = (
+  style,
+  layers,
+  sources = fromJS({})
+) => {
+  const updatedSources = style.get('sources').merge(sources)
+  const updatedLayers = layers.reduce(
+    (newLayers, layer) =>
+      newLayers.splice(layer.z, 0, layer.style),
+    style.get('layers')
   )
+  return style
+    .set('sources', updatedSources)
+    .set('layers', updatedLayers)
 }
 
 const MapBase = ({
@@ -44,12 +52,12 @@ const MapBase = ({
   hoveredId,
   selectedIds,
   layers,
-  viewport,
+  sources,
   children,
   idMap,
   selectedColors,
+  defaultViewport,
   ariaLabel,
-  onViewportChange,
   onHover,
   onClick,
   onLoad,
@@ -58,6 +66,14 @@ const MapBase = ({
   const [loaded, setLoaded] = useState(false)
 
   const [resizeListener, sizes] = useResizeAware()
+
+  const [viewport, setViewport] = useMapViewport()
+
+  const setResetViewport = useMapStore(
+    state => state.setResetViewport
+  )
+
+  const flyToReset = useFlyToReset()
 
   // reference to map container DOM element
   const mapEl = useRef(null)
@@ -76,7 +92,10 @@ const MapBase = ({
     currentMap && currentMap.getCanvas && currentMap.getCanvas()
 
   // storing previous hover / selected IDs
-  const prev = usePrevious({ hoveredId, selectedIds })
+  const prev = usePrevious({
+    hoveredId,
+    selectedIds
+  })
 
   /**
    * Sets the feature state for rendering styles
@@ -110,8 +129,8 @@ const MapBase = ({
 
   // update map style layers when layers change
   const mapStyle = useMemo(
-    () => getUpdatedMapStyle(style, layers),
-    [style, layers]
+    () => getUpdatedMapStyle(style, layers, sources),
+    [style, layers, sources]
   )
 
   // update list of interactive layer ids when layers change
@@ -144,7 +163,9 @@ const MapBase = ({
       }
       // add geolocation
       const geolocateControl = new mapboxgl.GeolocateControl({
-        positionOptions: { enableHighAccuracy: true },
+        positionOptions: {
+          enableHighAccuracy: true
+        },
         trackUserLocation: true
       })
       const controlContainer = document.querySelector(
@@ -168,9 +189,9 @@ const MapBase = ({
     (vp, options = {}) => {
       if (!loaded) return
       if (vp.zoom && vp.zoom < 2) return
-      onViewportChange(vp)
+      setViewport(vp)
     },
-    [onViewportChange, loaded]
+    [setViewport, loaded]
   )
 
   // handler for feature hover
@@ -201,18 +222,31 @@ const MapBase = ({
       onClick(features[0])
   }
 
+  // set the default / reset viewport when it changes
   useEffect(() => {
-    onViewportChange({
+    setResetViewport(defaultViewport)
+  }, [defaultViewport, setResetViewport])
+
+  // set the default viewport on mount
+  useEffect(() => {
+    defaultViewport && setViewport(defaultViewport)
+  }, [])
+
+  // set the map dimensions when the size changes
+  useEffect(() => {
+    setViewport({
       width: sizes.width,
       height: sizes.height
     })
-  }, [sizes, onViewportChange])
+  }, [sizes, setViewport])
 
   // set hovered outline when hoveredId changes
   useEffect(() => {
     prev &&
       prev.hoveredId &&
-      setFeatureState(prev.hoveredId, { hover: false })
+      setFeatureState(prev.hoveredId, {
+        hover: false
+      })
     hoveredId && setFeatureState(hoveredId, { hover: true })
     // eslint-disable-next-line
   }, [hoveredId, loaded]) // update only when hovered id changes
@@ -232,6 +266,12 @@ const MapBase = ({
     // eslint-disable-next-line
   }, [selectedIds, loaded]) // update only when selected ids change
 
+  /** handler for resetting the viewport */
+  const handleResetViewport = e => {
+    e.preventDefault()
+    flyToReset()
+  }
+
   return (
     <div
       id="map"
@@ -243,7 +283,10 @@ const MapBase = ({
       }}
       ref={mapEl}
       onMouseLeave={() =>
-        handleHover({ features: null, point: [null, null] })
+        handleHover({
+          features: null,
+          point: [null, null]
+        })
       }>
       {resizeListener}
       <ReactMapGL
@@ -261,6 +304,16 @@ const MapBase = ({
         onLoad={handleLoad}
         {...viewport}
         {...rest}>
+        <div className="map__zoom">
+          <NavigationControl
+            showCompass={false}
+            onViewportChange={setViewport}
+          />
+          <ZoomToControl
+            title="Reset Zoom"
+            onClick={handleResetViewport}
+          />
+        </div>
         {children}
       </ReactMapGL>
     </div>
@@ -270,7 +323,6 @@ const MapBase = ({
 MapBase.defaultProps = {
   style: defaultMapStyle,
   idMap: {},
-  viewport: DEFAULT_VIEWPORT,
   layers: [],
   attributionControl: true,
   selectedColors: ['#00ff00']
@@ -278,14 +330,12 @@ MapBase.defaultProps = {
 
 MapBase.propTypes = {
   style: PropTypes.object,
-  viewport: PropTypes.object,
   layers: PropTypes.array,
   selectedIds: PropTypes.arrayOf(PropTypes.string),
   hoveredId: PropTypes.string,
   idMap: PropTypes.object,
   selectedColors: PropTypes.arrayOf(PropTypes.string),
   children: PropTypes.node,
-  onViewportChange: PropTypes.func,
   onHover: PropTypes.func,
   onClick: PropTypes.func,
   onLoad: PropTypes.func

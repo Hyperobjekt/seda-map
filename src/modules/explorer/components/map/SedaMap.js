@@ -1,32 +1,29 @@
 import React, { useMemo, useEffect, useRef } from 'react'
-import { NavigationControl } from 'react-map-gl'
-import { getLayers } from '../../map/selectors'
-import MapBase from '../../map/components/MapBase'
+import { makeStyles } from '@material-ui/core'
+import { getLayers, SEDA_SOURCES } from './selectors'
+import MapBase, {
+  useFlyToState,
+  useFlyToFeature,
+  useIdMap
+} from '../../../map'
 import {
   getSelectedColors,
   getFeatureProperty,
   getLocationIdsForRegion
-} from '../../../shared/selectors'
-import { getLang } from '../../../shared/selectors/lang'
+} from '../../selectors'
+import { getLang } from '../../selectors/lang'
 import SedaMapLegend from './SedaMapLegend'
-import { makeStyles } from '@material-ui/core'
-import { ZoomToControl } from '../../map'
 import {
   useActiveOptionIds,
   useFilters,
   useLocations,
   useHovered,
   useMarkersVisibility,
-  useMapViewport,
   useAddLocation,
-  useFlyToState,
-  useFlyToFeature,
-  useFlyToReset,
-  useActiveLocationFeature,
-  useIdMap
-} from '../hooks'
-import useDataOptions from '../hooks/useDataOptions'
-import { REGION_TO_ID_LENGTH } from '../../../shared/constants/regions'
+  useActiveLocationFeature
+} from '../../hooks'
+import useDataOptions from '../../hooks/useDataOptions'
+import { REGION_TO_ID_LENGTH } from '../../constants/regions'
 
 const selectedColors = getSelectedColors()
 
@@ -39,8 +36,6 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const SedaMap = props => {
-  /** viewport with center lat / lng, zoom, width, height */
-  const [viewport, setViewport] = useMapViewport()
   /** current options for the map */
   const [metric, demographic, region] = useActiveOptionIds()
   /** currently active data filters */
@@ -61,7 +56,7 @@ const SedaMap = props => {
   const [idMap, addToIdMap] = useIdMap()
   const flyToState = useFlyToState()
   const flyToFeature = useFlyToFeature()
-  const flyToReset = useFlyToReset()
+  // const flyToReset = useFlyToReset()
   const isLoaded = useRef(false)
   /** memoized array of choropleth and dot layers */
   const layers = useMemo(() => {
@@ -108,12 +103,6 @@ const SedaMap = props => {
     isLoaded.current = true
   }
 
-  /** handler for zoom to U.S. */
-  const handleResetViewport = e => {
-    e.preventDefault()
-    flyToReset()
-  }
-
   /** zoom to filtered location when filter is selected */
   useEffect(() => {
     if (!prefix || prefix.length !== 2 || !isLoaded.current)
@@ -133,8 +122,8 @@ const SedaMap = props => {
   return (
     <MapBase
       selectedColors={selectedColors}
+      sources={SEDA_SOURCES}
       layers={layers}
-      viewport={viewport}
       idMap={idMap}
       selectedIds={locationIds}
       hoveredId={
@@ -143,18 +132,7 @@ const SedaMap = props => {
       ariaLabel={ariaLabel}
       onHover={handleHover}
       onLoad={handleLoad}
-      onViewportChange={setViewport}
       onClick={handleClick}>
-      <div className="map__zoom">
-        <NavigationControl
-          showCompass={false}
-          onViewportChange={setViewport}
-        />
-        <ZoomToControl
-          title="Zoom to U.S."
-          onClick={handleResetViewport}
-        />
-      </div>
       <SedaMapLegend className={classes.legend} />
     </MapBase>
   )

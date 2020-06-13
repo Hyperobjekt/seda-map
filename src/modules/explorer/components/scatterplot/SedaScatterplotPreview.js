@@ -1,6 +1,6 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import { isVersusFromVarNames } from '../../../../shared/selectors'
+import { isVersusFromVarNames } from '../../selectors'
 import ScatterplotBase from './SedaScatterplotBase'
 import clsx from 'clsx'
 

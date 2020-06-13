@@ -8,7 +8,7 @@ import {
   useScatterplotVars,
   useCondensed
 } from '../../hooks'
-import { getPreviewChartTitle } from '../../../scatterplot/utils'
+import { getPreviewChartTitle } from '../scatterplot/lang'
 
 const useStyles = makeStyles(theme => ({
   root: {

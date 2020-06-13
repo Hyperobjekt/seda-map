@@ -19,7 +19,7 @@ import {
   getMetricLabel,
   getRegionLabel,
   getPrefixLang
-} from '../../../../shared/selectors/lang'
+} from '../../selectors/lang'
 import PreviewChartPanel from './SedaPreviewChartPanel'
 import { SidebarCloseIcon } from '../../../icons'
 import {

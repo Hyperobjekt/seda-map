@@ -1,8 +1,4 @@
 import axios from 'axios'
-import { parseLocationsString } from '../selectors/router'
-
-const FLAGGED_ENDPOINT =
-  process.env.REACT_APP_DATA_ENDPOINT + 'flagged/'
 
 /**
  * Returns the feature with an id property that matches the
@@ -70,25 +66,3 @@ export const loadFeatureFromCoords = ({ id, lat, lon }) => {
  */
 export const loadFeaturesFromCoords = locationsArray =>
   Promise.all(locationsArray.map(l => loadFeatureFromCoords(l)))
-
-/**
- * Loads map features based on a string of locations
- * @param {string} locations locations formed as `{id},{lat},{lon}` separated by a `+`
- * @returns {Promise<Array<Feature>>}
- */
-export const loadFeaturesFromRoute = locations =>
-  loadFeaturesFromCoords(parseLocationsString(locations))
-
-/**
- * Loads map features from location parameter
- * @param {*} params
- * @returns {Promise<Array<Feature>>}
- */
-export const loadFeaturesFromRouteParams = params =>
-  params.locations
-    ? loadFeaturesFromRoute(params.locations)
-    : Promise.resolve([])
-
-export const loadFlaggedData = type => {
-  return axios.get(FLAGGED_ENDPOINT + type + '.json')
-}

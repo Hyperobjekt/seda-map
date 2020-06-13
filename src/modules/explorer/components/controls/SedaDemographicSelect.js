@@ -10,7 +10,7 @@ import {
   getDemographics,
   getGaps,
   getDemographicLabel
-} from '../../../../shared/selectors'
+} from '../../selectors'
 import { useDemographic } from '../../hooks'
 
 const useStyles = makeStyles(theme => ({
