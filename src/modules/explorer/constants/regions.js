@@ -78,13 +78,3 @@ export const ID_LENGTH_TO_REGION = {
   7: 'districts',
   12: 'schools'
 }
-
-/**
- * Variables contained in the base csv file for each region
- */
-export const REGION_BASE_VARS = {
-  counties: ['id', 'name', 'lat', 'lon', 'all_sz'],
-  districts: ['id', 'name', 'lat', 'lon', 'all_sz'],
-  schools: ['id', 'name', 'lat', 'lon', 'all_sz'],
-  states: ['id', 'name', 'lat', 'lon', 'all_sz']
-}

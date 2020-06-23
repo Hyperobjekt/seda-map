@@ -227,7 +227,7 @@ export const getDifferenceForMetric = (metricId, value) => {
  *          returned for `getDescriptionFromVarName('all_avg', 1.34)`
  */
 export const getDescriptionForVarName = (varName, value) => {
-  if ((!value || value === -9999) && value !== 0) {
+  if ((!value || value === -999) && value !== 0) {
     return getLabelFromVarName(varName) + ' unavailable'
   }
   const metricId = getMetricIdFromVarName(varName)

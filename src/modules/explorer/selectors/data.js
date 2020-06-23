@@ -4,7 +4,8 @@ import {
 } from './metrics'
 import {
   isGapVarName,
-  getDemographicIdFromVarName
+  getDemographicIdFromVarName,
+  isGapDemographic
 } from './demographics'
 import {
   getValuePositionInRange,
@@ -123,28 +124,6 @@ export const getFormatterForVarName = varName => {
 }
 
 /**
- * Gets the state IDs that belong to a certain state
- * @param {array} ids
- * @param {string} fips
- */
-const getPrefixIds = (ids, prefix) => {
-  if (ids) {
-    return ids.filter(
-      d => d.substring(0, prefix.length) === prefix
-    )
-  }
-  return []
-}
-
-/**
- * Returns true if at least one active filter
- * @param {*} filters
- */
-export const hasActiveFilters = filters => {
-  return Boolean(filters.prefix) || Boolean(filters.largest)
-}
-
-/**
  * Gets how many filters are currently active
  * @param {*} filters
  */
@@ -155,25 +134,81 @@ export const getFilterCount = filters => {
   return count
 }
 
-/**
- * Return an array of IDs that match the filter params
- * @param {*} data
- * @param {*} filters
- * @param {*} sizeVar
- */
-export const getFilteredIds = (data, filters = {}, sizeVar) => {
-  if (!hasActiveFilters(filters) || !data || !data['name'])
-    return []
-  let ids = Object.keys(data['name'])
-  if (filters.prefix) {
-    ids = getPrefixIds(ids, filters.prefix)
-  }
-  if (filters.largest && data && data[sizeVar]) {
-    ids = ids
-      .sort((a, b) =>
-        data[sizeVar][a] > data[sizeVar][b] ? -1 : 1
-      )
-      .slice(0, filters.largest)
-  }
-  return ids
+const getMetricVarName = (metric, demographic = 'all') => {
+  return demographic + '_' + metric
 }
+
+const getSecondaryVarName = (secondary, demographic) => {
+  // use "all" SES option for the following demographics
+  if (secondary === 'ses') {
+    const useAll =
+      ['m', 'f', 'p', 'np', 'a'].indexOf(demographic) > -1
+    return useAll ? 'all_ses' : demographic + '_ses'
+  }
+  return demographic + '_' + secondary
+}
+
+const getSizeVarName = demographic => {
+  return demographic + '_sz'
+}
+
+/**
+ * Returns x,y,z variable names for the versus scatterplot
+ * @param {string} metric  (metric id)
+ * @param {string} demographic (gap demographic id)
+ */
+const getVersusVarNames = (metric, demographic) => {
+  let dem1 = demographic[0]
+  let dem2 = demographic[1]
+  // if poor / non-poor, get correct demographic and order
+  if (dem2 === 'n') {
+    dem1 = 'np'
+    dem2 = 'p'
+  }
+  return [
+    dem2 + '_' + metric,
+    dem1 + '_' + metric,
+    demographic + '_sz'
+  ]
+}
+
+/**
+ * Returns the x,y,z variables for the current selection
+ * @param {string} region id
+ * @param {string} metric id
+ * @param {string} demographic id
+ * @param {string} type ("chart" or "map")
+ */
+export const getVarNames = (
+  region,
+  metric,
+  secondary = 'ses',
+  demographic,
+  type = 'chart'
+) => {
+  // schools always use "all" subgroup
+  if (region === 'schools') {
+    return ['all_frl', 'all_' + metric, 'all_sz']
+  }
+  // default chart for gap demographics should be versus
+  if (type === 'chart' && isGapDemographic(demographic)) {
+    return getVersusVarNames(metric, demographic)
+  }
+  return [
+    getSecondaryVarName(secondary, demographic),
+    getMetricVarName(metric, demographic),
+    getSizeVarName(demographic)
+  ]
+}
+
+// export const getGapVarNames = (
+//   metric,
+//   secondary,
+//   demographic
+// ) => {
+//   return [
+//     getSecondaryVarName(secondary, demographic),
+//     getMetricVarName(metric, demographic),
+//     getSizeVarName(demographic)
+//   ]
+// }

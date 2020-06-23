@@ -2,7 +2,8 @@ import { getStateAbbr } from '../../shared/utils/states'
 import { getRegionFromLocationId } from './selectors'
 
 /**
- * Gets the scatterplot data for a given ID
+ * Mergest data from the feature store and the
+ * scatterplot store for the provided identifier.
  * @param {*} id
  * @param {*} data
  */

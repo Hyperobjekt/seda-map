@@ -10,12 +10,13 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import { getLang } from '../selectors/lang'
-import { getScatterplotVars, getMapVars } from '../selectors'
+// import { getScatterplotVars } from '../selectors'
 import { InputAdornment, IconButton } from '@material-ui/core'
 import CopyIcon from '@material-ui/icons/FileCopy'
 import copy from 'copy-to-clipboard'
 import { toggleEmbedDialog } from '../../../actions'
 import { onShare } from '../Share/actions'
+// import { getMapVars } from '../map'
 
 const BASE_URL = `${window.location.origin}${
   window.location.pathname
@@ -55,14 +56,14 @@ const getChartEmbedLink = ({
   metric,
   locations
 }) => {
-  const { xVar, yVar, zVar } = getScatterplotVars(
-    region,
-    metric,
-    demographic
-  )
-  return locations
-    ? `${BASE_URL}#/embed/chart/${highlightedState}/${region}/${xVar}/${yVar}/${zVar}/${locations}`
-    : `${BASE_URL}#/embed/chart/${highlightedState}/${region}/${xVar}/${yVar}/${zVar}`
+  // const { xVar, yVar, zVar } = getScatterplotVars(
+  //   region,
+  //   metric,
+  //   demographic
+  // )
+  // return locations
+  //   ? `${BASE_URL}#/embed/chart/${highlightedState}/${region}/${xVar}/${yVar}/${zVar}/${locations}`
+  //   : `${BASE_URL}#/embed/chart/${highlightedState}/${region}/${xVar}/${yVar}/${zVar}`
 }
 
 const getSecondaryChartEmbedLink = ({
@@ -73,20 +74,20 @@ const getSecondaryChartEmbedLink = ({
   locations,
   secondary
 }) => {
-  let { xVar, yVar, zVar } = getMapVars(
-    region,
-    metric,
-    demographic
-  )
-  if (xVar.split('_')[0] === 'pn') {
-    // HACK: poor / non-poor gap in school poverty has different name
-    xVar = 'np_seg'
-  } else {
-    xVar = xVar.split('_')[0] + '_' + secondary
-  }
-  return locations
-    ? `${BASE_URL}#/embed/chart/${highlightedState}/${region}/${xVar}/${yVar}/${zVar}/${locations}`
-    : `${BASE_URL}#/embed/chart/${highlightedState}/${region}/${xVar}/${yVar}/${zVar}`
+  // let { xVar, yVar, zVar } = getMapVars(
+  //   region,
+  //   metric,
+  //   demographic
+  // )
+  // if (xVar.split('_')[0] === 'pn') {
+  //   // HACK: poor / non-poor gap in school poverty has different name
+  //   xVar = 'np_seg'
+  // } else {
+  //   xVar = xVar.split('_')[0] + '_' + secondary
+  // }
+  // return locations
+  //   ? `${BASE_URL}#/embed/chart/${highlightedState}/${region}/${xVar}/${yVar}/${zVar}/${locations}`
+  //   : `${BASE_URL}#/embed/chart/${highlightedState}/${region}/${xVar}/${yVar}/${zVar}`
 }
 
 const getEmbedCode = link => {

@@ -15,8 +15,8 @@ export const mergeDatasets = (...sets) => {
       (acc, curr) =>
         acc
           ? curr.hasOwnProperty(id) &&
-            parseFloat(curr[id]) > -9999 &&
-            parseFloat(curr[id]) > -9999 &&
+            parseFloat(curr[id]) > -999 &&
+            parseFloat(curr[id]) > -999 &&
             id !== '' &&
             id !== 'id'
           : false,
@@ -54,7 +54,7 @@ export const getScatterplotData = (...sets) => {
 const getDataRange = data => {
   const values = Object.keys(data)
     .map(k => parseFloat(data[k]))
-    .filter(v => v > -9999)
+    .filter(v => v > -999)
     .sort((a, b) => a - b)
   return [
     d3array.quantile(values, 0.001),

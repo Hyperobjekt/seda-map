@@ -2,7 +2,6 @@ import shallow from 'zustand/shallow'
 import useDataOptions from './useDataOptions'
 import useUiStore from './useUiStore'
 import {
-  getVarNames,
   getFeatureProperty,
   getSizesForRegion,
   getRegionFromLocationId,
@@ -17,6 +16,8 @@ import {
 import { useCallback } from 'react'
 import { formatNumber } from '../../../shared/utils'
 import { useMapStore } from '../../map'
+import { getVarNames } from '../selectors/data'
+import useScatterplotStore from '../components/scatterplot/store'
 
 /**
  * Provides the current values for metric, demographic, and region
@@ -284,17 +285,6 @@ export const useTooltipCoords = () => {
  */
 
 /**
- * Provides data used for the scatterplot and setter
- * @returns {[Object, function]}
- */
-export const useScatterplotData = () => {
-  return useDataOptions(
-    state => [state.data, state.setData],
-    shallow
-  )
-}
-
-/**
  * Provides x, y, z scatterplot variables for current data options
  * @returns {[string, string, string]} [xVar, yVar, zVar]
  */
@@ -369,18 +359,26 @@ export const useLocations = () =>
  * @returns {[Array<LocationData>]}
  */
 export const useLocationsData = () => {
-  return useDataOptions(
-    state =>
-      state.locations.map(l => ({
-        ...getDataForId(
-          getFeatureProperty(l, 'id'),
-          state.data[state.region],
-          state.featureData
-        ),
-        ...l.properties
-      })),
+  const region = useDataOptions(state => state.region)
+  const locations = useDataOptions(
+    state => state.locations,
     shallow
   )
+  const featureData = useDataOptions(
+    state => state.featureData,
+    shallow
+  )
+  const scatterplotData = useScatterplotStore(
+    state => state.data
+  )
+  return locations.map(l => ({
+    ...getDataForId(
+      getFeatureProperty(l, 'id'),
+      scatterplotData[region],
+      featureData
+    ),
+    ...l.properties
+  }))
 }
 
 /**
@@ -398,18 +396,8 @@ export const useActiveLocation = () =>
  * @returns {LocationData} LocationData object
  */
 export const useActiveLocationData = () => {
-  return useDataOptions(state => {
-    const id = state.activeLocation
-    if (!id) return {}
-    const region = getRegionFromLocationId(id)
-    const data = getDataForId(
-      id,
-      state.data[region],
-      state.featureData
-    )
-    console.log(data, state.featureData)
-    return data
-  }, shallow)
+  const id = useDataOptions(state => state.activeLocation)
+  return useLocationData(id)
 }
 
 /**
@@ -440,15 +428,16 @@ export const useLocationCount = () => {
  * @returns {LocationData} LocationData object
  */
 export const useLocationData = id => {
-  return useDataOptions(state => {
-    if (!id) return null
-    const region = getRegionFromLocationId(id)
-    return getDataForId(
-      id,
-      state.data[region],
-      state.featureData
-    )
-  })
+  const featureData = useDataOptions(
+    state => state.featureData,
+    shallow
+  )
+  const scatterplotData = useScatterplotStore(
+    state => state.data
+  )
+  if (!id) return null
+  const region = getRegionFromLocationId(id)
+  return getDataForId(id, scatterplotData[region], featureData)
 }
 
 /**

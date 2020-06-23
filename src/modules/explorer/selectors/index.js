@@ -60,14 +60,6 @@ export const getHoveredId = hovered =>
     ? hovered.properties.id
     : ''
 
-export { getMapVars } from './map'
-export {
-  getScatterplotVars,
-  getVarNames,
-  getSizerFunctionForRegion,
-  getDotSize,
-  getBaseVars
-} from './scatterplot'
 export {
   getColorForVarNameValue,
   isColorInvertedForVarName,
@@ -115,7 +107,8 @@ export {
   getPredictedValue,
   getFormatterForVarName,
   getMidpointForVarName,
-  getMetricRangeFromVarName
+  getMetricRangeFromVarName,
+  getVarNames
 } from './data'
 export {
   getRegionLabel,

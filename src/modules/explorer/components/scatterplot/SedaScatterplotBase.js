@@ -2,22 +2,16 @@ import React, { useMemo, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import useResizeAware from 'react-resize-aware'
 import clsx from 'clsx'
-import * as merge from 'deepmerge'
-import debug from 'debug'
 import { makeStyles } from '@material-ui/core'
 
 import ScatterplotBase, {
   ScatterplotAxis
 } from '../../../scatterplot'
-import { theme } from './echartTheme'
-import {
-  getBaseVars,
-  isVersusFromVarNames
-} from '../../selectors'
-import { fetchScatterplotVars, fetchReducedPair } from './utils'
+import { theme } from './theme'
+import { isVersusFromVarNames } from '../../selectors'
 import { getScatterplotOptions } from './style'
-import { getFilteredIds } from '../../selectors/data'
-import { useScatterplotData } from '../../hooks'
+import { getFilteredIds } from './selectors'
+import useScatterplotStore from './store'
 import {
   getLang,
   getLegendEndLabelsForVarName as getEndLabels,
@@ -28,41 +22,6 @@ import SedaLocationMarkers from './SedaLocationMarkers'
 
 // scatterplot width / height where left / right hints are not shown
 const LABEL_BREAKPOINT = 500
-
-const endpoint =
-  process.env.REACT_APP_DATA_ENDPOINT + 'scatterplot/'
-
-const log = debug('Scatterplot')
-
-const getMissingVarNames = (data, varNames) =>
-  data ? varNames.filter(v => !Boolean(data[v])) : varNames
-
-const fetchVariables = (vars, regionId, stateId) => {
-  if (!endpoint) {
-    throw new Error('No endpoint specified for scatterplot')
-  }
-  log('fetching vars', vars)
-  // get meta collection variables if any
-  const collectionVars = getBaseVars()[regionId] || []
-  return fetchScatterplotVars(
-    vars,
-    regionId,
-    endpoint,
-    collectionVars,
-    stateId
-  ).then(d => {
-    log('fetched vars', d)
-    return d
-  })
-}
-
-const fetchSchoolPair = (xVar, yVar) => {
-  if (!endpoint) {
-    throw new Error('No endpoint specified for scatterplot')
-  }
-  log('fetching school pair', xVar, yVar)
-  return fetchReducedPair(endpoint, xVar, yVar)
-}
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -116,18 +75,19 @@ function SedaScatterplotBase({
   onError,
   ...props
 }) {
+  // classnames for markers and axis
+  const classes = useStyles()
+
   // track size of scatterplot
   const [resizeListener, sizes] = useResizeAware()
 
   // scatterplot data store
-  const [data, setData] = useScatterplotData()
-
-  // store copy of scatterplot options
-  // const [options, setOptions] = useState({})
+  const { data, loadData, loading } = useScatterplotStore()
 
   // scatterplot data for the current region
   const regionData = data[region]
 
+  // boolean determining if vars have two different dems
   const isVersus = isVersusFromVarNames(xVar, yVar)
 
   // highlight ids based on filters
@@ -138,64 +98,23 @@ function SedaScatterplotBase({
     )
   }, [regionData, filters, zVar])
 
-  const showLabelsX =
-    sizes && !isVersus && sizes.width > LABEL_BREAKPOINT
-
-  const showLabelsY =
-    sizes && !isVersus && sizes.height > LABEL_BREAKPOINT
-
-  // classnames for markers and axis
-  const classes = useStyles()
-
-  // get list of vars needed to render current options
-  const neededVars = getMissingVarNames(regionData, [
-    xVar,
-    yVar,
-    zVar,
-    'name'
-  ])
-  // fetch base vars for region if they haven't already been fetched
-  // this is required as sometimes names are not available
+  // load the data on changes, if needed
   useEffect(() => {
-    if (!autoFetch || neededVars.length === 0) return
-    const promises = [
-      fetchVariables(neededVars, region, filters.prefix)
-    ]
-    if (region === 'schools') {
-      promises.push(fetchSchoolPair(xVar, yVar))
-    }
-    Promise.all(promises).then(dataArray => {
-      setData(merge.all(dataArray), region)
-      return dataArray
-    })
-    // disable lint, this doesn't need to fire when onData changes
-    // eslint-disable-next-line
-  }, [region, xVar, yVar, zVar, filters.prefix, neededVars])
-
-  // fetch any additional school level data for highlighted states
-  useEffect(() => {
-    if (!autoFetch || region !== 'schools' || !filters.prefix)
-      return
-    fetchVariables(
-      [xVar, yVar, zVar],
-      'schools',
-      filters.prefix
-    ).then(data => {
-      setData(data, 'schools')
-      return data
-    })
+    if (!autoFetch) return
+    loadData([xVar, yVar, zVar, 'name'], region, filters.prefix)
   }, [
+    region,
     xVar,
     yVar,
     zVar,
-    region,
-    autoFetch,
     filters.prefix,
-    setData
+    autoFetch,
+    loadData
   ])
 
+  // memoize the scatterplot options
   const options = useMemo(() => {
-    if (neededVars.length !== 0) return {}
+    if (loading) return {}
     const newOptions = getScatterplotOptions(
       variant,
       regionData,
@@ -210,10 +129,18 @@ function SedaScatterplotBase({
     zVar,
     region,
     variant,
-    neededVars.length,
     highlightIds,
-    regionData
+    regionData,
+    loading
   ])
+
+  // boolean determining if X axis labels should show
+  const showLabelsX =
+    sizes && !isVersus && sizes.width > LABEL_BREAKPOINT
+
+  // boolean determining if Y axis labels should show
+  const showLabelsY =
+    sizes && !isVersus && sizes.height > LABEL_BREAKPOINT
 
   const [startLabelX, endLabelX] = getEndLabels(xVar)
   const [startLabelY, endLabelY] = getEndLabels(yVar)
@@ -231,7 +158,7 @@ function SedaScatterplotBase({
       {resizeListener}
       <ScatterplotBase
         theme={theme}
-        loading={neededVars.length !== 0}
+        loading={loading}
         options={options}
         classes={{ error: 'scatterplot__error' }}
         onHover={onHover}

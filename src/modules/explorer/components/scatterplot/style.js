@@ -6,7 +6,6 @@ import {
 } from '../../../../shared/utils'
 
 import {
-  getSizerFunctionForRegion,
   getDemographicFromVarName,
   getMetricFromVarName,
   getChoroplethColors,
@@ -25,6 +24,7 @@ import {
   getIncrementForVarName,
   getPositionArray
 } from './utils'
+import { getSizerFunctionForRegion } from './selectors'
 
 /** GRID CONFIGURATION  */
 

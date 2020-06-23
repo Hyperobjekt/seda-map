@@ -1,8 +1,5 @@
 import axios from 'axios'
 import create from 'zustand'
-import produce from 'immer'
-import * as merge from 'deepmerge'
-
 import {
   getFeatureProperty,
   getRegionFromLocationId
@@ -137,13 +134,6 @@ const makeSetters = (set, get) => ({
   setError: error => set({ error }),
   setShowError: showError => set({ showError }),
   setDataLoading: dataLoading => set({ dataLoading }),
-  setData: (data, region) => {
-    set(
-      produce(state => {
-        state.data[region] = merge(state.data[region], data)
-      })
-    )
-  },
   // adds a feature to the object containing data for hovered / selected features
   addFeatureData: featureData => {
     if (get().featureData.hasOwnProperty(featureData.id)) return
@@ -256,7 +246,6 @@ const [useDataOptions] = create((set, get, api) => ({
     largest: null
   },
   dataLoading: false,
-  data: { districts: {} },
   activeLocation: null,
   loading: true,
   error: null,

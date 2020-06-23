@@ -6,17 +6,17 @@ import {
   getValuePercentInRange
 } from './utils'
 import {
-  getMetricRangeFromVarName,
-  getDemographicForVarNames,
-  getSizerFunctionForRegion
-} from '../../selectors'
-import {
   useHovered,
   useLocationsData,
   useLocationData,
   useMarkersVisibility
 } from '../../hooks'
 import ScatterplotOverlay from '../../../scatterplot/components/ScatterplotOverlay'
+import {
+  getMetricRangeFromVarName,
+  getDemographicForVarNames
+} from '../../selectors'
+import { getSizerFunctionForRegion } from './selectors'
 
 /**
  * Provides functions for positioning and sizing
