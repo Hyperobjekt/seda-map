@@ -22,8 +22,8 @@ import {
   useAddLocation,
   useActiveLocationFeature
 } from '../../hooks'
-import useDataOptions from '../../hooks/useDataOptions'
 import { REGION_TO_ID_LENGTH } from '../../constants/regions'
+import useData from '../../hooks/useData'
 
 const selectedColors = getSelectedColors()
 
@@ -50,8 +50,8 @@ const SedaMap = props => {
   const [showHovered] = useMarkersVisibility()
   /** function to add a location to the selected locations */
   const addLocation = useAddLocation()
-  const addFeatureData = useDataOptions(
-    state => state.addFeatureData
+  const addFeatureData = useData(
+    state => state.addData
   )
   const [idMap, addToIdMap] = useIdMap()
   const flyToState = useFlyToState()

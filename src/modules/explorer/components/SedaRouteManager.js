@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import useDebounce from '../../../shared/hooks/useDebounce'
-import { useRouterParams } from '../hooks'
+import { useRouterParams, useAddLocationsByRoute } from '../hooks'
 import useDataOptions from '../hooks/useDataOptions'
 import useUiStore from '../hooks/useUiStore'
 import {
@@ -19,9 +19,8 @@ const SedaRouteManager = props => {
   const setDataOptions = useDataOptions(
     state => state.setOptionsFromRoute
   )
-  const addLocationsFromRoute = useDataOptions(
-    state => state.addLocationsFromRoute
-  )
+  const addLocationsFromRoute = useAddLocationsByRoute()
+
   const setViewOptions = useUiStore(
     state => state.setViewFromRoute
   )

@@ -8,7 +8,6 @@ import {
   isGapDemographic
 } from '../selectors'
 import { getFiltersLang } from '../selectors/lang'
-import { getDataForId } from '../utils'
 import {
   getStateName,
   getStateAbbr
@@ -16,8 +15,9 @@ import {
 import { useCallback } from 'react'
 import { formatNumber } from '../../../shared/utils'
 import { useMapStore } from '../../map'
-import { getVarNames } from '../selectors/data'
+import { getVarNames, getDataForId } from '../selectors/data'
 import useScatterplotStore from '../components/scatterplot/store'
+import useData from './useData'
 
 /**
  * Provides the current values for metric, demographic, and region
@@ -364,8 +364,8 @@ export const useLocationsData = () => {
     state => state.locations,
     shallow
   )
-  const featureData = useDataOptions(
-    state => state.featureData,
+  const featureData = useData(
+    state => state.data,
     shallow
   )
   const scatterplotData = useScatterplotStore(
@@ -428,8 +428,8 @@ export const useLocationCount = () => {
  * @returns {LocationData} LocationData object
  */
 export const useLocationData = id => {
-  const featureData = useDataOptions(
-    state => state.featureData,
+  const featureData = useData(
+    state => state.data,
     shallow
   )
   const scatterplotData = useScatterplotStore(
@@ -472,11 +472,27 @@ export const useAddLocation = () => {
  * @returns {function}
  */
 export const useAddLocationById = () => {
-  return useDataOptions(state => state.addLocationFromId)
+  const addLocation = useDataOptions(state => state.addLocation)
+  const loadData = useData(state => state.loadData)
+  // todo: do not rely on scatterplot data for lat/lon
+  const scatterplotData = useScatterplotStore(state => state.data)
+  return async (id, setActive = true) => {
+    const region = getRegionFromLocationId(id);
+    const { lat, lon } = getDataForId(id, scatterplotData[region])
+    const feature = await loadData({ id, lat, lon })
+    addLocation(feature, setActive)
+    return feature;
+  }
 }
 
 export const useAddLocationsByRoute = () => {
-  return useDataOptions(state => state.addLocationsFromRoute)
+  const addLocations = useDataOptions(state => state.addLocations)
+  const loadData = useData(state => state.loadDataFromRoute)
+  return async (route, setActive = true) => {
+    const features = await loadData(route)
+    addLocations(features, setActive)
+    return features;
+  }
 }
 
 /**
@@ -511,20 +527,20 @@ export const useRemoveLocation = () => {
  * @returns {string}
  */
 export const useNameForId = id => {
-  return useDataOptions(state => {
-    if (!id) return ''
-    const region = getRegionFromLocationId(id)
-    switch (region) {
-      case 'states':
-        return getStateName(id)
-      default:
-        return getDataForId(
-          id,
-          state.data[region],
-          state.featureData
-        )['name']
-    }
-  })
+  const featureData = useData(state => state.data)
+  const scatterplotData = useScatterplotStore(state => state.data)
+  if (!id) return ''
+  const region = getRegionFromLocationId(id)
+  switch (region) {
+    case 'states':
+      return getStateName(id)
+    default:
+      return getDataForId(
+        id,
+        scatterplotData[region],
+        featureData
+      )['name']
+  }
 }
 
 /**

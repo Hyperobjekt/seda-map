@@ -108,7 +108,8 @@ export {
   getFormatterForVarName,
   getMidpointForVarName,
   getMetricRangeFromVarName,
-  getVarNames
+  getVarNames,
+  getDataForId
 } from './data'
 export {
   getRegionLabel,
