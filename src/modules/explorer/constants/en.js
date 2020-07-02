@@ -199,9 +199,11 @@ const LANG = {
     'difference between non-poor and poor students',
 
   // Region Labels
+  LABEL_STATES: 'states',
   LABEL_COUNTIES: 'counties',
   LABEL_DISTRICTS: 'school districts',
   LABEL_SCHOOLS: 'schools',
+  LABEL_SINGULAR_STATES: 'state',
   LABEL_SINGULAR_COUNTIES: 'county',
   LABEL_SINGULAR_DISTRICTS: 'school district',
   LABEL_SINGULAR_SCHOOLS: 'school',

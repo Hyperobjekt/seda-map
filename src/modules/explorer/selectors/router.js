@@ -138,7 +138,7 @@ export const locationsToString = locations =>
  */
 const getLocationCountByRegion = locations => {
   if (!locations) {
-    return { counties: 0, districts: 0, schools: 0 }
+    return { states: 0, counties: 0, districts: 0, schools: 0 }
   }
   const featureIds = locations
     .split('+')
@@ -148,7 +148,7 @@ const getLocationCountByRegion = locations => {
       acc[getRegionFromLocationId(curr)]++
       return acc
     },
-    { counties: 0, districts: 0, schools: 0 }
+    { states: 0, counties: 0, districts: 0, schools: 0 }
   )
 }
 

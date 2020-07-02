@@ -8,6 +8,7 @@ const DOT_SIZES = [4, 64]
  * Variables contained in the base csv file for each region
  */
 const BASE_VARS = {
+  states: ['id', 'name', 'lat', 'lon', 'all_sz'],
   counties: ['id', 'name', 'lat', 'lon', 'all_sz'],
   districts: ['id', 'name', 'lat', 'lon', 'all_sz'],
   schools: ['id', 'name', 'lat', 'lon', 'all_sz']

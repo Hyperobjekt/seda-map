@@ -4,12 +4,12 @@ import LANG from './en'
  * regions data is available for
  */
 export const REGIONS = [
-  // {
-  //   id: 'states',
-  //   label: 'States',
-  //   singular: 'State',
-  //   idLength: 2
-  // },
+  {
+    id: 'states',
+    label: 'States',
+    singular: 'State',
+    idLength: 2
+  },
   {
     id: 'counties',
     label: LANG['LABEL_COUNTIES'],
@@ -32,6 +32,20 @@ export const REGIONS = [
 
 /** data ranges to map to size ranges on chart */
 export const REGION_DOMAINS = {
+  all_states: [3, 110000],
+  b_states: [3, 21000],
+  w_states: [3, 22000],
+  h_states: [3, 75000],
+  a_states: [3, 10000],
+  f_states: [3, 56000],
+  m_states: [3, 59000],
+  p_states: [3, 81000],
+  np_states: [3, 34000],
+  wb_states: [9, 32000],
+  wh_states: [5, 92000],
+  wa_states: [3, 34000],
+  pn_states: [6, 116000],
+  mf_states: [6, 115000],
   all_counties: [3, 110000],
   b_counties: [3, 21000],
   w_counties: [3, 22000],

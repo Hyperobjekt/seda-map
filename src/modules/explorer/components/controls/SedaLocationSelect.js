@@ -148,7 +148,7 @@ const SedaLocationSelect = ({ onSelect }) => {
   return (
     <div style={{ padding: '4px 0', width: '100%' }}>
       <SedaSearch
-        indices={['counties', 'districts', 'schools']}
+        indices={['states', 'counties', 'districts', 'schools']}
         placeholder="Find a county, district, or school"
       />
       <LocationList

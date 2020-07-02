@@ -24,6 +24,7 @@ export const getStopsForVarName = (
   const metricId = getMetricIdFromVarName(varName)
   const isGap = isGapVarName(varName)
   colors = isGap ? [...colors].reverse() : colors
+  debugger
   const [min, max] = getMetricRange(
     metricId,
     demId,
@@ -294,7 +295,9 @@ const isChoroplethId = id => {
   }
   const featureRegion = getRegionFromLocationId(id)
   return (
-    featureRegion === 'districts' || featureRegion === 'counties'
+    featureRegion === 'districts' ||
+    featureRegion === 'counties' ||
+    featureRegion === 'states'
   )
 }
 

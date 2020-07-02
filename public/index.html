@@ -515,9 +515,12 @@
           }
           if (
             !params.region ||
-            ['counties', 'districts', 'schools'].indexOf(
-              params.region
-            ) === -1
+            [
+              'states',
+              'counties',
+              'districts',
+              'schools'
+            ].indexOf(params.region) === -1
           ) {
             return false
           }
@@ -854,6 +857,9 @@
           }
           if (url.indexOf('/counties/') !== -1) {
             trackRegion('counties')
+          }
+          if (url.indexOf('/states/') !== -1) {
+            trackRegion('states')
           }
           if (url.indexOf('/avg/') !== -1) {
             trackMetric('avg')

@@ -51,7 +51,13 @@ const SedaSearch = ({
 SedaSearch.defaultProps = {
   inputProps: {},
   placeholder: 'search',
-  indices: ['cities', 'counties', 'districts', 'schools']
+  indices: [
+    'states',
+    'cities',
+    'counties',
+    'districts',
+    'schools'
+  ]
 }
 
 SedaSearch.propTypes = {

@@ -8,6 +8,7 @@ export const METRICS = [
     id: 'avg',
     label: LANG['LABEL_AVG'],
     range: {
+      '*_states': [-3, 3],
       'map_*_gap': [-6, 6],
       map_counties: [-3, 3],
       map_districts: [-3.5, 3.5],
@@ -20,7 +21,6 @@ export const METRICS = [
       '*_counties_w': [-4, 4],
       '*_counties_a': [-4, 5],
       '*_counties': [-4.5, 2.5],
-
       '*_districts_b': [-4, 3],
       '*_districts_w': [-4, 4],
       '*_districts_a': [-4, 5],
