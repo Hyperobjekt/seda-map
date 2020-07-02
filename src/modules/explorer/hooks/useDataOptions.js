@@ -1,44 +1,12 @@
-import axios from 'axios'
 import create from 'zustand'
 import {
   getFeatureProperty,
-  getRegionFromLocationId
+  getRegionFromLocationId,
 } from '../selectors'
 import {
-  loadFeatureFromCoords,
-  loadFeaturesFromCoords
-} from '../../../shared/utils/tilequery'
-import { getDataForId } from '../utils'
-import {
-  getLocationFromFeature,
-  parseLocationsString
+  getLocationFromFeature
 } from '../selectors/router'
 import { getStateFipsFromAbbr } from '../../../shared/utils/states'
-
-const FLAGGED_ENDPOINT =
-  process.env.REACT_APP_DATA_ENDPOINT + 'flagged/'
-
-/**
- * Loads map features based on a string of locations
- * @param {string} locations locations formed as `{id},{lat},{lon}` separated by a `+`
- * @returns {Promise<Array<Feature>>}
- */
-export const loadFeaturesFromRoute = locations =>
-  loadFeaturesFromCoords(parseLocationsString(locations))
-
-/**
- * Loads map features from location parameter
- * @param {*} params
- * @returns {Promise<Array<Feature>>}
- */
-export const loadFeaturesFromRouteParams = params =>
-  params.locations
-    ? loadFeaturesFromRoute(params.locations)
-    : Promise.resolve([])
-
-export const loadFlaggedData = type => {
-  return axios.get(FLAGGED_ENDPOINT + type + '.json')
-}
 
 /**
  * Returns true if the feature is in the provided locations array
@@ -83,18 +51,6 @@ const getUpdatedLocations = (locations, features) => {
   }, locations)
 }
 
-/**
- * Gets an object with all of the provided features' data
- * with the ID as the key
- * @param {Array<GeoJsonFeature} an array of features
- */
-const getFeatureData = features => {
-  return features.reduce((obj, feature) => {
-    obj[feature.properties.id] = feature.properties
-    return obj
-  }, {})
-}
-
 const defaultMetric = 'avg'
 const defaultSecondary = 'ses'
 const defaultDemographic = 'all'
@@ -116,7 +72,21 @@ const getChangesForActiveLocation = (
   return changes
 }
 
-const makeSetters = (set, get) => ({
+
+const [useDataOptions] = create((set, get) => ({
+  metric: defaultMetric,
+  demographic: defaultDemographic,
+  region: defaultRegion,
+  secondary: defaultSecondary,
+  locations: [],
+  filters: {
+    prefix: null,
+    largest: null
+  },
+  activeLocation: null,
+  loading: true,
+  error: null,
+  showError: false,
   setMetric: metric => set({ metric }),
   setDemographic: demographic => set({ demographic }),
   setRegion: region => set({ region }),
@@ -133,69 +103,20 @@ const makeSetters = (set, get) => ({
   setLoading: loading => set({ loading }),
   setError: error => set({ error }),
   setShowError: showError => set({ showError }),
-  setDataLoading: dataLoading => set({ dataLoading }),
-  // adds a feature to the object containing data for hovered / selected features
-  addFeatureData: featureData => {
-    if (get().featureData.hasOwnProperty(featureData.id)) return
-    set(state => {
-      const newState = {
-        featureData: {
-          ...state.featureData,
-          [featureData.id]: featureData
-        }
-      }
-      return newState
-    })
-  },
-  addLocationFromId: async (id, setActive = true) => {
-    console.log('adding from id')
-    const region = getRegionFromLocationId(id)
-    const data = getDataForId(id, get().data[region])
-    const feature = await loadFeatureFromCoords(data)
-
-    set(state => {
-      return {
-        locations: getUpdatedLocations(state.locations, feature),
-        featureData: {
-          ...state.featureData,
-          ...getFeatureData([feature])
-        },
-        ...(setActive && { activeLocation: id })
-      }
-    })
-  },
-  addLocationsFromRoute: async (route, setActive = true) => {
-    try {
-      // load the features
-      const features = await loadFeaturesFromRoute(route)
-      if (!features || features.length === 0) return
-      // get activation for first feature
-      const changes = getChangesForActiveLocation(
-        getFeatureProperty(features[0], 'id'),
-        get().region
-      )
-      // set the loaded features in locations
-      set(state => ({
-        locations: getUpdatedLocations(
-          state.locations,
-          features
-        ),
-        featureData: {
-          ...state.featureData,
-          ...getFeatureData(features)
-        },
-        ...(setActive && changes)
-      }))
-    } catch (err) {
-      // unsuccessful load, show error
-      set(state => ({
-        error:
-          err && err.message
-            ? err.message
-            : 'error loading location',
-        showError: true
-      }))
-    }
+  addLocations: (features, setActive = true) => {
+    // get activation for first feature
+    const changes = getChangesForActiveLocation(
+      getFeatureProperty(features[0], 'id'),
+      get().region
+    )
+    // set the loaded features in locations
+    set(state => ({
+      locations: getUpdatedLocations(
+        state.locations,
+        features
+      ),
+      ...(setActive && changes)
+    }))
   },
   addLocation: (feature, setActive = true) => {
     set(state => {
@@ -231,26 +152,6 @@ const makeSetters = (set, get) => ({
       filters: { prefix, largest }
     })
   }
-})
-
-const [useDataOptions] = create((set, get, api) => ({
-  metric: defaultMetric,
-  demographic: defaultDemographic,
-  region: defaultRegion,
-  secondary: defaultSecondary,
-  locations: [],
-  featureData: {},
-  idMap: {},
-  filters: {
-    prefix: null,
-    largest: null
-  },
-  dataLoading: false,
-  activeLocation: null,
-  loading: true,
-  error: null,
-  showError: false,
-  ...makeSetters(set, get)
 }))
 
 export default useDataOptions
