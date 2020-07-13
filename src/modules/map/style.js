@@ -2605,20 +2605,8 @@ export default {
       id: 'admin-1-boundary-bg',
       type: 'line',
       metadata: { 'mapbox:group': '1444934295202.7542' },
-      source: 'composite',
-      'source-layer': 'admin',
-      filter: [
-        'all',
-        ['==', ['get', 'admin_level'], 1],
-        ['==', ['get', 'maritime'], 'false'],
-        [
-          'match',
-          ['get', 'worldview'],
-          ['all', 'US'],
-          true,
-          false
-        ]
-      ],
+      source: 'seda',
+      'source-layer': 'states',
       layout: { 'line-join': 'bevel' },
       paint: {
         'line-blur': [
@@ -2627,18 +2615,18 @@ export default {
           ['zoom'],
           3,
           0,
-          8,
-          3
+          12,
+          5
         ],
         'line-width': [
           'interpolate',
           ['linear'],
           ['zoom'],
           2,
-          0,
+          0.5,
           4.4,
-          0,
-          4.5,
+          1,
+          8,
           3.75,
           12,
           5.5
@@ -2647,10 +2635,10 @@ export default {
           'interpolate',
           ['linear'],
           ['zoom'],
-          7,
+          4,
           0,
-          8,
-          0.75
+          12,
+          0.5
         ],
         'line-dasharray': [1, 0],
         'line-translate': [0, 0],
@@ -2661,20 +2649,8 @@ export default {
       id: 'admin-1-boundary',
       type: 'line',
       metadata: { 'mapbox:group': '1444934295202.7542' },
-      source: 'composite',
-      'source-layer': 'admin',
-      filter: [
-        'all',
-        ['==', ['get', 'admin_level'], 1],
-        ['==', ['get', 'maritime'], 'false'],
-        [
-          'match',
-          ['get', 'worldview'],
-          ['all', 'US'],
-          true,
-          false
-        ]
-      ],
+      source: 'seda',
+      'source-layer': 'states',
       layout: { 'line-join': 'round', 'line-cap': 'round' },
       paint: {
         'line-dasharray': [
@@ -2689,7 +2665,7 @@ export default {
           ['linear'],
           ['zoom'],
           2,
-          0,
+          0.5,
           4,
           0.75,
           12,
@@ -2700,7 +2676,7 @@ export default {
           ['linear'],
           ['zoom'],
           4,
-          0,
+          0.5,
           4.5,
           1
         ],

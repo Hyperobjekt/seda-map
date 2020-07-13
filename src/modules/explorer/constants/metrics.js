@@ -8,7 +8,7 @@ export const METRICS = [
     id: 'avg',
     label: LANG['LABEL_AVG'],
     range: {
-      '*_states': [-3, 3],
+      '*_states': [-1.5, 1.5],
       'map_*_gap': [-6, 6],
       map_counties: [-3, 3],
       map_districts: [-3.5, 3.5],
@@ -34,6 +34,7 @@ export const METRICS = [
     id: 'grd',
     label: LANG['LABEL_GRD'],
     range: {
+      '*_states': [0.8, 1.2],
       'map_*_gap': [-0.4, 0.4],
       'map_*_*': [0.5, 1.5],
       '*_schools': [-0.2, 2.6],
@@ -49,6 +50,7 @@ export const METRICS = [
     id: 'coh',
     label: LANG['LABEL_COH'],
     range: {
+      '*_states': [-0.25, 0.25],
       'map_*_*': [-0.333, 0.3333],
       '*_*_gap': [-0.25, 0.25],
       '*_schools': [-1, 1],
@@ -63,6 +65,7 @@ export const METRICS = [
     map: false,
     scatterplot: true,
     range: {
+      '*_states': [-2, 2],
       '*_districts_h': [-5, 3],
       '*_counties_h': [-4, 2],
       '*_*_b': [-6, 2],
