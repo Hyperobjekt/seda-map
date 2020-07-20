@@ -715,7 +715,7 @@
       <svg class="section__brand">
         <use xlink:href="#seda-light" />
       </svg>
-      <h1 class="section__title"><span role="text">The Educational Opportunity Project at <br />Stanford University</span></h1>
+      <h1 class="section__title"><span role="text">The Educational Opportunity Project at&nbsp;<br />Stanford University</span></h1>
       <p class="section__description">
         Using public-school test scores in grades 3–8 from  2008–09 through 2015–16, we have created the first comprehensive view of educational opportunity in the United States.
       </p>
@@ -928,7 +928,7 @@
         if (
           !params.demographic || 
           (params.demographic !== 'all' && params.region === 'schools') ||
-          ['all', 'w', 'b', 'a', 'h', 'm', 'f', 'wb', 'wh', 'pn', 'np', 'mf'].indexOf(params.demographic) === -1
+          ['all', 'w', 'b', 'a', 'h', 'm', 'f', 'p', 'wb', 'wh', 'pn', 'np', 'mf'].indexOf(params.demographic) === -1
         ) {
           return false
         }
@@ -949,7 +949,13 @@
 
       // variable to track the current view (map, chart, split)
       var currentView;
-      
+
+      // variable to track the time when a user selects a metric
+      var metricTime;
+
+      // variable to track the current metric (avg, grd, coh)
+      var currentMetric;
+
       // track time after metric selection
       var startTimeDataLoad;
 
@@ -1200,23 +1206,40 @@
         return 'unknown';
       }
 
+      var getMetricFromURL = function(url) {
+        if (url.indexOf('/avg/') > -1) { return 'avg' }
+        if (url.indexOf('/grd/') > -1) { return 'grd' }
+        if (url.indexOf('/coh/') > -1) { return 'coh' }
+        return 'unknown';
+      }
+
       var setupViewTiming = function() {
         viewTime = new Date();
+        metricTime = new Date();
         currentView = getViewFromURL(window.location.hash)
+        currentMetric = getMetricFromURL(window.location.hash)
         var handleHashChange = function(e) {
           var newView = getViewFromURL(e.newURL)
+          var newMetric = getMetricFromURL(window.location.hash)
           if (newView !== currentView) {
             var elapsedTime = parseInt(((new Date()) - viewTime));
             trackTiming('interaction', 'viewing ' + currentView, elapsedTime);
             viewTime = new Date();
             currentView = newView;
           }
+          if (newMetric !== currentMetric) {
+            var elapsedTime = parseInt(((new Date()) - metricTime));
+            trackTiming('interaction', 'duration ' + currentMetric, elapsedTime);
+            metricTime = new Date();
+            currentMetric = newMetric;
+          }
         }
         var handleUnload = function() {
           var elapsedTime = parseInt(((new Date()) - viewTime));
           trackTiming('interaction', 'viewing ' + currentView, elapsedTime);
+          trackTiming('interaction', 'duration ' + currentMetric, elapsedTime);
         }
-        
+
         window.addEventListener("hashchange", handleHashChange, false);
         window.addEventListener("beforeunload", handleUnload, false)
       }
