@@ -1,2 +1,2 @@
-export { default as DataLoader } from './DataLoader'
+export { default as DataView } from './DataView'
 export { default as useStaticData } from './useStaticData'

@@ -4,16 +4,16 @@ import theme from './theme'
 import './index.css'
 import SedaApp from './modules/explorer'
 import { ThemeProvider, CssBaseline } from '@material-ui/core'
-import { DataLoader } from './modules/data'
+import { DataView } from './modules/data'
 
 const target = document.querySelector('#root')
 
-// render(<DataLoader />, target)
+render(<DataView />, target)
 
-render(
-  <ThemeProvider theme={theme}>
-    <CssBaseline />
-    <SedaApp />
-  </ThemeProvider>,
-  target
-)
+// render(
+//   <ThemeProvider theme={theme}>
+//     <CssBaseline />
+//     <SedaApp />
+//   </ThemeProvider>,
+//   target
+// )

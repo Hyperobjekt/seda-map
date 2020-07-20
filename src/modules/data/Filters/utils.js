@@ -22,8 +22,12 @@ const filterLessThanEqual = (data, column, value) =>
 const filterHas = (data, column) =>
   data.filter((d, i) => d[column] || d[column] === 0)
 
-const filterContains = (data, column, value) =>
-  data.filter((d, i) => d[column] && d[column].contains(value))
+const filterContains = (data, column, value) => {
+  return data.filter(
+    (d, i) =>
+      typeof d[column] === 'string' && d[column].includes(value)
+  )
+}
 
 const filterSort = (data, column, direction = 'asc') => {
   const desc = direction === 'desc'
@@ -59,6 +63,14 @@ const filterRules = {
  */
 export const registerFilterRule = (name, filterFunction) => {
   filterRules[name] = filterFunction
+}
+
+/**
+ * Checks if a filter rule exists
+ * @param {*} name
+ */
+export const hasFilterRule = name => {
+  return filterRules.hasOwnProperty(name)
 }
 
 /**
