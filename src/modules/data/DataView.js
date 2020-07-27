@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import useStaticData from './useStaticData'
-import { applyFilters, FiltersForm } from './Filters'
-import useFilterStore from './Filters/useFilterStore'
+import { applyFilters, FiltersForm } from '../filters'
+import useFilterStore from '../filters/useFilterStore'
 import DataLoader from './DataLoader'
 
 const DataSection = ({ title, total, data, ...props }) => {

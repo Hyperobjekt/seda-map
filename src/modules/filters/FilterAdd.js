@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 import Field from './Field'
 import FilterFields from './FilterFields'
-import { filterRuleFields, defaultValues } from './constants'
+import {
+  filterRuleFields as defaultRuleFields,
+  defaultValues as defaultRuleValues
+} from './constants'
 import { makeStyles, Button } from '@material-ui/core'
 import clsx from 'clsx'
-
-const filterOptions = Object.keys(filterRuleFields)
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -17,19 +19,29 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
+/**
+ * Provides inputs for adding a filter rule, including:
+ *
+ *   - Filter Type (select)
+ *   - Filter Fields (based on filter type, defined in constants)
+ *   - Add button
+ *
+ */
 const FilterAdd = ({
+  defaultValues,
+  filterRuleFields,
   onFilterAdd,
   className,
   classes: overrides,
   ...props
 }) => {
+  const classes = useStyles()
   const [filterType, setFilterType] = useState('startsWith')
   const [filterValues, setFilterValues] = useState(
     defaultValues['startsWith']
   )
-  const classes = useStyles()
+  const filterOptions = Object.keys(filterRuleFields)
   const handleTypeChange = e => {
-    console.log('filter type change', e)
     setFilterType(e.target.value)
     setFilterValues(defaultValues[e.target.value])
   }
@@ -39,16 +51,15 @@ const FilterAdd = ({
       if (i !== valueIndex) return fv
       return value
     })
-    console.log('value cahnge', filterValues, newValues)
     setFilterValues(newValues)
   }
   const handleAddFilter = () => {
-    console.log('add filter', filterType, filterValues)
     onFilterAdd && onFilterAdd([filterType, ...filterValues])
   }
   return (
     <div
-      className={clsx(classes.root, overrides.root, className)}>
+      className={clsx(classes.root, overrides.root, className)}
+      {...props}>
       <Field
         className={clsx(
           classes.filterSelect,
@@ -74,7 +85,22 @@ const FilterAdd = ({
 }
 
 FilterAdd.defaultProps = {
-  classes: {}
+  classes: {},
+  defaultValues: defaultRuleValues,
+  filterRuleFields: defaultRuleFields
+}
+
+FilterAdd.propTypes = {
+  /** Handler for adding filter */
+  onFilterAdd: PropTypes.func,
+  /** Class name for root element */
+  className: PropTypes.string,
+  /** Object of classNames for component elements */
+  classes: PropTypes.object,
+  /** Default values for filter rules */
+  defaultValues: PropTypes.object,
+  /** Input definitions for available filter rules */
+  filterRuleFields: PropTypes.object
 }
 
 export default FilterAdd
