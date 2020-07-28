@@ -11,7 +11,6 @@ import { theme } from './theme'
 import { isVersusFromVarNames } from '../../selectors'
 import { getScatterplotOptions } from './style'
 import { getFilteredIds } from './selectors'
-import useScatterplotStore from './store'
 import {
   getLang,
   getLegendEndLabelsForVarName as getEndLabels,
@@ -19,6 +18,7 @@ import {
   getRegionLabel
 } from '../../selectors/lang'
 import SedaLocationMarkers from './SedaLocationMarkers'
+import useStaticData from '../../../data/useStaticData'
 
 // scatterplot width / height where left / right hints are not shown
 const LABEL_BREAKPOINT = 500
@@ -82,7 +82,10 @@ function SedaScatterplotBase({
   const [resizeListener, sizes] = useResizeAware()
 
   // scatterplot data store
-  const { data, loadData, loading } = useScatterplotStore()
+  const data = useStaticData(state => state.data)
+
+  // boolean indicating if data is loading
+  const loading = useStaticData(state => state.isLoading)
 
   // scatterplot data for the current region
   const regionData = data[region]
@@ -97,20 +100,6 @@ function SedaScatterplotBase({
       3000
     )
   }, [regionData, filters, zVar])
-
-  // load the data on changes, if needed
-  useEffect(() => {
-    if (!autoFetch) return
-    loadData([xVar, yVar, zVar, 'name'], region, filters.prefix)
-  }, [
-    region,
-    xVar,
-    yVar,
-    zVar,
-    filters.prefix,
-    autoFetch,
-    loadData
-  ])
 
   // memoize the scatterplot options
   const options = useMemo(() => {

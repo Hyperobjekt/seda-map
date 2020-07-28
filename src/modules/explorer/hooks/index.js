@@ -18,6 +18,8 @@ import { useMapStore } from '../../map'
 import { getVarNames, getDataForId } from '../selectors/data'
 import useScatterplotStore from '../components/scatterplot/store'
 import useData from './useData'
+import useStaticData from '../../data/useStaticData'
+import { parseLocationsString } from '../selectors/router'
 
 /**
  * Provides the current values for metric, demographic, and region
@@ -364,21 +366,9 @@ export const useLocationsData = () => {
     state => state.locations,
     shallow
   )
-  const featureData = useData(
-    state => state.data,
-    shallow
-  )
-  const scatterplotData = useScatterplotStore(
-    state => state.data
-  )
-  return locations.map(l => ({
-    ...getDataForId(
-      getFeatureProperty(l, 'id'),
-      scatterplotData[region],
-      featureData
-    ),
-    ...l.properties
-  }))
+  const data = useStaticData(state => state.data)
+  const regionData = data[region]
+  return locations.map(l => regionData.find(d => d.id === l))
 }
 
 /**
@@ -428,10 +418,7 @@ export const useLocationCount = () => {
  * @returns {LocationData} LocationData object
  */
 export const useLocationData = id => {
-  const featureData = useData(
-    state => state.data,
-    shallow
-  )
+  const featureData = useData(state => state.data, shallow)
   const scatterplotData = useScatterplotStore(
     state => state.data
   )
@@ -475,23 +462,29 @@ export const useAddLocationById = () => {
   const addLocation = useDataOptions(state => state.addLocation)
   const loadData = useData(state => state.loadData)
   // todo: do not rely on scatterplot data for lat/lon
-  const scatterplotData = useScatterplotStore(state => state.data)
+  const scatterplotData = useScatterplotStore(
+    state => state.data
+  )
   return async (id, setActive = true) => {
-    const region = getRegionFromLocationId(id);
-    const { lat, lon } = getDataForId(id, scatterplotData[region])
+    const region = getRegionFromLocationId(id)
+    const { lat, lon } = getDataForId(
+      id,
+      scatterplotData[region]
+    )
     const feature = await loadData({ id, lat, lon })
     addLocation(feature, setActive)
-    return feature;
+    return feature
   }
 }
 
 export const useAddLocationsByRoute = () => {
-  const addLocations = useDataOptions(state => state.addLocations)
-  const loadData = useData(state => state.loadDataFromRoute)
+  const addLocations = useDataOptions(
+    state => state.addLocations
+  )
   return async (route, setActive = true) => {
-    const features = await loadData(route)
-    addLocations(features, setActive)
-    return features;
+    const locations = parseLocationsString(route).map(l => l.id)
+    addLocations(locations, setActive)
+    return locations
   }
 }
 
@@ -528,7 +521,9 @@ export const useRemoveLocation = () => {
  */
 export const useNameForId = id => {
   const featureData = useData(state => state.data)
-  const scatterplotData = useScatterplotStore(state => state.data)
+  const scatterplotData = useScatterplotStore(
+    state => state.data
+  )
   if (!id) return ''
   const region = getRegionFromLocationId(id)
   switch (region) {

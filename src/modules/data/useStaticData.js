@@ -28,15 +28,19 @@ const [useStaticData] = create((set, get) => ({
   loading: [],
   loaded: [],
   timing: {},
+  isLoading: false,
   loadDataSet: async (dataSetId, parser = autoType) => {
     const t0 = performance.now()
     set(state => ({
-      loading: [...state.loading, dataSetId]
+      loading: [...state.loading, dataSetId],
+      isLoading: true
     }))
     const data = await loadDataSet(dataSetId, parser)
     const loadTime = performance.now() - t0
     set(state => ({
       loading: state.loading.filter(v => v !== dataSetId),
+      isLoading:
+        state.loading.filter(v => v !== dataSetId).length > 0,
       loaded: [...state.loaded, dataSetId],
       data: { ...state.data, [dataSetId]: data },
       timing: {

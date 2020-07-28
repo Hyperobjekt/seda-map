@@ -23,7 +23,6 @@ import {
   useActiveLocationFeature
 } from '../../hooks'
 import { REGION_TO_ID_LENGTH } from '../../constants/regions'
-import useData from '../../hooks/useData'
 
 const selectedColors = getSelectedColors()
 
@@ -35,6 +34,9 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
+/**
+ * Displays the map with SEDA data layers
+ */
 const SedaMap = props => {
   /** current options for the map */
   const [metric, demographic, region] = useActiveOptionIds()
@@ -50,9 +52,7 @@ const SedaMap = props => {
   const [showHovered] = useMarkersVisibility()
   /** function to add a location to the selected locations */
   const addLocation = useAddLocation()
-  const addFeatureData = useData(
-    state => state.addData
-  )
+
   const [idMap, addToIdMap] = useIdMap()
   const flyToState = useFlyToState()
   const flyToFeature = useFlyToFeature()
@@ -79,7 +79,6 @@ const SedaMap = props => {
   const handleHover = (feature, coords) => {
     const id = getFeatureProperty(feature, 'id')
     if (id && id !== hoveredId) {
-      addFeatureData(feature.properties)
       // add schools to the ID map
       id.length === REGION_TO_ID_LENGTH['schools'] &&
         addToIdMap(feature.id, id)
