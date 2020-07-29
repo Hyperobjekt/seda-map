@@ -2,7 +2,6 @@ import shallow from 'zustand/shallow'
 import useDataOptions from './useDataOptions'
 import useUiStore from './useUiStore'
 import {
-  getFeatureProperty,
   getSizesForRegion,
   getRegionFromLocationId,
   isGapDemographic
@@ -15,9 +14,8 @@ import {
 import { useCallback } from 'react'
 import { formatNumber } from '../../../shared/utils'
 import { useMapStore } from '../../map'
-import { getVarNames, getDataForId } from '../selectors/data'
-import useScatterplotStore from '../components/scatterplot/store'
-import useData from './useData'
+import { getVarNames } from '../selectors/data'
+
 import useStaticData from '../../data/useStaticData'
 import { parseLocationsString } from '../selectors/router'
 
@@ -368,7 +366,23 @@ export const useLocationsData = () => {
   )
   const data = useStaticData(state => state.data)
   const regionData = data[region]
-  return locations.map(l => regionData.find(d => d.id === l))
+  return regionData
+    ? locations.map(l => regionData.find(d => d.id === l))
+    : []
+}
+
+/**
+ * Provides data from the store for the given ID
+ * @param {string} id
+ * @returns {LocationData} LocationData object
+ */
+export const useLocationData = id => {
+  const region = useDataOptions(state => state.region)
+  const data = useStaticData(state => state.data)
+  const regionData = data[region]
+  return regionData && regionData.length
+    ? regionData.find(d => d.id === id)
+    : null
 }
 
 /**
@@ -394,15 +408,15 @@ export const useActiveLocationData = () => {
  * Pulls an object containing the GeoJSON feature for the active location
  * @returns {GeojsonFeature} LocationFeature object
  */
-export const useActiveLocationFeature = () => {
-  return useDataOptions(state => {
-    const id = state.activeLocation
-    const locations = state.locations
-    return id
-      ? locations.find(l => getFeatureProperty(l, 'id') === id)
-      : null
-  })
-}
+// export const useActiveLocationFeature = () => {
+//   return useDataOptions(state => {
+//     const id = state.activeLocation
+//     const locations = state.locations
+//     return id
+//       ? locations.find(l => getFeatureProperty(l, 'id') === id)
+//       : null
+//   })
+// }
 
 /**
  * Provides count of current locations
@@ -410,21 +424,6 @@ export const useActiveLocationFeature = () => {
  */
 export const useLocationCount = () => {
   return useDataOptions(state => state.locations.length)
-}
-
-/**
- * Provides data from the store for the given ID
- * @param {string} id
- * @returns {LocationData} LocationData object
- */
-export const useLocationData = id => {
-  const featureData = useData(state => state.data, shallow)
-  const scatterplotData = useScatterplotStore(
-    state => state.data
-  )
-  if (!id) return null
-  const region = getRegionFromLocationId(id)
-  return getDataForId(id, scatterplotData[region], featureData)
 }
 
 /**
@@ -436,10 +435,8 @@ export const useLocationData = id => {
 export const useLocationNumber = id => {
   return useDataOptions(state => {
     const index = state.locations
-      .filter(
-        l => getFeatureProperty(l, 'id').length === id.length
-      )
-      .findIndex(l => getFeatureProperty(l, 'id') === id)
+      .filter(l => l.length === id.length)
+      .findIndex(l => l === id)
     return index + 1
   })
 }
@@ -451,30 +448,6 @@ export const useLocationNumber = id => {
  */
 export const useAddLocation = () => {
   return useDataOptions(state => state.addLocation)
-}
-
-/**
- * Provides a function for adding location (id strings) to
- * the selected locations list
- * @returns {function}
- */
-export const useAddLocationById = () => {
-  const addLocation = useDataOptions(state => state.addLocation)
-  const loadData = useData(state => state.loadData)
-  // todo: do not rely on scatterplot data for lat/lon
-  const scatterplotData = useScatterplotStore(
-    state => state.data
-  )
-  return async (id, setActive = true) => {
-    const region = getRegionFromLocationId(id)
-    const { lat, lon } = getDataForId(
-      id,
-      scatterplotData[region]
-    )
-    const feature = await loadData({ id, lat, lon })
-    addLocation(feature, setActive)
-    return feature
-  }
 }
 
 export const useAddLocationsByRoute = () => {
@@ -496,17 +469,11 @@ export const useAddLocationsByRoute = () => {
 export const useRemoveLocation = () => {
   const [locations, setLocations] = useLocations()
   return useCallback(
-    location => {
-      const id =
-        typeof location === 'string'
-          ? location
-          : location && typeof location === 'object'
-          ? getFeatureProperty(location, 'id')
-          : null
+    id => {
       if (!id)
         throw new Error('tried to remove invalid location')
       const newLocations = locations.filter(
-        l => getFeatureProperty(l, 'id') !== id
+        locationId => locationId !== id
       )
       setLocations(newLocations)
     },
@@ -520,21 +487,13 @@ export const useRemoveLocation = () => {
  * @returns {string}
  */
 export const useNameForId = id => {
-  const featureData = useData(state => state.data)
-  const scatterplotData = useScatterplotStore(
-    state => state.data
-  )
-  if (!id) return ''
+  const locationData = useLocationData(id)
   const region = getRegionFromLocationId(id)
   switch (region) {
     case 'states':
       return getStateName(id)
     default:
-      return getDataForId(
-        id,
-        scatterplotData[region],
-        featureData
-      )['name']
+      return locationData['name']
   }
 }
 
@@ -566,7 +525,7 @@ const getFilterRoute = filters => {
  */
 const getLocationsRoute = locations => {
   let locationsRoute = locations
-    .map(l => l.properties.route)
+    .map(l => [l.id, l.lat, l.lon].join(','))
     .join('+')
   return locationsRoute
 }
@@ -593,6 +552,7 @@ export const useRouterParams = () => {
   const viewportRoute = useMapStore(state =>
     getViewportRoute(state.viewport)
   )
+  const locationsData = useLocationsData()
   return useDataOptions(state =>
     [
       view,
@@ -601,8 +561,8 @@ export const useRouterParams = () => {
       state.metric,
       state.secondary,
       state.demographic,
-      viewportRoute,
-      getLocationsRoute(state.locations)
+      viewportRoute
+      // getLocationsRoute(locationsData)
     ].join('/')
   )
 }

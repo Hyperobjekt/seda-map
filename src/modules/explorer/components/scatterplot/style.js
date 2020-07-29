@@ -629,14 +629,12 @@ const yAxis = (variant, { varName, region }) => {
 
 export const getScatterplotOptions = (
   variant,
-  data = {},
+  data = [],
   { xVar, yVar, zVar },
   highlightIds = [],
   region
 ) => {
-  if (!data[xVar] || !data[yVar] || !data[zVar]) {
-    return {}
-  }
+  if (!data || data.length === 0) return {}
   const sizerDem = getDemographicForVarNames(xVar, yVar)
   const sizer = getSizerFunctionForRegion(region, sizerDem)
   const options = {

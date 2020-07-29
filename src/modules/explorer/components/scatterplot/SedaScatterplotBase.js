@@ -18,6 +18,7 @@ import {
   getRegionLabel
 } from '../../selectors/lang'
 import SedaLocationMarkers from './SedaLocationMarkers'
+import useFilteredData from '../../hooks/useFilteredData'
 import useStaticData from '../../../data/useStaticData'
 
 // scatterplot width / height where left / right hints are not shown
@@ -82,7 +83,7 @@ function SedaScatterplotBase({
   const [resizeListener, sizes] = useResizeAware()
 
   // scatterplot data store
-  const data = useStaticData(state => state.data)
+  const data = useFilteredData(state => state.data)
 
   // boolean indicating if data is loading
   const loading = useStaticData(state => state.isLoading)
@@ -97,7 +98,7 @@ function SedaScatterplotBase({
   const highlightIds = useMemo(() => {
     return getFilteredIds(regionData, filters, zVar).slice(
       0,
-      3000
+      2000
     )
   }, [regionData, filters, zVar])
 

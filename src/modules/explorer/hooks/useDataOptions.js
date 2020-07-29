@@ -1,53 +1,20 @@
 import create from 'zustand'
-import {
-  getFeatureProperty,
-  getRegionFromLocationId,
-} from '../selectors'
-import {
-  getLocationFromFeature
-} from '../selectors/router'
+import { getRegionFromLocationId } from '../selectors'
 import { getStateFipsFromAbbr } from '../../../shared/utils/states'
+import logger from '../../logger'
 
 /**
- * Returns true if the feature is in the provided locations array
- * @param {*} feature
- * @param {*} locations
- * @returns {boolean}
- */
-const isFeatureInLocations = (feature, locations) => {
-  const featureId = getFeatureProperty(feature, 'id')
-  return (
-    locations.findIndex(
-      l => featureId === getFeatureProperty(l, 'id')
-    ) > -1
-  )
-}
-
-/**
- * Adds the route string to the feature
- * @param {*} feature
- * @returns {GeoJsonFeature}
- */
-const addLocationStringToFeature = feature => {
-  const locationString = getLocationFromFeature(feature)
-  feature.properties['route'] = locationString
-  return feature
-}
-
-/**
- * Adds any missing features to the locations array
+ * Adds any missing IDs to the locations array
  * @param {*} locations
  * @param {*} features
  * @returns {Array<GeoJsonFeature>}
  */
-const getUpdatedLocations = (locations, features) => {
-  if (!Array.isArray(features)) {
-    features = [features]
+const getUpdatedLocations = (locations, locationIds) => {
+  if (!Array.isArray(locationIds)) {
+    locationIds = [locationIds]
   }
-  return features.reduce((loc, feature) => {
-    return isFeatureInLocations(feature, loc)
-      ? loc
-      : [...loc, addLocationStringToFeature(feature)]
+  return locationIds.reduce((locs, id) => {
+    return locs.indexOf(id) > -1 ? locs : [...locs, id]
   }, locations)
 }
 
@@ -57,7 +24,7 @@ const defaultDemographic = 'all'
 const defaultRegion = 'counties'
 
 /**
- * Gets state changes required to activate location
+ * Gets changes required to activate location (eg. new region)
  * @param {*} activeLocation
  * @param {*} currentRegion
  * @returns {object}
@@ -71,7 +38,6 @@ const getChangesForActiveLocation = (
   if (region !== currentRegion) changes['region'] = region
   return changes
 }
-
 
 const [useDataOptions] = create((set, get) => ({
   metric: defaultMetric,
@@ -103,27 +69,30 @@ const [useDataOptions] = create((set, get) => ({
   setLoading: loading => set({ loading }),
   setError: error => set({ error }),
   setShowError: showError => set({ showError }),
-  addLocations: (features, setActive = true) => {
+  addLocations: (locationIds, setActive = true) => {
     // get activation for first feature
     const changes = getChangesForActiveLocation(
-      getFeatureProperty(features[0], 'id'),
+      locationIds[0],
       get().region
     )
     // set the loaded features in locations
     set(state => ({
       locations: getUpdatedLocations(
         state.locations,
-        features
+        locationIds
       ),
       ...(setActive && changes)
     }))
   },
-  addLocation: (feature, setActive = true) => {
+  addLocation: (locationId, setActive = true) => {
     set(state => {
       return {
-        locations: getUpdatedLocations(state.locations, feature),
+        locations: getUpdatedLocations(
+          state.locations,
+          locationId
+        ),
         ...(setActive && {
-          activeLocation: getFeatureProperty(feature, 'id')
+          activeLocation: locationId
         })
       }
     })
@@ -143,7 +112,12 @@ const [useDataOptions] = create((set, get) => ({
         ? null
         : getStateFipsFromAbbr(filters[0])
     const largest = filters.length > 1 ? filters[1] : null
-    console.log('setting from route', params, prefix, largest)
+    logger.debug(
+      'setting options from route',
+      params,
+      prefix,
+      largest
+    )
     set({
       region: params['region'],
       metric: params['metric'],

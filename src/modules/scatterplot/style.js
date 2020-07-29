@@ -1,5 +1,5 @@
 import * as merge from 'deepmerge'
-import { getScatterplotData, getDataScale } from './utils'
+import { getDataScale, getDataSubset } from './utils'
 
 /** Default options for scatterplot container */
 const gridOptions = {
@@ -178,11 +178,7 @@ const getBaseSeries = ({ scatterData, scale, options }) => {
 const getDataSeries = (id, series = []) =>
   series && series.length ? series.find(s => s.id === id) : null
 
-const isDataReady = ({ data, xVar, yVar, zVar }) =>
-  data &&
-  data[xVar] &&
-  data[yVar] &&
-  ((zVar && data[zVar]) || !zVar)
+const isDataReady = ({ data }) => data && data.length !== 0
 
 /**
  * Gets scatterplot data series, or return empty array if
@@ -199,13 +195,14 @@ const getScatterplotSeries = props => {
         )
       : []
   if (!props.scale) {
+    const zData = data.map(d => d[zVar])
     props.scale = zVar
-      ? getDataScale(data[zVar], { range: [6, 48] })
+      ? getDataScale(zData, { range: [6, 48] })
       : () => 10
   }
   const scatterData = zVar
-    ? getScatterplotData(data[xVar], data[yVar], data[zVar])
-    : getScatterplotData(data[xVar], data[yVar])
+    ? getDataSubset(data, [xVar, yVar, zVar])
+    : getDataSubset(data, [xVar, yVar])
   const params = { scatterData, ...props }
   const series = [
     getBaseSeries(params),

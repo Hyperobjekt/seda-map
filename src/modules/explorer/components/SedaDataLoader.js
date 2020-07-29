@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
-import useStaticData from './useStaticData'
 import useDataOptions from '../hooks/useDataOptions'
 import { autoType } from 'd3-dsv'
 import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core'
+import useStaticData from '../../data/useStaticData'
 
 /** Parser for data, ensures ID stays a string */
 const SEDA_PARSER = ({ id, ...rest }) => {
@@ -19,7 +19,8 @@ const useStyles = makeStyles(theme => ({
     background: 'rgba(255, 255, 255, 0.87)',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    zIndex: 100
   }
 }))
 
@@ -39,13 +40,13 @@ const SedaDataLoader = ({ className, ...props }) => {
       loadDataForRegion(region, SEDA_PARSER)
   }, [loaded, loadDataForRegion, region])
 
-  return (
+  return loading.length > 0 ? (
     <div
       className={clsx('data-loader', classes.root, className)}
       {...props}>
       <p>Loading {loading.join(', ')}</p>
     </div>
-  )
+  ) : null
 }
 
 SedaDataLoader.propTypes = {

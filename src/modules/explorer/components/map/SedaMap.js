@@ -47,7 +47,7 @@ const SedaMap = props => {
   /** id of the currently hovered location */
   const [hoveredId, setHovered] = useHovered()
   /** id of the active location */
-  const activeFeature = useActiveLocationFeature()
+  // const activeFeature = useActiveLocationFeature()
   /** boolean determining if the hovered location should show */
   const [showHovered] = useMarkersVisibility()
   /** function to add a location to the selected locations */
@@ -110,11 +110,11 @@ const SedaMap = props => {
   }, [prefix, flyToState])
 
   /** zoom to activated location */
-  useEffect(() => {
-    if (activeFeature && isLoaded.current) {
-      flyToFeature(activeFeature)
-    }
-  }, [activeFeature, flyToFeature])
+  // useEffect(() => {
+  //   if (activeFeature && isLoaded.current) {
+  //     flyToFeature(activeFeature)
+  //   }
+  // }, [activeFeature, flyToFeature])
 
   const locationIds = getLocationIdsForRegion(region, locations)
 

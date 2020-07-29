@@ -47,10 +47,6 @@ export const isFeature = feature => {
   )
 }
 
-export const getFeatureFromArray = (features, id) => {
-  return features.find(l => getFeatureProperty(l, 'id') === id)
-}
-
 /**
  * Gets the id of the hovered feature
  * @param {*} hovered

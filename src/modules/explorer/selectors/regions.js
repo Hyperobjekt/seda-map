@@ -3,7 +3,6 @@ import {
   REGION_DOMAINS,
   ID_LENGTH_TO_REGION
 } from '../constants/regions'
-import { getFeatureProperty } from '.'
 import { getPrefixLang } from './lang'
 
 /**
@@ -81,21 +80,20 @@ export const getRegionFromFeature = feature => {
  * @param {*} locations
  */
 export const getLocationsByRegion = locations =>
-  locations.reduce((obj, l) => {
-    const id = getFeatureProperty(l, 'id')
+  locations.reduce((obj, id) => {
     if (!id) return obj
     const r = getRegionFromLocationId(id)
     if (!obj[r]) {
       obj[r] = []
     }
-    obj[r].push(l)
+    obj[r].push(id)
     return obj
   }, {})
 
 export const getLocationIdsForRegion = (region, locations) => {
-  return locations
-    .map(f => getFeatureProperty(f, 'id'))
-    .filter(id => id.length === getRegionById(region).idLength)
+  return locations.filter(
+    id => id.length === getRegionById(region).idLength
+  )
 }
 
 /**

@@ -13,8 +13,8 @@ import {
   useScatterplotVars,
   useRegion,
   useFilters,
-  useAddLocationById,
-  useSecondary
+  useSecondary,
+  useAddLocation
 } from '../../hooks'
 import { SplitView } from '../base/SplitView'
 import useUiStore from '../../hooks/useUiStore'
@@ -90,7 +90,7 @@ const SedaScatterplot = () => {
   const [xGapVar, yGapVar, zGapVar] = useScatterplotVars('gap')
   const [, setSecondary] = useSecondary()
   const setHovered = useUiStore(state => state.setHovered)
-  const addLocationFromId = useAddLocationById()
+  const addLocation = useAddLocation()
 
   // track state for split view of charts
   const [showGapChart, setShowGapChart] = useState(false)
@@ -129,9 +129,9 @@ const SedaScatterplot = () => {
     e => {
       // grab data from event
       const id = getLocatonIdFromEvent(e)
-      addLocationFromId(id)
+      addLocation(id)
     },
-    [addLocationFromId]
+    [addLocation]
   )
 
   const isVersus = isVersusFromVarNames(xVar, yVar)

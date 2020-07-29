@@ -10,11 +10,7 @@ import {
   IconButton,
   Button
 } from '@material-ui/core'
-import {
-  getRegions,
-  getRegionLabel,
-  getFeatureProperty
-} from '../../selectors'
+import { getRegions, getRegionLabel } from '../../selectors'
 import { getLocationsByRegion } from '../../selectors/regions'
 import { getLang } from '../../selectors/lang'
 import { CloseIcon } from '../../../icons'
@@ -27,6 +23,7 @@ import {
 import SedaSearch from '../SedaSearch'
 import SedaLocationName from '../location/SedaLocationName'
 import useUiStore from '../../hooks/useUiStore'
+import logger from '../../../logger'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -84,7 +81,7 @@ const LocationList = ({
               onClick={e => onLocationClick(l, e)}
               {...ListItemProps}>
               <SedaLocationName
-                locationId={getFeatureProperty(l, 'id')}
+                locationId={l}
                 markerPosition="left"
                 small
               />
@@ -116,16 +113,20 @@ const SedaLocationSelect = ({ onSelect }) => {
   const [, setActiveLocation] = useActiveLocation()
   const setHovered = useUiStore(state => state.setHovered)
   const locationsByRegion = getLocationsByRegion(locations)
+  logger.debug(
+    'selected locations by region:',
+    locationsByRegion
+  )
   const inactiveRegions = getRegions()
     .map(r => r.id)
     .filter(r => r !== activeRegion)
 
   const handleLocationClick = location => {
-    setActiveLocation(getFeatureProperty(location, 'id'))
+    setActiveLocation(location)
   }
 
   const handleLocationHover = location => {
-    setHovered(getFeatureProperty(location, 'id'), null, {
+    setHovered(location, null, {
       showTooltip: false,
       showMarkers: true
     })

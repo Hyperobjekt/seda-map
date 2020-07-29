@@ -96,11 +96,7 @@ const removeFilter = set => filter =>
   })
 
 const [useFilterStore] = create(set => ({
-  filters: [
-    ['startsWith', 'id', '06067'],
-    ['sort', 'all_sz', 'asc'],
-    ['limit', 100]
-  ],
+  filters: [['sort', 'all_sz', 'asc'], ['limit', 2500]],
   addFilter: addFilter(set),
   setFilters: filters => set({ filters }),
   updateFilter: updateFilter(set),
