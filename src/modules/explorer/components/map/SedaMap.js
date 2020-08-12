@@ -88,7 +88,8 @@ const SedaMap = props => {
 
   /** handler for map click */
   const handleClick = feature => {
-    addLocation(feature)
+    const id = getFeatureProperty(feature, "id");
+    addLocation(id)
   }
 
   /** handler for map load */

@@ -4,6 +4,7 @@ import {
   ID_LENGTH_TO_REGION
 } from '../constants/regions'
 import { getPrefixLang } from './lang'
+import logger from '../../logger'
 
 /**
  * Gets the configuation for regions
@@ -58,6 +59,7 @@ export const getRegionFromLocationId = id => {
     return null
   }
   if (!ID_LENGTH_TO_REGION[id.length]) {
+    logger.debug('error getting region for id', id);
     throw new Error('No region corresponding to provided ID')
   }
   return ID_LENGTH_TO_REGION[id.length]
