@@ -469,6 +469,7 @@ const getMapVisualMap = ({
 }) => {
   const range = getMetricRangeFromVarName(yVar, region, 'map')
   const colors = getChartColorsFromVarNames(xVar, yVar)
+
   return {
     type: 'continuous',
     min: range[0],

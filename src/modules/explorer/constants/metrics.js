@@ -50,7 +50,8 @@ export const METRICS = [
     id: 'coh',
     label: LANG['LABEL_COH'],
     range: {
-      '*_states': [-0.25, 0.25],
+      'map_states_*': [-0.25, 0.25],
+      '*_states': [-0.1, 0.25],
       'map_*_*': [-0.333, 0.3333],
       '*_*_gap': [-0.25, 0.25],
       '*_schools': [-1, 1],

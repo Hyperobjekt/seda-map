@@ -32,7 +32,7 @@ export const REGIONS = [
 
 /** data ranges to map to size ranges on chart */
 export const REGION_DOMAINS = {
-  all_states: [10, 400],
+  all_states: [10, 200000],
   b_states: [3, 210000],
   w_states: [3, 220000],
   h_states: [3, 750000],

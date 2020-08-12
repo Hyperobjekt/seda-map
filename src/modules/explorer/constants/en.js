@@ -105,7 +105,7 @@ const LANG = {
   LABEL_WH_GRD: 'White / Hispanic Gap in Learning Rates',
   LABEL_PN_GRD: 'Poor / Non-Poor Gap in Learning Rates',
   LABEL_MF_GRD: 'Male / Female Gap in Learning Rates',
-  LABEL_ALL_GRD: 'Trend in Test Scores',
+  LABEL_ALL_COH: 'Trend in Test Scores',
   LABEL_W_COH: "White students' trend in test scores",
   LABEL_H_COH: "Hispanic students' trend in test scores",
   LABEL_B_COH: "Black students' trend in test scores",
