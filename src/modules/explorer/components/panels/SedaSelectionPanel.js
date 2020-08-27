@@ -23,6 +23,7 @@ import {
   useActiveSelection,
   useHelpVisibility
 } from '../../hooks'
+import SedaFilterPanel from '../filters/SedaFilterPanel'
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -59,7 +60,7 @@ const SelectionComponent = ({
     case 'region':
       return <SedaRegionSelect onSelect={clearSelection} />
     case 'filter':
-      return <SedaFilterSelect />
+      return <SedaFilterPanel />
     case 'location':
       return <SedaLocationSelect />
     default:

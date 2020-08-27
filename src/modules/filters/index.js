@@ -1,3 +1,6 @@
 export { applyFilters, registerFilterRule } from './utils'
+export { default as FilterList } from './FilterList'
+export { default as FilterAdd } from './FilterAdd'
 export { default as FiltersForm } from './FiltersForm'
+export { default as useFilterStore } from './useFilterStore'
 export { default } from './useFilterStore'
