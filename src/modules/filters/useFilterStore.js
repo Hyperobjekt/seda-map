@@ -1,6 +1,7 @@
 import create from 'zustand'
 import * as _isEqual from 'lodash.isequal'
 import logger from '../logger'
+import { DEFAULT_RANGES } from '../explorer/constants/metrics'
 
 /**
  * Updates the the filters with the provided updated filter rule
@@ -70,7 +71,7 @@ const updateFilter = set => (ruleIndex, valueIndex, value) =>
     const updatedFilters = state.filters.map((f, i) => {
       if (i !== ruleIndex) return f
       const newValue = [...f]
-      newValue[valueIndex + 1] = value
+      newValue[valueIndex] = value
       return newValue
     })
     logger.debug(
@@ -96,7 +97,14 @@ const removeFilter = set => filter =>
   })
 
 const [useFilterStore] = create(set => ({
-  filters: [['sort', 'all_sz', 'asc'], ['limit', 2500]],
+  filters: [
+    ['range', 'avg', DEFAULT_RANGES['avg']],
+    ['range', 'grd', DEFAULT_RANGES['grd']],
+    ['range', 'coh', DEFAULT_RANGES['coh']],
+    ['range', 'ses', DEFAULT_RANGES['ses']],
+    ['sort', 'sz', 'asc'],
+    ['limit', 2500]
+  ],
   addFilter: addFilter(set),
   setFilters: filters => set({ filters }),
   updateFilter: updateFilter(set),

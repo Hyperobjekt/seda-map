@@ -3,8 +3,10 @@
  * In production, most logs are supressed (only errors are logged)
  */
 
+const DEBUG = true
+
 const logger =
-  process.env.NODE_ENV === 'development'
+  process.env.NODE_ENV === 'development' && DEBUG
     ? console
     : {
         log: () => {},

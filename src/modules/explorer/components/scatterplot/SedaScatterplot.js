@@ -141,7 +141,6 @@ const SedaScatterplot = () => {
     isVersus && secondaryMetrics.length > 0
 
   const classes = useStyles()
-
   return (
     <div className={clsx(classes.root)}>
       {resizeListener}

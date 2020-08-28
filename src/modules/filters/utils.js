@@ -1,3 +1,5 @@
+import * as _debounce from 'lodash.debounce'
+
 const filterStartsWith = (data, column, value) =>
   data.filter((d, i) => d[column] && d[column].startsWith(value))
 
@@ -29,6 +31,11 @@ const filterContains = (data, column, value) => {
   )
 }
 
+const filterRange = (data, column, value) =>
+  data.filter(
+    (d, i) => d[column] >= value[0] && d[column] <= value[1]
+  )
+
 const filterSort = (data, column, direction = 'asc') => {
   const desc = direction === 'desc'
   return [...data].sort((a, b) => {
@@ -52,6 +59,7 @@ const filterRules = {
   gte: filterGreaterThanEqual,
   lte: filterLessThanEqual,
   has: filterHas,
+  range: filterRange,
   sort: filterSort,
   limit: filterLimit
 }

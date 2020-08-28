@@ -89,7 +89,7 @@ function SedaScatterplotBase({
   const loading = useStaticData(state => state.isLoading)
 
   // scatterplot data for the current region
-  const regionData = data[region]
+  const regionData = data
 
   // boolean determining if vars have two different dems
   const isVersus = isVersusFromVarNames(xVar, yVar)
