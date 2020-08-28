@@ -60,10 +60,10 @@ const AutoComplete = ({
 
   const handleSelected = (event, hit) => {
     onSelected && onSelected(event, hit)
-    setValue('')
-    // setValue(
-    //   [hit.suggestion.name, hit.suggestion.state_name].join(', ')
-    // )
+    const value = [hit.suggestion.name]
+    if (hit.suggestion.state_name)
+      value.push(hit.suggestion.state_name)
+    setValue(value.join(', '))
   }
 
   const handleFetchRequested = ({ value }) => {

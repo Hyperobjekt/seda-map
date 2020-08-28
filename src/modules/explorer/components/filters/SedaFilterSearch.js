@@ -12,11 +12,19 @@ const SedaFilterSearch = ({
   inputProps,
   TextFieldProps,
   placeholder,
+  onSelect,
+  onClear,
   ...props
 }) => {
-  const handleSelected = (event, hit) => {}
+  const handleSelected = (event, hit) => {
+    console.log('SEARCH', event, hit)
+    const selectedId = getPropFromHit(hit, 'id')
+    onSelect && onSelect(selectedId, hit)
+  }
 
-  const handleCleared = (...args) => {}
+  const handleCleared = (...args) => {
+    onClear && onClear()
+  }
 
   return (
     <AlgoliaSearch
@@ -46,13 +54,7 @@ SedaFilterSearch.propTypes = {
 SedaFilterSearch.defaultProps = {
   inputProps: {},
   placeholder: 'search',
-  indices: [
-    'states',
-    'cities',
-    'counties',
-    'districts',
-    'schools'
-  ]
+  indices: ['states', 'counties', 'districts']
 }
 
 SedaFilterSearch.propTypes = {

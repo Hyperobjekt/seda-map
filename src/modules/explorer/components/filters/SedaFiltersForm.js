@@ -14,7 +14,6 @@ import {
   ListItemText,
   makeStyles,
   Typography,
-  Slider,
   Grid,
   Input,
   withStyles
@@ -24,6 +23,7 @@ import shallow from 'zustand/shallow'
 import { useDemographic } from '../../hooks'
 import { getPrefixLang } from '../../selectors/lang'
 import { DEFAULT_RANGES } from '../../constants/metrics'
+import Slider from '../../../../shared/components/Slider'
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -35,50 +35,11 @@ const useStyles = makeStyles(theme => ({
   },
   input: {
     width: 64
+  },
+  primaryText: {
+    textTransform: 'capitalize'
   }
 }))
-
-const SedaSlider = withStyles({
-  root: {
-    height: 2,
-    padding: '16px 0'
-  },
-  thumb: {
-    height: 16,
-    width: 16,
-    marginTop: -8,
-    marginLeft: -8
-  },
-  active: {},
-  valueLabel: {
-    left: 'calc(-50%)',
-    top: 22,
-    '& *': {
-      background: 'transparent',
-      color: '#000'
-    }
-  },
-  track: {
-    height: 2
-  },
-  rail: {
-    height: 2,
-    opacity: 0.5
-  },
-  mark: {
-    height: 8,
-    width: 1,
-    marginTop: -3
-  },
-  markActive: {
-    opacity: 1,
-    backgroundColor: 'currentColor'
-  }
-})(Slider)
-
-function valuetext(value) {
-  return `${value}`
-}
 
 const SedaFiltersForm = props => {
   // grab filters array
@@ -123,6 +84,16 @@ const SedaFiltersForm = props => {
     if (value === limitFilter.value) return
     updateFilter(limitFilter.index, 1, value)
   }
+
+  //
+  const handleLocationSelect = id => {
+    updateFilter(0, 2, id)
+  }
+
+  //
+  const handleLocationClear = () => {
+    updateFilter(0, 2, '')
+  }
   const classes = useStyles()
   return (
     <div {...props}>
@@ -132,7 +103,10 @@ const SedaFiltersForm = props => {
             primary="Location"
             secondary="Show districts or schools within a state or county"
           />
-          <SedaFilterSearch />
+          <SedaFilterSearch
+            onSelect={handleLocationSelect}
+            onClear={handleLocationClear}
+          />
         </ListItem>
         {Object.keys(ranges).map((key, i) => {
           const formatter = getFormatterForVarName(
@@ -141,11 +115,14 @@ const SedaFiltersForm = props => {
           return (
             <ListItem key={key} className={classes.listItem}>
               <ListItemText
-                primaryTypographyProps={{ id: key + '-slider' }}
+                primaryTypographyProps={{
+                  id: key + '-slider',
+                  className: classes.primaryText
+                }}
                 primary={getPrefixLang(key, 'LABEL')}
                 secondary="Only show places with values in the range below"
               />
-              <SedaSlider
+              <Slider
                 value={ranges[key].value}
                 min={DEFAULT_RANGES[key][0]}
                 max={DEFAULT_RANGES[key][1]}
@@ -173,7 +150,7 @@ const SedaFiltersForm = props => {
           />
           <Grid container spacing={2} justify="flex-start">
             <Grid item xs={9}>
-              <SedaSlider
+              <Slider
                 value={limitFilter.value}
                 min={DEFAULT_RANGES['limit'][0]}
                 max={DEFAULT_RANGES['limit'][1]}
