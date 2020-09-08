@@ -98,6 +98,7 @@ const removeFilter = set => filter =>
 
 const [useFilterStore] = create(set => ({
   filters: [
+    ['startsWith', 'id', ''],
     ['range', 'avg', DEFAULT_RANGES['avg']],
     ['range', 'grd', DEFAULT_RANGES['grd']],
     ['range', 'coh', DEFAULT_RANGES['coh']],
