@@ -69,6 +69,7 @@ const LANG = {
   LABEL_SES: 'Socioeconomic Status',
   LABEL_SEG: 'school poverty',
   LABEL_MIN: 'percent minority students in schools',
+  LABEL_SZ: 'Size',
 
   // Concepts that correspond to metric
   LABEL_CONCEPT_AVG: 'educational opportunity',

@@ -78,6 +78,14 @@ Filter data to contain objects with property values that are less than a given v
 [ "lt", property, value ]
 ```
 
+### Range (`range`)
+
+Filter values to only contain values sthat fall in the range
+
+```
+[ "range", property, [min, max]]
+```
+
 ### Sort (`sort`)
 
 Sort the data based on an object property
