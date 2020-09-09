@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import {
   useFilterStore,
@@ -20,10 +20,11 @@ import {
 } from '@material-ui/core'
 import { getFormatterForVarName } from '../../selectors'
 import shallow from 'zustand/shallow'
-import { useDemographic } from '../../hooks'
+import { useDemographic, useRegion } from '../../hooks'
 import { getPrefixLang } from '../../selectors/lang'
 import { DEFAULT_RANGES } from '../../constants/metrics'
 import Slider from '../../../../shared/components/Slider'
+import { getFilterIndex } from '../../../filters/useFilterStore'
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -41,7 +42,26 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
+/**
+ * Returns the search indicies for the current region
+ * @param {*} region
+ */
+const getIndiciesForSearch = region => {
+  switch (region) {
+    case 'states':
+      return []
+    case 'counties':
+      return ['states']
+    case 'districts':
+      return ['states', 'counties']
+    default:
+      return ['states', 'counties', 'districts']
+  }
+}
+
 const SedaFiltersForm = props => {
+  // manage state for location selection
+  const [selectedLocation, setSelectedLocation] = useState(null)
   // grab filters array
   const filters = useFilterStore(state => state.filters)
   logger.debug('active filters', filters)
@@ -51,6 +71,10 @@ const SedaFiltersForm = props => {
   )
   // get active demographic
   const [demographic] = useDemographic()
+  // get active demographic
+  const [region] = useRegion()
+  // indices for search
+  const indicies = getIndiciesForSearch(region)
 
   // get ranges from filter array
   const ranges = ['avg', 'grd', 'coh', 'ses'].reduce(
@@ -76,7 +100,8 @@ const SedaFiltersForm = props => {
   const handleRangeChange = (type, event, value) => {
     const isSameValue = shallow(value, ranges[type].value)
     if (isSameValue) return
-    updateFilter(ranges[type].index, 2, value)
+    const index = getFilterIndex(filters, ['range', type])
+    updateFilter(index, 2, value)
   }
 
   // handler for when the limit filter changes
@@ -85,67 +110,47 @@ const SedaFiltersForm = props => {
     updateFilter(limitFilter.index, 1, value)
   }
 
-  //
-  const handleLocationSelect = id => {
+  /**
+   * Update the "startsWith" filter for places that start with
+   * the given ID.
+   * @param {*} id identifier for location
+   * @param {*} hit selection from AlgoliaSearch component
+   */
+  const handleLocationSelect = (id, hit) => {
     updateFilter(0, 2, id)
+    setSelectedLocation(hit.suggestionValue)
   }
 
-  //
+  /**
+   * Clear the current filter and remove the selected location
+   */
   const handleLocationClear = () => {
     updateFilter(0, 2, '')
+    setSelectedLocation(null)
   }
+
   const classes = useStyles()
   return (
     <div {...props}>
       <List>
         <ListItem className={classes.listItem}>
           <ListItemText
-            primary="Location"
-            secondary="Show districts or schools within a state or county"
+            primary={getPrefixLang('location', 'FILTER_LABEL')}
           />
           <SedaFilterSearch
+            inputProps={{
+              disabled: Boolean(selectedLocation),
+              value: selectedLocation
+            }}
+            indices={indicies}
             onSelect={handleLocationSelect}
             onClear={handleLocationClear}
           />
         </ListItem>
-        {Object.keys(ranges).map((key, i) => {
-          const formatter = getFormatterForVarName(
-            demographic + '_' + key
-          )
-          return (
-            <ListItem key={key} className={classes.listItem}>
-              <ListItemText
-                primaryTypographyProps={{
-                  id: key + '-slider',
-                  className: classes.primaryText
-                }}
-                primary={getPrefixLang(key, 'LABEL')}
-                secondary="Only show places with values in the range below"
-              />
-              <Slider
-                value={ranges[key].value}
-                min={DEFAULT_RANGES[key][0]}
-                max={DEFAULT_RANGES[key][1]}
-                step={
-                  (DEFAULT_RANGES[key][1] -
-                    DEFAULT_RANGES[key][0]) /
-                  20
-                }
-                onChange={(event, value) =>
-                  handleRangeChange(key, event, value)
-                }
-                valueLabelDisplay="on"
-                aria-labelledby={key + '-slider'}
-                getAriaValueText={formatter}
-                valueLabelFormat={formatter}
-              />
-            </ListItem>
-          )
-        })}
         <ListItem className={classes.listItem}>
           <ListItemText
             primaryTypographyProps={{ id: 'limit-slider' }}
-            primary={getPrefixLang('size', 'LABEL')}
+            primary={getPrefixLang('size', 'FILTER_LABEL')}
             secondary=""
           />
           <Grid container spacing={2} justify="flex-start">
@@ -179,6 +184,39 @@ const SedaFiltersForm = props => {
             </Grid>
           </Grid>
         </ListItem>
+        {Object.keys(ranges).map((key, i) => {
+          const formatter = getFormatterForVarName(
+            demographic + '_' + key
+          )
+          return (
+            <ListItem key={key} className={classes.listItem}>
+              <ListItemText
+                primaryTypographyProps={{
+                  id: key + '-slider',
+                  className: classes.primaryText
+                }}
+                primary={getPrefixLang(key, 'FILTER_LABEL')}
+              />
+              <Slider
+                value={ranges[key].value}
+                min={DEFAULT_RANGES[key][0]}
+                max={DEFAULT_RANGES[key][1]}
+                step={
+                  (DEFAULT_RANGES[key][1] -
+                    DEFAULT_RANGES[key][0]) /
+                  20
+                }
+                onChange={(event, value) =>
+                  handleRangeChange(key, event, value)
+                }
+                valueLabelDisplay="on"
+                aria-labelledby={key + '-slider'}
+                getAriaValueText={formatter}
+                valueLabelFormat={formatter}
+              />
+            </ListItem>
+          )
+        })}
       </List>
     </div>
   )

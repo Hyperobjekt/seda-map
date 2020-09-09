@@ -54,7 +54,6 @@ const SedaLocationPanel = props => {
   const [demographic, setDemographic] = useDemographic()
   const region = getRegionFromLocationId(activeLocation)
   const secondary = getSecondaryMetricsForRegion(region)
-  console.log(secondary)
 
   const metrics = ['avg', 'grd', 'coh']
   const demographics = getDemographicsForRegion(region)

@@ -17,7 +17,6 @@ const SedaFilterSearch = ({
   ...props
 }) => {
   const handleSelected = (event, hit) => {
-    console.log('SEARCH', event, hit)
     const selectedId = getPropFromHit(hit, 'id')
     onSelect && onSelect(selectedId, hit)
   }

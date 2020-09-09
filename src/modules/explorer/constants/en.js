@@ -69,8 +69,8 @@ const LANG = {
   LABEL_SES: 'Socioeconomic Status',
   LABEL_SEG: 'school poverty',
   LABEL_MIN: 'percent minority students in schools',
-  LABEL_SZ: 'Size',
-  LABEL_SIZE: 'Size',
+  LABEL_SZ: 'Show largest',
+  LABEL_SIZE: 'Show largest',
 
   // Concepts that correspond to metric
   LABEL_CONCEPT_AVG: 'educational opportunity',
@@ -719,6 +719,26 @@ const LANG = {
   LEGEND_CHART_INTERACTIVE:
     'Go to the expanded chart to explore interactively:',
   LEGEND_CHART_BUTTON: 'Show Interactive Chart',
+
+  FILTER_LABEL_LOCATION: 'Show Within Location',
+  FILTER_LABEL_SIZE: 'Show Largest',
+  FILTER_LABEL_AVG: 'Average Test Score Range',
+  FILTER_LABEL_GRD: 'Learning Rate Range',
+  FILTER_LABEL_COH: 'Trend in Test Score Range',
+  FILTER_LABEL_SES: 'Socioeconomic Status Range',
+
+  FILTER_HINT_LOCATION:
+    'Show $[regions] within the below location',
+  FILTER_HINT_SIZE:
+    'Limit the number of $[regions] shown by number of students',
+  FILTER_HINT_AVG:
+    'measured in grade levels relative to national average',
+  FILTER_HINT_GRD:
+    'measured by average test score improvement each grade as student progresses',
+  FILTER_HINT_COH:
+    'measured by average change in cohort test scores each year',
+  FILTER_HINT_SES:
+    'measured in standard deviations from average',
 
   HELP_PANEL_TITLE: 'Help',
   HELP_PANEL_HOW_TAB: 'How to explore',

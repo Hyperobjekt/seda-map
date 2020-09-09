@@ -96,6 +96,18 @@ const removeFilter = set => filter =>
     return { filters: updatedFilters }
   })
 
+/**
+ * Gets the index of the filter that matches the provided params
+ */
+export const getFilterIndex = (filters, params) =>
+  filters.reduce((idx, curFilter, filterIndex) => {
+    if (idx > -1) return idx
+    const isEqual = params.reduce((eq, param, index) =>
+      eq ? curFilter[index] === param : false
+    )
+    return isEqual ? filterIndex : -1
+  }, -1)
+
 const [useFilterStore] = create(set => ({
   filters: [
     ['startsWith', 'id', ''],

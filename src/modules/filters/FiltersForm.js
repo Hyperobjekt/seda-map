@@ -6,7 +6,6 @@ import FilterList from './FilterList'
 
 const FiltersForm = props => {
   const filters = useFilterStore(state => state.filters)
-  console.log('actual filters', filters)
   const addFilter = useFilterStore(state => state.addFilter)
   const removeFilter = useFilterStore(
     state => state.removeFilter
@@ -16,7 +15,6 @@ const FiltersForm = props => {
   )
   const handleFilterRemove = filter => removeFilter(filter)
   const handleFilterChange = (change, e) => {
-    console.log('filter change', change, e)
     updateFilter(
       change.ruleIndex,
       change.valueIndex,
@@ -24,7 +22,6 @@ const FiltersForm = props => {
     )
   }
   const handleFilterAdd = filter => {
-    console.log('add filter', filter)
     addFilter(filter)
   }
   return (

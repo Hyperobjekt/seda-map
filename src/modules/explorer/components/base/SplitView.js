@@ -90,7 +90,6 @@ export const SplitView = ({
   minWidth = 360,
   ...props
 }) => {
-  console.log('split view', view)
   const rootRef = useRef(null)
   const dividerRef = useRef(null)
   const [splitRatio, setSplitRatio] = useState(initialSplit)

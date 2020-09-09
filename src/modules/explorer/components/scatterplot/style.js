@@ -509,7 +509,6 @@ const getXAxis = ({ metric, demographic, region, ...rest }) => {
     [demographic.id, metric.id].join('_'),
     region
   )
-  console.log(metric, demographic, region, min, max)
   return {
     min,
     max,

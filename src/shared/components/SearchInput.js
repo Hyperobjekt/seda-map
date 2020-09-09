@@ -4,7 +4,8 @@ import PropTypes from 'prop-types'
 import {
   InputAdornment,
   makeStyles,
-  TextField
+  TextField,
+  IconButton
 } from '@material-ui/core'
 import clsx from 'clsx'
 import { SearchIcon, CloseIcon } from '../../modules/icons'
@@ -17,6 +18,9 @@ const useStyles = makeStyles(theme => ({
     boxSizing: 'border-box',
     height: theme.spacing(4.5),
     padding: `18px 14px`
+  },
+  clearButton: {
+    marginRight: -1 * theme.spacing(1)
   }
 }))
 
@@ -44,7 +48,12 @@ const SearchInput = ({
         endAdornment: (
           <InputAdornment position="end">
             {inputProps.value ? (
-              <CloseIcon onClick={onClear} />
+              <IconButton
+                className={classes.clearButton}
+                size="small"
+                onClick={onClear}>
+                <CloseIcon />
+              </IconButton>
             ) : (
               <SearchIcon />
             )}
