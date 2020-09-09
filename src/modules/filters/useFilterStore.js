@@ -115,6 +115,7 @@ const [useFilterStore] = create(set => ({
     ['range', 'grd', DEFAULT_RANGES['grd']],
     ['range', 'coh', DEFAULT_RANGES['coh']],
     ['range', 'ses', DEFAULT_RANGES['ses']],
+    ['range', 'frl', DEFAULT_RANGES['frl']],
     ['sort', 'sz', 'asc'],
     ['limit', 2500]
   ],

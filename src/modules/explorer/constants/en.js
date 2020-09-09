@@ -140,6 +140,7 @@ const LANG = {
   LABEL_WH_SES: 'White - Hispanic gap in socioeconomic status',
   LABEL_SES_NO_REGION: 'socioeconomic status',
   LABEL_SES_REGION: '$[region] socioeconomic status',
+  LABEL_ALL_FRL: 'Free/Reduced Lunch',
 
   // Hints for metrics
   HINT_AVG:
@@ -726,7 +727,8 @@ const LANG = {
   FILTER_LABEL_GRD: 'Learning Rate Range',
   FILTER_LABEL_COH: 'Trend in Test Score Range',
   FILTER_LABEL_SES: 'Socioeconomic Status Range',
-
+  FILTER_LABEL_FRL: 'Free/Reduced Lunch Program Range',
+  FILTER_LABEL_SCHOOL_TYPE: 'Show School Types',
   FILTER_HINT_LOCATION:
     'Show $[regions] within the below location',
   FILTER_HINT_SIZE:
@@ -739,6 +741,18 @@ const LANG = {
     'measured by average change in cohort test scores each year',
   FILTER_HINT_SES:
     'measured in standard deviations from average',
+  FILTER_HINT_FRL:
+    'show schools within this range of % qualifying for free or reduced lunch program',
+
+  SCHOOL_TYPE_MIDDLE: 'Middle Schools',
+  SCHOOL_TYPE_ELEMENTARY: 'Elementary Schools',
+  SCHOOL_TYPE_COMBINED: 'Combined Schools',
+  SCHOOL_TYPE_CHARTER: 'Charter Schools',
+  SCHOOL_TYPE_PUBLIC: 'Traditional Public Schools',
+  SCHOOL_TYPE_MAGNET: 'Magnet Schools',
+  SCHOOL_TYPE_RURAL: 'Rural Schools',
+  SCHOOL_TYPE_SUBURBAN: 'Suburban Schools',
+  SCHOOL_TYPE_URBAN: 'Urban Schools',
 
   HELP_PANEL_TITLE: 'Help',
   HELP_PANEL_HOW_TAB: 'How to explore',

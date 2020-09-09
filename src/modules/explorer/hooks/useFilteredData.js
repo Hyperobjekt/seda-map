@@ -28,9 +28,21 @@ export default () => {
     shallow
   )
 
+  // if schools, remove SES filter
+  // if non-school region, remove FRL and school type filter
+  const cleanFilters =
+    region === 'schools'
+      ? filters.filter(f => f[1] !== 'ses')
+      : filters.filter(
+          f => f[1] !== 'frl' && f[0] !== 'contains'
+        )
+
   return useDebounce(
     useMemo(() => {
-      const dataFilters = populateFilters(demographic, filters)
+      const dataFilters = populateFilters(
+        demographic,
+        cleanFilters
+      )
       logger.debug(dataFilters, data)
       return applyFilters(data[region] || [], dataFilters)
     }, [data, region, filters, demographic]),

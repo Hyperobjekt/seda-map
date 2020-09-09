@@ -36,7 +36,10 @@ const SedaDataLoader = ({ className, ...props }) => {
   const region = useDataOptions(state => state.region)
   const classes = useStyles()
   useEffect(() => {
-    if (loaded.indexOf(region) === -1)
+    if (
+      loaded.indexOf(region) === -1 &&
+      loading.indexOf(region) === -1
+    )
       loadDataForRegion(region, SEDA_PARSER)
   }, [loaded, loadDataForRegion, region])
 

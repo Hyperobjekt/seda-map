@@ -16,7 +16,10 @@ import {
   Typography,
   Grid,
   Input,
-  withStyles
+  withStyles,
+  FormGroup,
+  FormControlLabel,
+  Checkbox
 } from '@material-ui/core'
 import { getFormatterForVarName } from '../../selectors'
 import shallow from 'zustand/shallow'
@@ -32,13 +35,17 @@ const useStyles = makeStyles(theme => ({
   },
   listItem: {
     flexDirection: 'column',
-    alignItems: 'stretch'
+    alignItems: 'stretch',
+    paddingBottom: theme.spacing(2)
   },
   input: {
     width: 64
   },
   primaryText: {
     textTransform: 'capitalize'
+  },
+  limitWrapper: {
+    height: theme.spacing(6)
   }
 }))
 
@@ -75,6 +82,20 @@ const SedaFiltersForm = props => {
   const [region] = useRegion()
   // indices for search
   const indicies = getIndiciesForSearch(region)
+  // school type checkboxes
+  const checkboxes = [
+    'middle',
+    'elementary',
+    'combined',
+    'charter',
+    'public',
+    'magnet',
+    'rural',
+    'suburban',
+    'urban'
+  ]
+  // checked school types
+  const [checked, setChecked] = useState([...checkboxes])
 
   // get ranges from filter array
   const ranges = ['avg', 'grd', 'coh', 'ses'].reduce(
@@ -129,6 +150,15 @@ const SedaFiltersForm = props => {
     setSelectedLocation(null)
   }
 
+  const handleSchoolTypeChange = (event, key) => {
+    const newChecked =
+      checked.indexOf(key) > -1
+        ? checked.filter(c => c !== key)
+        : [...checked, key]
+    console.log(newChecked)
+    setChecked(newChecked)
+  }
+
   const classes = useStyles()
   return (
     <div {...props}>
@@ -153,7 +183,11 @@ const SedaFiltersForm = props => {
             primary={getPrefixLang('size', 'FILTER_LABEL')}
             secondary=""
           />
-          <Grid container spacing={2} justify="flex-start">
+          <Grid
+            container
+            className={classes.limitWrapper}
+            spacing={2}
+            justify="flex-start">
             <Grid item xs={9}>
               <Slider
                 value={limitFilter.value}
@@ -217,6 +251,37 @@ const SedaFiltersForm = props => {
             </ListItem>
           )
         })}
+        {region === 'schools' && (
+          <ListItem className={classes.listItem}>
+            <ListItemText
+              primaryTypographyProps={{
+                className: classes.primaryText
+              }}
+              primary={getPrefixLang(
+                'school_type',
+                'FILTER_LABEL'
+              )}
+            />
+            <FormGroup>
+              {checkboxes.map(key => (
+                <FormControlLabel
+                  key={key}
+                  control={
+                    <Checkbox
+                      checked={checked.indexOf(key) > -1}
+                      onChange={e =>
+                        handleSchoolTypeChange(e, key)
+                      }
+                      name={key}
+                      color="primary"
+                    />
+                  }
+                  label={getPrefixLang(key, 'SCHOOL_TYPE')}
+                />
+              ))}
+            </FormGroup>
+          </ListItem>
+        )}
       </List>
     </div>
   )

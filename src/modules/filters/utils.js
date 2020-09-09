@@ -1,41 +1,101 @@
-import * as _debounce from 'lodash.debounce'
-
+/**
+ * Filters data that does not have a value that starts with the provided `value`
+ * @param {*} data
+ * @param {string} column
+ * @param {string|number} value
+ */
 const filterStartsWith = (data, column, value) =>
   data.filter((d, i) => d[column] && d[column].startsWith(value))
 
+/**
+ * Filters entries that do not have a value that is equal to the provided `value`
+ * @param {*} data
+ * @param {string} column
+ * @param {string|number} value
+ */
 const filterEquals = (data, column, value) =>
   data.filter((d, i) => d[column] === value)
 
+/**
+ * Filters entries that do not have a value that is not equal to the provided `value`
+ * @param {*} data
+ * @param {string} column
+ * @param {string|number} value
+ */
 const filterNotEquals = (data, column, value) =>
   data.filter((d, i) => d[column] !== value)
 
+/**
+ * Filters entries that do not have a value greater than a provided `value`
+ * @param {*} data
+ * @param {string} column
+ * @param {number} value
+ */
 const filterGreaterThan = (data, column, value) =>
   data.filter((d, i) => d[column] > value)
 
+/**
+ * Filters entries that do not have a value greater than or equal to a provided `value`
+ * @param {*} data
+ * @param {string} column
+ * @param {number} value
+ */
 const filterGreaterThanEqual = (data, column, value) =>
   data.filter((d, i) => d[column] >= value)
 
+/**
+ * Filters datat that does not have a value less than the provided `value`
+ * @param {*} data
+ * @param {string} column
+ * @param {number} value
+ */
 const filterLessThan = (data, column, value) =>
   data.filter((d, i) => d[column] < value)
 
+/**
+ * Filters data that does not have a value less than or equal to the provided `value`
+ * @param {*} data
+ * @param {string} column
+ * @param {number} value
+ */
 const filterLessThanEqual = (data, column, value) =>
   data.filter((d, i) => d[column] <= value)
 
+/**
+ * Filters data that does not have a value for the provided column
+ * @param {*} data
+ * @param {string} column
+ */
 const filterHas = (data, column) =>
   data.filter((d, i) => d[column] || d[column] === 0)
 
+/**
+ * Filters data that does not include the provided value
+ * @param {*} data
+ * @param {string} column column name containing string or array data
+ * @param {string} value string
+ */
 const filterContains = (data, column, value) => {
-  return data.filter(
-    (d, i) =>
-      typeof d[column] === 'string' && d[column].includes(value)
-  )
+  return data.filter((d, i) => d[column].includes(value))
 }
 
+/**
+ * Filters data that does not have a value within the provided range
+ * @param {*} data
+ * @param {string} column
+ * @param {Array} value [min, max]
+ */
 const filterRange = (data, column, value) =>
   data.filter(
     (d, i) => d[column] >= value[0] && d[column] <= value[1]
   )
 
+/**
+ * Sorts the data by the provided column and the provided direction
+ * @param {*} data
+ * @param {string} column
+ * @param {string} direction 'asc' | 'desc'
+ */
 const filterSort = (data, column, direction = 'asc') => {
   const desc = direction === 'desc'
   return [...data].sort((a, b) => {
@@ -45,6 +105,12 @@ const filterSort = (data, column, direction = 'asc') => {
   })
 }
 
+/**
+ * Returns the top `amount` entries in the data, offset by a certain number if `offset` is provided
+ * @param {*} data
+ * @param {number} amount
+ * @param {number} offset
+ */
 const filterLimit = (data, amount, offset = 0) => {
   return data.slice(offset, amount)
 }
