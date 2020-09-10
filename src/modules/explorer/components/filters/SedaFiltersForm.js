@@ -28,6 +28,7 @@ import { getPrefixLang } from '../../selectors/lang'
 import { DEFAULT_RANGES } from '../../constants/metrics'
 import Slider from '../../../../shared/components/Slider'
 import { getFilterIndex } from '../../../filters/useFilterStore'
+import NumberSlider from '../../../../shared/components/NumberSlider'
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -38,7 +39,7 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'stretch',
     paddingBottom: theme.spacing(2)
   },
-  input: {
+  numberInput: {
     width: 64
   },
   primaryText: {
@@ -150,12 +151,16 @@ const SedaFiltersForm = props => {
     setSelectedLocation(null)
   }
 
+  /**
+   * Adds / removes items from the `checked` array on change
+   * @param {*} event
+   * @param {*} key
+   */
   const handleSchoolTypeChange = (event, key) => {
     const newChecked =
       checked.indexOf(key) > -1
         ? checked.filter(c => c !== key)
         : [...checked, key]
-    console.log(newChecked)
     setChecked(newChecked)
   }
 
@@ -183,40 +188,19 @@ const SedaFiltersForm = props => {
             primary={getPrefixLang('size', 'FILTER_LABEL')}
             secondary=""
           />
-          <Grid
-            container
-            className={classes.limitWrapper}
-            spacing={2}
-            justify="flex-start">
-            <Grid item xs={9}>
-              <Slider
-                value={limitFilter.value}
-                min={DEFAULT_RANGES['limit'][0]}
-                max={DEFAULT_RANGES['limit'][1]}
-                step={10}
-                onChange={handleLimitChange}
-                valueLabelDisplay="off"
-                aria-labelledby={'limit-slider'}
-              />
-            </Grid>
-            <Grid item xs={3}>
-              <Input
-                className={classes.input}
-                value={limitFilter.value}
-                margin="dense"
-                onChange={e =>
-                  handleLimitChange(e, e.target.value)
-                }
-                inputProps={{
-                  step: 10,
-                  min: DEFAULT_RANGES['limit'][0],
-                  max: DEFAULT_RANGES['limit'][1],
-                  type: 'number',
-                  'aria-labelledby': 'limit-slider'
-                }}
-              />
-            </Grid>
-          </Grid>
+          <NumberSlider
+            value={limitFilter.value}
+            min={DEFAULT_RANGES['limit'][0]}
+            max={DEFAULT_RANGES['limit'][1]}
+            step={10}
+            aria-labelledby="limit-slider"
+            SliderProps={{
+              onChange: handleLimitChange
+            }}
+            inputProps={{
+              onChange: e => handleLimitChange(e, e.target.value)
+            }}
+          />
         </ListItem>
         {Object.keys(ranges).map((key, i) => {
           const formatter = getFormatterForVarName(

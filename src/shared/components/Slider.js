@@ -1,6 +1,11 @@
-import { withStyles, Slider } from '@material-ui/core'
+import React, { useState, useRef, useEffect } from 'react'
+import {
+  withStyles,
+  Slider as MuiSlider
+} from '@material-ui/core'
+import * as _debounce from 'lodash.debounce'
 
-export default withStyles({
+const StyledSlider = withStyles({
   root: {
     height: 2,
     padding: '16px 0'
@@ -36,4 +41,36 @@ export default withStyles({
     opacity: 1,
     backgroundColor: 'currentColor'
   }
-})(Slider)
+})(MuiSlider)
+
+/**
+ * A debounced slider component
+ */
+export default function Slider({
+  onChange,
+  value: defaultValue,
+  ...props
+}) {
+  const [value, setValue] = useState(defaultValue)
+  const event = useRef(null)
+  const debouncedChange = useRef(_debounce(onChange, 200))
+  useEffect(
+    () => value && debouncedChange.current(event.current, value),
+    [value]
+  )
+  const handleChange = (e, val) => {
+    event.current = e
+    setValue(val)
+  }
+  return (
+    <StyledSlider
+      value={value}
+      onChange={handleChange}
+      {...props}
+    />
+  )
+}
+
+Slider.defaultProps = {
+  onChange: () => {}
+}
