@@ -99,17 +99,19 @@ const SedaFiltersForm = props => {
   const [checked, setChecked] = useState([...checkboxes])
 
   // get ranges from filter array
-  const ranges = ['avg', 'grd', 'coh', 'ses'].reduce(
-    (obj, key, index) => {
-      const filter = filters.find(
-        f => f[0] === 'range' && f[1] === key
-      )
-      const value = filter ? filter[2] : DEFAULT_RANGES[key]
-      obj[key] = { index, value }
-      return obj
-    },
-    {}
-  )
+  const ranges = [
+    'avg',
+    'grd',
+    'coh',
+    region === 'schools' ? 'frl' : 'ses'
+  ].reduce((obj, key, index) => {
+    const filter = filters.find(
+      f => f[0] === 'range' && f[1] === key
+    )
+    const value = filter ? filter[2] : DEFAULT_RANGES[key]
+    obj[key] = { index, value }
+    return obj
+  }, {})
 
   // get limit filter from filters array
   const limitFilter = filters.reduce(
