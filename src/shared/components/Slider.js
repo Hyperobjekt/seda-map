@@ -58,6 +58,7 @@ export default function Slider({
     () => value && debouncedChange.current(event.current, value),
     [value]
   )
+  useEffect(() => setValue(defaultValue), [defaultValue])
   const handleChange = (e, val) => {
     event.current = e
     setValue(val)

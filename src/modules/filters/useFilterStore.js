@@ -108,22 +108,24 @@ export const getFilterIndex = (filters, params) =>
     return isEqual ? filterIndex : -1
   }, -1)
 
+export const DEFAULT_FILTERS = [
+  ['startsWith', 'id', ''],
+  ['range', 'avg', DEFAULT_RANGES['avg']],
+  ['range', 'grd', DEFAULT_RANGES['grd']],
+  ['range', 'coh', DEFAULT_RANGES['coh']],
+  ['range', 'ses', DEFAULT_RANGES['ses']],
+  ['range', 'frl', DEFAULT_RANGES['frl']],
+  ['sort', 'sz', 'asc'],
+  ['limit', 10000]
+]
+
 const [useFilterStore] = create(set => ({
-  filters: [
-    ['startsWith', 'id', ''],
-    ['range', 'avg', DEFAULT_RANGES['avg']],
-    ['range', 'grd', DEFAULT_RANGES['grd']],
-    ['range', 'coh', DEFAULT_RANGES['coh']],
-    ['range', 'ses', DEFAULT_RANGES['ses']],
-    ['range', 'frl', DEFAULT_RANGES['frl']],
-    ['sort', 'sz', 'asc'],
-    ['limit', 2500]
-  ],
+  filters: DEFAULT_FILTERS,
   addFilter: addFilter(set),
   setFilters: filters => set({ filters }),
   updateFilter: updateFilter(set),
   removeFilter: removeFilter(set),
-  clearFilters: () => set({ filters: [] })
+  clearFilters: () => set({ filters: DEFAULT_FILTERS })
 }))
 
 export default useFilterStore

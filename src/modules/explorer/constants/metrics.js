@@ -133,6 +133,6 @@ export const DEFAULT_RANGES = {
   grd: [0, 2],
   coh: [-0.5, 0.5],
   ses: [-3, 3],
-  limit: [10, 5000],
+  limit: [10, 15000],
   frl: [0, 1]
 }

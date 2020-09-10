@@ -19,7 +19,8 @@ import {
   withStyles,
   FormGroup,
   FormControlLabel,
-  Checkbox
+  Checkbox,
+  Button
 } from '@material-ui/core'
 import { getFormatterForVarName } from '../../selectors'
 import shallow from 'zustand/shallow'
@@ -68,7 +69,7 @@ const getIndiciesForSearch = region => {
 }
 
 const SedaFiltersForm = props => {
-  // manage state for location selection
+  // track state for location selection
   const [selectedLocation, setSelectedLocation] = useState(null)
   // grab filters array
   const filters = useFilterStore(state => state.filters)
@@ -76,6 +77,10 @@ const SedaFiltersForm = props => {
   // grab filter modifier functions
   const updateFilter = useFilterStore(
     state => state.updateFilter
+  )
+  // function to clear filters
+  const clearFilters = useFilterStore(
+    state => state.clearFilters
   )
   // get active demographic
   const [demographic] = useDemographic()
@@ -168,108 +173,114 @@ const SedaFiltersForm = props => {
 
   const classes = useStyles()
   return (
-    <div {...props}>
-      <List>
-        <ListItem className={classes.listItem}>
-          <ListItemText
-            primary={getPrefixLang('location', 'FILTER_LABEL')}
-          />
-          <SedaFilterSearch
-            inputProps={{
-              disabled: Boolean(selectedLocation),
-              value: selectedLocation
-            }}
-            indices={indicies}
-            onSelect={handleLocationSelect}
-            onClear={handleLocationClear}
-          />
-        </ListItem>
-        <ListItem className={classes.listItem}>
-          <ListItemText
-            primaryTypographyProps={{ id: 'limit-slider' }}
-            primary={getPrefixLang('size', 'FILTER_LABEL')}
-            secondary=""
-          />
-          <NumberSlider
-            value={limitFilter.value}
-            min={DEFAULT_RANGES['limit'][0]}
-            max={DEFAULT_RANGES['limit'][1]}
-            step={10}
-            aria-labelledby="limit-slider"
-            SliderProps={{
-              onChange: handleLimitChange
-            }}
-            inputProps={{
-              onChange: e => handleLimitChange(e, e.target.value)
-            }}
-          />
-        </ListItem>
-        {Object.keys(ranges).map((key, i) => {
-          const formatter = getFormatterForVarName(
-            demographic + '_' + key
-          )
-          return (
-            <ListItem key={key} className={classes.listItem}>
-              <ListItemText
-                primaryTypographyProps={{
-                  id: key + '-slider',
-                  className: classes.primaryText
-                }}
-                primary={getPrefixLang(key, 'FILTER_LABEL')}
-              />
-              <Slider
-                value={ranges[key].value}
-                min={DEFAULT_RANGES[key][0]}
-                max={DEFAULT_RANGES[key][1]}
-                step={
-                  (DEFAULT_RANGES[key][1] -
-                    DEFAULT_RANGES[key][0]) /
-                  20
-                }
-                onChange={(event, value) =>
-                  handleRangeChange(key, event, value)
-                }
-                valueLabelDisplay="on"
-                aria-labelledby={key + '-slider'}
-                getAriaValueText={formatter}
-                valueLabelFormat={formatter}
-              />
-            </ListItem>
-          )
-        })}
-        {region === 'schools' && (
-          <ListItem className={classes.listItem}>
+    <List {...props}>
+      <ListItem className={classes.listItem}>
+        <Button
+          fullWidth
+          variant="outlined"
+          onClick={clearFilters}>
+          Reset Data Filters
+        </Button>
+      </ListItem>
+      <ListItem className={classes.listItem}>
+        <ListItemText
+          primary={getPrefixLang('location', 'FILTER_LABEL')}
+        />
+        <SedaFilterSearch
+          inputProps={{
+            disabled: Boolean(selectedLocation),
+            value: selectedLocation
+          }}
+          indices={indicies}
+          onSelect={handleLocationSelect}
+          onClear={handleLocationClear}
+        />
+      </ListItem>
+      <ListItem className={classes.listItem}>
+        <ListItemText
+          primaryTypographyProps={{ id: 'limit-slider' }}
+          primary={getPrefixLang('size', 'FILTER_LABEL')}
+          secondary=""
+        />
+        <NumberSlider
+          value={limitFilter.value}
+          min={DEFAULT_RANGES['limit'][0]}
+          max={DEFAULT_RANGES['limit'][1]}
+          step={10}
+          aria-labelledby="limit-slider"
+          SliderProps={{
+            onChange: handleLimitChange
+          }}
+          inputProps={{
+            onChange: e => handleLimitChange(e, e.target.value)
+          }}
+        />
+      </ListItem>
+      {Object.keys(ranges).map((key, i) => {
+        const formatter = getFormatterForVarName(
+          demographic + '_' + key
+        )
+        return (
+          <ListItem key={key} className={classes.listItem}>
             <ListItemText
               primaryTypographyProps={{
+                id: key + '-slider',
                 className: classes.primaryText
               }}
-              primary={getPrefixLang(
-                'school_type',
-                'FILTER_LABEL'
-              )}
+              primary={getPrefixLang(key, 'FILTER_LABEL')}
             />
-            <FormGroup>
-              {checkboxes.map(key => (
-                <FormControlLabel
-                  key={key}
-                  control={
-                    <Checkbox
-                      checked={checked.indexOf(key) > -1}
-                      onChange={e =>
-                        handleSchoolTypeChange(e, key)
-                      }
-                      name={key}
-                      color="primary"
-                    />
-                  }
-                  label={getPrefixLang(key, 'SCHOOL_TYPE')}
-                />
-              ))}
-            </FormGroup>
+            <Slider
+              value={ranges[key].value}
+              min={DEFAULT_RANGES[key][0]}
+              max={DEFAULT_RANGES[key][1]}
+              step={
+                (DEFAULT_RANGES[key][1] -
+                  DEFAULT_RANGES[key][0]) /
+                20
+              }
+              onChange={(event, value) =>
+                handleRangeChange(key, event, value)
+              }
+              valueLabelDisplay="on"
+              aria-labelledby={key + '-slider'}
+              getAriaValueText={formatter}
+              valueLabelFormat={formatter}
+            />
           </ListItem>
-        )}
-      </List>
-    </div>
+        )
+      })}
+      {region === 'schools' && (
+        <ListItem className={classes.listItem}>
+          <ListItemText
+            primaryTypographyProps={{
+              className: classes.primaryText
+            }}
+            primary={getPrefixLang(
+              'school_type',
+              'FILTER_LABEL'
+            )}
+          />
+          <FormGroup>
+            {checkboxes.map(key => (
+              <FormControlLabel
+                key={key}
+                control={
+                  <Checkbox
+                    checked={checked.indexOf(key) > -1}
+                    onChange={e =>
+                      handleSchoolTypeChange(e, key)
+                    }
+                    name={key}
+                    color="primary"
+                  />
+                }
+                label={getPrefixLang(key, 'SCHOOL_TYPE')}
+              />
+            ))}
+          </FormGroup>
+        </ListItem>
+      )}
+    </List>
   )
 }
 
