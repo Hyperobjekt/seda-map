@@ -23,6 +23,8 @@ import {
   useActiveLocationFeature
 } from '../../hooks'
 import { REGION_TO_ID_LENGTH } from '../../constants/regions'
+import useFilterStore from '../../../filters'
+import useFilteredData from '../../hooks/useFilteredData'
 
 const selectedColors = getSelectedColors()
 
@@ -40,8 +42,9 @@ const useStyles = makeStyles(theme => ({
 const SedaMap = props => {
   /** current options for the map */
   const [metric, demographic, region] = useActiveOptionIds()
-  /** currently active data filters */
-  const [{ prefix }] = useFilters()
+  // currently active data filters
+  const filters = useFilterStore(state => state.filters)
+  const data = useFilteredData()
   /** currently selected location ids */
   const [locations] = useLocations()
   /** id of the currently hovered location */
@@ -63,9 +66,10 @@ const SedaMap = props => {
     if (!metric || !demographic || !region) {
       return []
     }
-    const context = { region, metric, demographic }
+    const ids = data.map(d => d.id)
+    const context = { region, metric, demographic, filters, ids }
     return getLayers(context)
-  }, [region, metric, demographic])
+  }, [region, metric, demographic, filters, data])
   /** aria label for screen readers */
   const ariaLabel = getLang('UI_MAP_SR', {
     metric: getLang('LABEL_' + metric),
@@ -88,7 +92,7 @@ const SedaMap = props => {
 
   /** handler for map click */
   const handleClick = feature => {
-    const id = getFeatureProperty(feature, "id");
+    const id = getFeatureProperty(feature, 'id')
     addLocation(id)
   }
 
@@ -104,11 +108,11 @@ const SedaMap = props => {
   }
 
   /** zoom to filtered location when filter is selected */
-  useEffect(() => {
-    if (!prefix || prefix.length !== 2 || !isLoaded.current)
-      return
-    flyToState(prefix)
-  }, [prefix, flyToState])
+  // useEffect(() => {
+  //   if (!prefix || prefix.length !== 2 || !isLoaded.current)
+  //     return
+  //   flyToState(prefix)
+  // }, [prefix, flyToState])
 
   /** zoom to activated location */
   // useEffect(() => {

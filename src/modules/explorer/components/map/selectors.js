@@ -128,6 +128,7 @@ export const getCircleLayer = ({
   region,
   metric,
   demographic,
+  ids,
   colors
 }) => {
   return fromJS({
@@ -138,6 +139,9 @@ export const getCircleLayer = ({
     minzoom: getCircleMinZoom(region),
     // interactive: region === 'schools',
     interactive: true,
+    ...(ids && ids.length > 0
+      ? { filter: ['in', ['get', 'id'], ['literal', ids]] }
+      : {}),
     layout: {
       visibility: demographic === 'all' ? 'visible' : 'none'
     },
@@ -169,6 +173,7 @@ export const getCircleLayer = ({
 export const getCircleCasingLayer = ({
   layerId,
   demographic,
+  ids,
   region
 }) =>
   fromJS({
@@ -178,6 +183,11 @@ export const getCircleCasingLayer = ({
     type: 'circle',
     minzoom: getCircleMinZoom(region),
     interactive: false,
+    ...(ids && ids.length > 0
+      ? {
+          filter: ['in', ['get', 'id'], ['literal', ids]]
+        }
+      : {}),
     layout: {
       visibility: demographic === 'all' ? 'visible' : 'none'
     },
@@ -308,11 +318,50 @@ const isCircleId = id => {
   return featureRegion === 'schools'
 }
 
+const getLayerFilter = ({
+  region,
+  demographic,
+  filter: [type, prop, value]
+}) => {
+  const demProp = demographic + '_' + prop
+  switch (type) {
+    case 'startsWith':
+      return value
+        ? [
+            '==',
+            value,
+            ['slice', ['get', demProp], 0, value.length]
+          ]
+        : null
+    case 'range':
+      if (region === 'schools' && prop === 'ses') return null
+      if (region !== 'schools' && prop === 'frl') return null
+      return [
+        'all',
+        ['>=', ['get', demProp], value[0]],
+        ['<=', ['get', demProp], value[1]]
+      ]
+    default:
+      return null
+  }
+}
+
+const getLayerFilters = ({ region, demographic, filters }) => {
+  const layerFilters = filters
+    .map(filter =>
+      getLayerFilter({ region, demographic, filter })
+    )
+    .filter(f => !!f)
+  return ['all', ...layerFilters]
+}
+
 export const getChoroplethLayer = ({
   layerId,
   region,
   metric,
   demographic,
+  filters,
+  ids,
   colors
 }) =>
   fromJS({
@@ -321,6 +370,10 @@ export const getChoroplethLayer = ({
     'source-layer': region === 'schools' ? 'districts' : region,
     type: 'fill',
     interactive: true,
+    // filter: getLayerFilters({ region, demographic, filters }),
+    ...(ids && ids.length > 0
+      ? { filter: ['in', ['get', 'id'], ['literal', ids]] }
+      : {}),
     paint: {
       'fill-color': getFillStyle(
         [demographic, metric].join('_'),
@@ -346,7 +399,7 @@ export const getChoroplethLayer = ({
 
 /**
  * Gets choropleth layer based on current context
- * @param {*} context { metric, demographic, region}
+ * @param {*} context { metric, demographic, region, filters}
  */
 export const getChoroplethLayers = context => {
   return [
