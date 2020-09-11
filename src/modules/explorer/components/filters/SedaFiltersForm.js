@@ -25,7 +25,7 @@ import {
 import { getFormatterForVarName } from '../../selectors'
 import shallow from 'zustand/shallow'
 import { useDemographic, useRegion } from '../../hooks'
-import { getPrefixLang } from '../../selectors/lang'
+import { getPrefixLang, getLang } from '../../selectors/lang'
 import { DEFAULT_RANGES } from '../../constants/metrics'
 import Slider from '../../../../shared/components/Slider'
 import { getFilterIndex } from '../../../filters/useFilterStore'
@@ -62,9 +62,9 @@ const getIndiciesForSearch = region => {
     case 'counties':
       return ['states']
     case 'districts':
-      return ['states', 'counties']
+      return ['states']
     default:
-      return ['states', 'counties', 'districts']
+      return ['states', 'districts']
   }
 }
 
@@ -179,23 +179,26 @@ const SedaFiltersForm = props => {
           fullWidth
           variant="outlined"
           onClick={clearFilters}>
-          Reset Data Filters
+          { getLang('FILTER_RESET') }
         </Button>
       </ListItem>
-      <ListItem className={classes.listItem}>
-        <ListItemText
-          primary={getPrefixLang('location', 'FILTER_LABEL')}
-        />
-        <SedaFilterSearch
-          inputProps={{
-            disabled: Boolean(selectedLocation),
-            value: selectedLocation
-          }}
-          indices={indicies}
-          onSelect={handleLocationSelect}
-          onClear={handleLocationClear}
-        />
-      </ListItem>
+      { region !== "states" && 
+        <ListItem className={classes.listItem}>
+          <ListItemText
+            primary={getPrefixLang('location', 'FILTER_LABEL', {region})}
+          />
+          <SedaFilterSearch
+            inputProps={{
+              disabled: Boolean(selectedLocation),
+              value: selectedLocation,
+            }}
+            placeholder={getPrefixLang(region, 'FILTER_PLACEHOLDER')}
+            indices={indicies}
+            onSelect={handleLocationSelect}
+            onClear={handleLocationClear}
+          />
+        </ListItem>
+      }
       <ListItem className={classes.listItem}>
         <ListItemText
           primaryTypographyProps={{ id: 'limit-slider' }}

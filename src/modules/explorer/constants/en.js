@@ -214,12 +214,6 @@ const LANG = {
   // Gap Chart Label For Selection
   LABEL_GAP_INPUT: '$[dem1] - $[dem2] gap in',
 
-  FILTER_PREFIX_STATES: 'Filter by state',
-  FILTER_PREFIX_COUNTIES: 'Filter by county',
-  FILTER_PREFIX_DISTRICTS: 'Filter by district',
-  FILTER_LARGEST: 'Filter by size',
-  FILTER_LARGEST_SELECTION: 'Largest $[num] $[region]',
-
   // Tooltips
   TOOLTIP_SUMMARY: 'Click on a location for more.',
   TOOLTIP_HINT: 'Click on a $[region] for more data.',
@@ -721,7 +715,13 @@ const LANG = {
     'Go to the expanded chart to explore interactively:',
   LEGEND_CHART_BUTTON: 'Show Interactive Chart',
 
-  FILTER_LABEL_LOCATION: 'Show Within Location',
+  FILTER_RESET: 'Reset Data Filters',
+  FILTER_PREFIX_STATES: 'Filter by state',
+  FILTER_PREFIX_COUNTIES: 'Filter by county',
+  FILTER_PREFIX_DISTRICTS: 'Filter by district',
+  FILTER_LARGEST: 'Filter by size',
+  FILTER_LARGEST_SELECTION: 'Largest $[num] $[region]',
+  FILTER_LABEL_LOCATION: 'Show $[region] within',
   FILTER_LABEL_SIZE: 'Show Largest',
   FILTER_LABEL_AVG: 'Average Test Score Range',
   FILTER_LABEL_GRD: 'Learning Rate Range',
@@ -729,6 +729,10 @@ const LANG = {
   FILTER_LABEL_SES: 'Socioeconomic Status Range',
   FILTER_LABEL_FRL: 'Free/Reduced Lunch Program Range',
   FILTER_LABEL_SCHOOL_TYPE: 'Show School Types',
+  FILTER_PLACEHOLDER_SCHOOLS: "Search for a state or district",
+  FILTER_PLACEHOLDER_DISTRICTS: "Search for a state",
+  FILTER_PLACEHOLDER_COUNTIES: "Search for a state",
+  FILTER_PLACEHOLDER_STATES: "Unavailable",
   FILTER_HINT_LOCATION:
     'Show $[regions] within the below location',
   FILTER_HINT_SIZE:

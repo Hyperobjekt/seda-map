@@ -7,8 +7,10 @@ export {
   default as SedaLocationPanel
 } from './SedaLocationPanel'
 export {
-  default as SedaSelectionPanel
-} from './SedaSelectionPanel'
+  default as SedaLocationListPanel
+} from './SedaLocationListPanel'
+export { default as SedaMetricPanel } from './SedaMetricPanel'
+export { default as SedaRegionPanel } from './SedaRegionPanel'
 export {
-  default as SedaFilterSelection
-} from './SedaFilterSelection'
+  default as SedaDemographicPanel
+} from './SedaDemographicPanel'
