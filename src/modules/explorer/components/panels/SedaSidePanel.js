@@ -19,10 +19,7 @@ const useStyles = makeStyles(theme => ({
   root: {},
   title: theme.mixins.boldType,
   body: {
-    padding: theme.spacing(1),
-    '& > .MuiList-root .MuiButtonBase-root': {
-      paddingLeft: 44
-    }
+    padding: theme.spacing(1)
   }
 }))
 

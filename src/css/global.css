@@ -177,7 +177,6 @@ hr {
 .react-autosuggest__input {
   width: 100%;
   box-sizing: border-box;
-  padding: 8px 0 8px 36px;
   font-family: var(--font);
   font-weight: 300;
   font-size: var(--mini-font-size);

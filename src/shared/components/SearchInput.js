@@ -20,7 +20,9 @@ const useStyles = makeStyles(theme => ({
     padding: `18px 14px`
   },
   clearButton: {
-    marginRight: -1 * theme.spacing(1)
+    marginRight: -1 * theme.spacing(1),
+    maxWidth: 24,
+    padding: 4
   }
 }))
 
@@ -59,7 +61,7 @@ const SearchInput = ({
             )}
           </InputAdornment>
         ),
-        inputProps
+        ...inputProps
       }}
       onChange={onChange}
       {...TextFieldProps}

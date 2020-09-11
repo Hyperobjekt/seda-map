@@ -29,6 +29,9 @@ const SelectionIcon = ({ selectionId }) => {
   }
 }
 
+/**
+ * Button used for options in the full panel view
+ */
 const SedaSelectionButton = ({
   selectionId,
   value,

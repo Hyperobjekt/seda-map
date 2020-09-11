@@ -9,6 +9,7 @@ import { MetricIcon } from '../../../icons'
 import clsx from 'clsx'
 import { getKeyMetrics, getMetricLabel } from '../../selectors'
 import { useMetric } from '../../hooks'
+import { SidePanelList } from '../../../../shared/components'
 const useStyles = makeStyles(theme => ({
   root: {
     paddingTop: 4,
@@ -24,7 +25,6 @@ const useStyles = makeStyles(theme => ({
       fontSize: theme.spacing(3)
     }
   },
-  active: theme.mixins.activeListButton,
   secondaryAction: {
     pointerEvents: 'none',
     fontSize: 24,
@@ -49,14 +49,14 @@ const SedaMetricSelect = ({ onSelect }) => {
   }
 
   return (
-    <List
+    <SidePanelList
       classes={{ root: classes.root }}
       aria-label="educational opportunity metric">
       {metrics.map((m, i) => {
         return (
           <ListItem
             className={clsx(classes.button, {
-              [classes.active]: m.id === metric
+              'MuiListItem--active': m.id === metric
             })}
             button
             key={m.id}
@@ -80,7 +80,7 @@ const SedaMetricSelect = ({ onSelect }) => {
           </ListItem>
         )
       })}
-    </List>
+    </SidePanelList>
   )
 }
 

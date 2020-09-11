@@ -1,22 +1,13 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import {
-  useFilterStore,
-  FilterList,
-  FilterAdd
-} from '../../../filters'
+import { useFilterStore } from '../../../filters'
 import logger from '../../../logger'
 import SedaFilterSearch from './SedaFilterSearch'
 import {
   List,
-  ListSubheader,
   ListItem,
   ListItemText,
   makeStyles,
-  Typography,
-  Grid,
-  Input,
-  withStyles,
   FormGroup,
   FormControlLabel,
   Checkbox,
@@ -68,12 +59,14 @@ const getIndiciesForSearch = region => {
   }
 }
 
+/**
+ * Contains all inputs for modifying filters
+ */
 const SedaFiltersForm = props => {
   // track state for location selection
   const [selectedLocation, setSelectedLocation] = useState(null)
   // grab filters array
   const filters = useFilterStore(state => state.filters)
-  logger.debug('active filters', filters)
   // grab filter modifier functions
   const updateFilter = useFilterStore(
     state => state.updateFilter
@@ -171,6 +164,13 @@ const SedaFiltersForm = props => {
     setChecked(newChecked)
   }
 
+  /**
+   * Sets filters to default values and clears selected location
+   */
+  const handleResetFilters = () => {
+    setSelectedLocation(null)
+    clearFilters()
+  }
   const classes = useStyles()
   return (
     <List {...props}>
@@ -178,27 +178,32 @@ const SedaFiltersForm = props => {
         <Button
           fullWidth
           variant="outlined"
-          onClick={clearFilters}>
-          { getLang('FILTER_RESET') }
+          onClick={handleResetFilters}>
+          {getLang('FILTER_RESET')}
         </Button>
       </ListItem>
-      { region !== "states" && 
+      {region !== 'states' && (
         <ListItem className={classes.listItem}>
           <ListItemText
-            primary={getPrefixLang('location', 'FILTER_LABEL', {region})}
+            primary={getPrefixLang('location', 'FILTER_LABEL', {
+              region
+            })}
           />
           <SedaFilterSearch
             inputProps={{
               disabled: Boolean(selectedLocation),
-              value: selectedLocation,
+              value: selectedLocation
             }}
-            placeholder={getPrefixLang(region, 'FILTER_PLACEHOLDER')}
+            placeholder={getPrefixLang(
+              region,
+              'FILTER_PLACEHOLDER'
+            )}
             indices={indicies}
             onSelect={handleLocationSelect}
             onClear={handleLocationClear}
           />
         </ListItem>
-      }
+      )}
       <ListItem className={classes.listItem}>
         <ListItemText
           primaryTypographyProps={{ id: 'limit-slider' }}

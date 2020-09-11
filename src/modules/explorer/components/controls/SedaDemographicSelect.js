@@ -12,24 +12,12 @@ import {
   getDemographicLabel
 } from '../../selectors'
 import { useDemographic } from '../../hooks'
-
-const useStyles = makeStyles(theme => ({
-  root: {
-    paddingTop: 4,
-    paddingBottom: 4,
-    width: '100%'
-  },
-  button: {
-    textTransform: 'capitalize'
-  },
-  active: theme.mixins.activeListButton
-}))
+import { SidePanelList } from '../../../../shared/components'
 
 const SedaDemographicSelect = ({ onSelect, ...props }) => {
   const gaps = getGaps()
   const demographics = getDemographics()
   const [demographic, setDemographic] = useDemographic()
-  const classes = useStyles()
   const handleClick = demId => {
     if (demographic !== demId) {
       setDemographic(demId)
@@ -39,7 +27,7 @@ const SedaDemographicSelect = ({ onSelect, ...props }) => {
 
   return (
     <>
-      <List
+      <SidePanelList
         subheader={
           <ListSubheader disableSticky>Subgroups</ListSubheader>
         }
@@ -47,8 +35,8 @@ const SedaDemographicSelect = ({ onSelect, ...props }) => {
         {demographics.map((m, i) => {
           return (
             <ListItem
-              className={clsx(classes.button, {
-                [classes.active]: m.id === demographic
+              className={clsx({
+                'MuiListItem--active': m.id === demographic
               })}
               button
               key={m.id}
@@ -62,8 +50,8 @@ const SedaDemographicSelect = ({ onSelect, ...props }) => {
             </ListItem>
           )
         })}
-      </List>
-      <List
+      </SidePanelList>
+      <SidePanelList
         subheader={
           <ListSubheader disableSticky>Gaps</ListSubheader>
         }
@@ -71,8 +59,8 @@ const SedaDemographicSelect = ({ onSelect, ...props }) => {
         {gaps.map((m, i) => {
           return (
             <ListItem
-              className={clsx(classes.button, {
-                [classes.active]: m.id === demographic
+              className={clsx({
+                'MuiListItem--active': m.id === demographic
               })}
               button
               key={m.id}
@@ -83,7 +71,7 @@ const SedaDemographicSelect = ({ onSelect, ...props }) => {
             </ListItem>
           )
         })}
-      </List>
+      </SidePanelList>
     </>
   )
 }

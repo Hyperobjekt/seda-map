@@ -90,22 +90,6 @@ const theme = createMuiTheme({
       width: '100%',
       height: '100%'
     },
-    activeListButton: {
-      background: primary.highlight,
-      color: primary.main,
-      borderRadius: borderRadius,
-      '&:before': {
-        position: 'absolute',
-        content: '""',
-        width: spacing(0.5),
-        top: spacing(2),
-        bottom: spacing(2),
-        display: 'block',
-        background: primary.main,
-        left: spacing(2.5),
-        borderRadius: borderRadius
-      }
-    },
     boldType: {
       fontFamily: boldFontFamily,
       fontWeight: 'normal'

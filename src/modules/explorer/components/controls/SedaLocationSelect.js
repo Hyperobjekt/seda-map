@@ -32,15 +32,7 @@ const useStyles = makeStyles(theme => ({
   },
   subheader: {
     textTransform: 'capitalize'
-  },
-  button: {
-    textTransform: 'capitalize',
-    borderRadius: theme.shape.borderRadius,
-    '& .MuiListItemText-secondary': {
-      fontSize: theme.typography.pxToRem(12)
-    }
-  },
-  active: theme.mixins.activeListButton
+  }
 }))
 
 const LocationList = ({
