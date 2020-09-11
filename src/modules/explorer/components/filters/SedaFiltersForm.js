@@ -168,7 +168,7 @@ const SedaFiltersForm = props => {
    * Sets filters to default values and clears selected location
    */
   const handleResetFilters = () => {
-    setSelectedLocation(null)
+    setSelectedLocation('')
     clearFilters()
   }
   const classes = useStyles()
@@ -191,9 +191,9 @@ const SedaFiltersForm = props => {
           />
           <SedaFilterSearch
             inputProps={{
-              disabled: Boolean(selectedLocation),
-              value: selectedLocation
+              disabled: Boolean(selectedLocation)
             }}
+            value={selectedLocation}
             placeholder={getPrefixLang(
               region,
               'FILTER_PLACEHOLDER'

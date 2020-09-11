@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Highlight } from 'react-instantsearch-dom'
 import AutoSuggest from 'react-autosuggest'
@@ -45,6 +45,7 @@ const AutoComplete = ({
   inputProps,
   onSuggestionSelected: onSelected,
   onSelectedClear: onClear,
+  value: overrideValue,
   ...props
 }) => {
   const [value, setValue] = useState(currentRefinement)
@@ -79,6 +80,12 @@ const AutoComplete = ({
     value,
     onChange: handleChange
   }
+
+  // if a new value is provided, override the existing value
+  useEffect(() => {
+    if (overrideValue || overrideValue === '')
+      setValue(overrideValue)
+  }, [overrideValue])
 
   return (
     <AutoSuggest
