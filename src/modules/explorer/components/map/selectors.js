@@ -7,6 +7,7 @@ import {
   getMetricRange,
   isGapVarName
 } from '../../selectors'
+import { getFilterIndex } from '../../../filters/useFilterStore'
 
 const noDataFill = '#ccc'
 
@@ -355,6 +356,23 @@ const getLayerFilters = ({ region, demographic, filters }) => {
   return ['all', ...layerFilters]
 }
 
+const getChoroplethFilter = ({ region, filters, ids }) => {
+  const prefixIndex = getFilterIndex(filters, [
+    'startsWith',
+    'id'
+  ])
+  const prefix = filters[prefixIndex][2]
+  if (region === 'schools' && prefix) {
+    return {
+      filter: ['in', prefix, ['get', 'id']]
+    }
+  }
+  if (region !== 'schools' && ids && ids.length > 0) {
+    return { filter: ['in', ['get', 'id'], ['literal', ids]] }
+  }
+  return {}
+}
+
 export const getChoroplethLayer = ({
   layerId,
   region,
@@ -371,9 +389,7 @@ export const getChoroplethLayer = ({
     type: 'fill',
     interactive: true,
     // filter: getLayerFilters({ region, demographic, filters }),
-    ...(ids && ids.length > 0
-      ? { filter: ['in', ['get', 'id'], ['literal', ids]] }
-      : {}),
+    ...getChoroplethFilter({ region, filters, ids }),
     paint: {
       'fill-color': getFillStyle(
         [demographic, metric].join('_'),

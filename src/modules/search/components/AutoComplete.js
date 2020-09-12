@@ -43,6 +43,7 @@ const AutoComplete = ({
   multiSection,
   TextFieldProps,
   inputProps,
+  hideSuggestions = false,
   onSuggestionSelected: onSelected,
   onSelectedClear: onClear,
   value: overrideValue,
@@ -89,7 +90,7 @@ const AutoComplete = ({
 
   return (
     <AutoSuggest
-      suggestions={hits}
+      suggestions={hideSuggestions ? [] : hits}
       multiSection={multiSection}
       inputProps={combinedInputProps}
       getSuggestionValue={getSuggestionValue}

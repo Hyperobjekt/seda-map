@@ -194,6 +194,7 @@ const SedaFiltersForm = props => {
               disabled: Boolean(selectedLocation)
             }}
             value={selectedLocation}
+            hideSuggestions={selectedLocation ? true : false}
             placeholder={getPrefixLang(
               region,
               'FILTER_PLACEHOLDER'
