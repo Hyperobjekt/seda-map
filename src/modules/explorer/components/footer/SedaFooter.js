@@ -1,22 +1,22 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Footer from '../../../shared/components/Footer'
+import Footer from '../../../../shared/components/Footer'
 import { Button, makeStyles } from '@material-ui/core'
-import { getLang } from '../selectors/lang'
+import { getLang } from '../../selectors/lang'
 import {
   FacebookIcon,
   TwitterIcon,
   EmbedIcon,
   LinkIcon
-} from '../../icons'
+} from '../../../icons'
 import StanfordLogo from './StanfordLogo'
 import Tooltip from '@material-ui/core/Tooltip'
-import { onTwitterShare, onFacebookShare } from './share'
+import { onTwitterShare, onFacebookShare } from './actions'
 import clsx from 'clsx'
 import {
   useLinkDialogVisibility,
   useEmbedDialogVisibility
-} from '../hooks'
+} from '../../hooks'
 
 const links = {
   id: 'share',

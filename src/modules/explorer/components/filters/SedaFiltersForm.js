@@ -18,9 +18,8 @@ import shallow from 'zustand/shallow'
 import { useDemographic, useRegion } from '../../hooks'
 import { getPrefixLang, getLang } from '../../selectors/lang'
 import { DEFAULT_RANGES } from '../../constants/metrics'
-import Slider from '../../../../shared/components/Slider'
 import { getFilterIndex } from '../../../filters/useFilterStore'
-import NumberSlider from '../../../../shared/components/NumberSlider'
+import { NumberSlider, Slider } from '../../../../shared'
 
 const useStyles = makeStyles(theme => ({
   title: {

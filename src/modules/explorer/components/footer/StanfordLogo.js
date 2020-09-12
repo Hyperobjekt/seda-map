@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { getLang } from '../selectors/lang'
+import { getLang } from '../../selectors/lang'
 
 const StanfordLogo = props => {
   return (

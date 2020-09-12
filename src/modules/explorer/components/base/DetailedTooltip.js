@@ -22,6 +22,10 @@ const useTooltipStyles = makeStyles(theme => ({
   }
 }))
 
+/**
+ * Tooltip component with primary text, secondary text, and a hint.
+ * TODO: this is a generic component, move to shared module outside of explorer scope
+ */
 const DetailedTooltip = ({
   primary,
   secondary,
@@ -55,8 +59,11 @@ const DetailedTooltip = ({
 }
 
 DetailedTooltip.propTypes = {
+  /** Primary text string */
   primary: PropTypes.string,
+  /** Secondary text string */
   secondary: PropTypes.string,
+  /** hint text for action (e.g. click for more) */
   hint: PropTypes.string
 }
 

@@ -33,6 +33,10 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
+/**
+ * Displays location name, parent location, and marker (optional) for a location
+ * TODO: generic, move to shared module or location module
+ */
 const LocationName = ({
   name,
   parentLocation,
@@ -78,8 +82,16 @@ LocationName.propTypes = {
   name: PropTypes.string,
   /** parent location (e.g. state name) */
   parentLocation: PropTypes.string,
-  /** label for the location */
-  label: PropTypes.any
+  /** label for the marker */
+  label: PropTypes.any,
+  /** color for marker */
+  color: PropTypes.string,
+  /** marker position (`"inline"` or `"left"`) */
+  markerPosition: PropTypes.string,
+  /** use small variant of location name */
+  small: PropTypes.bool,
+  /** class name for root */
+  className: PropTypes.string
 }
 
 export default LocationName

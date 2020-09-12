@@ -8,8 +8,8 @@ import {
   LocationsIcon
 } from '../../../icons'
 import { getPrefixLang } from '../../selectors/lang'
-import SelectionButton from '../base/SelectionButton'
 import { useActiveSelection, useMetric } from '../../hooks'
+import { SelectionButton } from '../../../../shared'
 
 const SelectionIcon = ({ selectionId }) => {
   const [metric] = useMetric()

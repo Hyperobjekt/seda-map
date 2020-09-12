@@ -114,6 +114,10 @@ const TableHeaderButton = ({ metricId, tooltip, ...props }) => {
   )
 }
 
+/**
+ * Displays stats for a location in a table format, with tooltip hints and header actions
+ * TODO: refactor to use rows / cols instead of demographics and metrics, so it is more general purpose.  Then move to shared module
+ */
 const LocationTable = ({
   data,
   label,

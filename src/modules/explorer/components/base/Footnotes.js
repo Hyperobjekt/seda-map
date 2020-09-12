@@ -25,6 +25,10 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
+/**
+ * Displays provided footnotes, usually alongside a figure
+ * TODO: generic component, move to scatterplot module (only placed used) or to shared module if it will be used elsewhere
+ */
 const Footnotes = ({
   footnotes,
   className,
@@ -59,8 +63,11 @@ Footnotes.defaultProps = {
 }
 
 Footnotes.propTypes = {
+  /** class names for the footnotes (`root`, `text`) */
   classes: PropTypes.object,
+  /** array of text strings */
   footnotes: PropTypes.array,
+  /** class name for the root (same element as classes.root) */
   className: PropTypes.string
 }
 

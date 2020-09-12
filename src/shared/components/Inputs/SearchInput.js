@@ -8,7 +8,7 @@ import {
   IconButton
 } from '@material-ui/core'
 import clsx from 'clsx'
-import { SearchIcon, CloseIcon } from '../../modules/icons'
+import { SearchIcon, CloseIcon } from '../../../modules/icons'
 
 const useStyles = makeStyles(theme => ({
   root: {

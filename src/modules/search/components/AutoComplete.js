@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Highlight } from 'react-instantsearch-dom'
 import AutoSuggest from 'react-autosuggest'
-import SearchInput from '../../../shared/components/SearchInput'
+import { SearchInput } from '../../../shared'
 
 /** Renders the input component for search */
 const renderInputComponent = (
@@ -36,6 +36,9 @@ const getSuggestionValue = hit => hit.name
 
 const getSectionSuggestions = section => section.hits
 
+/**
+ * Autocomplete field used for search
+ */
 const AutoComplete = ({
   hits,
   currentRefinement,

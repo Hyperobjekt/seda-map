@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
-import LinkButton from '../../../../shared/components/LinkButton'
+import { LinkButton } from '../../../../shared'
 import { makeId } from '../../../../shared/utils'
 import { getPrefixLang } from '../../selectors/lang'
 

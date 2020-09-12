@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core'
 
 import clsx from 'clsx'
-import { RightIcon } from '../../../icons'
+import { RightIcon } from '../../../modules/icons'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -47,6 +47,9 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
+/**
+ * List item menu button that can have a left icon, primary text, secondary text, and right icon (secondary)
+ */
 const SelectionButton = ({
   small,
   active,
@@ -109,14 +112,23 @@ SelectionButton.defaultProps = {
 }
 
 SelectionButton.propTypes = {
+  /** small variant of selection button */
   small: PropTypes.bool,
+  /** boolean indicating active state of button */
   active: PropTypes.bool,
+  /** icon for the left side */
   icon: PropTypes.node,
+  /** primary text for button */
   primary: PropTypes.string,
+  /** secondary text for button */
   secondary: PropTypes.string,
+  /** icon for the right side */
   secondaryIcon: PropTypes.node,
+  /** props for the ListItemSecondaryAction (right side) */
   SecondaryActionProps: PropTypes.object,
+  /** props for the ListItemText component */
   TextProps: PropTypes.object,
+  /** class names for elements (`root`, `icon`, `text`, `secondary`, `secondaryAction`) */
   classes: PropTypes.object
 }
 

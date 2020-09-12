@@ -3,9 +3,9 @@ import { makeStyles, Divider } from '@material-ui/core'
 import {
   SidePanel,
   SidePanelHeader,
-  SidePanelBody
-} from '../../../../shared/components/Panels'
-import IconLabelButton from '../../../../shared/components/IconLabelButton'
+  SidePanelBody,
+  IconLabelButton
+} from '../../../../shared'
 
 import {
   MetricIcon,

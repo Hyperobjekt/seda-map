@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react'
+import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core'
 import clsx from 'clsx'
 import { useSpring, animated } from 'react-spring'
@@ -82,12 +83,15 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
+/**
+ * A resizable side by side display
+ * TODO: move to shared module
+ */
 export const SplitView = ({
   LeftComponent,
   RightComponent,
   view,
   splitRatio: initialSplit = 0.5,
-  minWidth = 360,
   ...props
 }) => {
   const rootRef = useRef(null)
@@ -185,4 +189,15 @@ export const SplitView = ({
       )}
     </div>
   )
+}
+
+SplitView.propTypes = {
+  /** component for the left side of the view */
+  LeftComponent: PropTypes.node,
+  /** component for the right side of the view */
+  RightComponent: PropTypes.node,
+  /** how the split view should display (`left`, `right`, `split`) */
+  view: PropTypes.string,
+  /** size ratio for the split view */
+  splitRatio: PropTypes.number
 }
