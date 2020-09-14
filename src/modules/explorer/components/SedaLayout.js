@@ -1,5 +1,5 @@
 import React from 'react'
-import { Page, PageBody } from '../../../shared/components/Page'
+import { Page } from '../../../shared'
 import { SedaHeader } from './header'
 import SedaMenu from './SedaMenu'
 import { makeStyles } from '@material-ui/core'

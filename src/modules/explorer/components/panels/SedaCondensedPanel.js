@@ -4,7 +4,8 @@ import {
   SidePanel,
   SidePanelHeader,
   SidePanelBody,
-  IconLabelButton
+  IconLabelButton,
+  DetailedTooltip
 } from '../../../../shared'
 
 import {
@@ -25,7 +26,6 @@ import {
   getDemographicLabel,
   getLangWithSingleOrNone
 } from '../../selectors/lang'
-import DetailedTooltip from '../base/DetailedTooltip'
 import clsx from 'clsx'
 import {
   useCondensed,

@@ -1,5 +1,4 @@
 import React from 'react'
-import { PageHeader } from '../../../../shared/components/Page'
 import SedaLogo from './SedaLogo'
 import {
   makeStyles,
@@ -17,7 +16,7 @@ import {
   getPrefixLang
 } from '../../selectors/lang'
 import { isGapDemographic } from '../../selectors'
-import DetailedTooltip from '../base/DetailedTooltip'
+import { DetailedTooltip, PageHeader } from '../../../../shared'
 import { useActiveOptionIds, useFilters } from '../../hooks'
 import { getStateName } from '../../../../shared/utils/states'
 import SedaSearch from '../SedaSearch'

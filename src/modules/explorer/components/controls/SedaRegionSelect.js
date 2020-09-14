@@ -6,7 +6,7 @@ import ListItemText from '@material-ui/core/ListItemText'
 import clsx from 'clsx'
 import { getRegions } from '../../selectors'
 import { useRegion } from '../../hooks'
-import { SidePanelList } from '../../../../shared/components'
+import { SidePanelList } from '../../../../shared'
 
 const SedaRegionSelect = ({ onSelect, ...props }) => {
   const [region, setRegion] = useRegion()

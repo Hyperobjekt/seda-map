@@ -7,7 +7,7 @@ import { SplitView } from './base/SplitView'
 import SedaPanelGroup from './panels/SedaPanelGroup'
 import { useActiveView } from '../hooks'
 import SedaTooltip from './SedaTooltip'
-import { PageBody } from '../../../shared/components/Page'
+import { PageBody } from '../../../shared'
 
 const SedaExplorer = props => {
   const [view] = useActiveView()

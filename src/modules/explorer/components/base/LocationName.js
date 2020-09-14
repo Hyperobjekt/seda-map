@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles, Typography } from '@material-ui/core'
 import clsx from 'clsx'
-import Marker from '../../../../shared/components/Marker'
+import { Marker } from '../../../../shared'
 
 const useStyles = makeStyles(theme => ({
   root: {

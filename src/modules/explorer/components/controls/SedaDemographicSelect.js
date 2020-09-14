@@ -12,7 +12,7 @@ import {
   getDemographicLabel
 } from '../../selectors'
 import { useDemographic } from '../../hooks'
-import { SidePanelList } from '../../../../shared/components'
+import { SidePanelList } from '../../../../shared'
 
 const SedaDemographicSelect = ({ onSelect, ...props }) => {
   const gaps = getGaps()

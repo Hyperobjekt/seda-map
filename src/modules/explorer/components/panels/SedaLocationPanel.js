@@ -5,7 +5,7 @@ import {
   SidePanel,
   SidePanelHeader,
   SidePanelBody
-} from '../../../../shared/components/Panels/SidePanel'
+} from '../../../../shared'
 import { LocationTable } from '../base'
 import {
   getDemographics,

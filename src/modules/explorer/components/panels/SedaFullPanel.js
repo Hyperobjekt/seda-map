@@ -10,7 +10,7 @@ import {
   SidePanelHeader,
   SidePanelBody,
   SidePanelFooter
-} from '../../../../shared/components/Panels'
+} from '../../../../shared'
 import clsx from 'clsx'
 import SedaSelectionButton from '../controls/SedaSelectionButton'
 import {

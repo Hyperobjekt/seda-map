@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Footer from '../../../../shared/components/Footer'
 import { Button, makeStyles } from '@material-ui/core'
 import { getLang } from '../../selectors/lang'
 import {
@@ -17,6 +16,7 @@ import {
   useLinkDialogVisibility,
   useEmbedDialogVisibility
 } from '../../hooks'
+import { PageFooter } from '../../../../shared'
 
 const links = {
   id: 'share',
@@ -93,6 +93,10 @@ FooterLinks.propTypes = {
 
 const useStyles = makeStyles(theme => ({
   root: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'stretch',
+    padding: `0 ${theme.spacing(3)}px`,
     position: 'relative',
     zIndex: 1000,
     borderTop: `1px solid`,
@@ -108,6 +112,21 @@ const useStyles = makeStyles(theme => ({
     '& .MuiSvgIcon-root': {
       color: theme.palette.text.secondary
     }
+  },
+
+  branding: {
+    display: 'flex',
+    alignItems: 'center'
+  },
+  copyright: {
+    display: 'flex',
+    alignItems: 'center',
+    marginRight: 'auto',
+    marginLeft: theme.spacing(2)
+  },
+  links: {
+    display: 'flex',
+    alignItems: 'center'
   }
 }))
 
@@ -133,20 +152,23 @@ const SedaFooter = () => {
     }
   }
   return (
-    <Footer
-      classes={classes}
-      branding={
+    <PageFooter className={classes.root}>
+      <div
+        className={clsx('footer__branding', classes.branding)}>
         <StanfordLogo style={{ height: 16, width: 76 }} />
-      }
-      copyright={copyright}
-      links={
+      </div>
+      <div
+        className={clsx('footer__copyright', classes.copyright)}>
+        {copyright}
+      </div>
+      <div className={clsx('footer__links', classes.links)}>
         <FooterLinks
           label={links.label}
           links={links.items}
           onClick={handleClick}
         />
-      }
-    />
+      </div>
+    </PageFooter>
   )
 }
 

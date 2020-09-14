@@ -11,7 +11,7 @@ import {
   SidePanel,
   SidePanelHeader,
   SidePanelBody
-} from '../../../../shared/components/Panels/SidePanel'
+} from '../../../../shared'
 import { CloseIcon } from '../../../icons'
 import { useCondensed, useHelpVisibility } from '../../hooks'
 

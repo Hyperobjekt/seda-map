@@ -9,7 +9,7 @@ import { MetricIcon } from '../../../icons'
 import clsx from 'clsx'
 import { getKeyMetrics, getMetricLabel } from '../../selectors'
 import { useMetric } from '../../hooks'
-import { SidePanelList } from '../../../../shared/components'
+import { SidePanelList } from '../../../../shared'
 const useStyles = makeStyles(theme => ({
   root: {
     paddingTop: 4,

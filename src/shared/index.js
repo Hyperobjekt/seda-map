@@ -16,5 +16,13 @@ export {
   SidePanelFooter,
   SidePanelGroup,
   SidePanelList,
-  ExpansionPanel
+  ExpansionPanel,
+  DetailedTooltip,
+  Tooltip,
+  DivergingStatValue,
+  TableStats,
+  GradientLegend,
+  Stack,
+  BookEnds,
+  Marker
 } from './components'

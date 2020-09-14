@@ -1,5 +1,5 @@
 import React from 'react'
-import { ExpansionPanel } from '../../../../shared/components/Panels'
+import { ExpansionPanel } from '../../../../shared'
 import { ScatterplotPreview } from '../scatterplot'
 import { makeStyles, Typography } from '@material-ui/core'
 import { ExpandIcon, CloseIcon } from '../../../icons'

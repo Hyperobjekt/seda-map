@@ -12,7 +12,7 @@ import {
   useCondensed,
   useActiveSelection
 } from '../../hooks'
-import { SidePanelGroup } from '../../../../shared/components/Panels/SidePanel'
+import { SidePanelGroup } from '../../../../shared'
 import SedaDemographicPanel from './SedaDemographicPanel'
 import SedaMetricPanel from './SedaMetricPanel'
 import SedaRegionPanel from './SedaRegionPanel'

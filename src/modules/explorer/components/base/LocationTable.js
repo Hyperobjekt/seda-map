@@ -18,12 +18,12 @@ import {
   getMetricLabel,
   isGapDemographic
 } from '../../selectors'
-import MetricValue from '../../../../shared/components/MetricValue'
 import clsx from 'clsx'
 import {
   getDescriptionForVarName,
   getLang
 } from '../../selectors/lang'
+import { DivergingStatValue } from '../../../../shared'
 
 const useTooltipStyles = makeStyles(theme => ({
   root: {
@@ -213,7 +213,7 @@ const LocationTable = ({
                     ])
                   }
                   onMouseLeave={() => setHoveredData(null)}>
-                  <MetricValue
+                  <DivergingStatValue
                     value={data[d + '_' + m]}
                     formatter={getFormatterForVarName(
                       d + '_' + m

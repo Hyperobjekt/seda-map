@@ -1,7 +1,6 @@
 import React from 'react'
 import { Typography } from '@material-ui/core'
-import FlexStack from '../../../shared/components/FlexStack'
-import BookEnds from '../../../shared/components/BookEnds'
+import { Stack, BookEnds } from '../../../shared'
 import ArrowLeft from '@material-ui/icons/ArrowLeft'
 import ArrowRight from '@material-ui/icons/ArrowRight'
 import clsx from 'clsx'
@@ -21,17 +20,17 @@ const ScatterplotAxis = ({
       startLabel={
         showLabels &&
         minLabel.length > 1 && (
-          <FlexStack>
+          <Stack horizontal>
             <ArrowLeft /> {minLabel}
-          </FlexStack>
+          </Stack>
         )
       }
       endLabel={
         showLabels &&
         maxLabel.length > 1 && (
-          <FlexStack>
+          <Stack horizontal>
             {maxLabel} <ArrowRight />
-          </FlexStack>
+          </Stack>
         )
       }
       {...props}>

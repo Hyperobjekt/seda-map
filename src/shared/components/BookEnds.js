@@ -38,11 +38,13 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
+/**
+ * Shows a primary label at the given and optional start / end labels
+ */
 const BookEnds = ({
   startLabel,
   endLabel,
   vertical,
-  midPosition,
   children,
   className,
   classes: overrides = {},
@@ -97,7 +99,6 @@ BookEnds.propTypes = {
   startLabel: PropTypes.any,
   endLabel: PropTypes.any,
   vertical: PropTypes.bool,
-  midPosition: PropTypes.number,
   className: PropTypes.string,
   classes: PropTypes.object
 }

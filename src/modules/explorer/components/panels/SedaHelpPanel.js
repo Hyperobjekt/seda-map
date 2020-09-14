@@ -4,13 +4,13 @@ import {
   makeStyles,
   IconButton
 } from '@material-ui/core'
-import { ExpansionPanel } from '../../../../shared/components/Panels'
+import { ExpansionPanel } from '../../../../shared'
 
 import {
   SidePanel,
   SidePanelHeader,
   SidePanelBody
-} from '../../../../shared/components/Panels/SidePanel'
+} from '../../../../shared'
 import { getLang } from '../../selectors/lang'
 import { useHelpVisibility } from '../../hooks'
 import { CloseIcon } from '../../../icons'

@@ -1,7 +1,6 @@
 import React from 'react'
 import useSiteStore from '../hooks/useSiteStore'
 import { makeStyles, Button, Drawer } from '@material-ui/core'
-import LinkCollection from '../../../shared/components/LinkCollection'
 import { useMenuVisibility } from '../hooks'
 
 const useStyles = makeStyles(theme => ({
@@ -28,14 +27,14 @@ const SedaMenu = ({ ...props }) => {
       <div className={classes.header}>
         <Button onClick={toggleMenu}>Close</Button>
       </div>
-      <LinkCollection
+      {/* <LinkCollection
         classes={{
           root: classes.linkRoot,
           item: classes.linkItem,
           link: classes.link
         }}
         links={links}
-      />
+      /> */}
     </Drawer>
   )
 }

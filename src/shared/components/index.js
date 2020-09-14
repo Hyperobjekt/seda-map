@@ -15,3 +15,9 @@ export {
   SidePanelList,
   ExpansionPanel
 } from './Panels'
+export { Tooltip, DetailedTooltip } from './Tooltips'
+export { DivergingStatValue, TableStats } from './Stats'
+export { default as GradientLegend } from './GradientLegend'
+export { default as BookEnds } from './BookEnds'
+export { default as Marker } from './Marker'
+export { Stack } from './Layout'

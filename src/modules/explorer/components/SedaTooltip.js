@@ -16,8 +16,7 @@ import {
 import { getStateName } from '../../../shared/utils/states'
 import { Typography, makeStyles } from '@material-ui/core'
 import clsx from 'clsx'
-import Tooltip from '../../../shared/components/Tooltip'
-import MetricValue from '../../../shared/components/MetricValue'
+import { Tooltip, DivergingStatValue } from '../../../shared'
 import {
   useLocationData,
   useScatterplotVars,
@@ -69,7 +68,7 @@ const StatDetailed = ({ varName, value }) => {
       </div>
       <div
         className={clsx('stat-detailed__value', classes.value)}>
-        <MetricValue
+        <DivergingStatValue
           className={classes.primary}
           value={value}
           formatter={getFormatterForVarName(varName)}

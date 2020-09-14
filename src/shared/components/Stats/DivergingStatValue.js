@@ -2,7 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles, Typography } from '@material-ui/core'
 import clsx from 'clsx'
-import { AboveIcon, BelowIcon } from '../../modules/icons'
+import {
+  AboveIcon as defaultAbove,
+  BelowIcon as defaultBelow
+} from '../../../modules/icons'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -12,13 +15,13 @@ const useStyles = makeStyles(theme => ({
   },
   indicator: {
     fontSize: 16,
-    '&.metric-value__indicator--above': {
+    '&.stat-value__indicator--above': {
       color: props =>
         props.invertColor
           ? theme.app.belowColorAlt
           : theme.app.aboveColorAlt
     },
-    '&.metric-value__indicator--below': {
+    '&.stat-value__indicator--below': {
       color: props =>
         props.invertColor
           ? theme.app.aboveColorAlt
@@ -48,24 +51,37 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const MetricValue = ({
-  value,
-  formatter = v => Math.abs(v),
-  dark = false,
-  marginOfError,
-  mid = 0,
-  invertColor = false,
+const defaultIsUnavailable = value => {
+  return value === -999 || (!value && value !== 0)
+}
+
+const defaultFormatter = v => Math.abs(v)
+
+/**
+ * Displays a stat value with an above / below indicator based on the value, with an optional margin of error
+ */
+const DivergingStatValue = ({
   className,
   classes: overrides = {},
+  value,
+  unavailableValue = 'N/A',
+  marginOfError,
+  mid = 0,
+  dark = false,
+  invertColor = false,
+  AboveIcon = defaultAbove,
+  BelowIcon = defaultBelow,
+  formatter = defaultFormatter,
+  isUnavailable = defaultIsUnavailable,
   ...props
 }) => {
   const direction = value < mid ? 'below' : 'above'
   const classes = useStyles({ dark, invertColor })
-  const isNA = value === -999
+  const isNA = isUnavailable(value)
   return (
     <div
       className={clsx(
-        'metric-value',
+        'stat-value',
         classes.root,
         className,
         overrides.root
@@ -74,8 +90,8 @@ const MetricValue = ({
       {!isNA && direction === 'above' && (
         <AboveIcon
           className={clsx(
-            'metric-value__indicator',
-            'metric-value__indicator--above',
+            'stat-value__indicator',
+            'stat-value__indicator--above',
             classes.indicator,
             overrides.indicator
           )}
@@ -84,8 +100,8 @@ const MetricValue = ({
       {!isNA && direction === 'below' && (
         <BelowIcon
           className={clsx(
-            'metric-value__indicator',
-            'metric-value__indicator--below',
+            'stat-value__indicator',
+            'stat-value__indicator--below',
             classes.indicator,
             overrides.indicator
           )}
@@ -96,7 +112,7 @@ const MetricValue = ({
           variant="h6"
           component="span"
           className={clsx(
-            'metric-value__number',
+            'stat-value__number',
             classes.number,
             overrides.number
           )}>
@@ -107,7 +123,7 @@ const MetricValue = ({
         <Typography
           variant="body2"
           className={clsx(
-            'metric-value__margin-of-error',
+            'stat-value__marginOfError',
             classes.marginOfError,
             overrides.marginOfError
           )}>
@@ -119,7 +135,7 @@ const MetricValue = ({
           variant="h6"
           component="span"
           className={clsx(
-            'metric-value__unavailable',
+            'stat-value__unavailable',
             classes.unavailable,
             overrides.unavailable
           )}>
@@ -130,8 +146,31 @@ const MetricValue = ({
   )
 }
 
-MetricValue.propTypes = {
-  value: PropTypes.number
+DivergingStatValue.propTypes = {
+  /** Value for the stat */
+  value: PropTypes.number,
+  /** function to format the value for display */
+  formatter: PropTypes.func,
+  /** boolean indicating if it should render dark background variant */
+  dark: PropTypes.bool,
+  /** margin of error for the value */
+  marginOfError: PropTypes.number,
+  /** mid point for this stat */
+  mid: PropTypes.number,
+  /** boolean indicating if the color should be inverted */
+  invertColor: PropTypes.bool,
+  /** function that returns a boolean indicating if the value is N/A or not */
+  isUnavailable: PropTypes.func,
+  /** class name for the root of the component */
+  className: PropTypes.string,
+  /** class names for elements within the component */
+  classes: PropTypes.object,
+  /** string to display when value is unavailable */
+  unavailableValue: PropTypes.string,
+  /** icon to use for stats above the midpoint */
+  AboveIcon: PropTypes.node,
+  /** icon to use for stats below the midpoint */
+  BelowIcon: PropTypes.node
 }
 
-export default MetricValue
+export default DivergingStatValue
