@@ -1,18 +1,14 @@
 {
   "parser": "babel-eslint",
-  "plugins": [
-    "react"
-  ],
-  "extends": [
-    "eslint:recommended",
-    "plugin:react/recommended"
-  ],
+  "plugins": ["react"],
+  "extends": ["eslint:recommended", "plugin:react/recommended"],
   "globals": {
     "document": true,
     "window": true,
     "console": true
   },
   "rules": {
-    "no-template-curly-in-string": 0
+    "no-template-curly-in-string": 0,
+    "react/prop-types": "off"
   }
 }

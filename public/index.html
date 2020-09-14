@@ -1,41 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon/favicon-16x16.png">
-  <link rel="mask-icon" href="/images/favicon/safari-pinned-tab.svg" color="#409fba">
-  <meta name="msapplication-TileColor" content="#2d89ef">
-  <meta name="theme-color" content="#ffffff">
-  <meta property="og:title" content="The Educational Opportunity Project at Stanford" />
-  <meta property="og:description" content="Use our visualizations to explore educational opportunity in your school & community." />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="%PUBLIC_URL%" />
-  <meta property="og:image" content="%PUBLIC_URL%/social-image-01.png" />
-  <!-- Google Tag Manager -->
-  <script>
-    if (window.location.hash.indexOf('/embed/') === -1 && window.location.hostname !== 'localhost') {
-      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-      })(window,document,'script','dataLayer','GTM-5RMFK5W');
-    } else {
-      window.dataLayer = (function(){return {push:function(){}}})();
-    }
-  </script>
-  <!-- End Google Tag Manager -->
-  <!--
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/images/favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/images/favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/images/favicon/favicon-16x16.png"
+    />
+    <link
+      rel="mask-icon"
+      href="/images/favicon/safari-pinned-tab.svg"
+      color="#409fba"
+    />
+    <meta name="msapplication-TileColor" content="#2d89ef" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta
+      property="og:title"
+      content="The Educational Opportunity Project at Stanford"
+    />
+    <meta
+      property="og:description"
+      content="Use our visualizations to explore educational opportunity in your school & community."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="%PUBLIC_URL%" />
+    <meta
+      property="og:image"
+      content="%PUBLIC_URL%/social-image-01.png"
+    />
+    <!-- Google Tag Manager -->
+    <script>
+      if (
+        window.location.hash.indexOf('/embed/') === -1 &&
+        window.location.hostname !== 'localhost'
+      ) {
+        ;(function(w, d, s, l, i) {
+          w[l] = w[l] || []
+          w[l].push({
+            'gtm.start': new Date().getTime(),
+            event: 'gtm.js'
+          })
+          var f = d.getElementsByTagName(s)[0],
+            j = d.createElement(s),
+            dl = l != 'dataLayer' ? '&l=' + l : ''
+          j.async = true
+          j.src =
+            'https://www.googletagmanager.com/gtm.js?id=' +
+            i +
+            dl
+          f.parentNode.insertBefore(j, f)
+        })(
+          window,
+          document,
+          'script',
+          'dataLayer',
+          'GTM-5RMFK5W'
+        )
+      } else {
+        window.dataLayer = (function() {
+          return { push: function() {} }
+        })()
+      }
+    </script>
+    <!-- End Google Tag Manager -->
+    <!--
       manifest.json provides metadata used when your web app is added to the
       homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
     -->
-  <link href='https://api.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css' rel='stylesheet' />
-  <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
-  <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
-  <!--
+    <link
+      href="https://api.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css"
+      rel="stylesheet"
+    />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
+    <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
       Only files inside the `public` folder can be referenced from the HTML.
@@ -44,1237 +98,933 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-  <title>Opportunity Explorer | The Educational Opportunity Project at Stanford University</title>
-  <style>
-    :root {
-
-      /** Shade */
-      --darken1: rgba(0,0,0,0.05);
-      --darken2: rgba(0,0,0,0.15);
-      --darken3: rgba(0,0,0,0.24);
-      --darken4: rgba(0,0,0,0.37);
-
-      /** Brighten */
-      --lighten1: rgba(255,255,255,0.05);
-      --lighten2: rgba(255,255,255,0.15);
-
-      /** Colors */
-      --primary: #083794;
-      --link: #0078D4;
-      --accent: #FF003E;
-      --text: #031232;
-      --text2: #5D5D5D;
-      --text3: #757575;
-      --alt-text: #fff;
-      --background: #fff;
-      --dark-background: rgba(3, 18, 50, 0.9);
-      --alt-background: #F5F8FA;
-      --highlight-background: #EBFBFF;
-      --footer-background: #f8f8f8;
-
-      --body-text: var(--text);
-      --body2-text: var(--text2);
-      --link-text: var(--link);
-      --tab-text: var(--primary);
-      --accent2: #1B64AC;
-      --accent3: #34BFEF;
-      --accent4: rgb(177, 216, 206);
-      --divider: #ECEFF1;
-      --grey0: #f8f8f8;
-      --grey1: #efefef;
-      --grey2: #DCDCDC;
-      --grey3: #999;
-
-      /** Margins and spacing */
-      --grid-unit: 8px;
-      --padding: 16px;
-      --page-margin: 16px;
-
-      /** Typography */
-      --font: maisonneue-book, lato, helvetica neue, Arial, sans-serif, -apple-system;
-      --body-font: maisonneue-book, lato, helvetica neue, Arial, sans-serif, -apple-system;
-      --body-bold: maisonneue-bold, lato, helvetica neue, Arial, sans-serif, -apple-system;
-      --body-italic: maisonneue-italic, helvetica neue, Arial, sans-serif, -apple-system;
-      --heading-font: sharpgrotesk-medium20, lato, helvetica neue, Arial, sans-serif, -apple-system;
-      --alt-font: sharpgrotesk-medium15,lato,helvetica neue,Arial,sans-serif,-apple-system;
-      --font-size: 0.875rem; /** 14px */
-      --base-font-size: var(--font-size); /** 14px */
-      --large-font-size: 1rem;
-      --small-font-size: 0.8125rem; /** 13px */
-      --mini-font-size: 0.78125rem; /** 12.5px */
-      --micro-font-size: 0.6875rem; /** 11px */
-      --body-font-size: 1rem;
-      --header-title-size: 0.875em;
-      --header-subheader-size: 0.875em;
-
-      /** Layout Sizes */
-      --header-height: 104px;
-      --header-row1-height: 64px;
-      --header-row2-height: 40px;
-      --menu-width: 320px;
-      --help-panel-width: 320px;
-      --locations-bar-height: 64px;
-      --footer-height: 40px;
-      --panel-width: 296px;
-      --scatterplot-heading: 56px;
-
-      /** Shadows */
-      --shadow1: 0 0 1px rgba(0, 0, 0, 0.08), 1px 1px 2px rgba(0, 0, 0, 0.05);
-      --shadow10: 0 0 1.5px rgba(0, 0, 0, 0.1), 4px 4px 4px rgba(0, 0, 0, 0.05);
-      --shadow100: 0 0 4px rgba(0, 0, 0, 0.15), 4px 4px 8px rgba(0, 0, 0, 0.1);
-
-      --divider-border: 1px solid var(--divider);
-
-      /** Scatterplot Margins */
-      --sp-top: 24px;
-      --sp-right: 64px;
-      --sp-left: 24px;
-      --sp-bottom: 24px;
-
-      /** Preview Margins */
-      --sp-prev-top: 8px;
-      --sp-prev-right: 8px;
-      --sp-prev-left: 8px;
-      --sp-prev-bottom: 8px;
-
-    }
-
-    /** Variable overrides for 1023px and above */
-    @media (min-width: 1023px) {
+    <title>
+      Opportunity Explorer | The Educational Opportunity Project
+      at Stanford University
+    </title>
+    <style>
       :root {
+        /** Shade */
+        --darken1: rgba(0, 0, 0, 0.05);
+        --darken2: rgba(0, 0, 0, 0.15);
+        --darken3: rgba(0, 0, 0, 0.24);
+        --darken4: rgba(0, 0, 0, 0.37);
+
+        /** Brighten */
+        --lighten1: rgba(255, 255, 255, 0.05);
+        --lighten2: rgba(255, 255, 255, 0.15);
+
+        /** Colors */
+        --primary: #083794;
+        --link: #0078d4;
+        --accent: #ff003e;
+        --text: #031232;
+        --text2: #5d5d5d;
+        --text3: #757575;
+        --alt-text: #fff;
+        --background: #fff;
+        --dark-background: rgba(3, 18, 50, 0.9);
+        --alt-background: #f5f8fa;
+        --highlight-background: #ebfbff;
+        --footer-background: #f8f8f8;
+
+        --body-text: var(--text);
+        --body2-text: var(--text2);
+        --link-text: var(--link);
+        --tab-text: var(--primary);
+        --accent2: #1b64ac;
+        --accent3: #34bfef;
+        --accent4: rgb(177, 216, 206);
+        --divider: #eceff1;
+        --grey0: #f8f8f8;
+        --grey1: #efefef;
+        --grey2: #dcdcdc;
+        --grey3: #999;
+
         /** Margins and spacing */
+        --grid-unit: 8px;
+        --padding: 16px;
         --page-margin: 16px;
 
         /** Typography */
-        --base-font-size: 16px;
-      }
-    }
+        --font: maisonneue-book, lato, helvetica neue, Arial,
+          sans-serif, -apple-system;
+        --body-font: maisonneue-book, lato, helvetica neue, Arial,
+          sans-serif, -apple-system;
+        --body-bold: maisonneue-bold, lato, helvetica neue, Arial,
+          sans-serif, -apple-system;
+        --body-italic: maisonneue-italic, helvetica neue, Arial,
+          sans-serif, -apple-system;
+        --heading-font: sharpgrotesk-medium20, lato,
+          helvetica neue, Arial, sans-serif, -apple-system;
+        --alt-font: sharpgrotesk-medium15, lato, helvetica neue,
+          Arial, sans-serif, -apple-system;
+        --font-size: 0.875rem; /** 14px */
+        --base-font-size: var(--font-size); /** 14px */
+        --large-font-size: 1rem;
+        --small-font-size: 0.8125rem; /** 13px */
+        --mini-font-size: 0.78125rem; /** 12.5px */
+        --micro-font-size: 0.6875rem; /** 11px */
+        --body-font-size: 1rem;
+        --header-title-size: 0.875em;
+        --header-subheader-size: 0.875em;
 
-    @font-face {
-      font-family: maisonneue-bold;
-      src: url("/assets/fonts/MaisonNeue-Bold.woff2") format("woff2"),
-          url("/assets/fonts/MaisonNeue-Bold.woff") format("woff");
-    }
+        /** Layout Sizes */
+        --header-height: 104px;
+        --header-row1-height: 64px;
+        --header-row2-height: 40px;
+        --menu-width: 320px;
+        --help-panel-width: 320px;
+        --locations-bar-height: 64px;
+        --footer-height: 40px;
+        --panel-width: 296px;
+        --scatterplot-heading: 56px;
 
-    @font-face {
-      font-family: maisonneue-book;
-      src: url("/assets/fonts/MaisonNeue-Book.woff2") format("woff2"),
-          url("/assets/fonts/MaisonNeue-Book.woff") format("woff");
-    }
+        /** Shadows */
+        --shadow1: 0 0 1px rgba(0, 0, 0, 0.08),
+          1px 1px 2px rgba(0, 0, 0, 0.05);
+        --shadow10: 0 0 1.5px rgba(0, 0, 0, 0.1),
+          4px 4px 4px rgba(0, 0, 0, 0.05);
+        --shadow100: 0 0 4px rgba(0, 0, 0, 0.15),
+          4px 4px 8px rgba(0, 0, 0, 0.1);
 
-    @font-face {
-      font-family: maisonneue-italic;
-      src: url("/assets/fonts/MaisonNeue-BookItalic.woff2") format("woff2"),
-          url("/assets/fonts/MaisonNeue-BookItalic.woff") format("woff");
-    }
+        --divider-border: 1px solid var(--divider);
 
-    @font-face {
-      font-family: sharpgrotesk-medium15;
-      src: url("/assets/fonts/SharpGroteskMedium15.woff2") format("woff2"),
-          url("/assets/fonts/SharpGroteskMedium15.woff") format("woff");
-    }
+        /** Scatterplot Margins */
+        --sp-top: 24px;
+        --sp-right: 64px;
+        --sp-left: 24px;
+        --sp-bottom: 24px;
 
-    @font-face {
-      font-family: sharpgrotesk-medium20;
-      src: url("/assets/fonts/SharpGroteskMedium20.woff2") format("woff2"),
-          url("/assets/fonts/SharpGroteskMedium20.woff") format("woff");
-    }
-
-    html {
-      font-size: 100%;
-      margin:0;
-      padding:0;
-      box-sizing: border-box;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      width: 100%;
-      height: 100%;
-    }
-    *, *::before, *::after {
-      box-sizing: inherit;
-    }
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: var(--body-font);
-      font-weight: normal;
-      color: var(--body-text);
-      font-size: var(--font-size);
-      overflow:hidden;
-      width: 100%;
-      height: 100%;
-    }
-
-    a {
-      color: var(--link);
-    }
-
-    a:hover {
-      color: var(--primary);
-    }
-
-    button .icon {
-      width: 14px;
-      height: 14px;
-      margin-left: 8px;
-    }
-
-
-    .icon {
-      width: 16px;
-      height: 16px;
-    }
-
-    .icon.card__icon {
-      width: 26px;
-      height: 26px;
-      margin-right: 16px;
-    }
-
-    /** Intro Container */ 
-
-    .section.section--intro {
-      background: #061D56; 
-      color: #fff;
-      min-height: 440px;
-      margin-top:0;
-      padding:0 16px;
-      position: absolute;
-      width:100%;
-      height:100%;
-      top:0;
-      left:0;
-      z-index:10000;
-      display: block;
-      text-align: center;
-      transition: transform 0.6s ease-in-out 1s;
-      transform: translate3d(0, 0, 0);
-      overflow:auto;
-      background-image: linear-gradient(-180deg, #061D56 3%, #04143C 84%);
-      overflow: auto;
-      overflow-x: hidden;
-    }
-
-    @media(min-width: 1023px) {
-      .section.section--intro {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-      }
-    }
-
-    .section.section--intro.section--hidden {
-      transform: translate3d(-100%, 0, 0);
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .section.section--intro {
-        transition: opacity 0.6s ease-in-out 0.4s;
-        opacity:1;
-      }
-      .section.section--intro.section--hidden {
-        transform: translate3d(0, 0, 0);
-        opacity:0;
-        z-index:-1;
-      }
-    }
-
-
-    @media(min-width: 1023px) {
-      .section.section--intro.section--hidden {
-        transform: translate3d(0, -100%, 0);
-      }
-    }
-
-    /** Intro Header */
-
-    .section--intro .section__header {
-      position:relative;
-      margin: 32px auto 8px auto;
-      max-width: 576px;
-    }
-
-    /** Logo Mark */
-
-      .section__brand {
-        position:relative;
-        width: 32px;
-        height: 35px;
+        /** Preview Margins */
+        --sp-prev-top: 8px;
+        --sp-prev-right: 8px;
+        --sp-prev-left: 8px;
+        --sp-prev-bottom: 8px;
       }
 
-      @media(min-width: 1023px) {
-        .section__brand {
-          width: 34px;
-          height: 37px;
-          margin-top: -48px;
+      /** Variable overrides for 1023px and above */
+      @media (min-width: 1023px) {
+        :root {
+          /** Margins and spacing */
+          --page-margin: 16px;
+
+          /** Typography */
+          --base-font-size: 16px;
         }
       }
 
-    /** Title */
-
-      .section--intro .section__title {
-        font-size: 18.52px;
-        line-height: 27.24px;
-        letter-spacing: 0.18px;
-        position:relative;
+      @font-face {
+        font-family: maisonneue-bold;
+        src: url('/assets/fonts/MaisonNeue-Bold.woff2')
+            format('woff2'),
+          url('/assets/fonts/MaisonNeue-Bold.woff')
+            format('woff');
       }
 
-      .section--intro .section__title br {
-        display: none;
+      @font-face {
+        font-family: maisonneue-book;
+        src: url('/assets/fonts/MaisonNeue-Book.woff2')
+            format('woff2'),
+          url('/assets/fonts/MaisonNeue-Book.woff')
+            format('woff');
       }
 
-      @media(min-width: 480px) {
-        .section--intro .section__title br {
-          display: block;
-        }
+      @font-face {
+        font-family: maisonneue-italic;
+        src: url('/assets/fonts/MaisonNeue-BookItalic.woff2')
+            format('woff2'),
+          url('/assets/fonts/MaisonNeue-BookItalic.woff')
+            format('woff');
       }
 
-      @media(min-width: 1023px) {
-        .section--intro .section__title {
-          font-size: 22px;
-          letter-spacing: 0.22px;
-          line-height: 33.59px;
-        }
-
+      @font-face {
+        font-family: sharpgrotesk-medium15;
+        src: url('/assets/fonts/SharpGroteskMedium15.woff2')
+            format('woff2'),
+          url('/assets/fonts/SharpGroteskMedium15.woff')
+            format('woff');
       }
 
-
-    /** Intro Description */
-
-      .section--intro .section__description {
-        max-width: 660px;
-        margin: 24px auto;
-        text-align: center;
-        line-height: 1.5;
-        font-size: 15px;
-        position:relative;
+      @font-face {
+        font-family: sharpgrotesk-medium20;
+        src: url('/assets/fonts/SharpGroteskMedium20.woff2')
+            format('woff2'),
+          url('/assets/fonts/SharpGroteskMedium20.woff')
+            format('woff');
       }
 
-      @media(min-width: 1023px) {
-        .section--intro .section__description {
-          margin-bottom: 48px;
-          font-size: 14px;
-          letter-spacing: 0.23px;
-          text-align: center;
-          line-height: 21px;
-        }
-      }
-
-    /** Explorer Heading */
-    
-      .section--intro .section__heading {
-        font-size: 18.5px;
-        font-family: var(--heading-font);
-        font-weight: normal;
-        max-width: 200px;
-        margin: 32px auto 24px; 
-        line-height: 27px;
-        letter-spacing: 0.18px;
-      }
-
-      @media(min-width: 1023px) {
-        .section--intro .section__heading {
-          font-size: var(--large-font-size);
-          margin-bottom:0;
-          max-width: none;
-        }
-      }
-
-    /** Section Body */
-
-      .section--intro .section__body {
-        position: relative;
-      }
-
-      .section--intro .section__cards {
-        display: flex;
-        align-items: stretch;
-        justify-content: center;
-        flex-direction: column;
-      }
-
-      @media(min-width: 1023px) {
-        .section--intro .section__cards {
-          flex-direction: row;
-        }
-      }
-
-      .section--intro .section__loading {
-        position:absolute;
+      html {
+        font-size: 100%;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
         width: 100%;
         height: 100%;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: inherit;
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: var(--body-font);
+        font-weight: normal;
+        color: var(--body-text);
+        font-size: var(--font-size);
+        width: 100%;
+        height: 100%;
+      }
+
+      a {
+        color: var(--link);
+      }
+
+      a:hover {
+        color: var(--primary);
+      }
+
+      ul {
+        margin: 0;
+        padding: 0;
+      }
+      li {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      /* button .icon {
+        width: 14px;
+        height: 14px;
+        margin-left: 8px;
+      } */
+      .blocker {
+        background: rgba(255, 255, 255, 0.9);
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 99999;
         display: flex;
-        flex-direction: column;
-        align-items:center;
-        justify-content: flex-start;
-        opacity:0;
-        visibility: hidden;
-        transition: opacity 0.4s ease;
+        justify-content: center;
+        align-items: center;
       }
-
-      @media(min-width: 1023px) {
-        .section--intro .section__loading {
-          justify-content: flex-start;
-        }
-      }
-
-      .section--intro .section__body--loading .section__loading {
-        opacity: 1;
-        visibility: visible;
-      }
-
-      .section--intro .loading__text {
-        font-family: var(--alt-font);
-        letter-spacing: 0.02em;
-        color: #fff;
-        text-transform: uppercase;
-      }
-
-      .section--intro .section__user-prompt {
-        opacity:1;
-        transition: opacity 0.6s ease;
-      }
-
-      .section--intro .section__body--loading .section__user-prompt {
-        opacity:0;
-      }
-
-      .section--intro .section__body--unsupported .section__user-prompt {
-        display: none;
-      }
-
-      .section--intro .section__body .section__unsupported {
-        display:none;
-        font-family: sans-serif;
-        font-size: var(--large-font-size);
-        max-width: 620px;
-        margin:auto;
+      .blocker__message {
         padding: 16px;
-        background: rgba(255, 0, 0, 0.12);
-        border: 1px solid #c00;
+        border: 2px solid #ccc;
+        max-width: 300px;
+        background: #fff;
       }
-
-      .section--intro .section__body--unsupported .section__unsupported {
-        display:block;
-      }
-
-    /** Cards */
-
-      .card {
-        position:relative;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;        
-        text-align: left;
-        margin: 0 auto 32px auto;
-        width: 100%;
-        flex:1;
-        max-width: 320px;
-        min-width: 140px;
-      }
-
-      @media(min-width: 1023px) {
-        .card {
-          margin: 16px;
-          max-width: 320px;
+      @media (min-width: 900px) {
+        .blocker {
+          display: none;
         }
       }
+    </style>
+  </head>
 
-      .card__header {
-        position:relative;
-        z-index:9;
-        width: 100%;
-        flex: 0;
-        text-align:center;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-wrap: wrap;
-        padding: 0px 16px;
-        min-height: 48px;
-      }
+  <body>
+    <noscript>
+      You need to enable JavaScript to run this app.
+    </noscript>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript
+      ><iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-5RMFK5W"
+        height="0"
+        width="0"
+        style="display:none;visibility:hidden"
+      ></iframe
+    ></noscript>
+    <!-- End Google Tag Manager (noscript) -->
 
-      .card__title {
-        font-size: 16px;
-        letter-spacing: 0.16px;
-        line-height: 1;
-        text-transform: capitalize;
-        white-space: normal;
-      }
-
-      .card__body {
-        padding: 0px 16px 16px 16px;
-        display: flex;
-        flex-direction: column;
-        flex: 1;
-        align-items: flex-start;
-        justify-content: stretch;
-        width: 100%;
-        text-align: center;
-        font-size: 15px;
-        letter-spacing: 0.24px;
-        line-height: 22px;
-      }
-
-      @media(min-width: 1023px) {
-        .card__body {
-          font-size: 14px;
-          color: #FFFFFF;
-          letter-spacing: 0;
-          text-align: center;
-          line-height: 21px;
-        }
-      }
-
-      .card__body p { margin: 0; }
-
-      .card__actions {
-        width:100%;
-        z-index: 1;
-        padding: 0 16px;
-      }
-
-      @media(min-width: 1023px) {
-        .card__actions {
-          top:auto;
-          bottom:0;
-          height: 48px;
-        }
-      }
-
-      .card__actions button {
-        font-family: var(--alt-font);
-        font-size: 15.12px;
-        letter-spacing: 0.26px;
-        line-height: 18.36px;
-        text-transform: uppercase;
-        padding: 8px 16px;
-        height: 48px;
-        background: none;
-        border:none;
-        display: flex;
-        width: 100%;
-        align-items: center;
-        justify-content: center;
-        color:#fff;
-        border: 1px solid #fff;
-        margin: 0 auto;
-        border-radius: 2px;
-        max-width: 264px;
-      }
-      .card__actions button:hover {
-        cursor: pointer;
-        background: rgba(255,255,255,0.15);
-      }
-      .card__actions button:focus {
-        outline-color: #fff;
-      }
-      .card__actions button svg {
-        width: 12px;
-        height: 12px;
-      }
-
-      @media(min-width: 1023px) {
-        .card__actions button {
-          justify-content: center;
-          font-size: 16.8px;
-          letter-spacing: 0.29px;
-          line-height: 20.4px;
-          max-width: 88px;
-        }
-        .card__actions button svg {
-          transform: rotate(90deg);
-        }
-      }
-
-    /** App container */
-
-    #root {
-      position: relative;
-      width: 100%;
-      height:100%;
-    }
-
-    .hidden {
-      visibility: hidden;
-    }
-
-    .bg {
-      position: absolute;
-      top: -62px;
-      width: 420px;
-      margin-left: -187px;
-    }
-
-    @media(min-width: 1023px) {
-      .bg {
-        top: -102px;
-        width: 626px;
-        margin-left: -297px;
-      }
-    }
-
-    .bg__dots {
-      fill: rgba(12,49,141,0.82);
-      opacity:0.46;
-    }
-
-    .bg__mainland {
-      fill: none;
-      stroke-width: 0.8;
-      stroke: #06287C;
-      opacity:0.76;
-    }
-
-    /*!
-    * Load Awesome v1.1.0 (http://github.danielcardoso.net/load-awesome/)
-    * Copyright 2015 Daniel Cardoso <@DanielCardoso>
-    * Licensed under MIT
-    */
-    .la-ball-pulse,.la-ball-pulse>div{position:relative;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}.la-ball-pulse{display:block;font-size:0;color:#fff}.la-ball-pulse.la-dark{color:var(--alt-text)}.la-ball-pulse>div{display:inline-block;float:none;background-color:var(--alt-text);border:0 solid var(--alt-text)}.la-ball-pulse{width:54px;height:18px}.la-ball-pulse>div:nth-child(1){-webkit-animation-delay:-.2s;-moz-animation-delay:-.2s;-o-animation-delay:-.2s;animation-delay:-.2s}.la-ball-pulse>div:nth-child(2){-webkit-animation-delay:-.1s;-moz-animation-delay:-.1s;-o-animation-delay:-.1s;animation-delay:-.1s}.la-ball-pulse>div:nth-child(3){-webkit-animation-delay:0s;-moz-animation-delay:0s;-o-animation-delay:0s;animation-delay:0s}.la-ball-pulse>div{width:10px;height:10px;margin:4px;border-radius:100%;-webkit-animation:ball-pulse 1s ease infinite;-moz-animation:ball-pulse 1s ease infinite;-o-animation:ball-pulse 1s ease infinite;animation:ball-pulse 1s ease infinite}.la-ball-pulse.la-sm{width:26px;height:8px}.la-ball-pulse.la-sm>div{width:4px;height:4px;margin:2px}.la-ball-pulse.la-2x{width:108px;height:36px}.la-ball-pulse.la-2x>div{width:20px;height:20px;margin:8px}.la-ball-pulse.la-3x{width:162px;height:54px}.la-ball-pulse.la-3x>div{width:30px;height:30px;margin:12px}@-webkit-keyframes ball-pulse{0%,100%,60%{opacity:1;-webkit-transform:scale(1);transform:scale(1)}30%{opacity:.1;-webkit-transform:scale(.01);transform:scale(.01)}}@-moz-keyframes ball-pulse{0%,100%,60%{opacity:1;-moz-transform:scale(1);transform:scale(1)}30%{opacity:.1;-moz-transform:scale(.01);transform:scale(.01)}}@keyframes ball-pulse{0%,100%,60%{opacity:1;-webkit-transform:scale(1);-moz-transform:scale(1);-o-transform:scale(1);transform:scale(1)}30%{opacity:.1;-webkit-transform:scale(.01);-moz-transform:scale(.01);-o-transform:scale(.01);transform:scale(.01)}}
-  </style>
-</head>
-
-<body>
-  <noscript>
-    You need to enable JavaScript to run this app.
-  </noscript>
-  <!-- Google Tag Manager (noscript) -->
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5RMFK5W"
-  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-  <!-- End Google Tag Manager (noscript) -->
-  <svg xmlns="http://www.w3.org/2000/svg" style="height: 0; width: 0; position: absolute; visibility: hidden">
-    <defs>
-      <linearGradient x1="0%" y1="75.4971732%" x2="168.309859%" y2="-10.7952291%" id="rate-grad">
-          <stop stop-color="#0032A3" offset="0%"></stop>
-          <stop stop-color="#179BFF" offset="55.9755068%"></stop>
-          <stop stop-color="#169CF7" offset="100%"></stop>
-      </linearGradient>
-      <linearGradient x1="-154.142308%" y1="-141.633128%" x2="-154.142308%" y2="232.804362%" id="scores-grad">
-          <stop stop-color="#075ED2" offset="0%"></stop>
-          <stop stop-color="#04164F" offset="100%"></stop>
-      </linearGradient>
-      <linearGradient x1="66.0317073%" y1="116.469439%" x2="24.8872163%" y2="-106.654986%" id="tg1">
-          <stop stop-color="#0032A3" offset="0%"></stop>
-          <stop stop-color="#179BFF" offset="70.6572496%"></stop>
-          <stop stop-color="#169CF7" offset="100%"></stop>
-      </linearGradient>
-      <linearGradient x1="71.8389583%" y1="116.469439%" x2="15.7904784%" y2="-106.654986%" id="tg2">
-          <stop stop-color="#0032A3" offset="0%"></stop>
-          <stop stop-color="#179BFF" offset="70.6572496%"></stop>
-          <stop stop-color="#169CF7" offset="100%"></stop>
-      </linearGradient>
-      <linearGradient x1="62.4254035%" y1="116.469439%" x2="30.5362919%" y2="-106.654986%" id="tg3">
-          <stop stop-color="#0032A3" offset="0%"></stop>
-          <stop stop-color="#179BFF" offset="70.6572496%"></stop>
-          <stop stop-color="#169CF7" offset="100%"></stop>
-      </linearGradient>
-      <symbol id="right-arrow" viewBox="0 0 16 15">
-        <g stroke="none" fill="none" fill-rule="evenodd" stroke-linejoin="round">
-            <g transform="translate(0.000000, 1.000000)" stroke="#fff" stroke-width="1.5">
-                <path d="M8.05727956,12.4901119 L15.2902415,6.28378853 L8.05727956,12.4901119 Z"></path>
-                <path d="M15.3413008,6.2386813 L8.10833886,0.0323579094 L15.3413008,6.2386813 Z"></path>
-                <path d="M15.3413008,6.28378853 L0.943572443,6.28378853" stroke-linecap="round"></path>
-            </g>
-        </g>
-      </symbol>
-      <symbol id="rate-icon" viewBox="0 0 26 26">
-        <circle fill="#EEFCFF" cx="13" cy="13" r="13"></circle>
-        <path d="M3.77,16.9607186 L8.29081633,16.9607186 L8.29081633,19.24 L3.77,19.24 L3.77,16.9607186 Z M8.29081633,13.560479 L12.8116327,13.560479 L12.8116327,15.8397605 L8.29081633,15.8397605 L8.29081633,13.560479 Z M12.8116327,10.1602395 L17.332449,10.1602395 L17.332449,12.439521 L12.8116327,12.439521 L12.8116327,10.1602395 Z M17.332449,6.76 L22.23,6.76 L22.23,9.03928144 L17.332449,9.03928144 L17.332449,6.76 Z" fill="url(#rate-grad)" fill-rule="nonzero"></path>
-      </symbol>
-      <symbol id="scores-icon" viewBox="0 0 26 26">
-          <circle fill="#EEFCFF" cx="13" cy="13" r="13"></circle>
-          <polygon fill="#4EB5FF" points="7.802034 13.9558823 7.802034 20.02 6.24000058 20.02 6.24000058 13.9558823"></polygon>
-          <polygon fill="#4EB5FF" points="15.7740103 5.96530176 15.7740103 20.02 14.2119769 20.02 14.2119769 5.96530176"></polygon>
-          <polygon fill="#4EB5FF" points="19.7599994 13.9558823 19.7599994 20.02 18.197966 20.02 18.197966 13.9558823"></polygon>
-          <polygon fill="#4EB5FF" points="10.2259889 5.96530176 11.7880223 5.96530176 11.7880223 20.02 10.2259889 20.02"></polygon>
-          <polygon fill="#4EB5FF" points="9.79502757 9.53955691 9.79502757 20.02 8.23299415 20.02 8.23299415 9.53955691"></polygon>
-          <polygon fill="#4EB5FF" points="17.7670059 9.53955691 17.7670059 20.02 16.2049724 20.02 16.2049724 9.53955691"></polygon>
-          <polygon fill="url(#scores-grad)" points="12.2189833 4.16 13.7810167 4.16 13.7810167 20.02 12.2189833 20.02"></polygon>
-      </symbol>
-      <symbol id="trend-icon" viewBox="0 0 26 26">
-          <circle fill="#EEFCFF" cx="13" cy="13" r="13"></circle>
-          <path d="M16.0070775,19.6310688 C16.0782843,20.1430795 15.720942,20.6158708 15.2089312,20.6870775 C14.6969205,20.7582843 14.2241292,20.400942 14.1529225,19.8889312 C13.8861901,17.9709977 13.0423239,15.8841809 11.6093195,13.632553 C10.0396121,11.1661284 9.10612589,8.8297371 8.82165729,6.61948136 C8.75566956,6.10677183 9.11780913,5.63764501 9.63051865,5.57165728 C10.1432282,5.50566955 10.612355,5.86780912 10.6783427,6.38051864 C10.9247074,8.29471603 11.7571964,10.3783247 13.1886061,12.627447 C14.7567189,15.091366 15.7002107,17.4245492 16.0070775,19.6310688 Z" id="trend-line" fill="url(#tg1)" transform="translate(12.415006, 13.130006) rotate(90.000000) translate(-12.415006, -13.130006) "></path>
-          <path d="M16.7283662,15.3279594 C16.8333862,15.8341177 16.5081994,16.3295757 16.0020411,16.4345957 C15.4958828,16.5396158 15.0004248,16.2144289 14.8954048,15.7082706 C14.5124552,13.8625932 13.4800789,11.7684885 11.786261,9.43848922 C9.94794971,6.90972626 8.80230463,4.58351441 8.36143423,2.44729906 C8.25695077,1.94102972 8.58266259,1.44591675 9.08893193,1.34143329 C9.59520127,1.23694983 10.0903142,1.56266165 10.1947977,2.06893099 C10.5756227,3.91419932 11.6068005,6.00798747 13.3004396,8.33774083 C15.1385722,10.8662579 16.2852193,13.1921532 16.7283662,15.3279594 Z" id="trend-line" fill="url(#tg2)" transform="translate(12.545001, 8.888116) rotate(90.000000) translate(-12.545001, -8.888116) "></path>
-          <path d="M15.7119222,23.6219079 C15.7554666,24.1370092 15.3731943,24.589881 14.858093,24.6334254 C14.3429917,24.6769698 13.8901199,24.2946975 13.8465755,23.7795962 C13.7180669,22.2594266 12.976448,20.1787371 11.6101317,17.5700247 C10.1271725,14.7386054 9.37475275,12.37198 9.37475275,10.4407521 C9.37475275,9.92381348 9.79381423,9.504752 10.3107528,9.504752 C10.8276913,9.504752 11.2467528,9.92381348 11.2467528,10.4407521 C11.2467528,12.0174929 11.9133578,14.1142007 13.2684481,16.7014795 C14.7401814,19.5114649 15.5585351,21.8074421 15.7119222,23.6219079 Z" id="trend-line" fill="url(#tg3)" transform="translate(12.545027, 17.070779) rotate(90.000000) translate(-12.545027, -17.070779) "></path>
-      </symbol>
-      <symbol id="seda-light" viewBox="0 0 36 37">
-        <path d="M2.77679697,34.0680958 L34.1008827,34.0680958 C34.6859007,34.0680958 35.1601513,34.5423464 35.1601513,35.1273644 C35.1601513,35.7123824 34.6859007,36.186633 34.1008827,36.186633 L1.71752837,36.186633 C1.69294748,36.186633 1.66856214,36.1857959 1.64439933,36.1841483 C1.61854653,36.1857962 1.59247312,36.186633 1.56620429,36.186633 C0.897612409,36.186633 0.355611602,35.6446322 0.355611602,34.9760404 L0.355611602,1.98738966 C0.355611602,1.31879778 0.897612409,0.776796974 1.56620429,0.776796974 C2.23479617,0.776796974 2.77679697,1.31879778 2.77679697,1.98738966 L2.77679697,34.0680958 Z" fill="#fff"></path>
-        <path d="M15.4145686,21.0784986 C15.518896,22.2877889 14.6238535,23.3549861 13.4154351,23.4621503 C12.2070166,23.5693145 11.1428259,22.6758647 11.0384984,21.4665744 C10.934171,20.2572841 11.8292136,19.1900869 13.037632,19.0829227 C14.2460504,18.9757585 15.3102412,19.8692083 15.4145686,21.0784986 Z M11.5445139,28.772685 C11.5739777,29.1065458 11.3305659,29.4003698 11.0008384,29.4289592 C10.6711109,29.4575487 10.3799288,29.2100774 10.350465,28.8762166 C10.3210012,28.5423559 10.564413,28.2485319 10.8941405,28.2199424 C11.2238681,28.191353 11.5150501,28.4388243 11.5445139,28.772685 Z M5.65464088,26.2119521 C5.68410468,26.5458129 5.44069284,26.8396368 5.11096531,26.8682263 C4.78123782,26.8968157 4.49005571,26.6493444 4.46059191,26.3154837 C4.43112815,25.9816229 4.67453999,25.6877989 5.00426749,25.6592095 C5.33399501,25.63062 5.62517708,25.8780913 5.65464088,26.2119521 Z M15.0624437,26.667887 C15.1415155,27.5840071 14.4636641,28.3924372 13.5484203,28.4735662 C12.6331764,28.5546952 11.8271243,27.8778012 11.7480525,26.9616811 C11.6689807,26.045561 12.3468321,25.2371309 13.2620759,25.1560019 C14.1773198,25.0748729 14.9833719,25.7517669 15.0624437,26.667887 Z M6.42856449,19.1180523 C6.44820703,19.3406262 6.28593246,19.5365088 6.06611413,19.5555685 C5.84629577,19.5746281 5.65217439,19.4096472 5.63253186,19.1870734 C5.61288933,18.9644996 5.77516389,18.7686169 5.99498225,18.7495573 C6.21480058,18.7304976 6.40892196,18.8954785 6.42856449,19.1180523 Z M17.3748336,24.108038 C17.42394,24.6644726 17.0182536,25.1541792 16.4687077,25.2018283 C15.9191618,25.2494774 15.4338584,24.8370253 15.3847521,24.2805907 C15.3356457,23.724156 15.7413321,23.2344494 16.290878,23.1868003 C16.8404238,23.1391512 17.3257273,23.5516034 17.3748336,24.108038 Z M16.3833099,10.7796142 C16.4127737,11.113475 16.1693618,11.4072989 15.8396343,11.4358884 C15.5099068,11.4644779 15.2187247,11.2170066 15.1892609,10.8831458 C15.1597971,10.549285 15.403209,10.2554611 15.7329365,10.2268716 C16.062664,10.1982821 16.3538461,10.4457534 16.3833099,10.7796142 Z M31.866713,5.02005748 C31.8863555,5.24263134 31.724081,5.43851398 31.5042628,5.45757361 C31.2844443,5.47663324 31.090323,5.31165237 31.0706806,5.08907855 C31.0510378,4.8665047 31.2133126,4.67062205 31.4331308,4.65156239 C31.652949,4.63250276 31.8470706,4.79748363 31.866713,5.02005748 Z M14.3268262,14.6041574 C14.3464687,14.8267313 14.1841941,15.0226139 13.9643758,15.0416735 C13.7445574,15.0607332 13.5504361,14.8957523 13.5307935,14.6731785 C13.511151,14.4506046 13.6734255,14.254722 13.8932439,14.2356623 C14.1130622,14.2166027 14.3071836,14.3815836 14.3268262,14.6041574 Z M12.6128932,13.7633414 C12.642357,14.0972022 12.3989452,14.3910262 12.0692177,14.4196156 C11.7394901,14.4482051 11.4483081,14.2007338 11.4188443,13.866873 C11.3893805,13.5330122 11.6327923,13.2391883 11.9625198,13.2105988 C12.2922473,13.1820094 12.5834294,13.4294806 12.6128932,13.7633414 Z M21.8959271,15.4479098 C21.9920099,16.5613101 21.1680949,17.5438504 20.0556617,17.642475 C18.9432284,17.7410996 17.9635325,16.9184614 17.8674498,15.8050611 C17.7713671,14.6916609 18.595282,13.7091205 19.7077153,13.6104959 C20.8201486,13.5118713 21.7998444,14.3345095 21.8959271,15.4479098 Z M11.8193596,24.1310831 C11.8946096,24.9878939 11.2678723,25.7424073 10.4195026,25.8163359 C9.57113285,25.8902645 8.82239111,25.2556131 8.74714109,24.3988023 C8.67189107,23.5419915 9.29862843,22.7874781 10.1469981,22.7135495 C10.9953678,22.6396209 11.7441096,23.2742723 11.8193596,24.1310831 Z M7.67353175,31.2433869 C7.70299555,31.5772478 7.4595837,31.8710717 7.12985618,31.899661 C6.80012868,31.9282507 6.50894658,31.6807792 6.47948281,31.3469186 C6.45001901,31.0130578 6.69343086,30.7192338 7.02315835,30.6906443 C7.35288588,30.6620549 7.64406795,30.9095262 7.67353175,31.2433869 Z M23.9198338,14.5680926 C23.9492975,14.9019534 23.7058857,15.1957774 23.3761582,15.2243668 C23.0464307,15.2529563 22.7552486,15.005485 22.7257848,14.6716242 C22.696321,14.3377635 22.9397328,14.0439395 23.2694604,14.01535 C23.5991879,13.9867606 23.89037,14.2342319 23.9198338,14.5680926 Z M16.9370952,26.7927247 C16.9567378,27.0152986 16.7944632,27.2111812 16.5746448,27.2302409 C16.3548265,27.2493005 16.1607051,27.0843197 16.1410626,26.8617458 C16.1214201,26.639172 16.2836946,26.4432893 16.503513,26.4242297 C16.7233313,26.40517 16.9174527,26.5701509 16.9370952,26.7927247 Z M14.4942119,30.7495198 C14.5138544,30.9720936 14.3515799,31.1679764 14.1317615,31.187036 C13.9119432,31.2060955 13.7178218,31.0411147 13.6981793,30.8185409 C13.6785367,30.595967 13.8408113,30.4000844 14.0606296,30.3810247 C14.280448,30.3619651 14.4745694,30.5269459 14.4942119,30.7495198 Z M28.8112695,12.1118871 C28.830912,12.334461 28.6686375,12.5303436 28.4488191,12.5494032 C28.2290008,12.5684629 28.0348794,12.403482 28.0152369,12.1809082 C27.9955944,11.9583343 28.1578689,11.7624517 28.3776873,11.743392 C28.5975056,11.7243324 28.791627,11.8893133 28.8112695,12.1118871 Z M20.0591731,9.98721948 C20.108862,10.5502552 19.6983629,11.0457712 19.1422977,11.0939856 C18.5862325,11.1421999 18.0951718,10.7248548 18.0454829,10.1618191 C17.9957941,9.59878348 18.4062932,9.1032674 18.9623584,9.05505304 C19.5184236,9.0068387 20.0094842,9.42418381 20.0591731,9.98721948 Z M17.6558726,14.2315726 C17.7055614,14.7946083 17.2950624,15.2901243 16.7389972,15.3383387 C16.182932,15.3865531 15.6918713,14.9692079 15.6421824,14.4061723 C15.5924935,13.8431366 16.0029926,13.3476206 16.5590578,13.2994062 C17.115123,13.2511918 17.6061837,13.668537 17.6558726,14.2315726 Z M22.1406044,26.2663382 C22.1700682,26.600199 21.9266564,26.8940229 21.5969289,26.9226124 C21.2672014,26.9512019 20.9760193,26.7037306 20.9465555,26.3698698 C20.9170917,26.036009 21.1605035,25.7421851 21.490231,25.7135956 C21.8199586,25.6850061 22.1111406,25.9324774 22.1406044,26.2663382 Z M29.4512385,4.51587777 C29.5003449,5.07231238 29.0946584,5.56201898 28.5451126,5.60966809 C27.9955667,5.6573172 27.5102632,5.24486503 27.4611569,4.68843042 C27.4120506,4.1319958 27.817737,3.64228919 28.3672829,3.59464009 C28.9168287,3.546991 29.4021322,3.95944316 29.4512385,4.51587777 Z M23.8409963,5.76776729 C23.8704601,6.10162808 23.6270483,6.39545203 23.2973207,6.42404147 C22.9675932,6.45263095 22.6764111,6.20515966 22.6469473,5.8712989 C22.6174835,5.5374381 22.8608954,5.24361416 23.1906229,5.21502468 C23.5203504,5.18643523 23.8115325,5.43390652 23.8409963,5.76776729 Z M19.5493488,19.9538117 C19.6279189,20.8441071 18.9788206,21.6276377 18.0995473,21.7038762 C17.2202739,21.7801148 16.4437883,21.1201913 16.3652182,20.2298959 C16.2866481,19.3396005 16.9357463,18.55607 17.8150197,18.4798314 C18.6942931,18.4035928 19.4707786,19.0635163 19.5493488,19.9538117 Z M26.3034425,15.381537 C26.3525488,15.9379716 25.9468624,16.4276782 25.3973166,16.4753273 C24.8477707,16.5229764 24.3624673,16.1105242 24.3133609,15.5540896 C24.2642546,14.997655 24.669941,14.5079484 25.2194869,14.4602993 C25.7690327,14.4126502 26.2543362,14.8251023 26.3034425,15.381537 Z M22.5970443,22.3682584 C22.6559719,23.0359799 22.1691482,23.6236279 21.5096932,23.6808068 C20.8502382,23.7379857 20.267874,23.2430431 20.2089464,22.5753216 C20.1500189,21.9076 20.6368425,21.3199521 21.2962976,21.2627732 C21.9557526,21.2055943 22.5381168,21.7005368 22.5970443,22.3682584 Z M10.3153117,20.3825149 C10.3728184,21.048784 9.87983562,21.6367332 9.21420373,21.6957361 C8.54857184,21.754739 7.96235214,21.2624524 7.90484535,20.5961833 C7.8473386,19.9299141 8.34032142,19.341965 9.00595331,19.2829621 C9.6715852,19.2239592 10.2578049,19.7162458 10.3153117,20.3825149 Z M9.89369379,27.3163961 C9.95838477,28.0659492 9.40377552,28.7273891 8.65493932,28.7937633 C7.9061031,28.8601376 7.246609,28.3063116 7.18191799,27.5567584 C7.117227,26.8072053 7.67183625,26.1457654 8.42067245,26.0793912 C9.16950868,26.0130169 9.82900277,26.5668429 9.89369379,27.3163961 Z M11.8302519,18.0298244 C11.8498944,18.2523982 11.6876198,18.4482808 11.4678015,18.4673405 C11.2479832,18.4864001 11.0538618,18.3214193 11.0342192,18.0988454 C11.0145767,17.8762716 11.1768513,17.6803889 11.3966696,17.6613293 C11.616488,17.6422697 11.8106093,17.8072505 11.8302519,18.0298244 Z M6.61184009,22.3217554 C6.64130388,22.6556161 6.39789204,22.9494401 6.06816451,22.9780296 C5.73843702,23.006619 5.44725492,22.7591477 5.41779112,22.4252869 C5.38832735,22.0914262 5.63173916,21.7976022 5.96146669,21.7690128 C6.29119421,21.7404233 6.58237629,21.9878946 6.61184009,22.3217554 Z M28.9283772,17.1271775 C28.9480197,17.3497514 28.7857452,17.545634 28.5659268,17.5646937 C28.3461085,17.5837533 28.1519871,17.4187725 28.1323445,17.1961986 C28.112702,16.9736247 28.2749766,16.7777421 28.4947949,16.7586825 C28.7146133,16.7396228 28.9087347,16.9046037 28.9283772,17.1271775 Z M32.8945395,2.57960736 C32.914182,2.80218121 32.7519075,2.99806385 32.5320893,3.01712349 C32.3122708,3.03618312 32.1181495,2.87120226 32.098507,2.64862842 C32.0788643,2.42605457 32.2411391,2.23017193 32.4609573,2.21111229 C32.6807758,2.19205265 32.8748971,2.35703351 32.8945395,2.57960736 Z M25.2843982,18.2352676 C25.3562817,19.0681041 24.7400532,19.8030405 23.9080133,19.8767941 C23.0759734,19.9505478 22.3431988,19.3351896 22.2713154,18.5023531 C22.1994319,17.6695167 22.8156604,16.9345802 23.6477003,16.8608266 C24.4797402,16.787073 25.2125148,17.4024312 25.2843982,18.2352676 Z M31.0578788,8.65469911 C31.0775213,8.87727296 30.9152468,9.0731556 30.6954283,9.09221523 C30.4756101,9.1112749 30.2814887,8.94629402 30.2618461,8.72372017 C30.2422036,8.50114632 30.4044782,8.30526368 30.6242966,8.28620405 C30.8441148,8.26714442 31.0382364,8.43212529 31.0578788,8.65469911 Z M16.6839039,16.9931434 C16.7428315,17.6608649 16.2560078,18.2485129 15.5965528,18.3056918 C14.9370977,18.3628707 14.3547336,17.8679281 14.295806,17.2002066 C14.2368784,16.532485 14.723702,15.9448371 15.3831571,15.8876582 C16.0426121,15.8304793 16.6249763,16.3254219 16.6839039,16.9931434 Z M22.756805,12.0755751 C22.8059113,12.6320097 22.4002249,13.1217163 21.8506791,13.1693654 C21.3011332,13.2170145 20.8158297,12.8045624 20.7667234,12.2481277 C20.7176171,11.6916931 21.1233035,11.2019865 21.6728494,11.1543374 C22.2223952,11.1066883 22.7076987,11.5191405 22.756805,12.0755751 Z M24.8172035,8.06995757 C24.8663098,8.62639221 24.4606234,9.11609881 23.9110776,9.16374792 C23.3615317,9.211397 22.8762282,8.79894483 22.8271219,8.24251022 C22.7780156,7.6860756 23.183702,7.19636901 23.7332478,7.1487199 C24.2827937,7.10107082 24.7680972,7.51352296 24.8172035,8.06995757 Z M26.4751853,10.9375192 C26.5417207,11.6942046 25.988667,12.3604491 25.2399053,12.4256178 C24.4911435,12.4907866 23.8302146,11.9302016 23.7636791,11.1735162 C23.6971436,10.4168308 24.2501973,9.75058635 24.9989591,9.68541758 C25.7477209,9.6202488 26.4086498,10.1808338 26.4751853,10.9375192 Z M28.7356478,9.03112797 C28.7847542,9.58756258 28.3790678,10.0772692 27.8295219,10.1249183 C27.279976,10.1725674 26.7946726,9.76011523 26.7455662,9.20368062 C26.6964599,8.647246 27.1021463,8.15753938 27.6516922,8.1098903 C28.201238,8.06224119 28.6865415,8.47469336 28.7356478,9.03112797 Z"  fill="#fff" fill-rule="nonzero" transform="translate(18.677163, 17.055761) rotate(-4.000000) translate(-18.677163, -17.055761)"></path>
-      </symbol>
-    </defs>
-  </svg>
-  <div class="section section--intro ">
-    
-    <div class="section__header">
-      <svg class="bg" viewBox="0 0 626 395" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-        <path class="bg__dots" d="M428.460638,125.512437 C427.814272,125.431359 427.189188,125.145656 426.69281,124.655329 C425.816858,123.790055 425.585995,122.52886 426.000221,121.45489 C426.024425,118.990385 428.029773,117 430.5,117 C432.985281,117 435,119.014719 435,121.5 C435,123.985281 432.985281,126 430.5,126 C429.76589,126 429.072837,125.824213 428.460638,125.512437 Z M350.575151,156.000615 C351.650057,155.619692 352.898412,155.854513 353.759472,156.705077 C354.335144,157.273731 354.632198,158.013386 354.650634,158.758518 C354.875652,159.294184 355,159.882571 355,160.5 C355,162.985281 352.985281,165 350.5,165 C348.014719,165 346,162.985281 346,160.5 C346,158.014719 348.014719,156 350.5,156 C350.525099,156 350.550149,156.000205 350.575151,156.000615 Z M372.963784,155.073618 C372.987594,155.212181 373,155.354642 373,155.5 C373,156.471908 372.445392,157.314281 371.635391,157.727902 C370.824997,158.515213 369.719112,159 368.5,159 C366.014719,159 364,156.985281 364,154.5 C364,152.014719 366.014719,150 368.5,150 C370.985281,150 373,152.014719 373,154.5 C373,154.694329 372.987682,154.885781 372.963784,155.073618 Z M410.5643,125.910624 C410.113944,126.568405 409.357374,127 408.5,127 C407.119288,127 406,125.880712 406,124.5 C406,123.119288 407.119288,122 408.5,122 C408.678937,122 408.853483,122.018799 409.021771,122.05453 C409.245447,119.778364 411.165044,118 413.5,118 C415.985281,118 418,120.014719 418,122.5 C418,124.985281 415.985281,127 413.5,127 C412.378235,127 411.352336,126.589543 410.5643,125.910624 Z M394,132 C392.343146,132 391,130.656854 391,129 C391,127.343146 392.343146,126 394,126 C395.656854,126 397,127.343146 397,129 C397,130.656854 395.656854,132 394,132 Z M218,265 C216.343146,265 215,263.656854 215,262 C215,260.343146 216.343146,259 218,259 C219.656854,259 221,260.343146 221,262 C221,263.656854 219.656854,265 218,265 Z M218,253 C216.343146,253 215,251.656854 215,250 C215,248.343146 216.343146,247 218,247 C219.656854,247 221,248.343146 221,250 C221,251.656854 219.656854,253 218,253 Z M456.5,63 C454.014719,63 452,60.9852814 452,58.5 C452,56.0147186 454.014719,54 456.5,54 C458.985281,54 461,56.0147186 461,58.5 C461,60.9852814 458.985281,63 456.5,63 Z M490.5,29 C488.014719,29 486,26.9852814 486,24.5 C486,22.0147186 488.014719,20 490.5,20 C492.985281,20 495,22.0147186 495,24.5 C495,26.9852814 492.985281,29 490.5,29 Z M318.5,201 C316.014719,201 314,198.985281 314,196.5 C314,194.014719 316.014719,192 318.5,192 C320.985281,192 323,194.014719 323,196.5 C323,198.985281 320.985281,201 318.5,201 Z M469.5,41 C467.014719,41 465,38.9852814 465,36.5 C465,34.0147186 467.014719,32 469.5,32 C471.985281,32 474,34.0147186 474,36.5 C474,38.9852814 471.985281,41 469.5,41 Z M238,271 C236.343146,271 235,269.656854 235,268 C235,266.343146 236.343146,265 238,265 C239.656854,265 241,266.343146 241,268 C241,269.656854 239.656854,271 238,271 Z M158,298 C156.343146,298 155,296.656854 155,295 C155,293.343146 156.343146,292 158,292 C159.656854,292 161,293.343146 161,295 C161,296.656854 159.656854,298 158,298 Z M283,163 C281.343146,163 280,161.656854 280,160 C280,158.343146 281.343146,157 283,157 C284.656854,157 286,158.343146 286,160 C286,161.656854 284.656854,163 283,163 Z M367,136 C365.343146,136 364,134.656854 364,133 C364,131.343146 365.343146,130 367,130 C368.656854,130 370,131.343146 370,133 C370,134.656854 368.656854,136 367,136 Z M340.5,164 C339.119288,164 338,162.880712 338,161.5 C338,160.119288 339.119288,159 340.5,159 C341.880712,159 343,160.119288 343,161.5 C343,162.880712 341.880712,164 340.5,164 Z M235.5,256 C234.119288,256 233,254.880712 233,253.5 C233,252.119288 234.119288,251 235.5,251 C236.880712,251 238,252.119288 238,253.5 C238,254.880712 236.880712,256 235.5,256 Z M327.5,188 C325.014719,188 323,185.985281 323,183.5 C323,181.014719 325.014719,179 327.5,179 C329.985281,179 332,181.014719 332,183.5 C332,185.985281 329.985281,188 327.5,188 Z M201.5,268 C199.014719,268 197,265.985281 197,263.5 C197,261.014719 199.014719,259 201.5,259 C203.985281,259 206,261.014719 206,263.5 C206,265.985281 203.985281,268 201.5,268 Z M442.5,41 C440.014719,41 438,38.9852814 438,36.5 C438,34.0147186 440.014719,32 442.5,32 C444.985281,32 447,34.0147186 447,36.5 C447,38.9852814 444.985281,41 442.5,41 Z M399,98 C395.686292,98 393,95.3137085 393,92 C393,88.6862915 395.686292,86 399,86 C402.313708,86 405,88.6862915 405,92 C405,95.3137085 402.313708,98 399,98 Z M460.5,9 C458.014719,9 456,6.98528137 456,4.5 C456,2.01471863 458.014719,0 460.5,0 C462.985281,0 465,2.01471863 465,4.5 C465,6.98528137 462.985281,9 460.5,9 Z M242.5,244 C240.014719,244 238,241.985281 238,239.5 C238,237.014719 240.014719,235 242.5,235 C244.985281,235 247,237.014719 247,239.5 C247,241.985281 244.985281,244 242.5,244 Z M469.5,32 C467.014719,32 465,29.9852814 465,27.5 C465,25.0147186 467.014719,23 469.5,23 C471.985281,23 474,25.0147186 474,27.5 C474,29.9852814 471.985281,32 469.5,32 Z M345.5,142 C343.014719,142 341,139.985281 341,137.5 C341,135.014719 343.014719,133 345.5,133 C347.985281,133 350,135.014719 350,137.5 C350,139.985281 347.985281,142 345.5,142 Z M291.5,142 C289.014719,142 287,139.985281 287,137.5 C287,135.014719 289.014719,133 291.5,133 C293.985281,133 296,135.014719 296,137.5 C296,139.985281 293.985281,142 291.5,142 Z M352.344313,88.3549052 C354.523464,87.1121826 357.315526,87.8594454 358.580557,90.0239634 C359.845589,92.1884814 359.104548,94.9505956 356.925397,96.1933182 C354.746245,97.4360408 351.954184,96.688778 350.689152,94.52426 C349.424121,92.359742 350.165162,89.5976278 352.344313,88.3549052 Z M209,239 C207.343146,239 206,237.656854 206,236 C206,234.343146 207.343146,233 209,233 C210.656854,233 212,234.343146 212,236 C212,237.656854 210.656854,239 209,239 Z M259,163 C257.343146,163 256,161.656854 256,160 C256,158.343146 257.343146,157 259,157 C260.656854,157 262,158.343146 262,160 C262,161.656854 260.656854,163 259,163 Z M135.700164,276.941978 C137.309604,276.48615 138.991918,277.417572 139.457718,279.022367 C139.923517,280.627162 138.996413,282.297627 137.386973,282.753454 C135.777533,283.209281 134.095219,282.277859 133.629419,280.673064 C133.16362,279.068269 134.090724,277.397805 135.700164,276.941978 Z M432.514659,71.7111667 C431.325224,72.886103 429.396768,72.886103 428.207333,71.7111667 C427.017897,70.5362304 427.017897,68.6312823 428.207333,67.456346 C429.396768,66.2814097 431.325224,66.2814097 432.514659,67.456346 C433.704094,68.6312823 433.704094,70.5362304 432.514659,71.7111667 Z M261.405558,217.947054 C263.014998,217.491226 264.697312,218.422648 265.163112,220.027443 C265.628911,221.632238 264.701807,223.302703 263.092367,223.75853 C261.482927,224.214357 259.800613,223.282935 259.334813,221.67814 C258.869014,220.073345 259.796118,218.402881 261.405558,217.947054 Z M226.571533,249.713551 C228.180973,249.257724 229.863288,250.189146 230.329087,251.793941 C230.794886,253.398736 229.867782,255.0692 228.258342,255.525028 C226.648902,255.980855 224.966588,255.049433 224.500789,253.444638 C224.034989,251.839843 224.962093,250.169379 226.571533,249.713551 Z M440.087273,108.015735 C438.897838,109.190672 436.969382,109.190672 435.779947,108.015735 C434.590512,106.840799 434.590512,104.935851 435.779947,103.760915 C436.969382,102.585978 438.897838,102.585978 440.087273,103.760915 C441.276708,104.935851 441.276708,106.840799 440.087273,108.015735 Z M278.065309,257.277003 C279.674749,256.821176 281.357064,257.752598 281.822863,259.357393 C282.288662,260.962188 281.361558,262.632652 279.752118,263.088479 C278.142678,263.544307 276.460364,262.612885 275.994564,261.00809 C275.528765,259.403295 276.455869,257.73283 278.065309,257.277003 Z M295.817864,202.879976 C298.232021,202.196226 300.755498,203.593349 301.454206,206.000539 C302.152915,208.407728 300.762269,210.91343 298.348111,211.597181 C295.933954,212.280932 293.410477,210.883808 292.711769,208.476619 C292.01306,206.069429 293.403706,203.563727 295.817864,202.879976 Z"></path>
-        <path d="M542.247091,179.617917 L542.385501,179.162503 L545.340179,179.119815 L547.445305,179.790681 L548.885662,180.0143 L549.550439,178.560766 L548.553273,177.107238 L548.553273,175.877324 L546.891325,174.423789 L545.450975,170.622249 L546.337344,166.932512 L546.226548,165.478985 L545.340179,164.584499 C545.340179,164.584499 546.337344,163.466401 546.337344,163.019162 C546.337344,162.571916 546.669732,161.565628 546.669732,161.565628 L547.999293,160.67115 L549.328846,159.553045 L549.661235,160.22391 L548.66407,161.342008 L547.7777,163.913641 L547.999293,164.696309 L549.21805,164.919929 L549.550439,168.721476 L548.110089,169.392335 L548.331681,171.852157 L548.66407,171.740347 L549.439643,170.39863 L550.547611,171.628538 L549.439643,172.523023 L549.21805,174.871036 L550.990795,177.219048 L553.64991,177.554478 L554.757878,176.995429 L556.976096,179.888492 L557.907062,180.259416 L558.385139,180.473228 L558.48377,181.819863 L557.958184,183.96228 L556.870509,186.85544 L556.564912,190.624238 L557.572631,193.833987 L559.055947,192.508717 L560.308774,189.065644 L559.992306,186.720696 L560.278851,183.54898 L562.280083,180.935213 L562.808095,178.70964 L562.467256,178.324946 L563.843182,175.541894 L563.998725,172.177924 L563.84386,171.684076 L562.292036,166.597083 L561.627252,166.932512 L559.18973,165.255365 L557.970973,162.012867 L556.641412,159.553045 L555.090266,158.882186 L553.64991,156.422363 L553.991866,154.968829 L554.341662,155.317441 L555.090266,156.869603 L557.306196,158.882186 L560.630087,160.44753 L563.399997,160.894769 L563.510793,161.901057 L562.956813,162.571916 L563.178405,164.47269 L563.732385,164.47269 L565.172742,162.795543 L565.726723,159.441235 L567.610264,156.645983 L569.715397,152.173577 L570.49097,148.372037 L570.047786,147.589362 L569.93699,141.104372 L568.829022,138.756367 L568.053449,139.315416 L566.169907,139.539035 L565.837519,139.203606 L566.613099,138.53274 L568.053449,137.191023 L568.096668,136.434491 L568.467087,136.37519 L569.272213,136.743783 L572.042123,135.961108 L576.030798,134.61939 L577.803536,133.948524 L582.67858,130.258794 L585.337694,128.246211 L587.66442,125.786388 L584.783713,124.66829 L583.897344,125.674579 L581.903007,127.575352 L576.473982,130.258794 L574.92283,130.146984 L573.814868,129.699745 L573.039288,130.146984 L571.488143,131.935948 L570.49097,132.830427 L569.604601,133.054046 L569.383009,132.159568 L570.712563,130.929653 L570.166635,129.768798 L570.861828,129.927743 L574.258053,127.575352 L576.695575,125.339149 L578.025128,123.885615 L578.579116,124.332854 L580.46265,123.326566 L584.00814,122.543897 L588.836326,120.129211 L589.437185,119.972251 L591.431502,119.301399 L593.093451,117.959682 L593.869024,116.729767 L594.755393,116.841577 L596.750457,115.778948 L597.106285,115.520926 L598.522476,114.828993 L598.190087,113.263656 L598.744068,112.257361 L600.738405,111.251073 L601.292386,113.375466 L600.959997,114.605374 L599.298049,115.611669 L599.298049,116.282528 L600.627609,115.27624 L603.286723,112.145551 L605.945837,110.803834 L608.826544,109.797539 L608.604952,108.120392 L607.940175,106.107808 L606.610614,104.430654 L605.391857,103.871605 L603.9515,103.983415 L603.619112,104.318845 L604.283888,105.213323 L605.281061,104.654274 L606.72141,105.772379 L607.275398,107.673146 L606.056633,108.90306 L604.505488,109.573919 L602.067966,109.23849 L599.408845,105.101513 L597.857699,103.312556 L596.638934,103.312556 L595.863361,103.871605 L594.533801,102.082642 L594.755393,101.076354 L596.417342,97.4984262 L594.437158,94.4463493 L594.049015,94.1059954 L594.644597,93.3614498 L595.391796,91.0852634 L595.647485,90.311178 L596.417342,85.9819823 L596.528138,82.9631108 L597.52531,82.0686324 L596.860527,79.8324295 L598.96566,77.372607 L600.073628,78.3788952 L600.959997,78.0434658 L604.616284,75.9190727 L604.837876,73.9064894 L606.832213,73.57106 L607.940175,71.7820963 L607.829379,70.6639983 L607.607786,68.5396052 L608.161767,67.6451268 L607.940175,66.8624513 L607.053806,65.8561631 L608.494155,64.9616847 L609.71292,67.1978876 L610.710085,66.9742611 L610.931677,67.8687464 L610.931677,68.9868444 L612.261238,69.0986542 L612.593626,67.1978876 L612.926015,66.7506415 L611.818053,65.7443533 L612.48283,64.7380616 L614.144779,63.7317707 L614.809556,62.725479 L616.028313,62.6136692 C616.028313,62.6136692 616.249912,64.0672008 616.693097,64.0672008 C617.136282,64.0672008 617.579466,64.0672008 617.579466,64.0672008 L620.903357,60.2656565 L623.230083,58.1412641 L624.559643,57.6940235 L626,54.4515304 L626,53.1098086 L624.448847,50.5381756 L623.119287,49.0846441 L621.235752,49.1964546 L621.568141,49.9791252 L621.457345,50.3145553 L620.903357,50.3145553 L618.909027,48.749214 L618.79823,45.3949103 L618.244243,44.0531886 L614.144779,44.0531886 L607.940175,23.3683156 L606.610614,22.6974554 L602.51115,21.0203035 L601.513978,20.9084931 L600.295221,22.1384043 L597.52531,24.1509869 L597.52531,24.8218471 L596.971323,25.3808982 L595.087788,24.9336576 L594.201412,23.3683156 L594.201412,22.5856449 L593.315043,22.4738351 L592.428667,22.4738351 L590.988318,25.3808982 L588.99398,31.5304551 L587.775216,34.8847588 L587.886019,38.2390624 L587.996815,39.2453534 L587.442828,41.1461255 L586.888847,41.8169864 L586.888847,45.9539607 L588.218407,47.6311125 L587.221235,50.4263658 L585.44849,53.668859 L584.894509,57.4704032 L584.894509,59.2593656 L583.857011,58.9758648 L582.883422,59.057592 L582.296242,59.374675 L581.681415,59.3711754 L581.23823,60.4892768 L580.795046,60.1538467 L580.130262,59.4829858 L579.133097,60.8247069 L579.099877,64.3050542 L578.469012,64.5139544 L560.479903,69.1807236 L560.053592,69.4551231 L554.868674,70.8876179 L551.766368,71.8939061 L549.550439,71.7820963 L545.783363,72.6765816 L543.671506,73.538318 L542.016281,74.8009747 L540.575931,76.4781217 L538.69239,79.049754 L536.698052,82.1804422 L535.70088,84.1930255 L535.257696,84.7520745 L531.269028,88.5536146 L531.379824,90.3425783 L531.933805,91.1252538 L533.152562,91.6843028 L534.371327,91.6843028 L534.371327,92.690591 L533.595754,94.1441253 L533.817346,95.1504135 L534.814511,96.6039478 L534.703715,98.169285 L533.374155,98.9519605 L531.933805,98.9519605 L530.825837,100.293678 L529.607079,102.529881 L528.166722,103.759796 L524.621239,104.095225 L522.848494,104.877894 L521.408137,105.772379 L520.300176,105.660569 L518.970616,104.766084 L514.649559,104.877894 L512.43363,105.213323 L509.663713,106.107808 L506.67221,107.114097 L504.677873,108.344011 L506.007433,112.592798 L507.226191,112.704607 L508.112567,114.828993 L508.223363,115.499859 L507.447783,116.170718 L506.007433,118.071492 L505.675045,119.189589 L504.345484,120.419504 L503.126727,121.202173 L502.461943,122.320278 L501.575574,123.102946 L500.596804,123.881299 L499.907512,124.240389 L496.146549,128.134401 L495.260174,128.469831 L492.38007,130.550886 L491.680724,130.474225 L487.504423,133.277666 L484.845309,134.84301 L482.518583,137.414642 L479.748673,140.098084 L477.532743,140.657133 L475.538406,140.992563 L471.771324,142.781526 L470.330974,142.893336 L468.004248,140.768943 L464.458758,141.216189 L462.68602,140.209894 L461.054117,139.275612 L460.264679,139.05092 L460.359294,138.64455 L460.47009,137.638262 L461.91044,135.066629 L463.281554,133.864671 L463.129204,130.370604 L464.223726,129.266069 L464.971199,129.028879 L465.123542,126.569057 L466.176105,124.472627 L466.89628,124.89191 L467.007076,125.339149 L467.561064,125.450959 L468.890617,124.7801 L468.669025,118.183301 L466.453095,112.480981 L464.901943,106.219618 L463.240001,103.983415 L461.467256,102.753501 L460.359294,103.536176 L457.700173,104.766084 L456.370619,108.232202 L454.487078,110.803834 L453.711505,111.251073 L452.714333,110.803834 C452.714333,110.803834 450.941595,109.797539 451.052391,109.350299 C451.163187,108.90306 451.38478,105.884189 451.38478,105.884189 L453.711505,104.989703 L454.265486,102.641691 L454.708671,100.852734 L456.370619,99.7346291 L456.149027,92.8024008 L455.041059,91.2370636 L454.15469,90.6780077 L453.600709,89.2244803 L454.15469,88.6654313 L455.262651,88.8890509 L455.373447,87.770946 L453.711505,86.2056019 L452.825129,84.4166451 L451.052391,84.4166451 L447.950086,83.41035 L444.18301,81.0623373 L442.299469,81.0623373 L441.856284,81.5095834 L441.191501,81.1741471 L439.086374,79.6088099 L437.092037,80.8387177 L435.097699,82.4040618 L435.319292,84.8638843 L435.984068,85.0875039 L437.424425,85.4229333 L437.756813,85.9819823 L435.984068,86.5410382 L434.21133,86.7646578 L433.214158,87.9945656 L432.992566,89.4480999 L433.214158,90.5661979 L433.43575,94.3677449 L430.998228,95.8212792 L430.555044,95.7094625 L430.555044,92.8024008 L431.441413,91.1252538 L431.884604,89.4480999 L431.330617,88.8890509 L430.001063,89.4480999 L429.33628,92.3551616 L427.452745,93.1378302 L426.233981,94.4795547 L426.123185,95.1504135 L426.566369,95.7094625 L426.123185,97.4984262 L424.572032,97.8338556 L424.572032,98.6165311 L425.126019,100.293678 L424.35044,104.542464 L423.242478,107.337716 L423.685663,110.580214 L424.018051,111.362883 L423.464071,113.040037 L423.242478,113.599086 L423.020886,115.499859 L425.458408,119.636829 L427.452745,124.109234 L428.44991,127.463542 L427.89593,130.706033 L427.231153,134.84301 L425.569204,138.42093 L425.347612,140.321704 L423.114096,142.455503 L422.411857,143.004883 L420.472568,144.123251 L419.032211,145.464968 L418.256638,145.688588 L417.259466,145.017729 L415.154669,144.402512 L414.565529,144.536897 L414.37876,143.899631 L413.824779,142.110668 L412.93841,139.539035 L411.830442,138.309121 L410.833277,136.520164 L410.673196,132.723804 L410.468374,131.977467 L410.72248,129.923365 L409.614512,126.792677 L409.171328,122.543897 L408.395755,120.866743 L409.060532,118.74235 L409.614512,116.729767 L410.611684,114.94081 L410.168493,112.592798 L409.725308,110.132975 L410.057697,108.90306 L411.387257,107.225906 L411.498053,105.325133 L410.944073,104.430654 L411.387257,102.641691 L411.719646,100.405488 L413.603187,96.492138 L415.597524,91.7961126 L415.70832,90.2307685 L415.486728,89.5599097 L414.932741,89.8953391 L412.052034,94.2559351 L410.168493,97.051187 L408.838939,98.2811017 L408.284959,99.8464389 L407.287786,100.405488 L406.512213,101.747212 L405.515041,101.523593 L405.404245,100.293678 L406.290621,98.6165311 L407.730971,95.3740331 L408.949735,94.2559351 L409.704542,92.6710108 L410.093397,92.053899 L412.273626,87.211897 L412.93841,84.4166451 L414.267964,81.3977667 L414.821944,81.2859569 L415.597524,82.4040618 L416.040709,82.4040618 L419.143007,80.7269079 L420.14018,81.8450128 L420.472568,81.9568226 L421.358937,81.1741471 L422.13451,79.049754 L423.796459,78.490705 L428.560707,78.0434658 L429.890267,76.2545021 L433.43575,76.1426923 L437.424425,77.0371776 L438.643183,77.0371776 L440.859112,76.0308825 L442.410265,76.1426923 L443.850622,75.6954531 L446.39894,76.0308825 L446.95292,76.2545021 L447.839289,76.0308825 L446.95292,75.3600237 L446.066551,74.9127845 L443.850622,72.7883914 L443.850622,67.9805562 L442.85345,67.6451268 L442.077877,68.4277954 L437.86761,69.5458934 L436.538049,69.8813297 L434.543719,69.3222738 L434.21133,69.0986542 L434.21133,65.1853043 L433.214158,65.0734945 L431.441413,65.9679729 L428.339114,67.3096974 L423.796459,67.533317 L421.469733,68.3159856 L418.699823,70.7758081 L417.591855,71.4466669 L416.816282,71.4466669 L415.929913,72.0057228 L414.821944,71.6702865 L413.713983,70.7758081 L412.716811,71.4466669 L410.057697,71.5584767 L408.174156,69.6577101 L407.17699,67.533317 L406.179825,66.7506415 L403.963895,66.0797827 L402.412743,66.0797827 L401.526374,65.1853043 L399.088852,67.1978876 L398.424068,67.9805562 L397.870087,67.6451268 L398.09168,65.8561631 L399.753629,63.6199602 L400.086017,61.9428083 L401.63717,61.383758 L402.634335,59.2593656 L405.182653,58.5885047 L405.404245,57.9176438 L404.628672,57.1349731 L401.415577,57.4704032 L398.424068,59.1475551 L396.872922,60.7128971 L395.986546,61.9428083 L394.767789,62.5018587 L393.438228,64.5144413 L393.327432,65.4089239 L390.335929,66.8624513 L388.67398,68.2041758 L384.574517,68.8750346 L384.131325,69.3222738 L384.131325,69.9931395 L381.693803,71.5584767 L379.810262,72.1175326 L379.319349,72.5189578 L378.621969,72.8106413 L378.259116,73.6828698 L377.483543,73.57106 L377.040352,72.7883914 L375.156817,72.2293424 L374.381238,72.3411522 L373.16248,73.012011 L372.497696,72.5647718 L372.940888,71.2230473 L374.270441,69.0986542 L375.046014,68.3159856 L373.716461,67.3096974 L372.276104,67.8687464 L370.281767,69.210464 L365.185131,71.4466669 L363.190793,71.8939061 L361.196463,71.5584767 L360.523619,70.9510478 L360.225479,70.5687947 L362.858405,68.5396052 L363.744781,68.4277954 L366.84708,64.9616847 L368.065844,64.4026308 L369.61699,61.7191881 L371.278939,59.2593656 L373.384072,57.4704032 L376.656513,56.082362 L382.993249,53.2735416 L385.69271,52.0029207 L386.112222,50.4263658 L383.069263,50.6827309 L382.580179,51.4326568 L382.136988,51.4326568 L380.91823,49.3082644 L374.824422,49.5318847 L374.159645,50.090935 L373.494868,50.090935 L373.16248,49.1964546 L372.608492,47.9665433 L370.835754,48.3019734 L368.619825,50.5381756 L367.511856,51.0972267 L365.406723,51.0972267 L363.633985,50.4263658 L363.633985,48.9728343 L362.747609,48.8610238 L362.41522,49.1964546 L360.642475,48.3019734 L360.310087,46.2893908 L359.312922,46.6248216 L358.980533,47.2956825 L357.318584,46.9602517 L353.662298,45.2830998 L351.003184,43.4941382 L349.008847,43.4941382 L348.122477,42.8232773 L346.571325,43.2705179 L345.795752,44.0531886 L345.574159,44.9476698 L342.250268,44.9476698 L342.250268,43.4941382 L337.929205,43.2705179 L337.707613,42.264227 L334.383715,42.264227 L333.275754,41.1461255 L332.278582,36.8973407 L331.724601,33.0957964 L330.395047,32.5367461 L328.843895,32.2013153 L328.40071,32.3131258 L328.179118,38.0154421 L307.527406,37.9910475 L306.775697,37.9583027 L287.29522,37.5682016 L274.553629,37.120961 L256.383008,36.2264798 L239.285655,34.9235291 L238.405769,34.5905529 L217.382658,32.6485559 L197.328495,30.1887334 L177.274339,27.3934801 L155.115043,23.7037463 L142.484249,21.3557336 L120.056598,16.5608071 L119.286707,16.4498128 L110.379605,14.7012814 L109.885786,14.4233698 L99.4952245,12.0754933 L83.7621249,8.16213928 L70.0233627,4.24878455 L64.1511537,2.9070635 L57.5033655,1.00629117 L54.5118616,0 L53.7362859,0.559050656 L53.5146929,1.11810124 L55.1766398,4.47240484 L55.9522155,6.26136716 L54.7334545,8.72118966 L54.7334545,10.2865317 L55.1766398,11.2928226 L54.6226577,12.5227339 L54.9550475,14.7589361 L55.6198257,15.6534173 L55.5090296,16.5478984 L54.5118616,16.6597082 L54.0686757,15.3179872 L53.2931006,13.6408353 L52.074339,12.6345437 L52.295932,11.1810122 L53.8470827,10.8455821 L53.6254897,9.61567082 L53.4038968,8.83299946 L51.9635429,9.72748062 L51.077171,10.5101513 L51.077171,12.1873038 L49.526021,12.2991136 L47.1992932,11.6282527 L45.2049565,10.6219618 L43.0998224,10.1747212 L39.9975216,8.72118966 L37.7815927,7.37946792 L35.8980528,5.59050629 L34.236106,3.57792367 L32.7957521,3.24249359 L31.2446013,9.72748062 L32.4633623,11.9636835 L32.4633623,17.4423796 L32.0201764,19.4549615 L33.017345,24.3746072 L34.9008849,26.2753793 L31.9093802,26.7226192 L31.7985834,29.2942522 L33.5713271,30.0769236 L32.4633623,32.8721762 L30.5798225,33.0957964 L30.3582295,35.1083791 L31.9093802,37.120961 L30.4690263,38.9099233 L28.9178756,43.3823277 L26.7019467,50.3145553 L24.4860171,54.7869604 L21.0513272,64.5144413 L16.6194687,73.9064894 L11.079646,82.6276814 L9.75008823,84.6402647 L9.19610617,90.5661979 L8.30973433,94.7031743 L10.1658349,97.1428702 L9.83587882,97.8088184 L8.75292025,101.076354 L8.64212343,106.219618 L5.09663673,114.381754 L2.99150463,116.170718 L2.76991167,116.953387 L1.55115004,117.512443 L0.55398206,120.419504 L0,122.655707 L1.88353983,125.562769 L2.99150463,128.469831 L3.76707965,130.929653 L3.54548669,135.402059 L2.32672575,137.526452 L1.88353983,141.551619 L1.21876094,144.123251 L2.43752189,146.806693 L4.32106171,149.937374 L5.87221244,153.291682 L6.7585836,156.086934 L6.53699132,158.323137 L6.31539836,158.658566 L6.31539836,160.112094 L10.1932742,164.47269 L9.86088506,166.149844 L9.41769913,167.715188 L8.97451321,169.056905 L9.08530935,174.759226 L10.5256633,177.330858 L11.855221,179.119815 L13.7387608,179.455251 L14.4035397,181.356018 L13.6279647,183.81584 L12.1876101,184.933945 L11.4120351,184.933945 L10.858053,187.617387 L11.1904421,189.629971 L13.4063717,192.648842 L14.5143359,196.338579 L15.5115039,199.58107 L16.3978757,201.705463 L18.7246014,205.73063 L19.7217694,207.519587 L20.0541592,209.53217 L21.1621233,210.203029 L21.1621233,211.880183 L20.6081413,213.221907 L19.3893803,218.141552 L19.0569905,219.48327 L20.7189381,221.384043 L23.5996459,221.719473 L26.7019467,222.949388 L29.3610615,224.402915 L31.3553982,224.402915 L33.3497341,226.527308 L35.1224771,229.881616 L35.8980528,231.446953 L38.5571677,232.900487 L41.8810614,233.459536 L42.8782294,234.913071 L43.3214153,237.149274 L42.3242473,237.596513 L42.5458403,238.267372 L44.7617706,238.826421 L46.6453104,238.938237 L48.6396471,242.180728 L51.298764,245.08779 L51.852746,246.653134 L53.6254897,249.560196 L53.8470827,251.796399 L53.8470827,258.281388 L54.1794718,259.511296 L61.048855,260.517591 L74.566018,262.418357 L84.097762,263.092494 L84.7870132,263.609022 L82.9865519,265.101799 L82.7649597,266.108095 L83.0973481,266.778953 L96.0605305,274.158421 L104.370268,279.413495 L114.452744,285.339435 L125.975577,292.271664 L134.396111,293.948818 L151.617926,295.819629 L152.71778,296.374591 L163.313985,297.750358 L164.200354,290.818129 L175.61239,292.607093 L184.149382,293.726007 L184.808484,293.725191 L186.13803,294.060607 L187.910789,296.073176 L188.907961,299.092075 L192.121063,300.657419 L193.007432,302.893622 L197.882483,308.372323 L198.768852,309.490421 L202.203539,310.943955 L202.979119,312.397483 L204.08708,313.068349 L204.419469,314.969115 L206.635398,319.441521 L206.635398,325.032032 L208.186551,328.274523 L213.283187,333.641407 L216.828677,335.094941 L218.047435,336.436659 L218.047435,336.883905 L220.706549,338.449242 L222.036109,338.896481 L223.254867,339.679157 L225.027612,340.350016 L226.689561,338.672862 L229.681063,334.424082 L230.34584,331.852443 L231.896993,329.616247 L234.334515,328.609952 L237.436814,327.380044 L239.541947,328.945382 L244.638583,329.392621 L249.292035,330.175296 L251.06478,331.628824 L251.06478,332.411499 L252.837525,334.535892 L256.936996,338.225623 L257.047792,339.231918 L258.266549,340.573635 L258.82053,343.480697 L262.476816,351.978269 L262.36602,353.319987 L265.246726,355.108951 L267.684248,359.693166 L270.010974,362.712038 L272.226904,363.606523 L273.334865,365.17186 L272.448496,368.190739 L272.891681,368.861597 L273.778057,369.308837 L273.556464,371.656849 L273.113273,372.104089 L273.556464,373.669433 L275.772387,375.011157 L276.658763,379.483556 L278.099113,382.167005 L283.306552,384.515018 L286.852035,385.297686 L289.732741,387.42208 L291.948671,387.869319 L292.835047,387.533889 L296.602123,388.316558 L300.480001,391 L302.585135,389.658282 L303.249911,388.651987 L302.031154,386.751214 L301.36637,382.502435 L300.147613,377.694599 L299.593632,376.017445 L300.147613,372.886764 L300.923186,370.203322 L301.809555,367.072634 L302.806727,363.271094 L301.255574,361.929369 L301.920358,360.587652 L304.690268,360.364025 L307.349382,356.562485 L309.676108,356.115246 L313.664783,353.655423 L314.88354,352.649128 L319.204603,350.301115 L323.082475,348.623962 L326.738761,346.387766 L328.622302,344.934231 L332.500174,341.244494 L333.38655,340.685445 L334.8269,339.679157 L336.599645,338.337432 L337.264422,336.995715 L344.023007,333.865027 L347.905518,332.76866 L348.345221,332.680213 L351.557171,331.628824 L357.096992,331.405204 L364.187965,333.865027 L368.619825,334.647702 L371.168143,333.641407 L373.384072,334.424082 L375.600002,335.094941 L376.153983,333.641407 L373.938053,332.858738 L372.165308,333.194168 L370.281767,332.07607 C370.281767,332.07607 370.39257,331.181584 370.835754,331.069775 C371.278939,330.957965 372.940888,330.398916 372.940888,330.398916 L374.159645,331.405204 L375.37841,330.734345 L377.594339,331.181584 L378.591504,332.858738 L378.813097,334.424082 L381.915395,334.647702 L383.13416,335.87761 L382.580179,336.995715 L381.693803,337.554764 L382.801771,338.672862 L388.563184,341.132684 L391.000706,340.238206 L391.66549,338.561052 L393.438228,338.113813 L394.656992,337.107525 L395.543362,337.778383 L396.097342,339.790967 L394.546196,340.350016 L394.989381,340.797255 L397.316107,339.902776 L398.867259,337.554764 L399.42124,337.219334 L397.980883,336.995715 L398.534864,335.87761 L398.424068,334.871322 L399.864425,334.535892 L400.639998,333.641407 L401.083182,334.200456 C401.083182,334.200456 400.972386,336.324849 401.526374,336.324849 C402.080354,336.324849 404.40708,336.772095 404.40708,336.772095 L407.17699,338.113813 L407.841767,339.120108 L409.836104,339.120108 L410.611684,339.790967 L412.16283,337.666574 L412.16283,336.660278 L411.276461,336.660278 L408.949735,334.759512 L404.961061,334.200456 L402.745131,332.635119 L403.520711,330.734345 L405.071857,330.957965 L405.182653,330.510726 L403.963895,329.839867 L403.963895,329.504431 L406.179825,329.504431 L407.398583,327.380044 L406.512213,326.03832 L406.290621,324.137546 L405.293449,324.249356 L403.963895,325.70289 L403.520711,327.491854 L401.415577,327.044608 L400.750794,325.8147 L401.969558,324.472976 L403.35451,323.243075 L403.87303,322.886689 L404.628672,322.348583 L406.401417,319.441521 L407.620175,320.00057 L412.273626,318.658852 L413.713983,318.882472 L414.711148,319.441521 L418.256638,319.441521 L418.430899,318.572723 L419.143007,318.435233 L421.026549,318.435233 L421.469733,318.547043 L422.356102,316.646269 L423.353274,313.627398 L424.904427,314.074637 L427.009554,318.211613 L427.009554,318.882472 L425.126019,320.224196 L427.009554,320.447816 L430.807889,318.668307 L431.272793,318.747368 L433.657343,318.323423 L437.756813,316.869889 L441.856284,316.534459 L444.847787,316.08722 L450.055219,317.317128 L455.595046,320.00057 L456.703008,321.006865 L458.697345,321.789534 L459.805307,323.131258 L460.026899,325.032032 L462.242828,324.137546 L464.901943,324.137546 L467.339471,322.795829 L469.887789,320.336006 L471.992916,320.447816 L472.325311,319.665141 L471.771324,318.994282 L471.88212,317.652564 L474.652037,317.093508 L476.424775,317.093508 L478.419113,318.099803 L481.299819,319.106092 L482.961768,321.677724 L484.845309,322.348583 L485.620882,324.696595 L487.947608,325.8147 L489.055576,327.603664 L490.38513,328.050903 L493.93062,328.945382 L494.816989,331.069775 L496.922122,333.641407 L496.922122,340.238206 L495.924957,343.480697 L496.146549,345.38147 L497.032919,348.735778 L498.251683,351.53103 L498.805664,351.195601 L499.802829,348.064913 L498.030091,347.394054 L497.808492,346.946815 L498.91646,346.499575 L502.018758,347.170434 L502.129555,348.288532 L499.913625,352.090079 L498.473275,353.767233 L500.910797,356.338865 L502.683535,358.463258 L504.677873,362.152989 L506.67221,364.836431 L508.112567,368.302548 L509.331324,368.526168 L510.439292,367.072634 L511.65805,367.855309 L513.430795,370.650561 L513.873979,373.110384 L515.979113,376.129255 L516.533094,375.234777 L519.192208,375.458396 L521.62973,377.023734 L523.956455,380.601661 L524.510443,382.949674 L524.732035,384.962257 L525.507608,385.633116 L526.393984,385.968545 L528.055926,385.297686 L529.053098,384.179581 L531.712213,384.067772 L533.817346,383.061484 L535.70088,380.825281 L535.368492,379.483556 L535.1469,377.806409 L535.590084,376.464685 L535.368492,375.122967 L537.030441,374.228482 L537.252033,371.880469 L536.808849,370.650561 L536.47646,362.376608 L535.590084,357.121534 L532.487785,351.41922 L530.050264,347.394054 L528.277519,343.704317 L526.283181,341.69174 L524.288851,336.548469 L524.842831,335.65399 L525.618404,334.759512 L524.510443,332.746929 L521.740533,330.175296 L518.416635,326.373749 L515.868317,322.013153 L512.212037,315.528171 L509.655831,308.790078 L508.103026,303.728274 L508.090032,303.11312 L507.558586,298.756653 L509.109732,291.824424 L510.106904,288.917356 L509.774509,287.128399 L512.059797,282.809619 L511.710055,281.874749 L512.101234,281.202459 L513.541591,280.307981 L516.976285,276.506434 L516.311501,274.270231 L518.305839,274.158421 L520.743361,271.810408 L521.851329,271.251359 L523.402475,268.903346 L525.286016,267.002573 L526.726373,264.54275 L528.388315,264.095511 L529.163894,262.194738 L530.271856,261.635689 L530.604244,257.275093 L532.376989,253.026307 L536.092471,249.251125 L536.284558,248.695714 L540.021943,247.771232 L543.235045,247.435803 L543.567434,245.758649 L544.896987,241.286243 L547.223713,238.043752 L551.655572,234.354022 L555.201062,232.676868 L557.084597,232.229629 L557.860176,232.565058 L558.746546,232.565058 L560.851679,229.21075 L562.18124,226.750928 L561.294864,227.086364 L559.743718,228.651701 L559.300526,227.533603 L556.41982,227.533603 L557.74938,223.173007 L557.1954,222.278529 L555.865839,222.278529 L555.865839,221.607663 L555.644247,220.713185 L556.752208,221.607663 L557.74938,221.719473 L559.411322,221.943092 L561.959647,220.824994 L562.846016,218.812411 L563.289201,217.358877 L565.061946,216.464398 L565.283538,213.557337 L564.729558,213.110098 L566.3915,212.998288 L565.948315,211.432944 L564.286373,209.75579 L561.848851,205.283384 L560.676877,202.033665 L560.04608,201.394089 L557.573543,197.236025 L553.597726,198.402005 L552.520181,197.368494 L554.269946,196.413131 L553.93289,194.667353 L552.717662,193.43252 L552.634363,192.456 L551.071052,191.388897 L551.010082,190.271545 L552.856449,190.337209 L553.008463,189.379571 L552.165868,188.833338 L552.494123,187.498212 L551.551931,186.735649 L551.853142,183.491823 L551.258197,182.661846 L549.071581,182.383442 L547.596463,180.938989 L544.268007,180.287392 L542.247091,179.617917 Z M606.355551,114.230769 L608.04444,113.30768 L608.400006,111 L609.200003,111.153844 L610,114.230769 L609.022228,114.846143 L606,115 L606.355551,114.230769 Z M606,117.967754 L607.599992,115 L608.719997,115 L610,116.677423 L608.320003,117.838711 L606.800003,119 L606,117.967754 Z M610,69.4074069 L611.767443,68 L613.348841,68.9629655 L614,71.1851908 L612.046511,72 L610,69.4074069 Z M613,68.462112 L614.692305,69.9926085 C614.692305,69.9926085 615.923075,70.0591432 615.923075,69.7929713 C615.923075,69.5267995 616.153843,68.1293889 616.153843,68.1293889 L617,67.4639593 L616.230765,66 L614.307692,66.5988925 L613,68.462112 Z M549,177.292687 L550.365845,178.804883 L550.560966,179.878051 L551.926824,181 C551.926824,181 553,180.463413 553,180.268292 C553,180.073172 552.121957,178.414636 552.121957,178.414636 L551.243901,177 L549,177.292687 Z M446.631581,74.724144 L447.052631,76.8620698 L449.157894,77 L450,75.9655153 C450,75.9655153 449.947369,74.724144 449.736844,74.5862053 C449.526312,74.4482751 448.684213,73 448.684213,73 L447.263163,73.2068952 L446.210525,73.3448254 L446,74.310345 L446.631581,74.724144 Z M306.920002,385 L306.640004,380.145911 L305.280003,375.236656 L305,370.437727 L305.76,364.811394 L307.400004,360.122784 L309.119998,356.427051 L310.680002,354 L311,354.165486 L308.640001,358.688616 L306.480005,363.156593 L305.480002,367.679717 L305.320003,371.209971 L305.76,375.402142 L307.040001,380.311397 L307.28,383.841638 L307.359999,384.834527 L306.920002,385 Z M41,239.046155 L42.5172379,240.830768 L43.2069006,241.569233 L44.5172464,242 L45,240.892306 L44.1724155,239.53846 L41.896554,238 L41,238.123076 L41,239.046155 Z" class="bg__mainland" fill-rule="nonzero"></path>
-      </svg>
-      <svg class="section__brand">
-        <use xlink:href="#seda-light" />
-      </svg>
-      <h1 class="section__title"><span role="text">The Educational Opportunity Project at&nbsp;<br />Stanford University</span></h1>
-      <p class="section__description">
-        Using public-school test scores in grades 3–8 from  2008–09 through 2015–16, we have created the first comprehensive view of educational opportunity in the United States.
-      </p>
-    </div>
-
-    <div class="section__body section__body--loading">
-      <div class="section__loading">
-        <div class="la-ball-pulse la-dark">
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
-        <p class="loading__text" id="loadingText">Loading assets</p>
-      </div>
-      <div class="section__unsupported">
-        <p>The browser you are using does not support the features required to use this tool.  Please switch to a modern browser (MS Edge, Safari, Firefox, Google Chrome, etc.) and ensure WebGL is enabled.</p>
-        <button class="button" onclick="window.history.go(-1); return false;">Go Back</button>
-      </div>
-      <div class="section__user-prompt">
-        <h2 class="section__heading">
-          What would you like to explore?
-        </h2>
-        <div class="section__cards">
-          <div class="card">
-            <div class="card__header">
-              <svg class="icon card__icon"><use xlink:href="#scores-icon" /></svg>
-              <h3 class="card__title">Average test scores</h3>
-            </div>
-            <div class="card__body">
-              <p>Explore how students score relative to the national average to see educational opportunities across America</p>
-            </div>
-            <div class="card__actions">
-              <button aria-label="Explore average test scores" onclick="SEDA.loadView('avg')">
-                <span>Go</span>
-                <svg class="icon"><use xlink:href="#right-arrow" /></svg>
-              </button>
-            </div>
-          </div>
-      
-          <div class="card">
-            <div class="card__header">
-              <svg class="icon card__icon"><use xlink:href="#rate-icon" /></svg>
-              <h3 class="card__title">Learning rates</h3>
-            </div>
-            <div class="card__body">
-              <p>Explore how much students learn each year to see how the nation’s schools are contributing to educational opportunity</p>
-            </div>
-            <div class="card__actions">
-              <button aria-label="Explore learning rates" onclick="SEDA.loadView('grd')">
-                <span>Go</span>
-                <svg class="icon">
-                  <use xlink:href="#right-arrow" />
-                </svg>
-              </button>
-            </div>
-          </div>
-    
-          <div class="card">
-            <div class="card__header">
-              <svg class="icon card__icon"><use xlink:href="#trend-icon" /></svg>
-              <h3 class="card__title">Trends in test scores</h3>
-            </div>
-            <div class="card__body">
-              <p>Explore how much average test scores are changing each year to see where educational opportunities are improving or declining</p>
-            </div>
-            <div class="card__actions">
-              <button aria-label="Explore trends in test scores" onclick="SEDA.loadView('coh')">
-                <span>Go</span>
-                <svg class="icon">
-                  <use xlink:href="#right-arrow" />
-                </svg>
-              </button>
-            </div>
-          </div>
-        </div>
+    <div id="root" class="hidden"></div>
+    <div class="blocker">
+      <div class="blocker__message">
+        Not yet supported at this resolution. Please preview on a
+        laptop / desktop screen.
       </div>
     </div>
-  </div>
-  <div id="root" class="hidden"></div>
-  <script>
-    // test for local storage support
-    window.supportsLocalStorage = (function() {
-      var mod = 'test';
-      try {
-        localStorage.setItem(mod, mod);
-        localStorage.removeItem(mod);
-        return true;
-      } catch(e) {
-        return false;
-      }
-    })()
-
-    // sets hash on browser for url
-    function replaceHash(hash) {
-      window.location.hash = hash
-    }
-
-    // switch from split view if low resolution
-    if (
-      window.location.hash.indexOf('/split/') > -1 &&
-      window.innerWidth < 1024
-    ) {
-      replaceHash(window.location.hash.replace('/split/', '/map/'));
-    }
-
-    // SEDA namespace for globals
-    window.SEDA = (function() {
-
-      // grabs everything after the # character on provided string
-      function getHashFromURL(url) {
-        if (url.indexOf('#') === -1) { return '' }
-        return url.substring(url.indexOf('#')+1);
-      }
-
-      // listen to hash change, and show intro if empty route
-      window.addEventListener("hashchange", function(e) { 
-        const oldHash = getHashFromURL(e.oldURL);
-        const newHash = getHashFromURL(e.newURL);
-        if (newHash === '/' && oldHash.length > 0) {
-          showIntro();
-        }
-      }, false)
-
-      // stores the browser name and version for reporting
-      var browser = (function(){
-        var ua = navigator.userAgent, tem, 
-            M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
-        if(/trident/i.test(M[1])){
-            tem = /\brv[ :]+(\d+)/g.exec(ua) || [];
-            return {name:'IE',version:(tem[1] || '')};
-        }
-        if(M[1]=== 'Chrome'){
-            tem = ua.match(/\b(OPR|Edge)\/(\d+)/);
-            if(tem != null) return {name:tem[1].replace('OPR', 'Opera'),version:tem[2]};
-        }
-        M = M[2]? [M[1], M[2]]: [navigator.appName, navigator.appVersion, '-?'];
-        if((tem = ua.match(/version\/(\d+)/i))!= null)
-            M.splice(1, 1, tem[1]);
-        return {name:M[0], version:M[1]};
-      })();
-
-      // returns true if webgl is supported
-      function webgl_support () { 
+    <script>
+      // test for local storage support
+      window.supportsLocalStorage = (function() {
+        var mod = 'test'
         try {
-          var canvas = document.createElement('canvas'); 
-          return !!window.WebGLRenderingContext &&
-            (canvas.getContext('webgl') || canvas.getContext('experimental-webgl'));
-        } catch(e) {
-          return false;
-        }
-      };
-
-      // returns true if the browser is internet explorer
-      function isIE() {
-        var ua = window.navigator.userAgent;
-        var msie = ua.indexOf('MSIE ');
-        if (msie > 0) {
-          // IE 10 or older => return version number
-          return parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10);
-        }
-        var trident = ua.indexOf('Trident/');
-        if (trident > 0) {
-          // IE 11 => return version number
-          var rv = ua.indexOf('rv:');
-          return parseInt(ua.substring(rv + 3, ua.indexOf('.', rv)), 10);
-        }
-        return false;
-      }
-
-      // returns true if the browser is not supported
-      function unsupportedBrowser() {
-        return !webgl_support() || isIE();
-      }
-
-      // returns true if the provided route is valid
-      function validRoute(route) {
-        if (route[0] === '/') {
-          route = route.substring(1);
-        } else if (route[0] === '#') {
-          route = route.substring(2);
-        }
-        // skip embed validation
-        if (route.indexOf('embed/') !== -1) {
+          localStorage.setItem(mod, mod)
+          localStorage.removeItem(mod)
           return true
-        }
-        var parts = route.split('/');
-        var routeIds = [ 
-          'view', 'highlightedState', 'region', 'metric', 'secondary', 
-          'demographic', 'zoom', 'latitude', 'longitude', 'locations' 
-        ];
-        const params = routeIds.reduce(function(acc, curr, i) {
-          acc[curr] = parts[i];
-          return acc;
-        }, {});
-        if (!params.view || ['map', 'chart', 'split'].indexOf(params.view) === -1) {
-          return false;
-        }
-        if (!params.highlightedState || params.highlightedState.length !== 2) {
-          return false;
-        }
-        if (!params.region || ['counties', 'districts', 'schools'].indexOf(params.region) === -1) {
-          return false;
-        }
-        if (!params.metric || ['avg', 'grd', 'coh'].indexOf(params.metric) === -1) {
-          return false;
-        }
-        if (!params.secondary || ['ses', 'seg', 'min', 'frl'].indexOf(params.secondary) === -1) {
-          return false;
-        }
-        if (
-          !params.demographic || 
-          (params.demographic !== 'all' && params.region === 'schools') ||
-          ['all', 'w', 'b', 'a', 'h', 'm', 'f', 'p', 'wb', 'wh', 'pn', 'np', 'mf'].indexOf(params.demographic) === -1
-        ) {
+        } catch (e) {
           return false
         }
-        if (!params.zoom || !params.latitude || !params.longitude) {
-          return false;
+      })()
+
+      // sets hash on browser for url
+      function replaceHash(hash) {
+        window.location.hash = hash
+      }
+
+      // switch from split view if low resolution
+      if (
+        window.location.hash.indexOf('/split/') > -1 &&
+        window.innerWidth < 1024
+      ) {
+        replaceHash(
+          window.location.hash.replace('/split/', '/map/')
+        )
+      }
+
+      // SEDA namespace for globals
+      window.SEDA = (function() {
+        // grabs everything after the # character on provided string
+        function getHashFromURL(url) {
+          if (url.indexOf('#') === -1) {
+            return ''
+          }
+          return url.substring(url.indexOf('#') + 1)
         }
-        return true;
-      }
 
-      // default route to load if none specified, or invalid
-      var defaultRoute = '/map/us/districts/avg/ses/all/3.5/38/-97';
+        // listen to hash change, and show intro if empty route
+        window.addEventListener(
+          'hashchange',
+          function(e) {
+            const oldHash = getHashFromURL(e.oldURL)
+            const newHash = getHashFromURL(e.newURL)
+            if (newHash === '/' && oldHash.length > 0) {
+              showIntro()
+            }
+          },
+          false
+        )
 
-      // track start time
-      var startTime = new Date();
+        // stores the browser name and version for reporting
+        var browser = (function() {
+          var ua = navigator.userAgent,
+            tem,
+            M =
+              ua.match(
+                /(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i
+              ) || []
+          if (/trident/i.test(M[1])) {
+            tem = /\brv[ :]+(\d+)/g.exec(ua) || []
+            return { name: 'IE', version: tem[1] || '' }
+          }
+          if (M[1] === 'Chrome') {
+            tem = ua.match(/\b(OPR|Edge)\/(\d+)/)
+            if (tem != null)
+              return {
+                name: tem[1].replace('OPR', 'Opera'),
+                version: tem[2]
+              }
+          }
+          M = M[2]
+            ? [M[1], M[2]]
+            : [navigator.appName, navigator.appVersion, '-?']
+          if ((tem = ua.match(/version\/(\d+)/i)) != null)
+            M.splice(1, 1, tem[1])
+          return { name: M[0], version: M[1] }
+        })()
 
-      // variable to track the time when a user enters a view
-      var viewTime;
-
-      // variable to track the current view (map, chart, split)
-      var currentView;
-
-      // variable to track the time when a user selects a metric
-      var metricTime;
-
-      // variable to track the current metric (avg, grd, coh)
-      var currentMetric;
-
-      // track time after metric selection
-      var startTimeDataLoad;
-
-      // timeout to track long load times
-      var loadTimeout;
-
-      // stores event handlers
-      var handlers = {};
-
-      // labels for tracking
-      var LANG = {
-        'ALL': 'all',
-        'B': 'Black',
-        'W': 'White',
-        'H': 'Hispanic',
-        'A': 'Asian',
-        'M': 'male',
-        'F': 'female',
-        'P': 'poor',
-        'NP': 'non-poor',
-        'N': 'non-poor',
-        'WB': 'White / Black gap',
-        'WH': 'White / Hispanic gap',
-        'PN': 'non-poor / poor gap',
-        'MF': 'male / female gap',
-        'AVG': 'average test scores',
-        'GRD': 'learning rates',
-        'COH': 'trend in test scores'
-      }
-
-      // registers a handler for a custom event
-      var addHandler = function(handlerId, handler) {
-        if (!handlers.hasOwnProperty(handlerId)) {
-          handlers[handlerId] = [];
+        // returns true if webgl is supported
+        function webgl_support() {
+          try {
+            var canvas = document.createElement('canvas')
+            return (
+              !!window.WebGLRenderingContext &&
+              (canvas.getContext('webgl') ||
+                canvas.getContext('experimental-webgl'))
+            )
+          } catch (e) {
+            return false
+          }
         }
-        handlers[handlerId].push(handler);
-      }
 
-      // triggers a custom event
-      var trigger = function(handlerId, data) {
-        if (handlers[handlerId]) {
-          handlers[handlerId].forEach(function(handler) {
-            handler(data)
+        // returns true if the browser is internet explorer
+        function isIE() {
+          var ua = window.navigator.userAgent
+          var msie = ua.indexOf('MSIE ')
+          if (msie > 0) {
+            // IE 10 or older => return version number
+            return parseInt(
+              ua.substring(msie + 5, ua.indexOf('.', msie)),
+              10
+            )
+          }
+          var trident = ua.indexOf('Trident/')
+          if (trident > 0) {
+            // IE 11 => return version number
+            var rv = ua.indexOf('rv:')
+            return parseInt(
+              ua.substring(rv + 3, ua.indexOf('.', rv)),
+              10
+            )
+          }
+          return false
+        }
+
+        // returns true if the browser is not supported
+        function unsupportedBrowser() {
+          return !webgl_support() || isIE()
+        }
+
+        // returns true if the provided route is valid
+        function validRoute(route) {
+          if (route[0] === '/') {
+            route = route.substring(1)
+          } else if (route[0] === '#') {
+            route = route.substring(2)
+          }
+          // skip embed validation
+          if (route.indexOf('embed/') !== -1) {
+            return true
+          }
+          var parts = route.split('/')
+          var routeIds = [
+            'view',
+            'highlightedState',
+            'region',
+            'metric',
+            'secondary',
+            'demographic',
+            'zoom',
+            'latitude',
+            'longitude',
+            'locations'
+          ]
+          const params = routeIds.reduce(function(acc, curr, i) {
+            acc[curr] = parts[i]
+            return acc
+          }, {})
+          if (
+            !params.view ||
+            ['map', 'chart', 'split'].indexOf(params.view) === -1
+          ) {
+            return false
+          }
+          if (
+            !params.highlightedState ||
+            params.highlightedState.length !== 2
+          ) {
+            return false
+          }
+          if (
+            !params.region ||
+            [
+              'states',
+              'counties',
+              'districts',
+              'schools'
+            ].indexOf(params.region) === -1
+          ) {
+            return false
+          }
+          if (
+            !params.metric ||
+            ['avg', 'grd', 'coh'].indexOf(params.metric) === -1
+          ) {
+            return false
+          }
+          if (
+            !params.secondary ||
+            ['ses', 'seg', 'min', 'frl'].indexOf(
+              params.secondary
+            ) === -1
+          ) {
+            return false
+          }
+          if (
+            !params.demographic ||
+            (params.demographic !== 'all' &&
+              params.region === 'schools') ||
+            [
+              'all',
+              'w',
+              'b',
+              'a',
+              'h',
+              'm',
+              'f',
+              'p',
+              'wb',
+              'wh',
+              'pn',
+              'np',
+              'mf'
+            ].indexOf(params.demographic) === -1
+          ) {
+            return false
+          }
+          if (
+            !params.zoom ||
+            !params.latitude ||
+            !params.longitude
+          ) {
+            return false
+          }
+          return true
+        }
+
+        // default route to load if none specified, or invalid
+        var defaultRoute =
+          '/map/us/districts/avg/ses/all/3.5/38/-97'
+
+        // track start time
+        var startTime = new Date()
+
+        // variable to track the time when a user enters a view
+        var viewTime
+
+        // variable to track the current view (map, chart, split)
+        var currentView
+
+        // variable to track the time when a user selects a metric
+        var metricTime
+
+        // variable to track the current metric (avg, grd, coh)
+        var currentMetric
+
+        // track time after metric selection
+        var startTimeDataLoad
+
+        // timeout to track long load times
+        var loadTimeout
+
+        // stores event handlers
+        var handlers = {}
+
+        // labels for tracking
+        var LANG = {
+          ALL: 'all',
+          B: 'Black',
+          W: 'White',
+          H: 'Hispanic',
+          A: 'Asian',
+          M: 'male',
+          F: 'female',
+          P: 'poor',
+          NP: 'non-poor',
+          N: 'non-poor',
+          WB: 'White / Black gap',
+          WH: 'White / Hispanic gap',
+          PN: 'non-poor / poor gap',
+          MF: 'male / female gap',
+          AVG: 'average test scores',
+          GRD: 'learning rates',
+          COH: 'trend in test scores'
+        }
+
+        // registers a handler for a custom event
+        var addHandler = function(handlerId, handler) {
+          if (!handlers.hasOwnProperty(handlerId)) {
+            handlers[handlerId] = []
+          }
+          handlers[handlerId].push(handler)
+        }
+
+        // triggers a custom event
+        var trigger = function(handlerId, data) {
+          if (handlers[handlerId]) {
+            handlers[handlerId].forEach(function(handler) {
+              handler(data)
+            })
+          }
+        }
+
+        var showIntro = function() {
+          var el = document.getElementsByClassName(
+            'section--intro'
+          )[0]
+          if (el) {
+            // el.parentNode.removeChild(el)
+            el.setAttribute('style', '')
+            el.classList.remove('section--hidden')
+            document
+              .getElementById('root')
+              .classList.add('hidden')
+            showCards()
+          }
+        }
+
+        // hides the intro section and reveals the tool
+        var hideIntro = function() {
+          var el = document.getElementsByClassName(
+            'section--intro'
+          )[0]
+          if (el) {
+            el.classList.add('section--hidden')
+            document
+              .getElementById('root')
+              .classList.remove('hidden')
+          }
+        }
+
+        var removeIntro = function() {
+          var el = document.getElementsByClassName(
+            'section--intro'
+          )[0]
+          if (el) {
+            // el.parentNode.removeChild(el)
+            el.setAttribute('style', 'display:none;')
+          }
+        }
+
+        // shows the cards for metric selection
+        var showCards = function() {
+          var el = document.getElementsByClassName(
+            'section__body--loading'
+          )[0]
+          if (el) {
+            el.classList.remove('section__body--loading')
+          }
+        }
+
+        // shows a message indicating the browser is unsupported
+        var showUnsupported = function() {
+          var el = document.getElementsByClassName(
+            'section__body--loading'
+          )[0]
+          if (el) {
+            el.classList.remove('section__body--loading')
+            el.classList.add('section__body--unsupported')
+          }
+        }
+
+        // hide the cards for metric selection
+        var hideCards = function() {
+          var el = document.getElementsByClassName(
+            'section__body'
+          )[0]
+          if (el) {
+            el.classList.add('section__body--loading')
+          }
+        }
+
+        // load view for the provided metric, set in local storage to remember
+        var loadView = function(metric) {
+          if (supportsLocalStorage) {
+            localStorage.setItem('region', 'districts')
+            localStorage.setItem('metric', metric)
+            localStorage.setItem('view', 'map')
+            localStorage.setItem('demographic', 'all')
+          }
+          loadRoute()
+          hideCards()
+          showLoadRemainingAssets()
+        }
+
+        // load the route from local storage, or default options
+        var loadRoute = function() {
+          var getItem = function(item) {
+            return supportsLocalStorage
+              ? localStorage.getItem(item)
+              : null
+          }
+          var region = getItem('region') || 'districts'
+          var metric = getItem('metric') || 'avg'
+          var view = getItem('view') || 'map'
+          var demographic = getItem('demographic') || 'all'
+          var route =
+            '/' +
+            view +
+            '/us/' +
+            region +
+            '/' +
+            metric +
+            '/ses/' +
+            demographic +
+            '/3.5/38/-97'
+          if (!validRoute(route)) {
+            route = defaultRoute
+            trackProblem('tried to load invalid route')
+          } else {
+            trackRegion(region)
+            trackMetric(metric)
+            trackView(view)
+            trackDemographic(demographic)
+          }
+          replaceHash(route)
+        }
+
+        // updates the loading message
+        var updateLoadingText = function(text) {
+          var el = document.getElementById('loadingText')
+          if (el) {
+            el.innerHTML = text
+          }
+        }
+
+        // show remaining loading messages while the map / charts load
+        var showLoadRemainingAssets = function() {
+          startTimeDataLoad = new Date()
+          updateLoadingText('Loading maps')
+          setTimeout(function() {
+            updateLoadingText('Loading charts')
+          }, 3000)
+          setTimeout(function() {
+            updateLoadingText('Loading school data')
+          }, 8000)
+          loadTimeout = setTimeout(function() {
+            updateLoadingText('Still loading...')
+            trackProblem('explorer load longer than 30 seconds')
+          }, 30000)
+        }
+
+        var trackTiming = function(type, id, value) {
+          if (!dataLayer || !dataLayer.push) {
+            return
+          }
+          dataLayer.push({
+            event: 'timingEvent',
+            timingType: type,
+            timingId: id,
+            timeValue: value
           })
         }
-      }
 
-      var showIntro = function() {
-        var el = document.getElementsByClassName('section--intro')[0];
-        if (el) {
-          // el.parentNode.removeChild(el)
-          el.setAttribute("style", "");
-          el.classList.remove("section--hidden")
-          document.getElementById('root').classList.add('hidden');
-          showCards();
+        var trackProblem = function(type) {
+          if (!dataLayer || !dataLayer.push) {
+            return
+          }
+          dataLayer.push({
+            event: 'problemDetected',
+            problemType: type
+          })
         }
-      }
 
-      // hides the intro section and reveals the tool
-      var hideIntro = function() {
-        var el = document.getElementsByClassName('section--intro')[0];
-        if (el) {
-          el.classList.add("section--hidden")
-          document.getElementById('root').classList.remove('hidden');
-        }    
-      }
-
-      var removeIntro = function() {
-        var el = document.getElementsByClassName('section--intro')[0];
-        if (el) {
-          // el.parentNode.removeChild(el)
-          el.setAttribute("style", "display:none;");
-        }    
-      }
-
-      // shows the cards for metric selection
-      var showCards = function() {
-        var el = document.getElementsByClassName('section__body--loading')[0]
-        if (el) {
-          el.classList.remove("section__body--loading")
+        var trackRegion = function(region) {
+          if (!dataLayer || !dataLayer.push) {
+            return
+          }
+          dataLayer.push({
+            event: 'geoTypeSelected',
+            geoTypeSelection: region
+          })
         }
-      }
 
-      // shows a message indicating the browser is unsupported
-      var showUnsupported = function () {
-        var el = document.getElementsByClassName('section__body--loading')[0]
-        if (el) {
-          el.classList.remove("section__body--loading")
-          el.classList.add('section__body--unsupported')
+        var trackMetric = function(metric) {
+          if (!metric || !dataLayer || !dataLayer.push) {
+            return
+          }
+          dataLayer.push({
+            event: 'metricSelected',
+            metricSelection: LANG[metric.toUpperCase()] || metric
+          })
         }
-      }
 
-      // hide the cards for metric selection
-      var hideCards = function() {
-        var el = document.getElementsByClassName('section__body')[0]
-        if (el) {
-          el.classList.add("section__body--loading")
+        var trackDemographic = function(demographic) {
+          if (!demographic || !dataLayer || !dataLayer.push) {
+            return
+          }
+          dataLayer.push({
+            event: 'studentTypeSelected',
+            studentTypeSelection:
+              LANG[demographic.toUpperCase()] || demographic
+          })
         }
-      }
 
-      // load view for the provided metric, set in local storage to remember 
-      var loadView = function(metric) {
-        if (supportsLocalStorage) {
-          localStorage.setItem('region', 'districts')
-          localStorage.setItem('metric', metric)
-          localStorage.setItem('view', 'map')
-          localStorage.setItem('demographic', 'all')
+        var trackView = function(view) {
+          if (!dataLayer || !dataLayer.push) {
+            return
+          }
+          dataLayer.push({
+            event: 'displayTypeSelected',
+            displayTypeSelection: view
+          })
         }
-        loadRoute();
-        hideCards();
-        showLoadRemainingAssets();
-      }
 
-      // load the route from local storage, or default options
-      var loadRoute = function() {
-        var getItem = function(item) {
-          return supportsLocalStorage ? localStorage.getItem(item) : null
+        // tracks the view and region for direct links
+        var trackDirectLink = function() {
+          var url = window.location.hash
+          if (url.indexOf('/map/') !== -1) {
+            trackView('map')
+          }
+          if (url.indexOf('/chart/') !== -1) {
+            trackView('chart')
+          }
+          if (url.indexOf('/split/') !== -1) {
+            trackView('split')
+          }
+          if (url.indexOf('/schools/') !== -1) {
+            trackRegion('schools')
+          }
+          if (url.indexOf('/districts/') !== -1) {
+            trackRegion('districts')
+          }
+          if (url.indexOf('/counties/') !== -1) {
+            trackRegion('counties')
+          }
+          if (url.indexOf('/states/') !== -1) {
+            trackRegion('states')
+          }
+          if (url.indexOf('/avg/') !== -1) {
+            trackMetric('avg')
+          }
+          if (url.indexOf('/grd/') !== -1) {
+            trackMetric('grd')
+          }
+          if (url.indexOf('/coh/') !== -1) {
+            trackMetric('coh')
+          }
         }
-        var region = getItem('region') || 'districts';
-        var metric = getItem('metric') || 'avg';
-        var view = getItem('view') || 'map';
-        var demographic = getItem('demographic') || 'all';
-        var route = '/'+view+'/us/'+region+'/'+metric+'/ses/'+demographic+'/3.5/38/-97';
-        if (!validRoute(route)) {
-          route = defaultRoute;
-          trackProblem('tried to load invalid route');
+
+        // handler for when the 'app' event fires, indicating app assets are available
+        var appLoadedHandler = function() {
+          // var appLoadTime = new Date()
+          // var appLoadSeconds = parseInt(appLoadTime - startTime)
+          // trackTiming('load', 'loading assets', appLoadSeconds)
+          // if (location.hash.length < 3) {
+          //   if (supportsLocalStorage && localStorage.getItem('metric')) {
+          //     // load route from local storage
+          //     loadRoute()
+          //     showLoadRemainingAssets()
+          //   } else {
+          //     // no route in local storage, show selection
+          //     showCards()
+          //   }
+          // } else {
+          //   // route already exists, load
+          //   if (validRoute(window.location.hash)) {
+          //     trackDirectLink()
+          //   } else {
+          //     trackProblem('tried to load invalid route')
+          //     replaceHash(defaultRoute)
+          //   }
+          //   showLoadRemainingAssets()
+          // }
+          showLoadRemainingAssets()
+        }
+
+        var getViewFromURL = function(url) {
+          if (url.indexOf('/map/') > -1) {
+            return 'map'
+          }
+          if (url.indexOf('/chart/') > -1) {
+            return 'chart'
+          }
+          if (url.indexOf('/split/') > -1) {
+            return 'split'
+          }
+          return 'unknown'
+        }
+
+        var getMetricFromURL = function(url) {
+          if (url.indexOf('/avg/') > -1) {
+            return 'avg'
+          }
+          if (url.indexOf('/grd/') > -1) {
+            return 'grd'
+          }
+          if (url.indexOf('/coh/') > -1) {
+            return 'coh'
+          }
+          return 'unknown'
+        }
+
+        var setupViewTiming = function() {
+          viewTime = new Date()
+          metricTime = new Date()
+          currentView = getViewFromURL(window.location.hash)
+          currentMetric = getMetricFromURL(window.location.hash)
+          var handleHashChange = function(e) {
+            var newView = getViewFromURL(e.newURL)
+            var newMetric = getMetricFromURL(
+              window.location.hash
+            )
+            if (newView !== currentView) {
+              var elapsedTime = parseInt(new Date() - viewTime)
+              trackTiming(
+                'interaction',
+                'viewing ' + currentView,
+                elapsedTime
+              )
+              viewTime = new Date()
+              currentView = newView
+            }
+            if (newMetric !== currentMetric) {
+              var elapsedTime = parseInt(new Date() - metricTime)
+              trackTiming(
+                'interaction',
+                'duration ' + currentMetric,
+                elapsedTime
+              )
+              metricTime = new Date()
+              currentMetric = newMetric
+            }
+          }
+          var handleUnload = function() {
+            var elapsedTime = parseInt(new Date() - viewTime)
+            trackTiming(
+              'interaction',
+              'viewing ' + currentView,
+              elapsedTime
+            )
+            trackTiming(
+              'interaction',
+              'duration ' + currentMetric,
+              elapsedTime
+            )
+          }
+
+          window.addEventListener(
+            'hashchange',
+            handleHashChange,
+            false
+          )
+          window.addEventListener(
+            'beforeunload',
+            handleUnload,
+            false
+          )
+        }
+
+        var mapLoadHandler = function() {
+          if (loadTimeout) {
+            clearTimeout(loadTimeout)
+          }
+          var endTimeDataLoad = new Date()
+          var dataLoadSeconds = parseInt(
+            endTimeDataLoad - startTimeDataLoad
+          )
+          trackTiming(
+            'load',
+            'loading map data',
+            dataLoadSeconds
+          )
+          hideIntro()
+          setupViewTiming()
+          setTimeout(removeIntro, 2000)
+        }
+
+        if (unsupportedBrowser()) {
+          showUnsupported()
+          trackProblem(
+            'unsupported browser: ' +
+              browser.name +
+              ' ' +
+              browser.version
+          )
         } else {
-          trackRegion(region);
-          trackMetric(metric);
-          trackView(view);
-          trackDemographic(demographic);
-        }
-        replaceHash(route);
-      }
-
-      // updates the loading message
-      var updateLoadingText = function(text) {
-        var el = document.getElementById('loadingText')
-        if (el) { el.innerHTML = text }
-      }
-
-      // show remaining loading messages while the map / charts load
-      var showLoadRemainingAssets = function () {
-        startTimeDataLoad = new Date();
-        updateLoadingText('Loading maps')
-        setTimeout(function() { updateLoadingText('Loading charts') }, 3000)
-        setTimeout(function() { updateLoadingText('Loading school data') }, 8000)
-        loadTimeout = setTimeout(function() { 
-          updateLoadingText('Still loading...');
-          trackProblem('explorer load longer than 30 seconds');
-        }, 30000);
-      }
-
-      var trackTiming = function(type, id, value) {
-        if (!dataLayer || !dataLayer.push) { return; }
-        dataLayer.push({
-          'event': 'timingEvent', 
-          'timingType': type, 
-          'timingId': id,
-          'timeValue': value
-        })
-      }
-
-      var trackProblem = function(type) {
-        if (!dataLayer || !dataLayer.push) { return; }
-        dataLayer.push({
-          'event': 'problemDetected', 
-          'problemType': type
-        })
-      }
-
-      var trackRegion = function(region) {
-        if (!dataLayer || !dataLayer.push) { return; }
-        dataLayer.push({
-          'event': 'geoTypeSelected',
-          'geoTypeSelection': region
-        })
-      }
-
-      var trackMetric = function(metric) {
-        if (!metric || !dataLayer || !dataLayer.push) { return; }
-        dataLayer.push({
-          'event': 'metricSelected',
-          'metricSelection': LANG[metric.toUpperCase()] || metric
-        })
-      }
-
-      var trackDemographic = function(demographic) {
-        if (!demographic || !dataLayer || !dataLayer.push) { return; }
-        dataLayer.push({
-          'event': 'studentTypeSelected',
-          'studentTypeSelection': LANG[demographic.toUpperCase()] || demographic
-        })
-      }
-
-      var trackView = function(view) {
-        if (!dataLayer || !dataLayer.push) { return; }
-        dataLayer.push({
-          'event': 'displayTypeSelected',
-          'displayTypeSelection': view
-        })
-      }
-
-      // tracks the view and region for direct links
-      var trackDirectLink = function() {
-        var url = window.location.hash;
-        if (url.indexOf('/map/') !== -1) { trackView('map') }
-        if (url.indexOf('/chart/') !== -1) { trackView('chart') }
-        if (url.indexOf('/split/') !== -1) { trackView('split') }
-        if (url.indexOf('/schools/') !== -1) { trackRegion('schools') }
-        if (url.indexOf('/districts/') !== -1) { trackRegion('districts') }
-        if (url.indexOf('/counties/') !== -1) { trackRegion('counties') }
-        if (url.indexOf('/avg/') !== -1) { trackMetric('avg') }
-        if (url.indexOf('/grd/') !== -1) { trackMetric('grd') }
-        if (url.indexOf('/coh/') !== -1) { trackMetric('coh') }
-      }
-
-      // handler for when the 'app' event fires, indicating app assets are available
-      var appLoadedHandler = function() {
-        var appLoadTime = new Date();
-        var appLoadSeconds = parseInt((appLoadTime - startTime));
-        trackTiming('load', 'loading assets', appLoadSeconds);
-        if (location.hash.length < 3) {
-          if (supportsLocalStorage && localStorage.getItem('metric')) {
-            // load route from local storage
-            loadRoute();
-            showLoadRemainingAssets();
-          } else {
-            // no route in local storage, show selection
-            showCards();
-          }
-        } else {
-          // route already exists, load
-          if (validRoute(window.location.hash)) {
-            trackDirectLink();
-          } else {
-            trackProblem('tried to load invalid route');
-            replaceHash(defaultRoute);
-          }
-          showLoadRemainingAssets();
-        }
-      }
-
-      var getViewFromURL = function(url) {
-        if (url.indexOf('/map/') > -1) { return 'map' }
-        if (url.indexOf('/chart/') > -1) { return 'chart' }
-        if (url.indexOf('/split/') > -1) { return 'split' }
-        return 'unknown';
-      }
-
-      var getMetricFromURL = function(url) {
-        if (url.indexOf('/avg/') > -1) { return 'avg' }
-        if (url.indexOf('/grd/') > -1) { return 'grd' }
-        if (url.indexOf('/coh/') > -1) { return 'coh' }
-        return 'unknown';
-      }
-
-      var setupViewTiming = function() {
-        viewTime = new Date();
-        metricTime = new Date();
-        currentView = getViewFromURL(window.location.hash)
-        currentMetric = getMetricFromURL(window.location.hash)
-        var handleHashChange = function(e) {
-          var newView = getViewFromURL(e.newURL)
-          var newMetric = getMetricFromURL(window.location.hash)
-          if (newView !== currentView) {
-            var elapsedTime = parseInt(((new Date()) - viewTime));
-            trackTiming('interaction', 'viewing ' + currentView, elapsedTime);
-            viewTime = new Date();
-            currentView = newView;
-          }
-          if (newMetric !== currentMetric) {
-            var elapsedTime = parseInt(((new Date()) - metricTime));
-            trackTiming('interaction', 'duration ' + currentMetric, elapsedTime);
-            metricTime = new Date();
-            currentMetric = newMetric;
-          }
-        }
-        var handleUnload = function() {
-          var elapsedTime = parseInt(((new Date()) - viewTime));
-          trackTiming('interaction', 'viewing ' + currentView, elapsedTime);
-          trackTiming('interaction', 'duration ' + currentMetric, elapsedTime);
+          // bind events
+          addHandler('app', appLoadedHandler)
+          addHandler('map', mapLoadHandler)
         }
 
-        window.addEventListener("hashchange", handleHashChange, false);
-        window.addEventListener("beforeunload", handleUnload, false)
-      }
-
-      var mapLoadHandler = function() {
-        if (loadTimeout) { clearTimeout(loadTimeout); }
-        var endTimeDataLoad = new Date();
-        var dataLoadSeconds = parseInt((endTimeDataLoad - startTimeDataLoad));
-        trackTiming('load', 'loading map data', dataLoadSeconds);
-        hideIntro();
-        setupViewTiming();
-        setTimeout(removeIntro, 2000);
-      }
-
-      if (unsupportedBrowser()) {
-        showUnsupported();
-        trackProblem('unsupported browser: ' + browser.name + ' ' + browser.version)
-      } else {
-        // bind events
-        addHandler('app', appLoadedHandler);
-        addHandler('map', mapLoadHandler);
-      }      
-
-      // return public functions
-      return {
-        addHandler: addHandler,
-        trigger: trigger,
-        loadView: loadView,
-        trackTiming: trackTiming,
-        trackProblem: trackProblem
-      }
-    })()
-
-  </script>
-  <!--
+        // return public functions
+        return {
+          addHandler: addHandler,
+          trigger: trigger,
+          loadView: loadView,
+          trackTiming: trackTiming,
+          trackProblem: trackProblem
+        }
+      })()
+    </script>
+    <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
 
@@ -1284,6 +1034,5 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
-</body>
-
+  </body>
 </html>
