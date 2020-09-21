@@ -66,7 +66,11 @@ const addFilter = set => filter => {
  * Thunk that updates a value in one of the existing filter rules
  * @param {*} set
  */
-const updateFilter = set => (ruleIndex, valueIndex, value) =>
+const updateFilterByIndex = set => (
+  ruleIndex,
+  valueIndex,
+  value
+) =>
   set(state => {
     const updatedFilters = state.filters.map((f, i) => {
       if (i !== ruleIndex) return f
@@ -102,11 +106,24 @@ const removeFilter = set => filter =>
 export const getFilterIndex = (filters, params) =>
   filters.reduce((idx, curFilter, filterIndex) => {
     if (idx > -1) return idx
-    const isEqual = params.reduce((eq, param, index) =>
-      eq ? curFilter[index] === param : false
+    const isEqual = params.reduce(
+      (eq, param, index) =>
+        eq ? curFilter[index] === param : false,
+      true
     )
     return isEqual ? filterIndex : -1
   }, -1)
+
+export const getFilterValue = (filters, params) => {
+  const rule = filters.find(f =>
+    params.reduce(
+      (eq, param, index) => (eq ? f[index] === param : false),
+      true
+    )
+  )
+  // the value is the next index after the provided params
+  return rule[params.length]
+}
 
 export const DEFAULT_FILTERS = [
   ['startsWith', 'id', ''],
@@ -123,7 +140,7 @@ const [useFilterStore] = create(set => ({
   filters: DEFAULT_FILTERS,
   addFilter: addFilter(set),
   setFilters: filters => set({ filters }),
-  updateFilter: updateFilter(set),
+  updateFilterByIndex: updateFilterByIndex(set),
   removeFilter: removeFilter(set),
   clearFilters: () => set({ filters: DEFAULT_FILTERS })
 }))

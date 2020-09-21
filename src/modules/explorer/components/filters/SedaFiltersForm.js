@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useFilterStore } from '../../../filters'
 import logger from '../../../logger'
@@ -18,7 +18,10 @@ import shallow from 'zustand/shallow'
 import { useDemographic, useRegion } from '../../hooks'
 import { getPrefixLang, getLang } from '../../selectors/lang'
 import { DEFAULT_RANGES } from '../../constants/metrics'
-import { getFilterIndex } from '../../../filters/useFilterStore'
+import {
+  getFilterIndex,
+  getFilterValue
+} from '../../../filters/useFilterStore'
 import { NumberSlider, Slider } from '../../../../shared'
 
 const useStyles = makeStyles(theme => ({
@@ -67,8 +70,8 @@ const SedaFiltersForm = props => {
   // grab filters array
   const filters = useFilterStore(state => state.filters)
   // grab filter modifier functions
-  const updateFilter = useFilterStore(
-    state => state.updateFilter
+  const updateFilterByIndex = useFilterStore(
+    state => state.updateFilterByIndex
   )
   // function to clear filters
   const clearFilters = useFilterStore(
@@ -122,13 +125,13 @@ const SedaFiltersForm = props => {
     const isSameValue = shallow(value, ranges[type].value)
     if (isSameValue) return
     const index = getFilterIndex(filters, ['range', type])
-    updateFilter(index, 2, value)
+    updateFilterByIndex(index, 2, value)
   }
 
   // handler for when the limit filter changes
   const handleLimitChange = (event, value) => {
     if (value === limitFilter.value) return
-    updateFilter(limitFilter.index, 1, value)
+    updateFilterByIndex(limitFilter.index, 1, value)
   }
 
   /**
@@ -138,7 +141,7 @@ const SedaFiltersForm = props => {
    * @param {*} hit selection from AlgoliaSearch component
    */
   const handleLocationSelect = (id, hit) => {
-    updateFilter(0, 2, id)
+    updateFilterByIndex(0, 2, id)
     setSelectedLocation(hit.suggestionValue)
   }
 
@@ -146,8 +149,8 @@ const SedaFiltersForm = props => {
    * Clear the current filter and remove the selected location
    */
   const handleLocationClear = () => {
-    updateFilter(0, 2, '')
-    setSelectedLocation(null)
+    updateFilterByIndex(0, 2, '')
+    setSelectedLocation('')
   }
 
   /**
@@ -170,6 +173,30 @@ const SedaFiltersForm = props => {
     setSelectedLocation('')
     clearFilters()
   }
+
+  // clear the selected location if region is changed
+  useEffect(() => {
+    // get the location filter
+    const locationPrefix = getFilterValue(filters, [
+      'startsWith',
+      'id'
+    ])
+    // clear district filter if needed
+    if (
+      region !== 'schools' &&
+      locationPrefix &&
+      locationPrefix.length > 5
+    )
+      handleLocationClear()
+    // clear states filter if needed
+    if (
+      region !== 'states' &&
+      locationPrefix &&
+      locationPrefix.length > 0
+    )
+      handleLocationClear()
+  }, [region, filters])
+
   const classes = useStyles()
   return (
     <List {...props}>

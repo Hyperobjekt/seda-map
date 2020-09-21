@@ -10,12 +10,12 @@ const FiltersForm = props => {
   const removeFilter = useFilterStore(
     state => state.removeFilter
   )
-  const updateFilter = useFilterStore(
-    state => state.updateFilter
+  const updateFilterByIndex = useFilterStore(
+    state => state.updateFilterByIndex
   )
   const handleFilterRemove = filter => removeFilter(filter)
   const handleFilterChange = (change, e) => {
-    updateFilter(
+    updateFilterByIndex(
       change.ruleIndex,
       change.valueIndex,
       change.value
