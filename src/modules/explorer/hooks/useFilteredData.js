@@ -43,8 +43,12 @@ export default () => {
         demographic,
         cleanFilters
       )
-      logger.debug(dataFilters, data)
-      return applyFilters(data[region] || [], dataFilters)
+      const filteredData = applyFilters(
+        data[region] || [],
+        dataFilters
+      )
+      logger.debug(`applied filters`, dataFilters, filteredData)
+      return filteredData
     }, [data, region, filters, demographic]),
     500
   )

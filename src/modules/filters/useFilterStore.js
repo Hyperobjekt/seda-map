@@ -8,97 +8,21 @@ import { DEFAULT_RANGES } from '../explorer/constants/metrics'
  * @param {*} filters
  * @param {*} updatedFilter
  */
-const updateRule = (filters, updatedFilter) => {
-  const filterRule = updatedFilter[0]
-  if (!filterRule || typeof filterRule !== 'string')
+const updateRule = (filters, rule) => {
+  const value = rule.slice(rule.length - 1)[0]
+  const params = rule.slice(0, rule.length - 1)
+  const index = getFilterIndex(filters, params)
+  if (index === -1)
     throw new Error(
-      'invalid filter rule, index 0 must be rule name'
+      'filter does not exist and cannot be updated'
     )
-  const updatedFilters = filters.map(f =>
-    f[0] === filterRule ? updatedFilter : f
+  const updatedRule = filters[index].slice()
+  updatedRule[updatedRule.length - 1] = value
+  const updatedFilters = filters.map((f, i) =>
+    index === i ? updatedRule : f
   )
-  logger.debug(`updated ${filterRule} rule:`, updatedFilters)
   return updatedFilters
 }
-
-/**
- * Thunk that handles adding a new filter to the
- * array of filter rules.
- * @param {*} set
- */
-const addFilter = set => filter => {
-  set(state => {
-    const id = filter[0]
-
-    // check if sort rule exists
-    const sortIndex = state.filters.findIndex(
-      f => f[0] === 'sort'
-    )
-    // if sort rule exists, return the updated value
-    if (id === 'sort' && sortIndex > -1)
-      return { filters: updateRule(state.filters, filter) }
-
-    // check if a limit rule exists
-    const limitIndex = state.filters.findIndex(
-      f => f[0] === 'limit'
-    )
-    // if a limit rule exists, return the updated value
-    if (id === 'limit' && limitIndex > -1)
-      return { filters: updateRule(state.filters, filter) }
-
-    // this is a new rule, insert it at the appropriate spot
-    // below existing rules but above sort / limit
-    const insertIndex =
-      sortIndex > -1
-        ? sortIndex
-        : limitIndex > -1
-        ? limitIndex
-        : state.filters.length
-    const startValues = state.filters.slice(0, insertIndex)
-    const endValues = state.filters.slice(insertIndex)
-    const result = [...startValues, filter, ...endValues]
-    logger.debug('added filter rule:', filter, result)
-    return { filters: result }
-  })
-}
-
-/**
- * Thunk that updates a value in one of the existing filter rules
- * @param {*} set
- */
-const updateFilterByIndex = set => (
-  ruleIndex,
-  valueIndex,
-  value
-) =>
-  set(state => {
-    const updatedFilters = state.filters.map((f, i) => {
-      if (i !== ruleIndex) return f
-      const newValue = [...f]
-      newValue[valueIndex] = value
-      return newValue
-    })
-    logger.debug(
-      'updated filter rule:',
-      state.filters[ruleIndex],
-      updatedFilters[ruleIndex],
-      updatedFilters
-    )
-    return { filters: updatedFilters }
-  })
-
-/**
- * Thunk that removes a filter rule
- * @param {*} set
- */
-const removeFilter = set => filter =>
-  set(state => {
-    const updatedFilters = state.filters.filter(
-      f => !_isEqual(f, filter)
-    )
-    logger.debug('removed filter rule', filter, updatedFilters)
-    return { filters: updatedFilters }
-  })
 
 /**
  * Gets the index of the filter that matches the provided params
@@ -122,16 +46,99 @@ export const getFilterValue = (filters, params) => {
     )
   )
   // the value is the next index after the provided params
-  return rule[params.length]
+  return rule ? rule[params.length] : null
+}
+
+/**
+ * Inserts a filter into the provided filters array
+ * @param {*} filters
+ * @param {*} filter
+ * @param {*} atIndex
+ */
+const insertFilter = (filters, filter, atIndex) => {
+  const id = filter[0]
+  // check if sort rule exists
+  const sortIndex = filters.findIndex(f => f[0] === 'sort')
+  // if sort rule exists, return the updated value
+  if (id === 'sort' && sortIndex > -1)
+    return { filters: updateRule(filters, filter) }
+  // check if a limit rule exists
+  const limitIndex = filters.findIndex(f => f[0] === 'limit')
+  // if a limit rule exists, return the updated value
+  if (id === 'limit' && limitIndex > -1)
+    return { filters: updateRule(filters, filter) }
+  // this is a new rule, insert it at the appropriate spot
+  // below existing rules but above sort / limit
+  const insertIndex = atIndex
+    ? atIndex
+    : sortIndex > -1
+    ? sortIndex
+    : limitIndex > -1
+    ? limitIndex
+    : filters.length
+  const startValues = filters.slice(0, insertIndex)
+  const endValues = filters.slice(insertIndex)
+  const result = [...startValues, filter, ...endValues]
+  return result
+}
+
+const deleteFilter = (filters, rule, noValue) => {
+  const sliceIndex = noValue ? rule.length : rule.length - 1
+  const params = rule.slice(0, sliceIndex)
+  const index = getFilterIndex(filters, params)
+  const newFilters = filters.filter((f, i) => index !== i)
+  return newFilters
+}
+
+/**
+ * Thunk that handles adding a new filter to the
+ * array of filter rules.
+ * @param {*} set
+ */
+const addFilter = set => (filter, atIndex) => {
+  set(state => {
+    const newFilters = insertFilter(
+      state.filters,
+      filter,
+      atIndex
+    )
+    logger.debug('added filter rule', filter, newFilters)
+    return { filters: newFilters }
+  })
+}
+
+/**
+ * Thunk that removes a filter rule
+ * @param {*} set
+ */
+const removeFilter = set => (rule, noValue) =>
+  set(state => {
+    const updatedFilters = deleteFilter(
+      state.filters,
+      rule,
+      noValue
+    )
+    logger.debug('removed filter rule', rule, updatedFilters)
+    return { filters: updatedFilters }
+  })
+
+/**
+ * Adds a filter rule or updates and existing one
+ */
+export const setFilter = set => rule => {
+  const params = rule.slice(0, rule.length - 1)
+  return set(state => {
+    const index = getFilterIndex(state.filters, params)
+    const newFilters =
+      index > -1
+        ? updateRule(state.filters, rule)
+        : insertFilter(state.filters, rule)
+    logger.debug('set filter rule', rule, newFilters)
+    return { filters: newFilters }
+  })
 }
 
 export const DEFAULT_FILTERS = [
-  ['startsWith', 'id', ''],
-  ['range', 'avg', DEFAULT_RANGES['avg']],
-  ['range', 'grd', DEFAULT_RANGES['grd']],
-  ['range', 'coh', DEFAULT_RANGES['coh']],
-  ['range', 'ses', DEFAULT_RANGES['ses']],
-  ['range', 'frl', DEFAULT_RANGES['frl']],
   ['sort', 'sz', 'asc'],
   ['limit', 10000]
 ]
@@ -140,7 +147,7 @@ const [useFilterStore] = create(set => ({
   filters: DEFAULT_FILTERS,
   addFilter: addFilter(set),
   setFilters: filters => set({ filters }),
-  updateFilterByIndex: updateFilterByIndex(set),
+  setFilter: setFilter(set),
   removeFilter: removeFilter(set),
   clearFilters: () => set({ filters: DEFAULT_FILTERS })
 }))

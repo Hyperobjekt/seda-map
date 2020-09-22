@@ -69,10 +69,10 @@ const SedaFiltersForm = props => {
   const [selectedLocation, setSelectedLocation] = useState(null)
   // grab filters array
   const filters = useFilterStore(state => state.filters)
-  // grab filter modifier functions
-  const updateFilterByIndex = useFilterStore(
-    state => state.updateFilterByIndex
+  const removeFilter = useFilterStore(
+    state => state.removeFilter
   )
+  const setFilter = useFilterStore(state => state.setFilter)
   // function to clear filters
   const clearFilters = useFilterStore(
     state => state.clearFilters
@@ -104,34 +104,31 @@ const SedaFiltersForm = props => {
     'grd',
     'coh',
     region === 'schools' ? 'frl' : 'ses'
-  ].reduce((obj, key, index) => {
-    const filter = filters.find(
-      f => f[0] === 'range' && f[1] === key
-    )
-    const value = filter ? filter[2] : DEFAULT_RANGES[key]
-    obj[key] = { index, value }
+  ].reduce((obj, key) => {
+    const filterValue = getFilterValue(filters, ['range', key])
+    obj[key] = filterValue ? filterValue : DEFAULT_RANGES[key]
     return obj
   }, {})
 
   // get limit filter from filters array
-  const limitFilter = filters.reduce(
-    (obj, f, i) =>
-      f[0] === 'limit' ? { index: i, value: f[1] } : obj,
-    {}
+  const limitValue = filters.reduce(
+    (val, f) => (f[0] === 'limit' ? f[1] : val),
+    false
   )
 
   // handler for when one of the metric ranges changes
   const handleRangeChange = (type, event, value) => {
-    const isSameValue = shallow(value, ranges[type].value)
+    const isSameValue = shallow(value, ranges[type])
     if (isSameValue) return
-    const index = getFilterIndex(filters, ['range', type])
-    updateFilterByIndex(index, 2, value)
+    console.log('not same', type, value, ranges[type])
+    setFilter(['range', type, value])
   }
 
   // handler for when the limit filter changes
   const handleLimitChange = (event, value) => {
-    if (value === limitFilter.value) return
-    updateFilterByIndex(limitFilter.index, 1, value)
+    console.log('setting limit for some reason')
+    if (limitValue === value) return
+    setFilter(['limit', value])
   }
 
   /**
@@ -141,7 +138,7 @@ const SedaFiltersForm = props => {
    * @param {*} hit selection from AlgoliaSearch component
    */
   const handleLocationSelect = (id, hit) => {
-    updateFilterByIndex(0, 2, id)
+    setFilter(['startsWith', id])
     setSelectedLocation(hit.suggestionValue)
   }
 
@@ -149,7 +146,8 @@ const SedaFiltersForm = props => {
    * Clear the current filter and remove the selected location
    */
   const handleLocationClear = () => {
-    updateFilterByIndex(0, 2, '')
+    const index = getFilterIndex(filters, ['startsWith', 'id'])
+    index > -1 && removeFilter(filters[index])
     setSelectedLocation('')
   }
 
@@ -238,7 +236,7 @@ const SedaFiltersForm = props => {
           secondary=""
         />
         <NumberSlider
-          value={limitFilter.value}
+          value={limitValue}
           min={DEFAULT_RANGES['limit'][0]}
           max={DEFAULT_RANGES['limit'][1]}
           step={10}
@@ -265,7 +263,7 @@ const SedaFiltersForm = props => {
               primary={getPrefixLang(key, 'FILTER_LABEL')}
             />
             <Slider
-              value={ranges[key].value}
+              value={ranges[key]}
               min={DEFAULT_RANGES[key][0]}
               max={DEFAULT_RANGES[key][1]}
               step={

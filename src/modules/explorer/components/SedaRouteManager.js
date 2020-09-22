@@ -1,6 +1,9 @@
 import { useEffect, useRef } from 'react'
 import useDebounce from '../../../shared/hooks/useDebounce'
-import { useRouterParams, useAddLocationsByRoute } from '../hooks'
+import {
+  useRouterParams,
+  useAddLocationsByRoute
+} from '../hooks'
 import useDataOptions from '../hooks/useDataOptions'
 import useUiStore from '../hooks/useUiStore'
 import {
@@ -9,6 +12,22 @@ import {
   getParamsFromPathname
 } from '../selectors/router'
 import { useMapStore } from '../../map'
+import useFilterStore from '../../filters'
+import { getStateFipsFromAbbr } from '../../../shared/utils/states'
+
+const paramsToFilterArray = params => {
+  // handle legacy filter value (2 letter state)
+  if (
+    params.filter &&
+    params.filter.length === 2 &&
+    params.filter !== 'us'
+  ) {
+    const id = getStateFipsFromAbbr(params.filter)
+    return [['startsWith', 'id', id]]
+  }
+}
+
+const filterArrayToString = filters => {}
 
 const SedaRouteManager = props => {
   // track if initial route has loaded
@@ -27,6 +46,12 @@ const SedaRouteManager = props => {
   const setMapOptions = useMapStore(
     state => state.setViewportFromRoute
   )
+
+  const setFilters = useFilterStore(state => state.setFilters)
+
+  const setFilterOptions = params => {
+    console.log('filter params', params)
+  }
 
   // debounce the route so it updates every 1 second max
   const debouncedRoute = useDebounce(route, 500)
@@ -49,6 +74,7 @@ const SedaRouteManager = props => {
         setDataOptions(params)
         setViewOptions(params)
         setMapOptions(params)
+        setFilterOptions(params)
         if (params.locations)
           await addLocationsFromRoute(params.locations, false)
       }

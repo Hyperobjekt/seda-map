@@ -361,8 +361,8 @@ const getChoroplethFilter = ({ region, filters, ids }) => {
     'startsWith',
     'id'
   ])
-  const prefix = filters[prefixIndex][2]
-  if (region === 'schools' && prefix) {
+  if (region === 'schools' && prefixIndex > -1) {
+    const prefix = filters[prefixIndex][2]
     return {
       filter: ['in', prefix, ['get', 'id']]
     }
