@@ -17,7 +17,11 @@ import { useMapStore } from '../../map'
 import { getVarNames } from '../selectors/data'
 
 import useStaticData from '../../data/useStaticData'
-import { parseLocationsString } from '../selectors/router'
+import {
+  filterArrayToString,
+  parseLocationsString
+} from '../selectors/router'
+import useFilterStore from '../../filters'
 
 /**
  * Provides the current values for metric, demographic, and region
@@ -552,11 +556,12 @@ export const useRouterParams = () => {
   const viewportRoute = useMapStore(state =>
     getViewportRoute(state.viewport)
   )
+  const filters = useFilterStore(state => state.filters)
   const locationsData = useLocationsData()
   return useDataOptions(state =>
     [
       view,
-      getFilterRoute(state.filters),
+      filterArrayToString(filters),
       state.region,
       state.metric,
       state.secondary,

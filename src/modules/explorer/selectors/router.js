@@ -1,6 +1,7 @@
 import * as _debounce from 'lodash.debounce'
 import * as polylabel from 'polylabel'
 import { getRegionFromLocationId, getRegionFromFeature } from '.'
+import { getStateFipsFromAbbr } from '../../../shared/utils/states'
 
 const push = newRoute => {
   window.location.hash = newRoute
@@ -21,6 +22,80 @@ const DEFAULT_ROUTEVARS = [
   'lon',
   'locations'
 ]
+
+/**
+ * Takes an individual rule string and produces a filter rule definition array
+ * @param {*} rule
+ */
+export const ruleParamToArray = rule => {
+  const [type, ...rest] = rule.split(',')
+  switch (type) {
+    case 'id':
+      return ['startsWith', 'id', rest[0]]
+    case 'avg':
+    case 'grd':
+    case 'coh':
+    case 'ses':
+    case 'frl':
+      return ['range', type, rest.split(';')]
+    case 'limit':
+      return ['limit', rest[0]]
+    default:
+      throw new Error('could not process rule: ' + type)
+  }
+}
+
+/**
+ * Takes a filter rule array and produces a filter rule string for the route
+ * @param {*} rule
+ */
+export const filterRuleToString = ruleArray => {
+  const [type, ...rest] = ruleArray
+  switch (type) {
+    case 'startsWith':
+      return ['id', rest[1]].join(',')
+    case 'range':
+      return [rest[0], rest[1].join(';')].join(',')
+    case 'limit':
+      return ['limit', rest[0]].join(',')
+    case 'sort':
+      return null
+    default:
+      throw new Error('could not process rule: ' + type)
+  }
+}
+
+/**
+ * Takes route params and returns a filter array based on the filter portion
+ * @param {*} params
+ */
+export const paramsToFilterArray = params => {
+  // handle legacy filter value (2 letter state)
+  if (
+    params.filter &&
+    params.filter.length === 2 &&
+    params.filter !== 'us'
+  ) {
+    const id = getStateFipsFromAbbr(params.filter)
+    return [['startsWith', 'id', id]]
+  }
+  // filter rules are split by "+" and filter params are split by ","
+  // e.g. id,02+avg,3-4+limit,10000
+  const rules = params.filter.split('+').map(ruleParamToArray)
+  console.log('converted params to filter rules', rules)
+  return rules
+}
+
+/**
+ * Takes array of filter rule array definitions and returns a string for the route
+ * @param {*} filters
+ */
+export const filterArrayToString = filters => {
+  return filters
+    .map(filterRuleToString)
+    .filter(f => !!f)
+    .join('+')
+}
 
 /**
  * strip "#" and "/" from beginning and end

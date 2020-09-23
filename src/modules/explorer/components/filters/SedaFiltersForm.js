@@ -118,16 +118,11 @@ const SedaFiltersForm = props => {
 
   // handler for when one of the metric ranges changes
   const handleRangeChange = (type, event, value) => {
-    const isSameValue = shallow(value, ranges[type])
-    if (isSameValue) return
-    console.log('not same', type, value, ranges[type])
     setFilter(['range', type, value])
   }
 
   // handler for when the limit filter changes
   const handleLimitChange = (event, value) => {
-    console.log('setting limit for some reason')
-    if (limitValue === value) return
     setFilter(['limit', value])
   }
 
