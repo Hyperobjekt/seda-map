@@ -1,18 +1,71 @@
 import { useEffect, useRef } from 'react'
 import useDebounce from '../../../shared/hooks/useDebounce'
 import {
-  useRouterParams,
-  useAddLocationsByRoute
+  useAddLocationsByRoute,
+  useLocationsData
 } from '../hooks'
 import useDataOptions from '../hooks/useDataOptions'
 import useUiStore from '../hooks/useUiStore'
 import {
   isEmptyRoute,
   isValidExplorerRoute,
-  getParamsFromPathname
+  getParamsFromPathname,
+  filterArrayToString,
+  paramsToFilterArray
 } from '../selectors/router'
 import { useMapStore } from '../../map'
 import useFilterStore from '../../filters'
+import { formatNumber } from '../../../shared/utils'
+
+/**
+ * Gets a route string for locations
+ * @param {*} locations
+ * @returns {string}
+ */
+const getLocationsRoute = locations => {
+  let locationsRoute = locations
+    .map(l => [l.id, l.lat, l.lon].join(','))
+    .join('+')
+  return locationsRoute
+}
+
+/**
+ * Gets a route string for viewport
+ * @param {*} viewport
+ * @returns {string}
+ */
+const getViewportRoute = viewport => {
+  return [
+    formatNumber(viewport.zoom),
+    formatNumber(viewport.latitude),
+    formatNumber(viewport.longitude)
+  ].join('/')
+}
+
+/**
+ * Gets the route string for the current options
+ * @returns {string}
+ */
+const useRouterParams = () => {
+  const view = useUiStore(state => state.view)
+  const viewportRoute = useMapStore(state =>
+    getViewportRoute(state.viewport)
+  )
+  const filters = useFilterStore(state => state.filters)
+  const locationsData = useLocationsData()
+  return useDataOptions(state =>
+    [
+      view,
+      filterArrayToString(filters),
+      state.region,
+      state.metric,
+      state.secondary,
+      state.demographic,
+      viewportRoute
+      // getLocationsRoute(locationsData)
+    ].join('/')
+  )
+}
 
 /**
  * Hook that enables routing for the explorer.  Routes are in the following format:
@@ -39,7 +92,9 @@ export default () => {
   const setFilters = useFilterStore(state => state.setFilters)
 
   const setFilterOptions = params => {
-    console.log('filter params', params)
+    const filters = paramsToFilterArray(params)
+    console.log('filter params', params, filters)
+    setFilters(filters)
   }
 
   // debounce the route so it updates every 1 second max

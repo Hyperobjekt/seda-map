@@ -37,7 +37,7 @@ export const ruleParamToArray = rule => {
     case 'coh':
     case 'ses':
     case 'frl':
-      return ['range', type, rest.split(';')]
+      return ['range', type, rest[0].split(';')]
     case 'limit':
       return ['limit', rest[0]]
     default:

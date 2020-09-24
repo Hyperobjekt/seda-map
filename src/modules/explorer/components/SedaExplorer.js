@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import SedaRouteManager from './SedaRouteManager'
 import SedaScatterplot from './scatterplot/SedaScatterplot'
 import SedaMap from './map'
 import { SplitView } from './base/SplitView'
@@ -8,9 +7,12 @@ import SedaPanelGroup from './panels/SedaPanelGroup'
 import { useActiveView } from '../hooks'
 import SedaTooltip from './SedaTooltip'
 import { PageBody } from '../../../shared'
+import useRouting from '../hooks/useRouting'
 
 const SedaExplorer = props => {
   const [view] = useActiveView()
+
+  useRouting()
 
   // determines the active portion of the split view
   const splitView =
@@ -18,7 +20,6 @@ const SedaExplorer = props => {
 
   return (
     <PageBody {...props}>
-      <SedaRouteManager />
       <SedaPanelGroup />
       <SplitView
         view={splitView}
