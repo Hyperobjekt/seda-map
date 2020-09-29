@@ -118,6 +118,8 @@ const SedaFiltersForm = props => {
 
   // handler for when one of the metric ranges changes
   const handleRangeChange = (type, event, value) => {
+    // do nothing if default value
+    if (shallow(DEFAULT_RANGES[type], value)) return
     setFilter(['range', type, value])
   }
 
