@@ -7,21 +7,11 @@ import {
   isGapDemographic
 } from '../selectors'
 import { getFiltersLang } from '../selectors/lang'
-import {
-  getStateName,
-  getStateAbbr
-} from '../../../shared/utils/states'
+import { getStateName } from '../../../shared/utils/states'
 import { useCallback } from 'react'
-import { formatNumber } from '../../../shared/utils'
-import { useMapStore } from '../../map'
 import { getVarNames } from '../selectors/data'
-
 import useStaticData from '../../data/useStaticData'
-import {
-  filterArrayToString,
-  parseLocationsString
-} from '../selectors/router'
-import useFilterStore from '../../filters'
+import { parseLocationsString } from '../selectors/router'
 
 /**
  * Provides the current values for metric, demographic, and region
