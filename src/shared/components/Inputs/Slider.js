@@ -4,6 +4,7 @@ import {
   Slider as MuiSlider
 } from '@material-ui/core'
 import * as _debounce from 'lodash.debounce'
+import useDidUpdateEffect from '../../hooks/useDidUpdateEffect'
 
 const StyledSlider = withStyles({
   root: {

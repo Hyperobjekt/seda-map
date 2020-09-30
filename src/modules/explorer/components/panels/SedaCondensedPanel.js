@@ -37,6 +37,7 @@ import {
   useActiveView,
   useActiveFilterSelection
 } from '../../hooks'
+import useActiveFilters from '../../hooks/useActiveFilters'
 
 const useStyles = makeStyles(theme => ({
   header: {
@@ -68,6 +69,8 @@ const SedaCondensedPanel = props => {
   const [selection, setSelection] = useActiveSelection()
   const [showChart, toggleChart] = useChartVisible()
   const locationCount = useLocationCount()
+  // const activeFilters = useActiveFilters()
+  // console.log(activeFilters)
   // const filterLabel = useActiveFilterLang()
 
   /**
@@ -170,6 +173,7 @@ const SedaCondensedPanel = props => {
         <IconLabelButton
           className={classes.button}
           active={selection === 'filter'}
+          indicator={3}
           tooltip={
             selection !== 'filter' && (
               <DetailedTooltip
@@ -183,6 +187,7 @@ const SedaCondensedPanel = props => {
         />
         <IconLabelButton
           active={selection === 'location'}
+          indicator={locationCount}
           tooltip={
             selection !== 'location' && (
               <DetailedTooltip
@@ -199,7 +204,7 @@ const SedaCondensedPanel = props => {
             )
           }
           className={classes.button}
-          icon={<LocationsIcon />}
+          icon={<LocationsIcon style={{ fontSize: 32 }} />}
           onClick={() => handleSelection('location')}
         />
         <Divider />

@@ -1,6 +1,7 @@
 import create from 'zustand'
 import * as _isEqual from 'lodash.isequal'
 import logger from '../logger'
+import shallow from 'zustand/shallow'
 
 /**
  * Updates the the filters with the provided updated filter rule
@@ -153,6 +154,13 @@ export const setFilter = set => rule => {
     logger.debug('set filter rule', rule, newFilters)
     return { filters: newFilters }
   })
+}
+
+export const areFiltersEqual = (rules1, rules2) => {
+  logger.debug('useFilterStore: checking equality')
+  const isEqual = shallow(rules1, rules2)
+  logger.debug('useFilterStore: isequal? ', isEqual)
+  return isEqual
 }
 
 export const DEFAULT_FILTERS = []

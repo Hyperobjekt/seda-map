@@ -7,6 +7,7 @@ import {
   Typography
 } from '@material-ui/core'
 import clsx from 'clsx'
+import IndicatorIcon from '../Icons/IndicatorIcon'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -45,6 +46,9 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
+/**
+ * Icon action buttons with tooltips, used in the condensed panel
+ */
 const IconLabelButton = ({
   icon,
   className,
@@ -52,10 +56,17 @@ const IconLabelButton = ({
   children,
   active,
   tooltip,
+  indicator,
   placement,
   ...props
 }) => {
   const classes = useStyles()
+
+  const startIcon = indicator ? (
+    <IndicatorIcon indicator={indicator}>{icon}</IndicatorIcon>
+  ) : (
+    icon
+  )
 
   const button = (
     <Button
@@ -74,7 +85,7 @@ const IconLabelButton = ({
           [classes.activeIcon]: active
         })
       }}
-      startIcon={icon}
+      startIcon={startIcon}
       {...props}>
       <Typography variant="srOnly">{tooltip}</Typography>
     </Button>

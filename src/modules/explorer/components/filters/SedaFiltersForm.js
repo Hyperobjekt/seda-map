@@ -20,7 +20,8 @@ import { getPrefixLang, getLang } from '../../selectors/lang'
 import { DEFAULT_RANGES } from '../../constants/metrics'
 import {
   getFilterIndex,
-  getFilterValue
+  getFilterValue,
+  areFiltersEqual
 } from '../../../filters/useFilterStore'
 import { NumberSlider, Slider } from '../../../../shared'
 import { hasFilterRule } from '../../../filters/utils'
@@ -69,7 +70,10 @@ const SedaFiltersForm = props => {
   // track state for location selection
   const [selectedLocation, setSelectedLocation] = useState(null)
   // grab filters array
-  const filters = useFilterStore(state => state.filters)
+  const filters = useFilterStore(
+    state => state.filters,
+    areFiltersEqual
+  )
   const removeFilter = useFilterStore(
     state => state.removeFilter
   )
@@ -123,17 +127,23 @@ const SedaFiltersForm = props => {
     ) || DEFAULT_RANGES[region]['limit']
 
   // handler for when one of the metric ranges changes
-  const doRangeChange = (type, event, value) => {
-    // if set to a default value then clear the filter
-    shallow(DEFAULT_RANGES[region][type], value)
-      ? removeFilter(['range', type], true)
-      : setFilter(['range', type, value])
-  }
-  const handleRangeChange = useCallback(doRangeChange, [
-    region,
-    setFilter,
-    removeFilter
-  ])
+  // memoize handler to prevent constant re-renders of slider component
+  const handleRangeChange = useCallback(
+    (type, event, value) => {
+      value = value.map(v => parseFloat(v))
+      console.log(
+        ' is range equa;? ',
+        DEFAULT_RANGES[region][type],
+        value,
+        shallow(DEFAULT_RANGES[region][type], value)
+      )
+      // if set to a default value then clear the filter
+      // shallow(DEFAULT_RANGES[region][type], value)
+      //   ? removeFilter(['range', type], true)
+      //   : setFilter(['range', type, value])
+    },
+    [region, setFilter, removeFilter]
+  )
 
   // handler for when the limit filter changes
   // memoize handler to prevent constant re-renders of slider component
