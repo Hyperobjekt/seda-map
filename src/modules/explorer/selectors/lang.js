@@ -434,24 +434,26 @@ export const getLangDiverging = (
 export const getTooltipMetricLang = (varName, value) =>
   getLangDiverging(varName, value, 'TOOLTIP_DESC')
 
-export const getFiltersLang = (
-  filters,
-  region,
-  idToName = getStateName
-) => {
-  const labels = []
-  if (filters.prefix) {
-    labels.push('In ' + idToName(filters.prefix))
-  }
-  if (filters.largest) {
-    labels.push(
-      getLang('FILTER_LARGEST_SELECTION', {
-        num: filters.largest,
-        region: getRegionLabel(region)
-      })
-    )
-  }
-  return labels.length > 0
-    ? labels.join(', ')
-    : getLang('PANEL_FILTER_NONE')
-}
+// TODO: removed during filters refactor, need to revise to get human readable filters
+
+// export const getFiltersLang = (
+//   filters,
+//   region,
+//   idToName = getStateName
+// ) => {
+//   const labels = []
+//   if (filters.prefix) {
+//     labels.push('In ' + idToName(filters.prefix))
+//   }
+//   if (filters.largest) {
+//     labels.push(
+//       getLang('FILTER_LARGEST_SELECTION', {
+//         num: filters.largest,
+//         region: getRegionLabel(region)
+//       })
+//     )
+//   }
+//   return labels.length > 0
+//     ? labels.join(', ')
+//     : getLang('PANEL_FILTER_NONE')
+// }

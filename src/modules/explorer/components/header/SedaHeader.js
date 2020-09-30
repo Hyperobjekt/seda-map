@@ -114,23 +114,24 @@ const getTitleFromSelections = ({
  * @param {string} regionLabel
  * @param {function} idToName (function to transform id to name)
  */
-const getFilterLabel = (filters, regionLabel) => {
-  const labels = []
-  if (filters.largest) {
-    labels.push(
-      getLang('HEADER_TITLE_LARGEST', {
-        num: filters.largest,
-        region: regionLabel
-      })
-    )
-  }
-  return labels.length > 0 ? labels.join(' ') : ''
-}
+// const getFilterLabel = (filters, regionLabel) => {
+//   const labels = []
+//   if (filters.largest) {
+//     labels.push(
+//       getLang('HEADER_TITLE_LARGEST', {
+//         num: filters.largest,
+//         region: regionLabel
+//       })
+//     )
+//   }
+//   return labels.length > 0 ? labels.join(' ') : ''
+// }
 
 const Subtitle = ({ metric, demographic, region, filters }) => {
   const metricLabel = getMetricLabel(metric)
-  const regionLabel = getRegionLabel(region)
-  const filterLabel = getFilterLabel(filters, regionLabel)
+  // NOTE: removed for filter refactor
+  // const regionLabel = getRegionLabel(region)
+  // const filterLabel = getFilterLabel(filters, regionLabel)
   const metricTooltip = getMetricLabel(metric, 'HINT')
   const classes = useSubtitleStyles()
   const MetricLabel = (
@@ -157,7 +158,7 @@ const Subtitle = ({ metric, demographic, region, filters }) => {
     </>
   ) : (
     <>
-      shown by {MetricLabel} for {studentLabel} {filterLabel}
+      shown by {MetricLabel} for {studentLabel}
     </>
   )
 }
@@ -187,15 +188,16 @@ const useHeaderStyles = makeStyles(theme => ({
 
 const SedaHeader = props => {
   const [metricId, demId, regionId] = useActiveOptionIds()
-  const [filters] = useFilters()
-  const stateName = filters.prefix
-    ? getStateName(filters.prefix)
-    : undefined
+  // const [filters] = useFilters()
+  // const stateName = filters.prefix
+  //   ? getStateName(filters.prefix)
+  //   : undefined
   const heading = getTitleFromSelections({
     metric: metricId,
     demographic: demId,
     region: regionId,
-    parentLocation: stateName
+    // TODO: parent location removed in filter refactor, need to re-add
+    parentLocation: undefined
   })
   const classes = useHeaderStyles()
   return (
@@ -212,7 +214,6 @@ const SedaHeader = props => {
           metric={metricId}
           demographic={demId}
           region={regionId}
-          filters={filters}
         />
       </Typography>
     </PageHeader>

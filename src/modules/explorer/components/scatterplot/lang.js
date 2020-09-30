@@ -99,21 +99,21 @@ export const getFootnotes = (xVar, yVar, region, filters) => {
     footnotes.push(getLang('FOOTNOTE_CHART_GAP', context))
   }
   // add filter footnote
-  if (filters.prefix || filters.largest) {
-    const largest = filters.largest
-      ? `Largest ${filters.largest}`
-      : 'All'
-    const parentLocation = filters.prefix
-      ? getStateName(filters.prefix)
-      : 'U.S.'
-    footnotes.push(
-      getLang('FOOTNOTE_CHART_FILTER', {
-        region,
-        largest,
-        parentLocation
-      })
-    )
-  }
+  // if (filters.prefix || filters.largest) {
+  //   const largest = filters.largest
+  //     ? `Largest ${filters.largest}`
+  //     : 'All'
+  //   const parentLocation = filters.prefix
+  //     ? getStateName(filters.prefix)
+  //     : 'U.S.'
+  //   footnotes.push(
+  //     getLang('FOOTNOTE_CHART_FILTER', {
+  //       region,
+  //       largest,
+  //       parentLocation
+  //     })
+  //   )
+  // }
   // add circle size note
   footnotes.push(
     getLang('FOOTNOTE_CHART_SIZE', { region: regionSingular })

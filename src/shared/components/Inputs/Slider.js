@@ -54,11 +54,22 @@ export default function Slider({
   const [value, setValue] = useState(defaultValue)
   const event = useRef(null)
   const debouncedChange = useRef(_debounce(onChange, 200))
+
+  // update the debounced callback when callback changes
+  useEffect(() => {
+    debouncedChange.current = _debounce(onChange, 200)
+  }, [onChange])
+
+  // call the debounce callback when the value changes
   useEffect(
     () => value && debouncedChange.current(event.current, value),
     [value, debouncedChange.current]
   )
+
+  // update the value when a new value is passed
   useEffect(() => setValue(defaultValue), [defaultValue])
+
+  // handle changes on the slider
   const handleChange = (e, val) => {
     event.current = e
     setValue(val)

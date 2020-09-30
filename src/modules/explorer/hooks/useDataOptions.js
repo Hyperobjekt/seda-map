@@ -45,10 +45,6 @@ const [useDataOptions] = create((set, get) => ({
   region: defaultRegion,
   secondary: defaultSecondary,
   locations: [],
-  filters: {
-    prefix: null,
-    largest: null
-  },
   activeLocation: null,
   loading: true,
   error: null,
@@ -106,24 +102,12 @@ const [useDataOptions] = create((set, get) => ({
     set(changes)
   },
   setOptionsFromRoute: params => {
-    const filters = params['filter'].split('+')
-    const prefix =
-      filters[0] === 'us'
-        ? null
-        : getStateFipsFromAbbr(filters[0])
-    const largest = filters.length > 1 ? filters[1] : null
-    logger.debug(
-      'setting options from route',
-      params,
-      prefix,
-      largest
-    )
+    logger.debug('setting options from route', params)
     set({
       region: params['region'],
       metric: params['metric'],
       secondary: params['secondary'],
-      demographic: params['demographic'],
-      filters: { prefix, largest }
+      demographic: params['demographic']
     })
   }
 }))

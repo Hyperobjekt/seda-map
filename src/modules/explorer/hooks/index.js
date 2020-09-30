@@ -6,7 +6,6 @@ import {
   getRegionFromLocationId,
   isGapDemographic
 } from '../selectors'
-import { getFiltersLang } from '../selectors/lang'
 import { getStateName } from '../../../shared/utils/states'
 import { useCallback } from 'react'
 import { getVarNames } from '../selectors/data'
@@ -111,17 +110,17 @@ export const useFilters = () => {
   )
 }
 
-/**
- * Provides a human readable string for the current filter selections
- * @returns {string}
- */
-export const useActiveFilterLang = () => {
-  return useDataOptions(state => {
-    const filters = state.filters
-    const region = state.region
-    return getFiltersLang(filters, region)
-  })
-}
+// /**
+//  * Provides a human readable string for the current filter selections
+//  * @returns {string}
+//  */
+// export const useActiveFilterLang = () => {
+//   return useDataOptions(state => {
+//     const filters = state.filters
+//     const region = state.region
+//     return getFiltersLang(filters, region)
+//   })
+// }
 
 /**
  * User Interface

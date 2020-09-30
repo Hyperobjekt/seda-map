@@ -28,8 +28,7 @@ import {
   useLocationCount,
   useChartVisible,
   useActiveView,
-  useActiveOptionIds,
-  useActiveFilterLang
+  useActiveOptionIds
 } from '../../hooks'
 
 const useStyles = makeStyles(theme => ({
@@ -67,7 +66,7 @@ const SedaFullPanel = props => {
   const [selection] = useActiveSelection()
   const [showChart] = useChartVisible()
   const locationCount = useLocationCount()
-  const filterLabel = useActiveFilterLang()
+  // const filterLabel = useActiveFilterLang()
   return (
     <SidePanel {...props}>
       <SidePanelHeader sticky>
@@ -102,7 +101,7 @@ const SedaFullPanel = props => {
         <SedaSelectionButton
           active={selection === 'filter'}
           selectionId="filter"
-          value={filterLabel}
+          value="ACTIVE_FILTERS"
         />
         <SedaSelectionButton
           active={selection === 'location'}

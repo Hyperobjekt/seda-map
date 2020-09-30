@@ -129,10 +129,32 @@ export const METRICS = [
 export const KEY_METRIC_IDS = ['avg', 'grd', 'coh']
 
 export const DEFAULT_RANGES = {
-  avg: [-5, 5],
-  grd: [0, 2],
-  coh: [-0.5, 0.5],
-  ses: [-3, 3],
-  limit: [10, 15000],
-  frl: [0, 1]
+  states: {
+    avg: [-5, 5],
+    grd: [0, 2],
+    coh: [-0.5, 0.5],
+    ses: [-2, 2],
+    limit: 52
+  },
+  counties: {
+    avg: [-5, 5],
+    grd: [0, 2],
+    coh: [-0.5, 0.5],
+    ses: [-3, 3],
+    limit: 3500
+  },
+  districts: {
+    avg: [-5, 5],
+    grd: [0, 2],
+    coh: [-0.5, 0.5],
+    ses: [-3, 3],
+    limit: 15000
+  },
+  schools: {
+    avg: [-5, 5],
+    grd: [0, 2],
+    coh: [-0.5, 0.5],
+    frl: [0, 1],
+    limit: 80000
+  }
 }

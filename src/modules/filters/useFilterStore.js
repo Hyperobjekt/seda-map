@@ -1,7 +1,6 @@
 import create from 'zustand'
 import * as _isEqual from 'lodash.isequal'
 import logger from '../logger'
-import { DEFAULT_RANGES } from '../explorer/constants/metrics'
 
 /**
  * Updates the the filters with the provided updated filter rule
@@ -22,6 +21,15 @@ const updateRule = (filters, rule) => {
     index === i ? updatedRule : f
   )
   return updatedFilters
+}
+
+/**
+ * Checks if the filters has the provided rule
+ * @param {*} filters
+ * @param {*} rule
+ */
+export const hasFilterRule = (filters, rule) => {
+  return getFilterIndex(filters, rule) > -1
 }
 
 /**
@@ -82,6 +90,12 @@ const insertFilter = (filters, filter, atIndex) => {
   return result
 }
 
+/**
+ * Deletes a filter from the provided filters if it exists
+ * @param {*} filters
+ * @param {*} rule
+ * @param {*} noValue true if the provided rule does not contain a value, this is used to match a rule regardless of value
+ */
 const deleteFilter = (filters, rule, noValue) => {
   const sliceIndex = noValue ? rule.length : rule.length - 1
   const params = rule.slice(0, sliceIndex)
@@ -111,7 +125,9 @@ const addFilter = set => (filter, atIndex) => {
  * Thunk that removes a filter rule
  * @param {*} set
  */
-const removeFilter = set => (rule, noValue) =>
+const removeFilter = (set, get) => (rule, noValue) => {
+  const filters = get().filters
+  if (!hasFilterRule(filters, rule)) return
   set(state => {
     const updatedFilters = deleteFilter(
       state.filters,
@@ -121,6 +137,7 @@ const removeFilter = set => (rule, noValue) =>
     logger.debug('removed filter rule', rule, updatedFilters)
     return { filters: updatedFilters }
   })
+}
 
 /**
  * Adds a filter rule or updates and existing one
@@ -138,17 +155,14 @@ export const setFilter = set => rule => {
   })
 }
 
-export const DEFAULT_FILTERS = [
-  ['sort', 'sz', 'asc'],
-  ['limit', 10000]
-]
+export const DEFAULT_FILTERS = []
 
-const [useFilterStore] = create(set => ({
+const [useFilterStore] = create((set, get) => ({
   filters: DEFAULT_FILTERS,
   addFilter: addFilter(set),
   setFilters: filters => set({ filters }),
   setFilter: setFilter(set),
-  removeFilter: removeFilter(set),
+  removeFilter: removeFilter(set, get),
   clearFilters: () => set({ filters: DEFAULT_FILTERS })
 }))
 

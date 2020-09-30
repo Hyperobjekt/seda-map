@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { useFilterStore } from '../../../filters'
 import logger from '../../../logger'
@@ -23,6 +23,7 @@ import {
   getFilterValue
 } from '../../../filters/useFilterStore'
 import { NumberSlider, Slider } from '../../../../shared'
+import { hasFilterRule } from '../../../filters/utils'
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -73,6 +74,8 @@ const SedaFiltersForm = props => {
     state => state.removeFilter
   )
   const setFilter = useFilterStore(state => state.setFilter)
+  const setFilters = useFilterStore(state => state.setFilters)
+
   // function to clear filters
   const clearFilters = useFilterStore(
     state => state.clearFilters
@@ -106,27 +109,54 @@ const SedaFiltersForm = props => {
     region === 'schools' ? 'frl' : 'ses'
   ].reduce((obj, key) => {
     const filterValue = getFilterValue(filters, ['range', key])
-    obj[key] = filterValue ? filterValue : DEFAULT_RANGES[key]
+    obj[key] = filterValue
+      ? filterValue
+      : DEFAULT_RANGES[region][key]
     return obj
   }, {})
 
-  // get limit filter from filters array
-  const limitValue = filters.reduce(
-    (val, f) => (f[0] === 'limit' ? f[1] : val),
-    false
-  )
+  // get limit filter from filters array, or set to default for region
+  const limitValue =
+    filters.reduce(
+      (val, f) => (f[0] === 'limit' ? f[1] : val),
+      false
+    ) || DEFAULT_RANGES[region]['limit']
 
   // handler for when one of the metric ranges changes
-  const handleRangeChange = (type, event, value) => {
-    // do nothing if default value
-    if (shallow(DEFAULT_RANGES[type], value)) return
-    setFilter(['range', type, value])
+  const doRangeChange = (type, event, value) => {
+    // if set to a default value then clear the filter
+    shallow(DEFAULT_RANGES[region][type], value)
+      ? removeFilter(['range', type], true)
+      : setFilter(['range', type, value])
   }
+  const handleRangeChange = useCallback(doRangeChange, [
+    region,
+    setFilter,
+    removeFilter
+  ])
 
   // handler for when the limit filter changes
-  const handleLimitChange = (event, value) => {
-    setFilter(['limit', value])
-  }
+  // memoize handler to prevent constant re-renders of slider component
+  const handleLimitChange = useCallback(
+    (event, value) => {
+      value = parseInt(value)
+      // if set to a default value then clear the filter
+      if (value === DEFAULT_RANGES[region]['limit']) {
+        removeFilter(['limit'], true)
+      } else {
+        const hasLimit = hasFilterRule(filters, ['limit'])
+        // if limit rule doesn't already exist, add the sorting rule so it limts by size
+        hasLimit
+          ? setFilter(['limit', value])
+          : setFilters([
+              ...filters,
+              ['sort', 'sz', 'asc'],
+              ['limit', value]
+            ])
+      }
+    },
+    [region, setFilter, setFilters, removeFilter]
+  )
 
   /**
    * Update the "startsWith" filter for places that start with
@@ -135,7 +165,7 @@ const SedaFiltersForm = props => {
    * @param {*} hit selection from AlgoliaSearch component
    */
   const handleLocationSelect = (id, hit) => {
-    setFilter(['startsWith', id])
+    setFilter(['startsWith', 'id', id])
     setSelectedLocation(hit.suggestionValue)
   }
 
@@ -185,7 +215,7 @@ const SedaFiltersForm = props => {
       handleLocationClear()
     // clear states filter if needed
     if (
-      region !== 'states' &&
+      region === 'states' &&
       locationPrefix &&
       locationPrefix.length > 0
     )
@@ -234,8 +264,8 @@ const SedaFiltersForm = props => {
         />
         <NumberSlider
           value={limitValue}
-          min={DEFAULT_RANGES['limit'][0]}
-          max={DEFAULT_RANGES['limit'][1]}
+          min={10}
+          max={DEFAULT_RANGES[region]['limit']}
           step={10}
           aria-labelledby="limit-slider"
           SliderProps={{
@@ -261,11 +291,11 @@ const SedaFiltersForm = props => {
             />
             <Slider
               value={ranges[key]}
-              min={DEFAULT_RANGES[key][0]}
-              max={DEFAULT_RANGES[key][1]}
+              min={DEFAULT_RANGES[region][key][0]}
+              max={DEFAULT_RANGES[region][key][1]}
               step={
-                (DEFAULT_RANGES[key][1] -
-                  DEFAULT_RANGES[key][0]) /
+                (DEFAULT_RANGES[region][key][1] -
+                  DEFAULT_RANGES[region][key][0]) /
                 20
               }
               onChange={(event, value) =>

@@ -35,7 +35,6 @@ import {
   useLocationCount,
   useChartVisible,
   useActiveView,
-  useActiveFilterLang,
   useActiveFilterSelection
 } from '../../hooks'
 
@@ -69,7 +68,7 @@ const SedaCondensedPanel = props => {
   const [selection, setSelection] = useActiveSelection()
   const [showChart, toggleChart] = useChartVisible()
   const locationCount = useLocationCount()
-  const filterLabel = useActiveFilterLang()
+  // const filterLabel = useActiveFilterLang()
 
   /**
    * Event handler for when option is selected
@@ -175,7 +174,6 @@ const SedaCondensedPanel = props => {
             selection !== 'filter' && (
               <DetailedTooltip
                 primary={getPrefixLang('filter', 'PANEL_TITLE')}
-                secondary={filterLabel}
                 hint={getLang('TOOLTIP_HINT_REGION')}
               />
             )
