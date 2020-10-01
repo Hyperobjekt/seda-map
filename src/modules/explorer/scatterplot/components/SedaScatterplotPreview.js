@@ -1,10 +1,10 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import { isVersusFromVarNames } from '../../selectors'
+import { isVersusFromVarNames } from '../../app/selectors'
 import ScatterplotBase from './SedaScatterplotBase'
 import clsx from 'clsx'
 
-import { useRegion } from '../../hooks'
+import { useRegion } from '../../app/hooks'
 import useScatterplotVars from '../hooks/useScatterplotVars'
 
 const useStyles = makeStyles(theme => ({

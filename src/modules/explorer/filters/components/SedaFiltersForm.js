@@ -12,11 +12,10 @@ import {
   Checkbox,
   Button
 } from '@material-ui/core'
-import { getFormatterForVarName } from '../../selectors'
+import { getFormatterForVarName } from '../../app/selectors'
 import shallow from 'zustand/shallow'
-import { useDemographic, useRegion } from '../../hooks'
-import { getPrefixLang, getLang } from '../../selectors/lang'
-import { DEFAULT_RANGES } from '../../constants/metrics'
+import { getPrefixLang, getLang } from '../../app/selectors/lang'
+import { DEFAULT_RANGES } from '../../app/constants/metrics'
 import {
   getFilterIndex,
   getFilterValue
@@ -27,6 +26,7 @@ import {
 } from '../../../../shared'
 import { hasFilterRule } from '../../../filters/utils'
 import useFilters from '../hooks/useFilters'
+import { useDemographic, useRegion } from '../../app/hooks'
 
 const useStyles = makeStyles(theme => ({
   title: {

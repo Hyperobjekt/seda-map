@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { getPrefixLang } from '../../selectors/lang'
-import SedaSidePanel from '../../components/panels/SedaSidePanel'
+import { getPrefixLang } from '../../app/selectors/lang'
+import SedaSidePanel from '../../app/components/panels/SedaSidePanel'
 import SedaFiltersForm from './SedaFiltersForm'
 
 /**

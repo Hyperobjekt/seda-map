@@ -6,14 +6,14 @@ import {
   SidePanelHeader,
   SidePanelBody
 } from '../../../../shared'
-import { LocationTable } from '../../components/base'
+import { LocationTable } from '../../app/components/base'
 import {
   getDemographics,
   getGaps,
   getRegionFromLocationId
-} from '../../selectors'
+} from '../../app/selectors'
 import { CloseIcon } from '../../../icons'
-import { useMetric, useDemographic } from '../../hooks'
+import { useMetric, useDemographic } from '../../app/hooks'
 import { SedaLocationName } from '..'
 import useActiveLocationData from '../hooks/useActiveLocationData'
 import useActiveLocation from '../hooks/useActiveLocation'

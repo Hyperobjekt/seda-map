@@ -4,7 +4,7 @@ import {
   getPrefixLang,
   getMetricLabel,
   getDemographicLabel
-} from '../selectors/lang'
+} from '../app/selectors/lang'
 import {
   isVersusFromVarNames,
   getDemographicIdFromVarName,
@@ -12,7 +12,7 @@ import {
   getGapDemographics,
   getMetricIdFromVarName,
   isGapVarName
-} from '../selectors'
+} from '../app/selectors'
 import { titleCase } from '../../../shared/utils'
 
 import { getStateName } from '../../../shared/utils/states'

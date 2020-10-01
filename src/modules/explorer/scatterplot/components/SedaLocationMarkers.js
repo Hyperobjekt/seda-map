@@ -5,11 +5,14 @@ import {
   getCircle,
   getValuePercentInRange
 } from '../utils'
-import { useHovered, useMarkersVisibility } from '../../hooks'
+import {
+  useHovered,
+  useMarkersVisibility
+} from '../../app/hooks'
 import {
   getMetricRangeFromVarName,
   getDemographicForVarNames
-} from '../../selectors'
+} from '../../app/selectors'
 import { getSizerFunctionForRegion } from '../selectors'
 import {
   useLocationData,

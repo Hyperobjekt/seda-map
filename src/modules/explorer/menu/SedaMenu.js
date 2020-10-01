@@ -1,7 +1,7 @@
 import React from 'react'
-import useSiteStore from '../hooks/useSiteStore'
 import { makeStyles, Button, Drawer } from '@material-ui/core'
 import useMenuVisibility from './useMenuVisibility'
+import { useSiteStore } from '../app/hooks'
 
 const useStyles = makeStyles(theme => ({
   root: { width: theme.app.panelWidth },

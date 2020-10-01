@@ -6,7 +6,7 @@ import {
   getMetricIdFromVarName,
   getColorForVarNameValue,
   getSelectedColors
-} from '../selectors'
+} from '../app/selectors'
 
 function FetchException(message, urls, err) {
   this.message = message

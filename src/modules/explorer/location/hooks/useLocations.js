@@ -1,4 +1,4 @@
-import useDataOptions from '../../hooks/useDataOptions'
+import useDataOptions from '../../app/hooks/useDataOptions'
 import shallow from 'zustand/shallow'
 
 /**

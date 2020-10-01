@@ -5,7 +5,7 @@ import {
   isGapDemographic,
   getMetricLabel,
   getDemographicLabel
-} from '../../selectors'
+} from '../../app/selectors'
 import {
   TableCell,
   Tooltip,
@@ -18,7 +18,7 @@ import clsx from 'clsx'
 import {
   getDescriptionForVarName,
   getLang
-} from '../../selectors/lang'
+} from '../../app/selectors/lang'
 import { TableStats } from '../../../../shared'
 import { DivergingStatValue } from '../../../../shared'
 

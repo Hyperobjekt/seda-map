@@ -8,14 +8,14 @@ import ScatterplotBase, {
   ScatterplotAxis
 } from '../../../scatterplot'
 import { theme } from '../theme'
-import { isVersusFromVarNames } from '../../selectors'
+import { isVersusFromVarNames } from '../../app/selectors'
 import { getScatterplotOptions } from '../style'
 import {
   getLang,
   getLegendEndLabelsForVarName as getEndLabels,
   getLabelForVarName,
   getRegionLabel
-} from '../../selectors/lang'
+} from '../../app/selectors/lang'
 import SedaLocationMarkers from './SedaLocationMarkers'
 import useStaticData from '../../../data/useStaticData'
 import { useFilteredData } from '../../filters'

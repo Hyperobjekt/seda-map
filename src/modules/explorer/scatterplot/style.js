@@ -16,10 +16,10 @@ import {
   isVersusFromVarNames,
   isGapVarName,
   getMetricIdFromVarName
-} from '../selectors'
+} from '../app/selectors'
 import { getScatterplotBaseOptions } from '../../scatterplot'
 import { getLangKeyForAxisLabel } from './lang'
-import { getLang } from '../selectors/lang'
+import { getLang } from '../app/selectors/lang'
 import {
   getIncrementForVarName,
   getPositionArray

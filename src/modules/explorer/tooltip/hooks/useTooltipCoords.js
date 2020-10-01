@@ -1,4 +1,4 @@
-import { useUiStore } from '../../hooks'
+import { useUiStore } from '../../app/hooks'
 import shallow from 'zustand/shallow'
 
 /**

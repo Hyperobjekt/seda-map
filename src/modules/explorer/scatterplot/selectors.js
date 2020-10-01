@@ -1,5 +1,5 @@
 import * as scale from 'd3-scale'
-import { getRegionDomain } from '../selectors/regions'
+import { getRegionDomain } from '../app/selectors/regions'
 
 /** min / max dot sizes */
 const DOT_SIZES = [4, 64]

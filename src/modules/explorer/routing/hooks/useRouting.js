@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import useDebounce from '../../../../shared/hooks/useDebounce'
-import useDataOptions from '../../hooks/useDataOptions'
-import useUiStore from '../../hooks/useUiStore'
+import useDataOptions from '../../app/hooks/useDataOptions'
+import useUiStore from '../../app/hooks/useUiStore'
 import {
   isEmptyRoute,
   isValidExplorerRoute,

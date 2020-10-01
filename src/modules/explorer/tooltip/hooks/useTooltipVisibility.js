@@ -1,5 +1,5 @@
 import shallow from 'zustand/shallow'
-import { useUiStore } from '../../hooks'
+import { useUiStore } from '../../app/hooks'
 
 /**
  * Provides tooltip visible value and setter function

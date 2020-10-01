@@ -8,18 +8,18 @@ import {
   getFormatterForVarName,
   getGapDemographics,
   getInvertedFromVarName
-} from '../selectors'
+} from '../app/selectors'
 import {
   getPrefixLang,
   getDemographicLabel
-} from '../selectors/lang'
+} from '../app/selectors/lang'
 import {
   useMapVars,
   useHovered,
   useRegion,
   useMarkersVisibility,
   useDemographicType
-} from '../hooks'
+} from '../app/hooks'
 import { getValuePositionInRange } from '../../../shared/utils'
 import { useMapSize } from '../../map'
 import { useLocationData } from '../location'

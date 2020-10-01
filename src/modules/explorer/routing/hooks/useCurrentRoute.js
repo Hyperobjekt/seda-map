@@ -1,11 +1,11 @@
-import { useUiStore } from '../../hooks'
+import { useUiStore } from '../../app/hooks'
 import { useMapStore } from '../../../map'
 import {
   getViewportRoute,
   filterArrayToString
 } from '../selectors'
 import { useFilters } from '../../filters'
-import useDataOptions from '../../hooks/useDataOptions'
+import useDataOptions from '../../app/hooks/useDataOptions'
 import { useLocationsData } from '../../location'
 
 /**

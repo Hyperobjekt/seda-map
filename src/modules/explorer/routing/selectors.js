@@ -3,7 +3,7 @@ import * as polylabel from 'polylabel'
 import {
   getRegionFromLocationId,
   getRegionFromFeature
-} from '../selectors'
+} from '../app/selectors'
 import { getStateFipsFromAbbr } from '../../../shared/utils/states'
 import { formatNumber } from '../../../shared/utils'
 

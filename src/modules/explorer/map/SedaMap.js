@@ -10,15 +10,15 @@ import {
   getSelectedColors,
   getFeatureProperty,
   getLocationIdsForRegion
-} from '../selectors'
-import { getLang } from '../selectors/lang'
+} from '../app/selectors'
+import { getLang } from '../app/selectors/lang'
 import SedaMapLegend from './SedaMapLegend'
 import {
   useActiveOptionIds,
   useHovered,
   useMarkersVisibility
-} from '../hooks'
-import { REGION_TO_ID_LENGTH } from '../constants/regions'
+} from '../app/hooks'
+import { REGION_TO_ID_LENGTH } from '../app/constants/regions'
 import { useFilters, useFilteredData } from '../filters'
 import { useLocations, useAddLocation } from '../location'
 

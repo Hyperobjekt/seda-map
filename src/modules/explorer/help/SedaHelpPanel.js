@@ -10,7 +10,7 @@ import {
   SidePanelBody,
   ExpansionPanel
 } from '../../../shared'
-import { getLang } from '../selectors/lang'
+import { getLang } from '../app/selectors/lang'
 import { CloseIcon } from '../../icons'
 import useHelpVisibility from './useHelpVisibility'
 

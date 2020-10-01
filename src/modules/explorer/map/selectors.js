@@ -6,7 +6,7 @@ import {
   getMetricIdFromVarName,
   getMetricRange,
   isGapVarName
-} from '../selectors'
+} from '../app/selectors'
 import { getFilterIndex } from '../../filters/useFilterStore'
 
 const noDataFill = '#ccc'

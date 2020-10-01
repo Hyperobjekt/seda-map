@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 import {
   getSelectedColors,
   getRegionFromLocationId
-} from '../../selectors'
-import { useRegion } from '../../hooks'
+} from '../../app/selectors'
+import { useRegion } from '../../app/hooks'
 import { getStateName } from '../../../../shared/utils/states'
-import { LocationName } from '../../components/base'
+import { LocationName } from '../../app/components/base'
 import useLocationData from '../hooks/useLocationData'
 import useLocationNumber from '../hooks/useLocationNumber'
 

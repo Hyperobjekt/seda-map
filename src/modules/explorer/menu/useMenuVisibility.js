@@ -1,5 +1,5 @@
-import { useUiStore } from '../hooks'
 import shallow from 'zustand/shallow'
+import { useUiStore } from '../app/hooks'
 
 /**
  * Provides site menu visible value and toggle function

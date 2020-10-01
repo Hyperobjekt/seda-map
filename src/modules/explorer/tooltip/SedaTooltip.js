@@ -4,7 +4,7 @@ import {
   getMetricLabel,
   getDemographicLabel,
   getLang
-} from '../selectors/lang'
+} from '../app/selectors/lang'
 import {
   isVersusFromVarNames,
   getDemographicForVarNames,
@@ -12,12 +12,12 @@ import {
   getFormatterForVarName,
   getRegionFromLocationId,
   getSingularRegion
-} from '../selectors'
+} from '../app/selectors'
 import { getStateName } from '../../../shared/utils/states'
 import { Typography, makeStyles } from '@material-ui/core'
 import clsx from 'clsx'
 import { Tooltip, DivergingStatValue } from '../../../shared'
-import { useHovered, useRegion } from '../hooks'
+import { useHovered, useRegion } from '../app/hooks'
 import { useScatterplotVars } from '../scatterplot'
 import useTooltipVisibility from './hooks/useTooltipVisibility'
 import useTooltipCoords from './hooks/useTooltipCoords'

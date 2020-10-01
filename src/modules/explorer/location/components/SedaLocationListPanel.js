@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import SedaLocationSelect from './SedaLocationSelect'
-import { getPrefixLang } from '../../selectors/lang'
-import SedaSidePanel from '../../components/panels/SedaSidePanel'
+import { getPrefixLang } from '../../app/selectors/lang'
+import SedaSidePanel from '../../app/components/panels/SedaSidePanel'
 
 /**
  * Side panel for demographic selection

@@ -4,17 +4,21 @@ import {
   isVersusFromVarNames,
   getDemographicIdFromVarName,
   getSecondaryForDemographic
-} from '../../selectors'
+} from '../../app/selectors'
 import ScatterplotBase from './SedaScatterplotBase'
 import clsx from 'clsx'
 import useResizeAware from 'react-resize-aware'
 
-import { useRegion, useSecondary, useUiStore } from '../../hooks'
-import { SplitView } from '../../components/base/SplitView'
+import {
+  useRegion,
+  useSecondary,
+  useUiStore
+} from '../../app/hooks'
+import { SplitView } from '../../app/components/base/SplitView'
 import { Typography } from '@material-ui/core'
 import Footnotes from './Footnotes'
 import { LinkButton } from '../../../../shared'
-import SedaGenericSelect from '../../components/controls/SedaGenericSelect'
+import SedaGenericSelect from '../../app/components/controls/SedaGenericSelect'
 import { getFootnotes, getChartTitle } from '../lang'
 import {
   getLocatonIdFromEvent,

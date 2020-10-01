@@ -4,7 +4,7 @@ import { useMemo } from 'react'
 import useDebounce from '../../../../shared/hooks/useDebounce'
 import shallow from 'zustand/shallow'
 import useFilters from './useFilters'
-import useDataOptions from '../../hooks/useDataOptions'
+import useDataOptions from '../../app/hooks/useDataOptions'
 import { applyFilters } from '../../../filters'
 
 /**

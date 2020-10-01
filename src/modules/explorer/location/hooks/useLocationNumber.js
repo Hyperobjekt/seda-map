@@ -1,4 +1,4 @@
-import useDataOptions from '../../hooks/useDataOptions'
+import useDataOptions from '../../app/hooks/useDataOptions'
 
 /**
  * Provides the index of the location based on region type,

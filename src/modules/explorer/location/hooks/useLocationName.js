@@ -1,5 +1,5 @@
 import { getStateName } from '../../../../shared/utils/states'
-import { getRegionFromLocationId } from '../../selectors'
+import { getRegionFromLocationId } from '../../app/selectors'
 import useLocationData from './useLocationData'
 
 /**

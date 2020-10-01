@@ -1,5 +1,5 @@
-import useDataOptions from '../../hooks/useDataOptions'
-import { getVarNames } from '../../selectors'
+import useDataOptions from '../../app/hooks/useDataOptions'
+import { getVarNames } from '../../app/selectors'
 import shallow from 'zustand/shallow'
 
 /**

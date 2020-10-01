@@ -1,4 +1,4 @@
-import useUiStore from '../../hooks/useUiStore'
+import useUiStore from '../../app/hooks/useUiStore'
 import shallow from 'zustand/shallow'
 
 /**
