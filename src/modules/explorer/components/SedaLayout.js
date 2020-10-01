@@ -1,12 +1,12 @@
 import React from 'react'
 import { Page } from '../../../shared'
 import { SedaHeader } from './header'
-import SedaMenu from './SedaMenu'
 import { makeStyles } from '@material-ui/core'
 import SedaFooter from './footer'
-import SedaError from './SedaError'
 import SedaDataLoader from './SedaDataLoader'
 import SedaExplorer from './SedaExplorer'
+import { SedaMenu } from '../menu'
+import { SedaError } from '../errors'
 
 const useStyles = makeStyles(theme => ({
   offset: theme.mixins.toolbar,

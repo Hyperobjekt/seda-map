@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import AlgoliaSearch from '../../search'
 import { useFlyToLatLon } from '../../map'
-import { useAddLocationsByRoute } from '../hooks'
+import { useAddLocationsByRoute } from '../routing'
 
 const getPropFromHit = (hit = {}, propName) => {
   if (!hit.suggestion || !hit.suggestion[propName]) return null

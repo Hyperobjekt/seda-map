@@ -1,13 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import SedaScatterplot from './scatterplot/SedaScatterplot'
-import SedaMap from './map'
+import SedaMap from '../map'
 import { SplitView } from './base/SplitView'
 import SedaPanelGroup from './panels/SedaPanelGroup'
 import { useActiveView } from '../hooks'
-import SedaTooltip from './SedaTooltip'
 import { PageBody } from '../../../shared'
-import SedaRouting from './SedaRouting'
+import SedaRouting from '../routing/SedaRouting'
+import { SedaScatterplot } from '../scatterplot'
+import { SedaTooltip } from '../tooltip'
 
 const SedaExplorer = props => {
   const [view] = useActiveView()

@@ -5,8 +5,6 @@ import {
   Typography,
   Tooltip
 } from '@material-ui/core'
-import SedaHelpButton from './SedaHelpButton'
-import SedaMenuButton from './SedaMenuButton'
 import SedaViewControls from './SedaViewControls'
 import {
   getLang,
@@ -17,9 +15,11 @@ import {
 } from '../../selectors/lang'
 import { isGapDemographic } from '../../selectors'
 import { DetailedTooltip, PageHeader } from '../../../../shared'
-import { useActiveOptionIds, useFilters } from '../../hooks'
+import { useActiveOptionIds } from '../../hooks'
 import { getStateName } from '../../../../shared/utils/states'
 import SedaSearch from '../SedaSearch'
+import { SedaHelpButton } from '../../help'
+import { SedaMenuButton } from '../../menu'
 
 const useLogoStyles = makeStyles(theme => ({
   root: {

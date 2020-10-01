@@ -13,7 +13,8 @@ import {
   SidePanelBody
 } from '../../../../shared'
 import { CloseIcon } from '../../../icons'
-import { useCondensed, useHelpVisibility } from '../../hooks'
+import { useCondensed } from '../../hooks'
+import { useHelpVisibility } from '../../help'
 
 const useStyles = makeStyles(theme => ({
   root: {},

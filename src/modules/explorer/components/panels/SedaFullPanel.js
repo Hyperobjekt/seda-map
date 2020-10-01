@@ -20,16 +20,16 @@ import {
   getRegionLabel,
   getPrefixLang
 } from '../../selectors/lang'
-import PreviewChartPanel from './SedaPreviewChartPanel'
 import { SidebarCloseIcon } from '../../../icons'
 import {
   useCondensed,
   useActiveSelection,
-  useLocationCount,
   useChartVisible,
   useActiveView,
   useActiveOptionIds
 } from '../../hooks'
+import { useLocationCount } from '../../location'
+import { SedaPreviewChartPanel } from '../../scatterplot'
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -118,7 +118,7 @@ const SedaFullPanel = props => {
           transition: `height 0.2s ease-in-out`,
           height: view === 'map' ? (showChart ? 264 : 48) : 0
         }}>
-        <PreviewChartPanel
+        <SedaPreviewChartPanel
           className={clsx(classes.footerPanel, {
             [classes.footerCondensed]:
               condensed && showChart && view === 'map',

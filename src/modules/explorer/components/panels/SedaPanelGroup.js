@@ -1,23 +1,20 @@
 import React from 'react'
 import {
   SedaCondensedPanel as CondensedPanel,
-  SedaSelectionPanel as SelectionPanel,
-  SedaFullPanel as FullPanel,
-  SedaHelpPanel as HelpPanel,
-  SedaLocationPanel as LocationPanel
+  SedaFullPanel as FullPanel
 } from '.'
-import {
-  useHelpVisibility,
-  useActiveLocation,
-  useCondensed,
-  useActiveSelection
-} from '../../hooks'
+import { useCondensed, useActiveSelection } from '../../hooks'
 import { SidePanelGroup } from '../../../../shared'
 import SedaDemographicPanel from './SedaDemographicPanel'
 import SedaMetricPanel from './SedaMetricPanel'
 import SedaRegionPanel from './SedaRegionPanel'
-import SedaLocationListPanel from './SedaLocationListPanel'
 import { SedaFilterPanel } from '../../filters'
+import { useHelpVisibility, SedaHelpPanel } from '../../help'
+import {
+  useActiveLocation,
+  SedaLocationListPanel,
+  SedaLocationPanel
+} from '../../location'
 
 /**
  * A group containing all panels within the tool
@@ -40,12 +37,12 @@ const SedaPanelGroup = props => {
 
   return (
     <SidePanelGroup condensed={condensed} maxVisible={1}>
-      <HelpPanel
+      <SedaHelpPanel
         className="panel--help"
         open={showHelp}
         style={{ zIndex: 1001 }}>
         Help Panel
-      </HelpPanel>
+      </SedaHelpPanel>
       <CondensedPanel
         className="panel--condensed"
         style={{ zIndex: 1000 }}
@@ -98,7 +95,7 @@ const SedaPanelGroup = props => {
         onClose={handlePanelClose}
       />
       {activeLocation && (
-        <LocationPanel
+        <SedaLocationPanel
           className="panel--location"
           open={activeLocation}
           style={{

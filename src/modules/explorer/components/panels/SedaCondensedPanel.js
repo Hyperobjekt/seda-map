@@ -29,14 +29,16 @@ import {
 import clsx from 'clsx'
 import {
   useCondensed,
-  useActiveLocation,
   useActiveOptionIds,
   useActiveSelection,
-  useLocationCount,
   useChartVisible,
   useActiveView
 } from '../../hooks'
 import { useActiveFilters } from '../../filters'
+import {
+  useActiveLocation,
+  useLocationCount
+} from '../../location'
 
 const useStyles = makeStyles(theme => ({
   header: {

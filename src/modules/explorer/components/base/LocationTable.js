@@ -139,14 +139,10 @@ const LocationTable = ({
   ) : (
     ''
   )
-  const aria = `educational opportunity stats for ${
-    data['name']
-  }`
   const classes = useStyles()
   return (
     <Table
       className={clsx('stats-table', classes.root)}
-      aria-label={aria}
       stickyHeader
       {...props}>
       <TableHead>

@@ -125,17 +125,6 @@ export const getFormatterForVarName = varName => {
   }
 }
 
-/**
- * Gets how many filters are currently active
- * @param {*} filters
- */
-export const getFilterCount = filters => {
-  let count = 0
-  if (filters.prefix) count++
-  if (filters.largest) count++
-  return count
-}
-
 const getMetricVarName = (metric, demographic = 'all') => {
   return demographic + '_' + metric
 }
