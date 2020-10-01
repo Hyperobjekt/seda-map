@@ -22,8 +22,7 @@ import {
   useActiveLocationFeature
 } from '../../hooks'
 import { REGION_TO_ID_LENGTH } from '../../constants/regions'
-import useFilteredData from '../filters/useFilteredData'
-import useFilters from '../filters/useFilters'
+import { useFilters, useFilteredData } from '../../filters'
 
 const selectedColors = getSelectedColors()
 

@@ -7,4 +7,4 @@ export const getActiveFilterCount = filters => {
   return filters.filter(f => f[0] !== 'sort').length
 }
 
-export const getReadableFilters = filters => {}
+export const getHumanReadableFilters = filters => {}

@@ -1,11 +1,11 @@
 import useStaticData from '../../../data/useStaticData'
 import logger from '../../../logger'
-import useFilterStore, { applyFilters } from '../../../filters'
 import { useMemo } from 'react'
 import useDebounce from '../../../../shared/hooks/useDebounce'
 import shallow from 'zustand/shallow'
-import useDataOptions from '../../hooks/useDataOptions'
 import useFilters from './useFilters'
+import useDataOptions from '../../hooks/useDataOptions'
+import { applyFilters } from '../../../filters'
 
 /**
  * Update the range and sort filters to use the

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { useFilterStore } from '../../../filters'
-import logger from '../../../logger'
 import SedaFilterSearch from './SedaFilterSearch'
 import {
   List,
@@ -27,7 +26,7 @@ import {
   DebouncedSlider as Slider
 } from '../../../../shared'
 import { hasFilterRule } from '../../../filters/utils'
-import useFilters from './useFilters'
+import useFilters from '../hooks/useFilters'
 
 const useStyles = makeStyles(theme => ({
   title: {

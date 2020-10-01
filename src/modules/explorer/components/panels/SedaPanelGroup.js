@@ -16,8 +16,8 @@ import { SidePanelGroup } from '../../../../shared'
 import SedaDemographicPanel from './SedaDemographicPanel'
 import SedaMetricPanel from './SedaMetricPanel'
 import SedaRegionPanel from './SedaRegionPanel'
-import SedaFilterPanel from './SedaFilterPanel'
 import SedaLocationListPanel from './SedaLocationListPanel'
+import { SedaFilterPanel } from '../../filters'
 
 /**
  * A group containing all panels within the tool

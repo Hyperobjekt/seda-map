@@ -208,18 +208,6 @@ export const useEmbedDialogVisibility = () => {
 }
 
 /**
- * Provides the currently active filter selection panel value
- * ("prefix" or "largest", null for no panel) and setter function
- * @returns [string, function]
- */
-export const useActiveFilterSelection = () => {
-  return useUiStore(
-    state => [state.filterPanel, state.setFilterPanel],
-    shallow
-  )
-}
-
-/**
  * Provides the currently active selection panel value
  * ('metric', 'region', 'demographic', 'filter', 'location',
  * or null for no panel) and setter function

@@ -16,7 +16,7 @@ import {
 import { useMapStore } from '../../map'
 import useFilterStore from '../../filters'
 import { formatNumber } from '../../../shared/utils'
-import useFilters from '../components/filters/useFilters'
+import { useFilters } from '../filters'
 
 /**
  * Gets a route string for locations

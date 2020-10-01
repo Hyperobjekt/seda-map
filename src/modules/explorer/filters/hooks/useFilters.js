@@ -1,5 +1,5 @@
-import useFilterStore from '../../../filters'
 import shallow from 'zustand/shallow'
+import useFilterStore from '../../../filters'
 
 /**
  * Returns all filters for the explorer

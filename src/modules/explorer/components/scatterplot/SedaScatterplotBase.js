@@ -17,8 +17,8 @@ import {
   getRegionLabel
 } from '../../selectors/lang'
 import SedaLocationMarkers from './SedaLocationMarkers'
-import useFilteredData from '../filters/useFilteredData'
 import useStaticData from '../../../data/useStaticData'
+import { useFilteredData } from '../../filters'
 
 // scatterplot width / height where left / right hints are not shown
 const LABEL_BREAKPOINT = 500

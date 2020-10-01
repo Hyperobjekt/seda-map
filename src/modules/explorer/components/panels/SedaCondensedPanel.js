@@ -34,10 +34,9 @@ import {
   useActiveSelection,
   useLocationCount,
   useChartVisible,
-  useActiveView,
-  useActiveFilterSelection
+  useActiveView
 } from '../../hooks'
-import useActiveFilters from '../filters/useActiveFilters'
+import { useActiveFilters } from '../../filters'
 
 const useStyles = makeStyles(theme => ({
   header: {
@@ -60,10 +59,6 @@ const SedaCondensedPanel = props => {
   const classes = useStyles()
   const [condensed, toggleCondensed] = useCondensed()
   const [activeLocation, setActiveLocation] = useActiveLocation()
-  const [
-    filterSelection,
-    setFilterSelection
-  ] = useActiveFilterSelection()
   const [metricId, demId, regionId] = useActiveOptionIds()
   const [view] = useActiveView()
   const [selection, setSelection] = useActiveSelection()
@@ -88,7 +83,6 @@ const SedaCondensedPanel = props => {
     // clear any active panels
     selection && setSelection(null)
     activeLocation && setActiveLocation(null)
-    filterSelection && setFilterSelection(null)
     // switch out of condensed mode if needed
     condensed && toggleCondensed()
   }
