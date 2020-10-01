@@ -61,7 +61,7 @@ const useStyles = makeStyles(theme => ({
 const SedaScatterplotPreview = props => {
   // pull required data from store
   const [region] = useRegion()
-  const [filters] = useFilters()
+  // const [filters] = useFilters()
   const [xVar, yVar, zVar] = useScatterplotVars()
   const isVersus = isVersusFromVarNames(xVar, yVar)
   const classes = useStyles()
@@ -75,7 +75,7 @@ const SedaScatterplotPreview = props => {
       })}
       classes={classes}
       region={region}
-      filters={filters}
+      // filters={filters}
       autoFetch={false}
       variant="preview"
       {...props}

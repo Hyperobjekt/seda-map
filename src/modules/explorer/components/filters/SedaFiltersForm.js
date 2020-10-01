@@ -20,11 +20,14 @@ import { getPrefixLang, getLang } from '../../selectors/lang'
 import { DEFAULT_RANGES } from '../../constants/metrics'
 import {
   getFilterIndex,
-  getFilterValue,
-  areFiltersEqual
+  getFilterValue
 } from '../../../filters/useFilterStore'
-import { NumberSlider, Slider } from '../../../../shared'
+import {
+  NumberSlider,
+  DebouncedSlider as Slider
+} from '../../../../shared'
 import { hasFilterRule } from '../../../filters/utils'
+import useFilters from './useFilters'
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -70,10 +73,7 @@ const SedaFiltersForm = props => {
   // track state for location selection
   const [selectedLocation, setSelectedLocation] = useState(null)
   // grab filters array
-  const filters = useFilterStore(
-    state => state.filters,
-    areFiltersEqual
-  )
+  const filters = useFilters()
   const removeFilter = useFilterStore(
     state => state.removeFilter
   )
@@ -112,10 +112,7 @@ const SedaFiltersForm = props => {
     'coh',
     region === 'schools' ? 'frl' : 'ses'
   ].reduce((obj, key) => {
-    const filterValue = getFilterValue(filters, ['range', key])
-    obj[key] = filterValue
-      ? filterValue
-      : DEFAULT_RANGES[region][key]
+    obj[key] = getFilterValue(filters, ['range', key])
     return obj
   }, {})
 
@@ -131,16 +128,10 @@ const SedaFiltersForm = props => {
   const handleRangeChange = useCallback(
     (type, event, value) => {
       value = value.map(v => parseFloat(v))
-      console.log(
-        ' is range equa;? ',
-        DEFAULT_RANGES[region][type],
-        value,
-        shallow(DEFAULT_RANGES[region][type], value)
-      )
       // if set to a default value then clear the filter
-      // shallow(DEFAULT_RANGES[region][type], value)
-      //   ? removeFilter(['range', type], true)
-      //   : setFilter(['range', type, value])
+      shallow(DEFAULT_RANGES[region][type], value)
+        ? removeFilter(['range', type], true)
+        : setFilter(['range', type, value])
     },
     [region, setFilter, removeFilter]
   )
@@ -301,6 +292,7 @@ const SedaFiltersForm = props => {
             />
             <Slider
               value={ranges[key]}
+              defaultValue={DEFAULT_RANGES[region][key]}
               min={DEFAULT_RANGES[region][key][0]}
               max={DEFAULT_RANGES[region][key][1]}
               step={

@@ -15,7 +15,6 @@ import { getLang } from '../../selectors/lang'
 import SedaMapLegend from './SedaMapLegend'
 import {
   useActiveOptionIds,
-  useFilters,
   useLocations,
   useHovered,
   useMarkersVisibility,
@@ -23,8 +22,8 @@ import {
   useActiveLocationFeature
 } from '../../hooks'
 import { REGION_TO_ID_LENGTH } from '../../constants/regions'
-import useFilterStore from '../../../filters'
-import useFilteredData from '../../hooks/useFilteredData'
+import useFilteredData from '../filters/useFilteredData'
+import useFilters from '../filters/useFilters'
 
 const selectedColors = getSelectedColors()
 
@@ -43,7 +42,7 @@ const SedaMap = props => {
   /** current options for the map */
   const [metric, demographic, region] = useActiveOptionIds()
   // currently active data filters
-  const filters = useFilterStore(state => state.filters)
+  const filters = useFilters()
   const data = useFilteredData()
   /** currently selected location ids */
   const [locations] = useLocations()

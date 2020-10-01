@@ -16,6 +16,7 @@ import {
 import { useMapStore } from '../../map'
 import useFilterStore from '../../filters'
 import { formatNumber } from '../../../shared/utils'
+import useFilters from '../components/filters/useFilters'
 
 /**
  * Gets a route string for locations
@@ -51,7 +52,7 @@ const useRouterParams = () => {
   const viewportRoute = useMapStore(state =>
     getViewportRoute(state.viewport)
   )
-  const filters = useFilterStore(state => state.filters)
+  const filters = useFilters()
   const locationsData = useLocationsData()
   return useDataOptions(state =>
     [
@@ -93,7 +94,6 @@ export default () => {
 
   const setFilterOptions = params => {
     const filters = paramsToFilterArray(params)
-    console.log('filter params', params, filters)
     setFilters(filters)
   }
 

@@ -82,7 +82,6 @@ export const paramsToFilterArray = params => {
   // filter rules are split by "+" and filter params are split by ","
   // e.g. id,02+avg,3-4+limit,10000
   const rules = params.filter.split('+').map(ruleParamToArray)
-  console.log('converted params to filter rules', rules)
   return rules
 }
 

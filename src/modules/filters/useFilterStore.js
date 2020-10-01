@@ -156,13 +156,6 @@ export const setFilter = set => rule => {
   })
 }
 
-export const areFiltersEqual = (rules1, rules2) => {
-  logger.debug('useFilterStore: checking equality')
-  const isEqual = shallow(rules1, rules2)
-  logger.debug('useFilterStore: isequal? ', isEqual)
-  return isEqual
-}
-
 export const DEFAULT_FILTERS = []
 
 const [useFilterStore] = create((set, get) => ({

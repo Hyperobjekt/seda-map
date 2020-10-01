@@ -99,16 +99,16 @@ export const useHovered = () => {
   )
 }
 
-/**
- * Provides an object of current filters and setters
- * @returns {[{prefix, largest}, function, function]} [ filters, setFilters, setSingleFilter ]
- */
-export const useFilters = () => {
-  return useDataOptions(
-    state => [state.filters, state.setFilters, state.setFilter],
-    shallow
-  )
-}
+// /**
+//  * Provides an object of current filters and setters
+//  * @returns {[{prefix, largest}, function, function]} [ filters, setFilters, setSingleFilter ]
+//  */
+// export const useFilters = () => {
+//   return useDataOptions(
+//     state => [state.filters, state.setFilters, state.setFilter],
+//     shallow
+//   )
+// }
 
 // /**
 //  * Provides a human readable string for the current filter selections

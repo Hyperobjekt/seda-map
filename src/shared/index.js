@@ -6,6 +6,7 @@ export {
   NumberSlider,
   SearchInput,
   Slider,
+  DebouncedSlider,
   Page,
   PageBody,
   PageFooter,

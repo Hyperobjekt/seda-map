@@ -7,12 +7,10 @@ import SedaPanelGroup from './panels/SedaPanelGroup'
 import { useActiveView } from '../hooks'
 import SedaTooltip from './SedaTooltip'
 import { PageBody } from '../../../shared'
-import useRouting from '../hooks/useRouting'
+import SedaRouting from './SedaRouting'
 
 const SedaExplorer = props => {
   const [view] = useActiveView()
-
-  useRouting()
 
   // determines the active portion of the split view
   const splitView =
@@ -20,6 +18,7 @@ const SedaExplorer = props => {
 
   return (
     <PageBody {...props}>
+      <SedaRouting />
       <SedaPanelGroup />
       <SplitView
         view={splitView}

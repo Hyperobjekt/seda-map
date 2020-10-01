@@ -12,7 +12,6 @@ import useResizeAware from 'react-resize-aware'
 import {
   useScatterplotVars,
   useRegion,
-  useFilters,
   useSecondary,
   useAddLocation
 } from '../../hooks'
@@ -85,7 +84,6 @@ const SedaScatterplot = () => {
 
   // pull required data from store
   const [region] = useRegion()
-  const [filters] = useFilters()
   const [xVar, yVar, zVar] = useScatterplotVars()
   const [xGapVar, yGapVar, zGapVar] = useScatterplotVars('gap')
   const [, setSecondary] = useSecondary()
@@ -153,7 +151,7 @@ const SedaScatterplot = () => {
             xVar={xVar}
             yVar={yVar}
             zVar={zVar}
-            filters={filters}
+            // filters={filters}
             region={region}
             variant="map"
             onHover={handleHover}
@@ -178,8 +176,8 @@ const SedaScatterplot = () => {
               footnotes={getFootnotes(
                 xVar,
                 yVar,
-                region,
-                filters
+                region
+                // filters
               )}
               className={classes.footnote}
             />
@@ -192,7 +190,7 @@ const SedaScatterplot = () => {
               xVar={xGapVar}
               yVar={yGapVar}
               zVar={zGapVar}
-              filters={filters}
+              // filters={filters}
               region={region}
               variant="map"
               axisChildren={
@@ -230,8 +228,8 @@ const SedaScatterplot = () => {
                 footnotes={getFootnotes(
                   xGapVar,
                   yGapVar,
-                  region,
-                  filters
+                  region
+                  // filters
                 )}
                 className={classes.footnote}
               />

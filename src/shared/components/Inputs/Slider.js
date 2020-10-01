@@ -5,6 +5,8 @@ import {
 } from '@material-ui/core'
 import * as _debounce from 'lodash.debounce'
 import useDidUpdateEffect from '../../hooks/useDidUpdateEffect'
+import shallow from 'zustand/shallow'
+import usePrevious from '../../hooks/usePrevious'
 
 const StyledSlider = withStyles({
   root: {
@@ -45,36 +47,65 @@ const StyledSlider = withStyles({
 })(MuiSlider)
 
 /**
- * A debounced slider component
+ * Gets the value for the slider, or provides the default value if none is given
+ * @param {*} value
+ * @param {*} defaultValue
  */
-export default function Slider({
+const getValue = (value, defaultValue) => {
+  if (typeof value === 'string') value = Number(value)
+  return value ? value : defaultValue
+}
+
+export default StyledSlider
+
+/**
+ * A debounced slider component.
+ */
+export function DebouncedSlider({
   onChange,
-  value: defaultValue,
+  value: overrideValue,
+  defaultValue,
+  debounceTime = 200,
   ...props
 }) {
-  const [value, setValue] = useState(defaultValue)
+  const [value, setValue] = useState(
+    getValue(overrideValue, defaultValue)
+  )
+  // track the previous value
+  const prevValue = usePrevious(value)
+  // keep a reference to the event to send along with the debounced callback
   const event = useRef(null)
-  const debouncedChange = useRef(_debounce(onChange, 200))
+  // keep a reference to the debounced callback
+  const debouncedChange = useRef(
+    _debounce(onChange, debounceTime)
+  )
 
   // update the debounced callback when callback changes
-  useEffect(() => {
-    debouncedChange.current = _debounce(onChange, 200)
+  useDidUpdateEffect(() => {
+    debouncedChange.current = _debounce(onChange, debounceTime)
   }, [onChange])
 
   // call the debounce callback when the value changes
-  useEffect(
-    () => value && debouncedChange.current(event.current, value),
-    [value, debouncedChange.current]
-  )
+  useDidUpdateEffect(() => {
+    // no callback if value is the same
+    if (shallow(prevValue, value)) return
+    value && debouncedChange.current(event.current, value)
+  }, [value, debouncedChange.current])
 
   // update the value when a new value is passed
-  useEffect(() => setValue(defaultValue), [defaultValue])
+  useDidUpdateEffect(() => {
+    const newValue = getValue(overrideValue, defaultValue)
+    // do not set value if it hasn't changed
+    if (shallow(newValue, value)) return
+    setValue(newValue)
+  }, [overrideValue, defaultValue])
 
   // handle changes on the slider
   const handleChange = (e, val) => {
     event.current = e
     setValue(val)
   }
+  console.log('slider: value', value)
   return (
     <StyledSlider
       value={value}
@@ -84,6 +115,6 @@ export default function Slider({
   )
 }
 
-Slider.defaultProps = {
+DebouncedSlider.defaultProps = {
   onChange: () => {}
 }

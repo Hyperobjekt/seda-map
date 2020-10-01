@@ -10,7 +10,6 @@ import ScatterplotBase, {
 import { theme } from './theme'
 import { isVersusFromVarNames } from '../../selectors'
 import { getScatterplotOptions } from './style'
-import { getFilteredIds } from './selectors'
 import {
   getLang,
   getLegendEndLabelsForVarName as getEndLabels,
@@ -18,7 +17,7 @@ import {
   getRegionLabel
 } from '../../selectors/lang'
 import SedaLocationMarkers from './SedaLocationMarkers'
-import useFilteredData from '../../hooks/useFilteredData'
+import useFilteredData from '../filters/useFilteredData'
 import useStaticData from '../../../data/useStaticData'
 
 // scatterplot width / height where left / right hints are not shown
@@ -66,7 +65,6 @@ function SedaScatterplotBase({
   classes: overrides,
   region,
   variant,
-  filters,
   autoFetch,
   axisChildren,
   children,
@@ -94,14 +92,6 @@ function SedaScatterplotBase({
   // boolean determining if vars have two different dems
   const isVersus = isVersusFromVarNames(xVar, yVar)
 
-  // highlight ids based on filters
-  const highlightIds = useMemo(() => {
-    return getFilteredIds(regionData, filters, zVar).slice(
-      0,
-      2000
-    )
-  }, [regionData, filters, zVar])
-
   // memoize the scatterplot options
   const options = useMemo(() => {
     if (loading) return {}
@@ -109,20 +99,11 @@ function SedaScatterplotBase({
       variant,
       regionData,
       { xVar, yVar, zVar },
-      highlightIds,
+      [],
       region
     )
     return newOptions
-  }, [
-    xVar,
-    yVar,
-    zVar,
-    region,
-    variant,
-    highlightIds,
-    regionData,
-    loading
-  ])
+  }, [xVar, yVar, zVar, region, variant, regionData, loading])
 
   // boolean determining if X axis labels should show
   const showLabelsX =
@@ -212,7 +193,6 @@ function SedaScatterplotBase({
 
 SedaScatterplotBase.defaultProps = {
   classes: {},
-  filters: { prefix: null, largest: null },
   autoFetch: true,
   onHover: () => {},
   onClick: () => {},

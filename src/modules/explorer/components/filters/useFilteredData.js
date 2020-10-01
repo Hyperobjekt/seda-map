@@ -1,10 +1,11 @@
-import useStaticData from '../../data/useStaticData'
-import logger from '../../logger'
-import useFilterStore, { applyFilters } from '../../filters'
+import useStaticData from '../../../data/useStaticData'
+import logger from '../../../logger'
+import useFilterStore, { applyFilters } from '../../../filters'
 import { useMemo } from 'react'
-import useDebounce from '../../../shared/hooks/useDebounce'
+import useDebounce from '../../../../shared/hooks/useDebounce'
 import shallow from 'zustand/shallow'
-import useDataOptions from './useDataOptions'
+import useDataOptions from '../../hooks/useDataOptions'
+import useFilters from './useFilters'
 
 /**
  * Update the range and sort filters to use the
@@ -22,7 +23,7 @@ const populateFilters = (demographic, filters) => {
  */
 export default () => {
   const data = useStaticData(state => state.data)
-  const filters = useFilterStore(state => state.filters)
+  const filters = useFilters()
   const [demographic, region] = useDataOptions(
     state => [state.demographic, state.region],
     shallow

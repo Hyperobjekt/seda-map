@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Grid, Input, makeStyles } from '@material-ui/core'
-import Slider from './Slider'
+import { DebouncedSlider as Slider } from './Slider'
 import clsx from 'clsx'
 
 const useStyles = makeStyles(theme => ({
