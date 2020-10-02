@@ -62,7 +62,9 @@ const SedaLocationPanel = props => {
   const handleDemographicSelect = e => {
     setDemographic(e.currentTarget.value)
   }
-  return (
+  console.log(data)
+  // TODO: better handling when data isn't ready yet
+  return data ? (
     <SidePanel {...props}>
       <SidePanelHeader sticky>
         {data['id'] && (
@@ -98,7 +100,7 @@ const SedaLocationPanel = props => {
         )}
       </SidePanelBody>
     </SidePanel>
-  )
+  ) : null
 }
 
 export default SedaLocationPanel

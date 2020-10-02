@@ -15,12 +15,12 @@ import { getLocationsByRegion } from '../../app/selectors/regions'
 import { getLang } from '../../app/selectors/lang'
 import { CloseIcon } from '../../../icons'
 import { useRegion } from '../../app/hooks'
-import SedaSearch from '../../app/components/SedaSearch'
 import useUiStore from '../../app/hooks/useUiStore'
 import logger from '../../../logger'
 import { SedaLocationName, useActiveLocation } from '..'
 import useRemoveLocation from '../hooks/useRemoveLocation'
 import useLocations from '../hooks/useLocations'
+import { SedaSearch } from '../../search'
 
 const useStyles = makeStyles(theme => ({
   root: {

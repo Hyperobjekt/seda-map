@@ -21,10 +21,7 @@ import {
   getPrefixLang
 } from '../../app/selectors/lang'
 import { SidebarCloseIcon } from '../../../icons'
-import {
-  useActiveView,
-  useActiveOptionIds
-} from '../../app/hooks'
+import { useActiveView, useActiveOptions } from '../../app/hooks'
 import { useLocationCount } from '../../location'
 import SedaPreviewChartPanel from './SedaPreviewChartPanel'
 import useCondensedPanel from '../hooks/useCondensedPanel'
@@ -65,7 +62,7 @@ const SedaFullPanel = props => {
   const classes = useStyles()
   const [view] = useActiveView()
   const [condensed, toggleCondensed] = useCondensedPanel()
-  const [metricId, demId, regionId] = useActiveOptionIds()
+  const [metricId, demId, regionId] = useActiveOptions()
   const [selection] = useActivePanel()
   const [showChart] = usePanelChartVisible()
   const locationCount = useLocationCount()

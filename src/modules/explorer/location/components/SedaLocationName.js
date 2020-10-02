@@ -21,15 +21,21 @@ const SedaLocationName = ({ locationId, ...props }) => {
     activeRegion === featureRegion
       ? selectedColors[locationNumber - 1]
       : '#ccc'
-  return (
+  const isState = locationId.length === 2
+  // TODO: better handling of missing location data
+  return locationData ? (
     <LocationName
-      name={locationData['name']}
-      parentLocation={getStateName(locationId)}
+      name={
+        isState ? getStateName(locationId) : locationData['name']
+      }
+      parentLocation={
+        isState ? 'United States' : getStateName(locationId)
+      }
       label={locationNumber}
       color={color}
       {...props}
     />
-  )
+  ) : null
 }
 
 SedaLocationName.propTypes = {

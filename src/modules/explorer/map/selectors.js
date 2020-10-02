@@ -12,6 +12,27 @@ import { getFilterIndex } from '../../filters/useFilterStore'
 const noDataFill = '#ccc'
 
 /**
+ * Returns the appropriate map zoom level for a given geography
+ * @param {*} region ['states', 'counties', 'cities', 'districts', 'schools']
+ */
+export const getZoomLevelForRegion = region => {
+  switch (region) {
+    case 'states':
+      return 6
+    case 'counties':
+      return 8
+    case 'cities':
+      return 12
+    case 'districts':
+      return 12
+    case 'schools':
+      return 14
+    default:
+      return 3.5
+  }
+}
+
+/**
  * Gets the color stops for the provided metric ID
  * @param {string} id
  * @returns {array}

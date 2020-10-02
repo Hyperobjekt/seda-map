@@ -9,7 +9,7 @@ import { useUiStore } from '../../app/hooks'
  */
 export default () => {
   return useUiStore(
-    state => [state.selection, state.setSelection],
+    state => [state.condensed, state.toggleCondensed],
     shallow
   )
 }

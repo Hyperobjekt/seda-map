@@ -1,15 +1,8 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import { autoType } from 'd3-dsv'
 import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core'
-import useStaticData from '../../../data/useStaticData'
-import { useDataOptions } from '../hooks'
-
-/** Parser for data, ensures ID stays a string */
-const SEDA_PARSER = ({ id, ...rest }) => {
-  return { id, ...autoType(rest) }
-}
+import useDataLoading from '../hooks/useDataLoading'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -28,20 +21,8 @@ const useStyles = makeStyles(theme => ({
  * Handles loading of all data within the app
  */
 const SedaDataLoader = ({ className, ...props }) => {
-  const loadDataForRegion = useStaticData(
-    state => state.loadDataSet
-  )
-  const loaded = useStaticData(state => state.loaded)
-  const loading = useStaticData(state => state.loading)
-  const region = useDataOptions(state => state.region)
   const classes = useStyles()
-  useEffect(() => {
-    if (
-      loaded.indexOf(region) === -1 &&
-      loading.indexOf(region) === -1
-    )
-      loadDataForRegion(region, SEDA_PARSER)
-  }, [loaded, loadDataForRegion, region])
+  const [loading] = useDataLoading()
 
   return loading.length > 0 ? (
     <div

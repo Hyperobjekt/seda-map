@@ -105,7 +105,6 @@ export function DebouncedSlider({
     event.current = e
     setValue(val)
   }
-  console.log('slider: value', value)
   return (
     <StyledSlider
       value={value}

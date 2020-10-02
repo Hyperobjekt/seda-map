@@ -27,10 +27,7 @@ import {
   getLangWithSingleOrNone
 } from '../../app/selectors/lang'
 import clsx from 'clsx'
-import {
-  useActiveOptionIds,
-  useActiveView
-} from '../../app/hooks'
+import { useActiveOptions, useActiveView } from '../../app/hooks'
 import { useActiveFilters } from '../../filters'
 import {
   useActiveLocation,
@@ -64,7 +61,7 @@ const SedaCondensedPanel = props => {
   const classes = useStyles()
   const [condensed, toggleCondensed] = useCondensedPanel()
   const [activeLocation, setActiveLocation] = useActiveLocation()
-  const [metricId, demId, regionId] = useActiveOptionIds()
+  const [metricId, demId, regionId] = useActiveOptions()
   const [view] = useActiveView()
   const [selection, setSelection] = useActivePanel()
   const [showChart, toggleChart] = usePanelChartVisible()

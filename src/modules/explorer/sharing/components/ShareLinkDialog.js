@@ -10,9 +10,9 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import { InputAdornment, IconButton } from '@material-ui/core'
 import CopyIcon from '@material-ui/icons/FileCopy'
 import copy from 'copy-to-clipboard'
-import { toggleLinkShareDialog } from './actions'
-import { onShare } from './actions'
-import { getLang } from '../../selectors/lang'
+import { toggleLinkShareDialog } from '../actions'
+import { onShare } from '../actions'
+import { getLang } from '../../app/selectors/lang'
 
 export const ShareLinkDialog = ({
   open,

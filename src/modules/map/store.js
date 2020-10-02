@@ -1,11 +1,12 @@
 import create from 'zustand'
 import shallow from 'zustand/shallow'
-import { FlyToInterpolator } from 'react-map-gl'
 import WebMercatorViewport from 'viewport-mercator-project'
-import * as ease from 'd3-ease'
 import bbox from '@turf/bbox'
 
-import { DEFAULT_VIEWPORT } from './constants'
+import {
+  DEFAULT_VIEWPORT,
+  DEFAULT_FLIGHT_PROPS
+} from './constants'
 import { getStateViewportByFips } from './utils'
 
 const getFeatureGeometryType = feature => {
@@ -75,9 +76,7 @@ const [useMapStore] = create((set, get) => ({
   flyToFeature: feature => {
     const viewport = {
       ...getViewportForFeature(feature, get().viewport),
-      transitionDuration: 3000,
-      transitionInterpolator: new FlyToInterpolator(),
-      transitionEasing: ease.easeCubic
+      ...DEFAULT_FLIGHT_PROPS
     }
     set(state => ({ viewport }))
   },
@@ -85,9 +84,7 @@ const [useMapStore] = create((set, get) => ({
     set(state => ({
       viewport: {
         ...getViewportForBounds(bounds, state.viewport),
-        transitionDuration: 3000,
-        transitionInterpolator: new FlyToInterpolator(),
-        transitionEasing: ease.easeCubic
+        ...DEFAULT_FLIGHT_PROPS
       }
     }))
   },
@@ -98,9 +95,7 @@ const [useMapStore] = create((set, get) => ({
         latitude: lat,
         longitude: lon,
         zoom: zoom,
-        transitionDuration: 3000,
-        transitionInterpolator: new FlyToInterpolator(),
-        transitionEasing: ease.easeCubic
+        ...DEFAULT_FLIGHT_PROPS
       }
     }))
   },
@@ -109,9 +104,7 @@ const [useMapStore] = create((set, get) => ({
       viewport: {
         ...state.viewport,
         ...getStateViewportByFips(stateId, state.viewport),
-        transitionDuration: 3000,
-        transitionInterpolator: new FlyToInterpolator(),
-        transitionEasing: ease.easeCubic
+        ...DEFAULT_FLIGHT_PROPS
       }
     }))
   },
@@ -120,9 +113,7 @@ const [useMapStore] = create((set, get) => ({
       viewport: {
         ...state.viewport,
         ...state.resetViewport,
-        transitionDuration: 3000,
-        transitionInterpolator: new FlyToInterpolator(),
-        transitionEasing: ease.easeCubic
+        ...DEFAULT_FLIGHT_PROPS
       }
     }))
   },

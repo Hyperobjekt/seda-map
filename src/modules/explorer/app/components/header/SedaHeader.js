@@ -18,11 +18,11 @@ import {
   DetailedTooltip,
   PageHeader
 } from '../../../../../shared'
-import { useActiveOptionIds } from '../../hooks'
+import { useActiveOptions } from '../../hooks'
 import { getStateName } from '../../../../../shared/utils/states'
-import SedaSearch from '../SedaSearch'
 import { SedaHelpButton } from '../../../help'
 import { SedaMenuButton } from '../../../menu'
+import { SedaSearch } from '../../../search'
 
 const useLogoStyles = makeStyles(theme => ({
   root: {
@@ -190,7 +190,7 @@ const useHeaderStyles = makeStyles(theme => ({
 }))
 
 const SedaHeader = props => {
-  const [metricId, demId, regionId] = useActiveOptionIds()
+  const [metricId, demId, regionId] = useActiveOptions()
   // const [filters] = useFilters()
   // const stateName = filters.prefix
   //   ? getStateName(filters.prefix)

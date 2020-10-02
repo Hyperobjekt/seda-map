@@ -3,8 +3,8 @@ import { makeStyles } from '@material-ui/core'
 import { getLayers, SEDA_SOURCES } from './selectors'
 import MapBase, {
   useFlyToState,
-  useFlyToFeature,
-  useIdMap
+  useIdMap,
+  useFlyToReset
 } from '../../map'
 import {
   getSelectedColors,
@@ -14,13 +14,18 @@ import {
 import { getLang } from '../app/selectors/lang'
 import SedaMapLegend from './SedaMapLegend'
 import {
-  useActiveOptionIds,
+  useActiveOptions,
   useHovered,
   useMarkersVisibility
 } from '../app/hooks'
 import { REGION_TO_ID_LENGTH } from '../app/constants/regions'
 import { useFilters, useFilteredData } from '../filters'
-import { useLocations, useAddLocation } from '../location'
+import {
+  useLocations,
+  useAddLocation,
+  useActiveLocationData
+} from '../location'
+import useFlyToLocation from './hooks/useFlyToLocation'
 
 const selectedColors = getSelectedColors()
 
@@ -37,7 +42,7 @@ const useStyles = makeStyles(theme => ({
  */
 const SedaMap = props => {
   /** current options for the map */
-  const [metric, demographic, region] = useActiveOptionIds()
+  const [metric, demographic, region] = useActiveOptions()
   // currently active data filters
   const filters = useFilters()
   const data = useFilteredData()
@@ -46,16 +51,15 @@ const SedaMap = props => {
   /** id of the currently hovered location */
   const [hoveredId, setHovered] = useHovered()
   /** id of the active location */
-  // const activeFeature = useActiveLocationFeature()
+  const activeLocation = useActiveLocationData()
   /** boolean determining if the hovered location should show */
   const [showHovered] = useMarkersVisibility()
   /** function to add a location to the selected locations */
   const addLocation = useAddLocation()
 
   const [idMap, addToIdMap] = useIdMap()
-  const flyToState = useFlyToState()
-  const flyToFeature = useFlyToFeature()
-  // const flyToReset = useFlyToReset()
+  const flyToLocation = useFlyToLocation()
+  const flyToReset = useFlyToReset()
   const isLoaded = useRef(false)
   /** memoized array of choropleth and dot layers */
   const layers = useMemo(() => {
@@ -97,9 +101,9 @@ const SedaMap = props => {
     // inform global listener that map has loaded
     window.SEDA.trigger('map')
     // zoom to US if needed once cover is shown
-    // setTimeout(() => {
-    //   flyToReset()
-    // }, 1000)
+    setTimeout(() => {
+      flyToReset()
+    }, 1000)
     isLoaded.current = true
   }
 
@@ -111,11 +115,11 @@ const SedaMap = props => {
   // }, [prefix, flyToState])
 
   /** zoom to activated location */
-  // useEffect(() => {
-  //   if (activeFeature && isLoaded.current) {
-  //     flyToFeature(activeFeature)
-  //   }
-  // }, [activeFeature, flyToFeature])
+  useEffect(() => {
+    if (activeLocation && isLoaded.current) {
+      flyToLocation(activeLocation)
+    }
+  }, [activeLocation, flyToLocation])
 
   const locationIds = getLocationIdsForRegion(region, locations)
 

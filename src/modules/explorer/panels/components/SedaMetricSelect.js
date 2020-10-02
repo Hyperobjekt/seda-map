@@ -5,11 +5,14 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
-import { MetricIcon } from '../../../../icons'
+import { MetricIcon } from '../../../icons'
 import clsx from 'clsx'
-import { getKeyMetrics, getMetricLabel } from '../../selectors'
-import { SidePanelList } from '../../../../../shared'
-import { useMetric } from '../../hooks'
+import {
+  getKeyMetrics,
+  getMetricLabel
+} from '../../app/selectors'
+import { SidePanelList } from '../../../../shared'
+import { useMetric } from '../../app/hooks'
 const useStyles = makeStyles(theme => ({
   root: {
     paddingTop: 4,

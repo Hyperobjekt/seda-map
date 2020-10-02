@@ -14,8 +14,8 @@ import { getLang } from '../selectors/lang'
 import { InputAdornment, IconButton } from '@material-ui/core'
 import CopyIcon from '@material-ui/icons/FileCopy'
 import copy from 'copy-to-clipboard'
-import { toggleEmbedDialog } from './actions'
-import { onShare } from './actions'
+import { toggleEmbedDialog } from '../actions'
+import { onShare } from '../actions'
 // import { getMapVars } from '../map'
 
 const BASE_URL = `${window.location.origin}${

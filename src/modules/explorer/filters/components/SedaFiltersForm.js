@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { useFilterStore } from '../../../filters'
-import SedaFilterSearch from './SedaFilterSearch'
 import {
   List,
   ListItem,
@@ -27,6 +26,8 @@ import {
 import { hasFilterRule } from '../../../filters/utils'
 import useFilters from '../hooks/useFilters'
 import { useDemographic, useRegion } from '../../app/hooks'
+import { SedaSearch } from '../../search'
+import { getPropFromHit } from '../../search/selectors'
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -164,7 +165,8 @@ const SedaFiltersForm = props => {
    * @param {*} id identifier for location
    * @param {*} hit selection from AlgoliaSearch component
    */
-  const handleLocationSelect = (id, hit) => {
+  const handleLocationSelect = (e, hit) => {
+    const id = getPropFromHit(hit, 'id')
     setFilter(['startsWith', 'id', id])
     setSelectedLocation(hit.suggestionValue)
   }
@@ -240,7 +242,7 @@ const SedaFiltersForm = props => {
               region
             })}
           />
-          <SedaFilterSearch
+          <SedaSearch
             inputProps={{
               disabled: Boolean(selectedLocation)
             }}
@@ -251,6 +253,7 @@ const SedaFiltersForm = props => {
               'FILTER_PLACEHOLDER'
             )}
             indices={indicies}
+            activateSelection={false}
             onSelect={handleLocationSelect}
             onClear={handleLocationClear}
           />

@@ -9,9 +9,9 @@ import {
   getDemographics,
   getGaps,
   getDemographicLabel
-} from '../../selectors'
-import { SidePanelList } from '../../../../../shared'
-import { useDemographic } from '../../hooks'
+} from '../../app/selectors'
+import { SidePanelList } from '../../../../shared'
+import { useDemographic } from '../../app/hooks'
 
 const SedaDemographicSelect = ({ onSelect, ...props }) => {
   const gaps = getGaps()

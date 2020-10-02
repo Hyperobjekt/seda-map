@@ -4,3 +4,8 @@ export {
   loadFeatureFromCoords,
   loadFeaturesFromCoords
 } from './utils'
+
+export { getZoomLevelForRegion } from './selectors'
+export {
+  default as useFlyToLocation
+} from './hooks/useFlyToLocation'

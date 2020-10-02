@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { parseLocationsString } from './selectors/router'
 
 const FLAGGED_ENDPOINT =
   process.env.REACT_APP_DATA_ENDPOINT + 'flagged/'

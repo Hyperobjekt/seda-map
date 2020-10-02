@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import SedaRegionSelect from '../../app/components/controls/SedaRegionSelect'
+import SedaRegionSelect from './SedaRegionSelect'
 import { getPrefixLang } from '../../app/selectors/lang'
 import SedaSidePanel from './SedaSidePanel'
 

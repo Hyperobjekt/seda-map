@@ -10,14 +10,17 @@ import {
 } from '../../../../icons'
 import StanfordLogo from './StanfordLogo'
 import Tooltip from '@material-ui/core/Tooltip'
-import { onTwitterShare, onFacebookShare } from './actions'
 import clsx from 'clsx'
 
 import { PageFooter } from '../../../../../shared'
 import {
+  onTwitterShare,
+  onFacebookShare
+} from '../../../sharing/actions'
+import {
   useLinkDialogVisibility,
   useEmbedDialogVisibility
-} from '../../hooks'
+} from '../../../sharing'
 
 const links = {
   id: 'share',
