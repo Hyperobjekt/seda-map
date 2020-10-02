@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import SedaMetricSelect from '../controls/SedaMetricSelect'
-import { getPrefixLang } from '../../selectors/lang'
+import SedaMetricSelect from '../../app/components/controls/SedaMetricSelect'
+import { getPrefixLang } from '../../app/selectors/lang'
 import SedaSidePanel from './SedaSidePanel'
 import { Typography } from '@material-ui/core'
 

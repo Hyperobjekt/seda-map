@@ -14,11 +14,11 @@ import {
   getDemographicLabel
 } from '../app/selectors/lang'
 import {
-  useMapVars,
   useHovered,
   useRegion,
   useMarkersVisibility,
-  useDemographicType
+  useDemographicType,
+  useCurrentVars
 } from '../app/hooks'
 import { getValuePositionInRange } from '../../../shared/utils'
 import { useMapSize } from '../../map'
@@ -26,7 +26,7 @@ import { useLocationData } from '../location'
 
 const SedaMapLegend = props => {
   /** variable to show on the map */
-  const [, yVar] = useMapVars()
+  const [, yVar] = useCurrentVars('map')
   /** id of the hovered location */
   const [hovered] = useHovered()
   /** boolean determining if hovered location should show */

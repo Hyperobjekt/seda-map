@@ -1,20 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-
 import {
   Typography,
   makeStyles,
   IconButton
 } from '@material-ui/core'
-
 import {
   SidePanel,
   SidePanelHeader,
   SidePanelBody
-} from '../../../../../shared'
-import { CloseIcon } from '../../../../icons'
-import { useHelpVisibility } from '../../../help'
-import { useCondensed } from '../../hooks'
+} from '../../../../shared'
+import { CloseIcon } from '../../../icons'
+import { useHelpVisibility } from '../../help'
+import useCondensedPanel from '../hooks/useCondensedPanel'
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -33,7 +31,7 @@ const SedaSidePanel = ({
   onClose,
   ...props
 }) => {
-  const [condensed] = useCondensed()
+  const [condensed] = useCondensedPanel()
   const [showHelp] = useHelpVisibility()
   const classes = useStyles({ condensed, showHelp })
 

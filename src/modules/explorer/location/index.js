@@ -2,17 +2,14 @@ export {
   default as SedaLocationName
 } from './components/SedaLocationName'
 export {
-  default as SedaLocationTable
-} from './components/SedaLocationTable'
-export {
-  default as SedaLocationListPanel
-} from './components/SedaLocationListPanel'
-export {
   default as SedaLocationPanel
 } from './components/SedaLocationPanel'
 export {
   default as SedaLocationSelect
 } from './components/SedaLocationSelect'
+export {
+  default as LocationName
+} from './components/LocationName'
 export {
   default as useActiveLocation
 } from './hooks/useActiveLocation'

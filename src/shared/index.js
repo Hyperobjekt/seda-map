@@ -25,5 +25,13 @@ export {
   GradientLegend,
   Stack,
   BookEnds,
-  Marker
+  Marker,
+  SplitView
 } from './components'
+export {
+  useDebounce,
+  useDidUpdateEffect,
+  useInterval,
+  useKeyPress,
+  usePrevious
+} from './hooks'

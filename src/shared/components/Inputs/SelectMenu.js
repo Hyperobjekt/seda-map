@@ -1,30 +1,34 @@
 import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
-import { makeId } from '../../../../../shared/utils'
-import { LinkButton } from '../../../../../shared'
-import { getPrefixLang } from '../../selectors/lang'
+import { makeId } from '../../utils'
+import { LinkButton } from '../Buttons'
 
-export default function SedaGenericSelect({
+/**
+ * A basic select menu
+ */
+export default function SelectMenu({
   items,
-  ButtonComponent = LinkButton,
-  getLabel = getPrefixLang,
+  ButtonComponent,
+  getLabel,
   onSelect,
   children,
   ...props
 }) {
+  // anchor element for managing focus
   const [anchorEl, setAnchorEl] = useState(null)
-
+  // unique id for menu
   const [id] = useState(makeId())
-
+  // handler for menu button click
   const handleClick = event => {
     setAnchorEl(event.currentTarget)
   }
-
+  // handler for menu button close
   const handleClose = () => {
     setAnchorEl(null)
   }
-
+  // handler for menu item select
   const handleSelect = e => {
     onSelect && onSelect(e)
     handleClose()
@@ -56,4 +60,16 @@ export default function SedaGenericSelect({
       </Menu>
     </div>
   )
+}
+
+SelectMenu.defaultProps = {
+  ButtonComponent: LinkButton,
+  getLabel: v => v
+}
+
+SelectMenu.propTypes = {
+  /** React element to use for the button (default: LinkButton) */
+  ButtonComponent: PropTypes.element,
+  /** Function that accepts the menu item and returns a label */
+  getLabel: PropTypes.func
 }

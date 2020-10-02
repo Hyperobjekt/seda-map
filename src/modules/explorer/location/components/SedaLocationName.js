@@ -6,14 +6,13 @@ import {
 } from '../../app/selectors'
 import { useRegion } from '../../app/hooks'
 import { getStateName } from '../../../../shared/utils/states'
-import { LocationName } from '../../app/components/base'
 import useLocationData from '../hooks/useLocationData'
 import useLocationNumber from '../hooks/useLocationNumber'
+import LocationName from './LocationName'
 
 const selectedColors = getSelectedColors()
 
 const SedaLocationName = ({ locationId, ...props }) => {
-  console.log('location id', locationId)
   const locationData = useLocationData(locationId)
   const locationNumber = useLocationNumber(locationId)
   const [activeRegion] = useRegion()

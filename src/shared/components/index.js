@@ -8,7 +8,8 @@ export {
   NumberSlider,
   SearchInput,
   Slider,
-  DebouncedSlider
+  DebouncedSlider,
+  SelectMenu
 } from './Inputs'
 export { Page, PageBody, PageFooter, PageHeader } from './Page'
 export {
@@ -25,4 +26,4 @@ export { DivergingStatValue, TableStats } from './Stats'
 export { default as GradientLegend } from './GradientLegend'
 export { default as BookEnds } from './BookEnds'
 export { default as Marker } from './Marker'
-export { Stack } from './Layout'
+export { Stack, SplitView } from './Layout'

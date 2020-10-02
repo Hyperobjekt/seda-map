@@ -6,7 +6,7 @@ import {
   SidePanelBody,
   IconLabelButton,
   DetailedTooltip
-} from '../../../../../shared'
+} from '../../../../shared'
 
 import {
   MetricIcon,
@@ -16,29 +16,29 @@ import {
   ChartIcon,
   LocationsIcon,
   SidebarOpenIcon
-} from '../../../../icons'
+} from '../../../icons'
 
-import { getMetricLabel } from '../../selectors'
+import { getMetricLabel } from '../../app/selectors'
 import {
   getPrefixLang,
   getLang,
   getRegionLabel,
   getDemographicLabel,
   getLangWithSingleOrNone
-} from '../../selectors/lang'
+} from '../../app/selectors/lang'
 import clsx from 'clsx'
 import {
-  useCondensed,
   useActiveOptionIds,
-  useActiveSelection,
-  useChartVisible,
   useActiveView
-} from '../../hooks'
-import { useActiveFilters } from '../../../filters'
+} from '../../app/hooks'
+import { useActiveFilters } from '../../filters'
 import {
   useActiveLocation,
   useLocationCount
-} from '../../../location'
+} from '../../location'
+import useCondensedPanel from '../hooks/useCondensedPanel'
+import useActivePanel from '../hooks/useActivePanel'
+import usePanelChartVisible from '../hooks/usePanelChartVisible'
 
 const useStyles = makeStyles(theme => ({
   header: {
@@ -57,14 +57,17 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
+/**
+ * Condensed version of the control panel, docked to the side with vertically stacked icons
+ */
 const SedaCondensedPanel = props => {
   const classes = useStyles()
-  const [condensed, toggleCondensed] = useCondensed()
+  const [condensed, toggleCondensed] = useCondensedPanel()
   const [activeLocation, setActiveLocation] = useActiveLocation()
   const [metricId, demId, regionId] = useActiveOptionIds()
   const [view] = useActiveView()
-  const [selection, setSelection] = useActiveSelection()
-  const [showChart, toggleChart] = useChartVisible()
+  const [selection, setSelection] = useActivePanel()
+  const [showChart, toggleChart] = usePanelChartVisible()
   const locationCount = useLocationCount()
   const activeFilters = useActiveFilters()
   // const filterLabel = useActiveFilterLang()

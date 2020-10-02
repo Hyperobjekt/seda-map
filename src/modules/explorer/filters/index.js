@@ -1,6 +1,6 @@
 export {
-  default as SedaFilterPanel
-} from './components/SedaFilterPanel'
+  default as SedaFiltersForm
+} from './components/SedaFiltersForm'
 export {
   default as useActiveFilters
 } from './hooks/useActiveFilters'

@@ -85,15 +85,14 @@ const useStyles = makeStyles(theme => ({
 
 /**
  * A resizable side by side display
- * TODO: move to shared module
  */
-export const SplitView = ({
+export default function SplitView({
   LeftComponent,
   RightComponent,
   view,
   splitRatio: initialSplit = 0.5,
   ...props
-}) => {
+}) {
   const rootRef = useRef(null)
   const dividerRef = useRef(null)
   const [splitRatio, setSplitRatio] = useState(initialSplit)

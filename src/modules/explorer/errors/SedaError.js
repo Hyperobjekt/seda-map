@@ -8,6 +8,10 @@ import { CloseIcon } from '../../icons'
 
 const useStyles = makeStyles(theme => ({
   root: {
+    position: 'absolute',
+    bottom: 64,
+    right: 24,
+    zIndex: 999,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -40,7 +44,7 @@ const ErrorMessage = ({
   })
   return (
     <animated.div
-      className={clsx('error', classes.root, className)}
+      className={clsx(classes.root, 'error', className)}
       style={{ ...style, ...initialStyle }}
       {...props}>
       <Typography

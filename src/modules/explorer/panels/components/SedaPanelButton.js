@@ -6,10 +6,11 @@ import {
   RegionsIcon,
   SubgroupsIcon,
   LocationsIcon
-} from '../../../../icons'
-import { getPrefixLang } from '../../selectors/lang'
-import { useActiveSelection, useMetric } from '../../hooks'
-import { SelectionButton } from '../../../../../shared'
+} from '../../../icons'
+import { getPrefixLang } from '../../app/selectors/lang'
+import { useMetric } from '../../app/hooks'
+import { SelectionButton } from '../../../../shared'
+import useActivePanel from '../hooks/useActivePanel'
 
 const SelectionIcon = ({ selectionId }) => {
   const [metric] = useMetric()
@@ -38,7 +39,7 @@ const SedaSelectionButton = ({
   ...props
 }) => {
   const label = getPrefixLang(selectionId, 'PANEL_TITLE')
-  const [, setSelection] = useActiveSelection()
+  const [, setSelection] = useActivePanel()
   return (
     <SelectionButton
       primary={label}

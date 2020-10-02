@@ -6,7 +6,6 @@ import {
   SidePanelHeader,
   SidePanelBody
 } from '../../../../shared'
-import { LocationTable } from '../../app/components/base'
 import {
   getDemographics,
   getGaps,
@@ -17,6 +16,7 @@ import { useMetric, useDemographic } from '../../app/hooks'
 import { SedaLocationName } from '..'
 import useActiveLocationData from '../hooks/useActiveLocationData'
 import useActiveLocation from '../hooks/useActiveLocation'
+import LocationTable from './LocationTable'
 
 /**
  * Gets available demographics for region

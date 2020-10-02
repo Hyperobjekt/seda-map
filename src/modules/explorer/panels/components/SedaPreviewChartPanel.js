@@ -2,10 +2,11 @@ import React from 'react'
 import { ExpansionPanel } from '../../../../shared'
 import { makeStyles, Typography } from '@material-ui/core'
 import { ExpandIcon, CloseIcon } from '../../../icons'
-import { useChartVisible, useCondensed } from '../../app/hooks'
+import { useCurrentVars } from '../../app/hooks'
 import { getPreviewChartTitle } from '../../scatterplot/lang'
-import useScatterplotVars from '../hooks/useScatterplotVars'
-import SedaScatterplotPreview from './SedaScatterplotPreview'
+import { SedaScatterplotPreview } from '../../scatterplot'
+import useCondensedPanel from '../hooks/useCondensedPanel'
+import usePanelChartVisible from '../hooks/usePanelChartVisible'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -40,11 +41,11 @@ const useStyles = makeStyles(theme => ({
 
 const SedaPreviewChartPanel = ({ ...props }) => {
   /** panel is detached if in condensed mode */
-  const [detached] = useCondensed()
+  const [detached] = useCondensedPanel()
   /** state of preview chart visibility */
-  const [showChart, setShowChart] = useChartVisible()
+  const [showChart, setShowChart] = usePanelChartVisible()
   /** scatterplot variables */
-  const [xVar, yVar] = useScatterplotVars()
+  const [xVar, yVar] = useCurrentVars('chart')
   /** object containing class names */
   const classes = useStyles({ detached })
   return (

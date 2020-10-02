@@ -13,7 +13,6 @@ import {
   Button,
   makeStyles
 } from '@material-ui/core'
-import { MetricIcon } from '../../../icons'
 import clsx from 'clsx'
 import {
   getDescriptionForVarName,
@@ -21,6 +20,7 @@ import {
 } from '../../app/selectors/lang'
 import { TableStats } from '../../../../shared'
 import { DivergingStatValue } from '../../../../shared'
+import { MetricIcon } from '../../../icons'
 
 const useStyles = makeStyles(theme => ({
   root: {},

@@ -6,18 +6,13 @@ import SedaFooter from './footer'
 import SedaDataLoader from './SedaDataLoader'
 import SedaExplorer from './SedaExplorer'
 import { SedaMenu } from '../../menu'
-import { SedaError } from '../../errors'
+import { SedaRouting } from '../../routing'
+import SedaShortcuts from './SedaShortcuts'
 
 const useStyles = makeStyles(theme => ({
   offset: theme.mixins.toolbar,
   body: {
     overflow: 'hidden'
-  },
-  error: {
-    position: 'absolute',
-    bottom: 64,
-    right: 24,
-    zIndex: 999
   }
 }))
 
@@ -26,13 +21,14 @@ const SedaApp = () => {
 
   return (
     <Page>
+      <SedaShortcuts />
+      <SedaRouting />
       <SedaHeader />
       <div className={classes.offset} />
       <SedaMenu />
       <SedaDataLoader />
       <SedaExplorer className={classes.body} />
       <SedaFooter />
-      <SedaError className={classes.error} />
     </Page>
   )
 }

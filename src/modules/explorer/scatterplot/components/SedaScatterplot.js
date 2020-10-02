@@ -14,11 +14,10 @@ import {
   useSecondary,
   useUiStore
 } from '../../app/hooks'
-import { SplitView } from '../../app/components/base/SplitView'
 import { Typography } from '@material-ui/core'
 import Footnotes from './Footnotes'
-import { LinkButton } from '../../../../shared'
-import SedaGenericSelect from '../../app/components/controls/SedaGenericSelect'
+import { LinkButton, SplitView } from '../../../../shared'
+import SedaGenericSelect from '../../../../shared/components/Inputs/SelectMenu'
 import { getFootnotes, getChartTitle } from '../lang'
 import {
   getLocatonIdFromEvent,

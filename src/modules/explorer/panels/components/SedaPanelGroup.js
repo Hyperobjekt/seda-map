@@ -1,20 +1,19 @@
 import React from 'react'
-import {
-  SedaCondensedPanel as CondensedPanel,
-  SedaFullPanel as FullPanel
-} from '.'
-import { useCondensed, useActiveSelection } from '../../hooks'
-import { SidePanelGroup } from '../../../../../shared'
+import { SidePanelGroup } from '../../../../shared'
 import SedaDemographicPanel from './SedaDemographicPanel'
 import SedaMetricPanel from './SedaMetricPanel'
 import SedaRegionPanel from './SedaRegionPanel'
-import { SedaFilterPanel } from '../../../filters'
-import { useHelpVisibility, SedaHelpPanel } from '../../../help'
+import SedaFilterPanel from './SedaFilterPanel'
+import SedaLocationListPanel from './SedaLocationListPanel'
+import SedaFullPanel from './SedaFullPanel'
+import SedaCondensedPanel from './SedaCondensedPanel'
+import { useHelpVisibility, SedaHelpPanel } from '../../help'
 import {
   useActiveLocation,
-  SedaLocationListPanel,
   SedaLocationPanel
-} from '../../../location'
+} from '../../location'
+import useCondensedPanel from '../hooks/useCondensedPanel'
+import useActivePanel from '../hooks/useActivePanel'
 
 /**
  * A group containing all panels within the tool
@@ -22,8 +21,8 @@ import {
 const SedaPanelGroup = props => {
   const [showHelp] = useHelpVisibility()
   const [activeLocation] = useActiveLocation()
-  const [condensed] = useCondensed()
-  const [selection, setSelection] = useActiveSelection()
+  const [condensed] = useCondensedPanel()
+  const [selection, setSelection] = useActivePanel()
 
   // boolean that determines when full panel is shown
   const isFullPanel =
@@ -36,21 +35,24 @@ const SedaPanelGroup = props => {
   const handlePanelClose = () => setSelection(null)
 
   return (
-    <SidePanelGroup condensed={condensed} maxVisible={1}>
+    <SidePanelGroup
+      condensed={condensed}
+      maxVisible={1}
+      {...props}>
       <SedaHelpPanel
         className="panel--help"
         open={showHelp}
         style={{ zIndex: 1001 }}>
         Help Panel
       </SedaHelpPanel>
-      <CondensedPanel
+      <SedaCondensedPanel
         className="panel--condensed"
         style={{ zIndex: 1000 }}
         offset={showHelp ? 1 : 0}
         condensed
         open={isCondensedPanel}
       />
-      <FullPanel
+      <SedaFullPanel
         className="panel--full"
         style={{
           zIndex: condensed || showHelp ? 998 : 999,

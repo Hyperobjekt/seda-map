@@ -11,19 +11,19 @@ import {
   Tooltip,
   Button
 } from '@material-ui/core'
-import { MetricIcon } from '../../../../icons'
 import {
   getDemographicLabel,
   getFormatterForVarName,
   getMetricLabel,
   isGapDemographic
-} from '../../selectors'
+} from '../../app/selectors'
 import clsx from 'clsx'
 import {
   getDescriptionForVarName,
   getLang
-} from '../../selectors/lang'
-import { DivergingStatValue } from '../../../../../shared'
+} from '../../app/selectors/lang'
+import { MetricIcon } from '../../../icons'
+import { DivergingStatValue } from '../../../../shared'
 
 const useTooltipStyles = makeStyles(theme => ({
   root: {
@@ -116,7 +116,8 @@ const TableHeaderButton = ({ metricId, tooltip, ...props }) => {
 
 /**
  * Displays stats for a location in a table format, with tooltip hints and header actions
- * TODO: refactor to use rows / cols instead of demographics and metrics, so it is more general purpose.  Then move to shared module
+ * > DEPRECATED: LocationTable will be replaced with more general purpose "TableStats"
+ * > TODO: refactor to use rows / cols instead of demographics and metrics, so it is more general purpose.  Then move to shared module
  */
 const LocationTable = ({
   data,

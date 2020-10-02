@@ -10,26 +10,26 @@ import {
   SidePanelHeader,
   SidePanelBody,
   SidePanelFooter
-} from '../../../../../shared'
+} from '../../../../shared'
 import clsx from 'clsx'
-import SedaSelectionButton from '../controls/SedaSelectionButton'
+import SedaPanelButton from './SedaPanelButton'
 import {
   getLang,
   getLangWithSingleOrNone,
   getMetricLabel,
   getRegionLabel,
   getPrefixLang
-} from '../../selectors/lang'
-import { SidebarCloseIcon } from '../../../../icons'
+} from '../../app/selectors/lang'
+import { SidebarCloseIcon } from '../../../icons'
 import {
-  useCondensed,
-  useActiveSelection,
-  useChartVisible,
   useActiveView,
   useActiveOptionIds
-} from '../../hooks'
-import { useLocationCount } from '../../../location'
-import { SedaPreviewChartPanel } from '../../../scatterplot'
+} from '../../app/hooks'
+import { useLocationCount } from '../../location'
+import SedaPreviewChartPanel from './SedaPreviewChartPanel'
+import useCondensedPanel from '../hooks/useCondensedPanel'
+import useActivePanel from '../hooks/useActivePanel'
+import usePanelChartVisible from '../hooks/usePanelChartVisible'
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -58,13 +58,16 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
+/**
+ * Expanded version of the control panel
+ */
 const SedaFullPanel = props => {
   const classes = useStyles()
   const [view] = useActiveView()
-  const [condensed, toggleCondensed] = useCondensed()
+  const [condensed, toggleCondensed] = useCondensedPanel()
   const [metricId, demId, regionId] = useActiveOptionIds()
-  const [selection] = useActiveSelection()
-  const [showChart] = useChartVisible()
+  const [selection] = useActivePanel()
+  const [showChart] = usePanelChartVisible()
   const locationCount = useLocationCount()
   // const filterLabel = useActiveFilterLang()
   return (
@@ -83,27 +86,27 @@ const SedaFullPanel = props => {
         </Tooltip>
       </SidePanelHeader>
       <SidePanelBody classes={{ root: classes.body }}>
-        <SedaSelectionButton
+        <SedaPanelButton
           active={selection === 'metric'}
           selectionId="metric"
           value={getMetricLabel(metricId)}
         />
-        <SedaSelectionButton
+        <SedaPanelButton
           active={selection === 'region'}
           selectionId="region"
           value={getRegionLabel(regionId)}
         />
-        <SedaSelectionButton
+        <SedaPanelButton
           active={selection === 'demographic'}
           selectionId="demographic"
           value={getPrefixLang(demId, 'LABEL_STUDENTS')}
         />
-        <SedaSelectionButton
+        <SedaPanelButton
           active={selection === 'filter'}
           selectionId="filter"
           value="ACTIVE_FILTERS"
         />
-        <SedaSelectionButton
+        <SedaPanelButton
           active={selection === 'location'}
           selectionId="location"
           value={getLangWithSingleOrNone(
