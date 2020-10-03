@@ -149,11 +149,10 @@ const SedaFiltersForm = props => {
         // if limit rule doesn't already exist, add the sorting rule so it limts by size
         hasLimit
           ? setFilter(['limit', value])
-          : setFilters([
-              ...filters,
-              ['sort', 'sz', 'asc'],
-              ['limit', value]
-            ])
+          : setFilters(
+              [['sort', 'sz', 'asc'], ['limit', value]],
+              true
+            )
       }
     },
     [region, setFilter, setFilters, removeFilter]

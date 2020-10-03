@@ -156,12 +156,33 @@ export const setFilter = set => rule => {
   })
 }
 
+/**
+ * Returns a function that sets the filter rules in the store
+ * @param {*} set
+ */
+export const setFilters = set => (rules, extend) => {
+  if (!extend) return set({ filters: rules })
+  return set(state => {
+    let newFilters = state.filters
+    rules.forEach(rule => {
+      const params = rule.slice(0, rule.length - 1)
+      const index = getFilterIndex(state.filters, params)
+      newFilters =
+        index > -1
+          ? updateRule(newFilters, rule)
+          : insertFilter(newFilters, rule)
+    })
+    logger.debug('set filter rules', rules, newFilters)
+    return { filters: newFilters }
+  })
+}
+
 export const DEFAULT_FILTERS = []
 
 const [useFilterStore] = create((set, get) => ({
   filters: DEFAULT_FILTERS,
   addFilter: addFilter(set),
-  setFilters: filters => set({ filters }),
+  setFilters: setFilters(set),
   setFilter: setFilter(set),
   removeFilter: removeFilter(set, get),
   clearFilters: () => set({ filters: DEFAULT_FILTERS })
