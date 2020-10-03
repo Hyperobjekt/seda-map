@@ -8,6 +8,7 @@ import {
   DEFAULT_FLIGHT_PROPS
 } from './constants'
 import { getStateViewportByFips } from './utils'
+import logger from '../logger'
 
 const getFeatureGeometryType = feature => {
   if (!feature.geometry || !feature.geometry.type) return null
@@ -55,13 +56,25 @@ const getViewportForBounds = (
 
 const [useMapStore] = create((set, get) => ({
   loaded: false,
-  resetViewport: DEFAULT_VIEWPORT,
+  resetViewport: { ...DEFAULT_VIEWPORT },
   viewport: DEFAULT_VIEWPORT,
   idMap: {},
   setViewport: viewport =>
-    set(state => ({
-      viewport: { ...state.viewport, ...viewport }
-    })),
+    set(state => {
+      const newViewport = {
+        ...state.viewport,
+        ...viewport
+      }
+      logger.debug(
+        'useMapStore viewport update',
+        newViewport,
+        state.viewport,
+        viewport
+      )
+      return {
+        viewport: newViewport
+      }
+    }),
   setResetViewport: resetViewport => set({ resetViewport }),
   setLoaded: loaded => set({ loaded }),
   addToIdMap: (featureId, locationId) => {
@@ -109,23 +122,36 @@ const [useMapStore] = create((set, get) => ({
     }))
   },
   flyToReset: () => {
-    set(state => ({
-      viewport: {
+    set(state => {
+      const newViewport = {
         ...state.viewport,
         ...state.resetViewport,
         ...DEFAULT_FLIGHT_PROPS
       }
-    }))
+      logger.debug(
+        'useMapStore reset viewport',
+        newViewport,
+        state.viewport
+      )
+      return { viewport: newViewport }
+    })
   },
   setViewportFromRoute: params => {
-    set(state => ({
-      viewport: {
+    set(state => {
+      const newViewport = {
         ...state.viewport,
         zoom: params.zoom,
         latitude: params.lat,
         longitude: params.lon
       }
-    }))
+      logger.debug(
+        'useMapStore set viewport from route',
+        newViewport,
+        state.viewport,
+        params
+      )
+      return { viewport: newViewport }
+    })
   }
 }))
 

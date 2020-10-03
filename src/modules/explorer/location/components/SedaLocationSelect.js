@@ -60,23 +60,25 @@ const LocationList = ({
       }
       {...props}>
       {locations &&
-        locations.map((l, i) => {
+        locations.map((locationId, i) => {
           return (
             <ListItem
               button
-              key={l.id}
-              onMouseEnter={e => onLocationHover(l, e)}
+              key={locationId}
+              onMouseEnter={e => onLocationHover(locationId, e)}
               onMouseLeave={e => onLocationHover(null, e)}
-              onClick={e => onLocationClick(l, e)}
+              onClick={e => onLocationClick(locationId, e)}
               {...ListItemProps}>
               <SedaLocationName
-                locationId={l}
+                locationId={locationId}
                 markerPosition="left"
                 small
               />
               <ListItemSecondaryAction>
                 <IconButton
-                  onClick={e => onLocationDismiss(l, e)}>
+                  onClick={e =>
+                    onLocationDismiss(locationId, e)
+                  }>
                   <CloseIcon style={{ fontSize: 16 }} />
                 </IconButton>
               </ListItemSecondaryAction>

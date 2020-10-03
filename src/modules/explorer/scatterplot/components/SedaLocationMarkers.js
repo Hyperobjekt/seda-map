@@ -16,7 +16,7 @@ import {
 import { getSizerFunctionForRegion } from '../selectors'
 import {
   useLocationData,
-  useLocationsData
+  useCurrentRegionLocationsData
 } from '../../location'
 import { ScatterplotOverlay } from '../../../scatterplot'
 
@@ -52,7 +52,7 @@ const SedaLocationMarkers = ({
   const [showHovered] = useMarkersVisibility()
   const [hoveredId, setHovered] = useHovered()
   const hoveredData = useLocationData(hoveredId)
-  const locations = useLocationsData()
+  const locations = useCurrentRegionLocationsData()
   const theme = useTheme()
   const canRender = xVar && yVar && zVar && region
 

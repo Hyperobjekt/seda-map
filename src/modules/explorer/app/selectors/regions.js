@@ -77,9 +77,9 @@ export const getRegionFromFeature = feature => {
 }
 
 /**
- * Returns the provided locations (features) array as an object
+ * Returns the provided location IDs array as an object
  * with a key for each region and the corresponding locations.
- * @param {*} locations
+ * @param {Array<string>} locations
  */
 export const getLocationsByRegion = locations =>
   locations.reduce((obj, id) => {

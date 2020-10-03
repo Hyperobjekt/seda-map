@@ -31,7 +31,7 @@ export default () => {
   const setViewOptions = useUiStore(
     state => state.setViewFromRoute
   )
-  const setMapOptions = useMapStore(
+  const setViewportFromRoute = useMapStore(
     state => state.setViewportFromRoute
   )
 
@@ -62,7 +62,7 @@ export default () => {
         const params = getParamsFromPathname(path)
         setDataOptions(params)
         setViewOptions(params)
-        setMapOptions(params)
+        setViewportFromRoute(params)
         setFilterOptions(params)
         if (params.locations)
           await addLocationsFromRoute(params.locations, false)

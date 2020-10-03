@@ -3,10 +3,10 @@ import shallow from 'zustand/shallow'
 import useStaticData from '../../../data/useStaticData'
 
 /**
- * Provides all current locations as an array of object data
+ * Provides all selected locations for the current region as an array of object data
  * @returns {[Array<LocationData>]}
  */
-export default () => {
+export default function useCurrentRegionLocationsData() {
   const region = useDataOptions(state => state.region)
   const locations = useDataOptions(
     state => state.locations,

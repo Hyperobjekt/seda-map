@@ -1,11 +1,7 @@
 import React, { useMemo, useEffect, useRef } from 'react'
 import { makeStyles } from '@material-ui/core'
 import { getLayers, SEDA_SOURCES } from './selectors'
-import MapBase, {
-  useFlyToState,
-  useIdMap,
-  useFlyToReset
-} from '../../map'
+import MapBase, { useIdMap, useFlyToReset } from '../../map'
 import {
   getSelectedColors,
   getFeatureProperty,
@@ -101,18 +97,11 @@ const SedaMap = props => {
     // inform global listener that map has loaded
     window.SEDA.trigger('map')
     // zoom to US if needed once cover is shown
-    setTimeout(() => {
-      flyToReset()
-    }, 1000)
+    // setTimeout(() => {
+    //   flyToReset()
+    // }, 1000)
     isLoaded.current = true
   }
-
-  /** zoom to filtered location when filter is selected */
-  // useEffect(() => {
-  //   if (!prefix || prefix.length !== 2 || !isLoaded.current)
-  //     return
-  //   flyToState(prefix)
-  // }, [prefix, flyToState])
 
   /** zoom to activated location */
   useEffect(() => {

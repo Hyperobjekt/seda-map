@@ -2,11 +2,12 @@ import { useUiStore } from '../../app/hooks'
 import { useMapStore } from '../../../map'
 import {
   getViewportRoute,
-  filterArrayToString
+  filterArrayToString,
+  getLocationsRoute
 } from '../selectors'
 import { useFilters } from '../../filters'
 import useDataOptions from '../../app/hooks/useDataOptions'
-import { useLocationsData } from '../../location'
+import { useAllLocationsData } from '../../location'
 
 /**
  * Gets the route string for the current options
@@ -18,7 +19,7 @@ export default () => {
     getViewportRoute(state.viewport)
   )
   const filters = useFilters()
-  const locationsData = useLocationsData()
+  const locationsData = useAllLocationsData()
   return useDataOptions(state =>
     [
       view,
@@ -27,8 +28,8 @@ export default () => {
       state.metric,
       state.secondary,
       state.demographic,
-      viewportRoute
-      // getLocationsRoute(locationsData)
+      viewportRoute,
+      getLocationsRoute(locationsData)
     ].join('/')
   )
 }

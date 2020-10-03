@@ -45,7 +45,10 @@ export const ruleParamToArray = rule => {
     case 'limit':
       return ['limit', rest[0]]
     default:
-      throw new Error('could not process rule: ' + type)
+      console.warn(
+        'could not process filter rule "' + type + '", ignoring'
+      )
+      return null
   }
 }
 
@@ -85,7 +88,10 @@ export const paramsToFilterArray = params => {
   }
   // filter rules are split by "+" and filter params are split by ","
   // e.g. id,02+avg,3-4+limit,10000
-  const rules = params.filter.split('+').map(ruleParamToArray)
+  const rules = params.filter
+    .split('+')
+    .map(ruleParamToArray)
+    .filter(f => !!f)
   return rules
 }
 
@@ -94,10 +100,11 @@ export const paramsToFilterArray = params => {
  * @param {*} filters
  */
 export const filterArrayToString = filters => {
-  return filters
+  const filterString = filters
     .map(filterRuleToString)
     .filter(f => !!f)
     .join('+')
+  return filterString ? filterString : 'none'
 }
 
 /**
@@ -129,7 +136,7 @@ const isValidSecondary = secondary =>
 const isValidViewport = (zoom, lat, lon) =>
   !isNaN(zoom) && !isNaN(lat) && !isNaN(lon)
 
-const isValidFilter = filter => Boolean(filter)
+const isValidFilter = filter => true
 
 export const isValidExplorerRoute = (route, vars) => {
   const path = getStrippedRoute(route)
@@ -458,6 +465,7 @@ export const removeFeatureFromRoute = (pathname, feature) => {
  */
 export const getLocationsRoute = locations => {
   let locationsRoute = locations
+    .filter(l => !!l)
     .map(l => [l.id, l.lat, l.lon].join(','))
     .join('+')
   return locationsRoute

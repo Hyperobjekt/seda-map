@@ -30,8 +30,11 @@ export {
 } from './hooks/useLocationNumber'
 export { default as useLocations } from './hooks/useLocations'
 export {
-  default as useLocationsData
-} from './hooks/useLocationsData'
+  default as useCurrentRegionLocationsData
+} from './hooks/useCurrentRegionLocationsData'
+export {
+  default as useAllLocationsData
+} from './hooks/useAllLocationsData'
 export {
   default as useRemoveLocation
 } from './hooks/useRemoveLocation'
