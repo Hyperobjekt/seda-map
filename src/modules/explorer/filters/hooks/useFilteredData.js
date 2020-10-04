@@ -6,17 +6,10 @@ import shallow from 'zustand/shallow'
 import useFilters from './useFilters'
 import useDataOptions from '../../app/hooks/useDataOptions'
 import { applyFilters } from '../../../filters'
-
-/**
- * Update the range and sort filters to use the
- * current demographic.
- */
-const populateFilters = (demographic, filters) => {
-  return filters.map(f => {
-    if (f[0] !== 'range' && f[0] !== 'sort') return f
-    return [f[0], demographic + '_' + f[1], f[2]]
-  })
-}
+import {
+  getFiltersForDemographic,
+  removeIrrelevantFilters
+} from '../selectors'
 
 /**
  * Returns data object with current filters applied
@@ -28,22 +21,19 @@ export default () => {
     state => [state.demographic, state.region],
     shallow
   )
-
-  // if schools, remove SES filter
-  // if non-school region, remove FRL and school type filter
-  const cleanFilters =
-    region === 'schools'
-      ? filters.filter(f => f[1] !== 'ses')
-      : filters.filter(
-          f => f[1] !== 'frl' && f[0] !== 'contains'
-        )
-
   return useDebounce(
     useMemo(() => {
-      const dataFilters = populateFilters(
-        demographic,
-        cleanFilters
+      // drop filters that do not apply to current region
+      const cleanFilters = removeIrrelevantFilters(
+        filters,
+        region
       )
+      // update filters to apply to current demographic
+      const dataFilters = getFiltersForDemographic(
+        cleanFilters,
+        demographic
+      )
+      // get the filtered dataset
       const filteredData = applyFilters(
         data[region] || [],
         dataFilters

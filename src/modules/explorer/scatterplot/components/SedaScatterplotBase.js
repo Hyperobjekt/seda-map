@@ -81,13 +81,10 @@ function SedaScatterplotBase({
   const [resizeListener, sizes] = useResizeAware()
 
   // scatterplot data store
-  const data = useFilteredData(state => state.data)
+  const data = useFilteredData()
 
   // boolean indicating if data is loading
   const loading = useStaticData(state => state.isLoading)
-
-  // scatterplot data for the current region
-  const regionData = data
 
   // boolean determining if vars have two different dems
   const isVersus = isVersusFromVarNames(xVar, yVar)
@@ -97,13 +94,13 @@ function SedaScatterplotBase({
     if (loading) return {}
     const newOptions = getScatterplotOptions(
       variant,
-      regionData,
+      data.slice(0, 4000),
       { xVar, yVar, zVar },
       [],
       region
     )
     return newOptions
-  }, [xVar, yVar, zVar, region, variant, regionData, loading])
+  }, [xVar, yVar, zVar, region, variant, data, loading])
 
   // boolean determining if X axis labels should show
   const showLabelsX =

@@ -28,6 +28,7 @@ import useFilters from '../hooks/useFilters'
 import { useDemographic, useRegion } from '../../app/hooks'
 import { SedaSearch } from '../../search'
 import { getPropFromHit } from '../../search/selectors'
+import { useLocationName } from '../../location'
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -74,15 +75,21 @@ const SedaFiltersForm = props => {
   const [selectedLocation, setSelectedLocation] = useState(null)
   // grab filters array
   const filters = useFilters()
+  // function to remove a single filter
   const removeFilter = useFilterStore(
     state => state.removeFilter
   )
+  // function to set (add or update) single filter
   const setFilter = useFilterStore(state => state.setFilter)
+  // function to set (add or update) multiple filters
   const setFilters = useFilterStore(state => state.setFilters)
-
   // function to clear filters
   const clearFilters = useFilterStore(
     state => state.clearFilters
+  )
+  // function to get location name
+  const locationName = useLocationName(
+    getFilterValue(filters, ['startsWith', 'id'])
   )
   // get active demographic
   const [demographic] = useDemographic()
@@ -222,6 +229,12 @@ const SedaFiltersForm = props => {
     )
       handleLocationClear()
   }, [region, filters])
+
+  // get the location filter place name
+  useEffect(() => {
+    console.log('sedafiltersform', locationName)
+    if (locationName) setSelectedLocation(locationName)
+  }, [locationName])
 
   const classes = useStyles()
   return (

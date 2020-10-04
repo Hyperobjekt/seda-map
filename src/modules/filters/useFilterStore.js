@@ -177,7 +177,7 @@ export const setFilters = set => (rules, extend) => {
   })
 }
 
-export const DEFAULT_FILTERS = []
+export const DEFAULT_FILTERS = [['sort', 'sz', 'asc']]
 
 const [useFilterStore] = create((set, get) => ({
   filters: DEFAULT_FILTERS,

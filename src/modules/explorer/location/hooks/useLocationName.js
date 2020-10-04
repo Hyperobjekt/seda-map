@@ -10,6 +10,7 @@ import useLocationData from './useLocationData'
 export default id => {
   const locationData = useLocationData(id)
   const region = getRegionFromLocationId(id)
+  if (!id || !region || !locationData) return ''
   switch (region) {
     case 'states':
       return getStateName(id)
