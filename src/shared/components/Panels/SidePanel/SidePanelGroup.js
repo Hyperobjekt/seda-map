@@ -6,10 +6,10 @@ const useStyles = makeStyles(theme => ({
   root: {
     position: 'relative',
     zIndex: 2,
-    width: props =>
+    minWidth: props =>
       props.condensed
         ? theme.app.condensedPanelWidth
-        : theme.app.fullPanelWidth,
+        : theme.app.panelWidth,
     transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen

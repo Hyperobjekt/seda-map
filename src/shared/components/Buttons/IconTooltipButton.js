@@ -49,7 +49,7 @@ const useStyles = makeStyles(theme => ({
 /**
  * Icon action buttons with tooltips, used in the condensed panel
  */
-const IconLabelButton = ({
+const IconTooltipButton = ({
   icon,
   className,
   classes: overrides,
@@ -99,7 +99,7 @@ const IconLabelButton = ({
   )
 }
 
-IconLabelButton.propTypes = {
+IconTooltipButton.propTypes = {
   icon: PropTypes.node,
   className: PropTypes.string,
   classes: PropTypes.object,
@@ -107,9 +107,9 @@ IconLabelButton.propTypes = {
   tooltip: PropTypes.any,
   placement: PropTypes.string
 }
-IconLabelButton.defaultProps = {
+IconTooltipButton.defaultProps = {
   classes: {},
   placement: 'right'
 }
 
-export default IconLabelButton
+export default IconTooltipButton

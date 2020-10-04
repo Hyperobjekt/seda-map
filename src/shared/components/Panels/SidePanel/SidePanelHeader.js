@@ -12,9 +12,10 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-
+    minHeight: theme.spacing(7),
     '& .MuiIconButton-root': {
-      marginRight: theme.spacing(-1.5)
+      marginRight: theme.spacing(-1.5),
+      padding: 8
     }
   }
 }))
@@ -22,6 +23,7 @@ const useStyles = makeStyles(theme => ({
 const SidePanelHeader = ({
   sticky,
   children,
+  className,
   classes: overrides,
   ...props
 }) => {
@@ -31,7 +33,8 @@ const SidePanelHeader = ({
       className={clsx(
         'panel__header',
         classes.root,
-        overrides.root
+        overrides.root,
+        className
       )}
       {...props}>
       {children}
@@ -43,7 +46,9 @@ SidePanelHeader.propTypes = {
   /** true to stick to top on scroll */
   sticky: PropTypes.bool,
   /** class name overrides for elements */
-  classes: PropTypes.object
+  classes: PropTypes.object,
+  /** class name for root */
+  className: PropTypes.string
 }
 SidePanelHeader.defaultProps = {
   sticky: false,

@@ -27,14 +27,14 @@ const useStyles = makeStyles(theme => ({
   },
   area: {
     height: '100%',
-    display: 'flex',
-    transition: theme.transitions.create(
-      ['width', 'transform'],
-      {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen
-      }
-    )
+    display: 'flex'
+    // transition: theme.transitions.create(
+    //   ['width', 'transform'],
+    //   {
+    //     easing: theme.transitions.easing.sharp,
+    //     duration: theme.transitions.duration.leavingScreen
+    //   }
+    // )
   },
   side: {
     position: 'relative',

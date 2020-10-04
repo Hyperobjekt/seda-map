@@ -59,6 +59,7 @@ const SelectionButton = ({
   secondaryIcon,
   SecondaryActionProps,
   TextProps,
+  className,
   classes: overrides,
   ...props
 }) => {
@@ -69,7 +70,8 @@ const SelectionButton = ({
         root: clsx(
           'selection-button',
           classes.root,
-          overrides.root
+          overrides.root,
+          className
         )
       }}
       button
@@ -128,6 +130,8 @@ SelectionButton.propTypes = {
   SecondaryActionProps: PropTypes.object,
   /** props for the ListItemText component */
   TextProps: PropTypes.object,
+  /** class name for the root element */
+  className: PropTypes.string,
   /** class names for elements (`root`, `icon`, `text`, `secondary`, `secondaryAction`) */
   classes: PropTypes.object
 }

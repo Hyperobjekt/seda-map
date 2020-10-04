@@ -14,6 +14,7 @@ import {
 } from '../../location'
 import useCondensedPanel from '../hooks/useCondensedPanel'
 import useActivePanel from '../hooks/useActivePanel'
+import SedaCollapsePanel from './SedaCollapsePanel'
 
 /**
  * A group containing all panels within the tool
@@ -45,7 +46,7 @@ const SedaPanelGroup = props => {
         style={{ zIndex: 1001 }}>
         Help Panel
       </SedaHelpPanel>
-      <SedaCondensedPanel
+      {/* <SedaCondensedPanel
         className="panel--condensed"
         style={{ zIndex: 1000 }}
         offset={showHelp ? 1 : 0}
@@ -60,6 +61,15 @@ const SedaPanelGroup = props => {
         }}
         offset={showHelp ? 1 : 0}
         open={isFullPanel}
+      /> */}
+      <SedaCollapsePanel
+        className="panel--full"
+        style={{
+          zIndex: condensed || showHelp ? 998 : 999
+        }}
+        condensed={isCondensedPanel}
+        offset={0}
+        open={true}
       />
       <SedaMetricPanel
         className="panel--selection panel--metric"

@@ -57,13 +57,7 @@ const SedaPreviewChartPanel = ({ ...props }) => {
       onChange={(e, expanded) => {
         setShowChart(expanded)
       }}
-      expandIcon={
-        detached ? (
-          <CloseIcon style={{ fontSize: 16 }} />
-        ) : (
-          <ExpandIcon />
-        )
-      }
+      expandIcon={<ExpandIcon />}
       {...props}>
       <div
         style={{

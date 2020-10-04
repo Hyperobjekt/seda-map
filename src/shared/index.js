@@ -1,5 +1,5 @@
 export {
-  IconLabelButton,
+  IconTooltipButton,
   LinkButton,
   SelectionButton,
   HideOnScroll,

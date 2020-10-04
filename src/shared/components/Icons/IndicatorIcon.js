@@ -9,17 +9,16 @@ const useStyles = makeStyles(theme => ({
   },
   indicator: {
     position: 'absolute',
-    bottom: 4,
-    right: 4,
+    bottom: 0,
+    right: 0,
     background: theme.palette.secondary.main,
     padding: 0,
-    paddingLeft: 1, // for number alignment
-    fontSize: '0.825rem',
+    fontSize: 10,
     color: theme.app.darkText,
     width: 16,
     height: 16,
     borderRadius: 16,
-    lineHeight: '18px',
+    lineHeight: '16px',
     textAlign: 'center',
     fontWeight: 'bold'
   }
@@ -40,13 +39,15 @@ const IndicatorIcon = ({
       className={clsx(classes.root, 'indicator-icon', className)}
       {...props}>
       {children}
-      <span
-        className={clsx(
-          classes.indicator,
-          'indicator-icon__indicator'
-        )}>
-        {indicator}
-      </span>
+      {!!indicator && (
+        <span
+          className={clsx(
+            classes.indicator,
+            'indicator-icon__indicator'
+          )}>
+          {indicator}
+        </span>
+      )}
     </div>
   )
 }

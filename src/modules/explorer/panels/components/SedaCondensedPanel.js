@@ -4,7 +4,7 @@ import {
   SidePanel,
   SidePanelHeader,
   SidePanelBody,
-  IconLabelButton,
+  IconTooltipButton,
   DetailedTooltip
 } from '../../../../shared'
 
@@ -92,7 +92,7 @@ const SedaCondensedPanel = props => {
   return (
     <SidePanel condensed {...props}>
       <SidePanelHeader classes={{ root: classes.header }}>
-        <IconLabelButton
+        <IconTooltipButton
           className={clsx(
             'panel-header__button',
             classes.button
@@ -109,7 +109,7 @@ const SedaCondensedPanel = props => {
         />
       </SidePanelHeader>
       <SidePanelBody classes={{ root: classes.body }}>
-        <IconLabelButton
+        <IconTooltipButton
           className={classes.button}
           active={selection === 'metric'}
           tooltip={
@@ -129,7 +129,7 @@ const SedaCondensedPanel = props => {
           }
           onClick={() => handleSelection('metric')}
         />
-        <IconLabelButton
+        <IconTooltipButton
           className={classes.button}
           active={selection === 'region'}
           tooltip={
@@ -144,7 +144,7 @@ const SedaCondensedPanel = props => {
           icon={<RegionsIcon style={{ fontSize: 32 }} />}
           onClick={() => handleSelection('region')}
         />
-        <IconLabelButton
+        <IconTooltipButton
           className={classes.button}
           active={selection === 'demographic'}
           tooltip={
@@ -165,7 +165,7 @@ const SedaCondensedPanel = props => {
           icon={<SubgroupsIcon />}
           onClick={() => handleSelection('demographic')}
         />
-        <IconLabelButton
+        <IconTooltipButton
           className={classes.button}
           active={selection === 'filter'}
           indicator={activeFilters.length}
@@ -180,7 +180,7 @@ const SedaCondensedPanel = props => {
           icon={<FilterIcon style={{ fontSize: 32 }} />}
           onClick={() => handleSelection('filter')}
         />
-        <IconLabelButton
+        <IconTooltipButton
           active={selection === 'location'}
           indicator={locationCount}
           tooltip={
@@ -204,7 +204,7 @@ const SedaCondensedPanel = props => {
         />
         <Divider />
         {view === 'map' && condensed && (
-          <IconLabelButton
+          <IconTooltipButton
             active={showChart}
             tooltip={getLang('TOOLTIP_HINT_CHART')}
             className={classes.button}

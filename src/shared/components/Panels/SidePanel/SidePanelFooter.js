@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { forwardRef } from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core'
 import clsx from 'clsx'
@@ -11,25 +11,25 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const SidePanelFooter = ({
-  sticky,
-  children,
-  classes: overrides,
-  ...props
-}) => {
+const SidePanelFooter = forwardRef(function _SidePanelFooter(
+  { sticky, children, className, classes: overrides, ...props },
+  ref
+) {
   const classes = useStyles()
   return (
     <div
+      ref={ref}
       className={clsx(
         'panel__footer',
         classes.root,
-        overrides.root
+        overrides.root,
+        className
       )}
       {...props}>
       {children}
     </div>
   )
-}
+})
 
 SidePanelFooter.propTypes = {
   /** true to fix to bottom of panel */
