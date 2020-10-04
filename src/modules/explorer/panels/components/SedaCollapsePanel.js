@@ -60,6 +60,7 @@ const useStyles = makeStyles(theme => ({
     border: `1px solid ${theme.palette.divider}`,
     borderRadius: '100%',
     zIndex: 999,
+    transition: 'opacity 0.4s ease-in-out',
     '&.MuiIconButton-root': {
       marginRight: 0
     },
@@ -147,6 +148,9 @@ const SedaCollapsePanel = ({
         </Typography>
         <IconButton
           className={classes.toggleCondensed}
+          style={{
+            opacity: condensed && !hovered ? 0 : 1
+          }}
           onClick={handleToggleCondensed}>
           {condensed ? (
             <SidebarOpenIcon />
