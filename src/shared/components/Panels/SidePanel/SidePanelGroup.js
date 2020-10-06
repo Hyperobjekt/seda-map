@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles, useTheme } from '@material-ui/core'
+import clsx from 'clsx'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -55,7 +56,13 @@ const setChildPositions = (
   })
 }
 
-const SidePanelGroup = ({ children, maxVisible, condensed }) => {
+const SidePanelGroup = ({
+  children,
+  maxVisible,
+  condensed,
+  className,
+  ...props
+}) => {
   const theme = useTheme()
   const updatedChildren = setChildPositions(
     children,
@@ -71,7 +78,17 @@ const SidePanelGroup = ({ children, maxVisible, condensed }) => {
     panelCount: Math.min(openPanelCount, maxVisible),
     condensed
   })
-  return <div className={classes.root}>{updatedChildren}</div>
+  return (
+    <div
+      className={clsx(
+        'side-panel-group',
+        classes.root,
+        className
+      )}
+      {...props}>
+      {updatedChildren}
+    </div>
+  )
 }
 
 SidePanelGroup.propTypes = {

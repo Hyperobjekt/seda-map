@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import {
   Typography,
@@ -30,14 +30,18 @@ const BasicSidePanel = ({
   ...props
 }) => {
   const classes = useStyles()
-
+  const closeRef = useRef(null)
+  // set focus to close button when the panel opens
+  useEffect(() => {
+    if (props.open && closeRef.current) closeRef.current.focus()
+  }, [props.open])
   return (
     <SidePanel classes={{ root: classes.root }} {...props}>
       <SidePanelHeader sticky>
         <Typography className={classes.title}>
           {title}
         </Typography>
-        <IconButton onClick={onClose}>
+        <IconButton ref={closeRef} onClick={onClose}>
           <CloseIcon />
         </IconButton>
       </SidePanelHeader>

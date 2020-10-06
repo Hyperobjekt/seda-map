@@ -8,7 +8,7 @@ export default function SedaRegionPanelButton(props) {
   const [region] = useRegion()
   return (
     <SedaPanelButton
-      selectionId="region"
+      panelId="region"
       secondary={getPrefixLang(region, 'LABEL')}
       icon={<RegionsIcon />}
       {...props}

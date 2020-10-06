@@ -9,7 +9,7 @@ export default function SedaMetricPanelButton(props) {
   const [metric] = useMetric()
   return (
     <SedaPanelButton
-      selectionId="metric"
+      panelId="metric"
       secondary={getPrefixLang(metric, 'LABEL')}
       icon={<MetricIcon metricId={metric} />}
       {...props}

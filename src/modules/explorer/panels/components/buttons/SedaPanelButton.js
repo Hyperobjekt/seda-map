@@ -1,7 +1,11 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 import { getPrefixLang } from '../../../app/selectors/lang'
-import { SelectionButton } from '../../../../../shared'
+import {
+  SelectionButton,
+  useDidUpdateEffect,
+  usePrevious
+} from '../../../../../shared'
 import useActivePanel from '../../hooks/useActivePanel'
 import { makeStyles } from '@material-ui/core'
 
@@ -15,20 +19,39 @@ const useStyles = makeStyles(theme => ({
  * Button used for options in the full panel view
  */
 const SedaPanelButton = ({
-  selectionId,
+  panelId,
   primaryFormatter,
   secondaryFormatter,
   ...props
 }) => {
   const classes = useStyles()
-  const [selection, setSelection] = useActivePanel()
+  const buttonRef = useRef(null)
+  const [activePanel, setActivePanel] = useActivePanel()
+  const prevActivePanel = usePrevious(activePanel)
+  // Restore focus to appropriate element on panel close
+  useDidUpdateEffect(() => {
+    if (
+      !activePanel &&
+      prevActivePanel === panelId &&
+      buttonRef.current
+    ) {
+      console.log(
+        'restore focus',
+        activePanel,
+        prevActivePanel,
+        buttonRef.current
+      )
+      buttonRef.current.querySelector("[role='button']").focus()
+    }
+  }, [activePanel, prevActivePanel, panelId, buttonRef.current])
   return (
     <SelectionButton
+      ref={buttonRef}
       className={classes.root}
-      active={selection === selectionId}
-      primary={primaryFormatter(selectionId)}
-      secondary={secondaryFormatter(selectionId)}
-      onClick={() => setSelection(selectionId)}
+      active={activePanel === panelId}
+      primary={primaryFormatter(panelId)}
+      secondary={secondaryFormatter(panelId)}
+      onClick={() => setActivePanel(panelId)}
       {...props}
     />
   )

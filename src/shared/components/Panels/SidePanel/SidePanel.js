@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 import { Paper, makeStyles } from '@material-ui/core'
 import clsx from 'clsx'
@@ -34,12 +34,24 @@ const SidePanel = ({
   ...props
 }) => {
   const classes = useStyles({ condensed })
+  const panelRef = useRef(null)
   const panelStyle = useSpring({
     transform: open ? 'translateX(0%)' : 'translateX(-100%)',
-    marginLeft: marginLeft ? marginLeft : 0
+    marginLeft: marginLeft ? marginLeft : 0,
+    onStart: () => {
+      if (!panelRef.current) return
+      if (open) panelRef.current.style.visibility = 'visible'
+    },
+    onRest: () => {
+      if (!panelRef.current) return
+      open
+        ? (panelRef.current.style.visibility = 'visible')
+        : (panelRef.current.style.visibility = 'hidden')
+    }
   })
   return (
     <AnimatedPanel
+      ref={panelRef}
       square
       classes={{
         root: clsx('panel', classes.root, overrides.root, {

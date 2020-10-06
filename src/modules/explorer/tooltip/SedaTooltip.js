@@ -90,6 +90,25 @@ const useStyles = makeStyles(theme => ({
 const getSecondaryVar = (activeRegion, featureRegion) =>
   featureRegion === 'schools' ? 'all_frl' : 'all_ses'
 
+/**
+ * Gets the location name based on the current location data
+ * @param {*} param0
+ */
+const getLocationName = ({ id, name }) => {
+  if (!id && !name) return 'Unavailable'
+  if (id && id.length === 2) return getStateName(id)
+  return name
+}
+
+/**
+ * Gets the parent location name based on the location data
+ */
+const getLocationParent = ({ id }) => {
+  if (!id) return ''
+  if (id && id.length === 2) return 'United States'
+  return getStateName(id)
+}
+
 const SedaTooltip = props => {
   const [hoveredId] = useHovered()
   const [showTooltip] = useTooltipVisibility()
@@ -108,7 +127,6 @@ const SedaTooltip = props => {
   const descriptionVars = isVersus
     ? [demographic + '_' + xVar.split('_')[1]]
     : [yVar, xVar]
-  const stateName = data && data.id ? getStateName(data.id) : ''
 
   // add var to feature if missing
   if (isVersus && data && !data[descriptionVars[0]]) {
@@ -119,8 +137,8 @@ const SedaTooltip = props => {
 
   return data ? (
     <Tooltip
-      title={data.name}
-      subtitle={stateName}
+      title={getLocationName(data)}
+      subtitle={getLocationParent(data)}
       show={showTooltip}
       x={x}
       y={y}

@@ -8,7 +8,7 @@ export default function SedaLocationsPanelButton(props) {
   const locationCount = useLocationCount()
   return (
     <SedaPanelButton
-      selectionId="location"
+      panelId="location"
       secondary={locationCount + ' pinned locations'}
       icon={
         <IndicatorIcon indicator={locationCount}>

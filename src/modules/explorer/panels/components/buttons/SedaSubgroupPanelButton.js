@@ -8,7 +8,7 @@ export default function SedaSubgroupPanelButton(props) {
   const [demographic] = useDemographic()
   return (
     <SedaPanelButton
-      selectionId="demographic"
+      panelId="demographic"
       secondary={getPrefixLang(demographic, 'LABEL')}
       icon={<SubgroupsIcon />}
       {...props}

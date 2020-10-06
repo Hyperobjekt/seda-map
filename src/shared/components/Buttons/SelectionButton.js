@@ -50,61 +50,67 @@ const useStyles = makeStyles(theme => ({
 /**
  * List item menu button that can have a left icon, primary text, secondary text, and right icon (secondary)
  */
-const SelectionButton = ({
-  small,
-  active,
-  icon,
-  primary,
-  secondary,
-  secondaryIcon,
-  SecondaryActionProps,
-  TextProps,
-  className,
-  classes: overrides,
-  ...props
-}) => {
-  const classes = useStyles({ small, active })
-  return (
-    <ListItem
-      classes={{
-        root: clsx(
-          'selection-button',
-          classes.root,
-          overrides.root,
-          className
-        )
-      }}
-      button
-      {...props}>
-      {icon && (
-        <ListItemIcon
-          classes={{
-            root: clsx(
-              'selection-button__icon',
-              classes.icon,
-              overrides.icon
-            )
-          }}>
-          {icon}
-        </ListItemIcon>
-      )}
-      <ListItemText
-        primary={primary}
-        secondary={secondary}
+const SelectionButton = React.forwardRef(
+  (
+    {
+      small,
+      active,
+      icon,
+      primary,
+      secondary,
+      secondaryIcon,
+      SecondaryActionProps,
+      TextProps,
+      className,
+      classes: overrides,
+      ...props
+    },
+    ref
+  ) => {
+    const classes = useStyles({ small, active })
+    return (
+      <ListItem
+        ref={ref}
         classes={{
-          root: classes.text,
-          secondary: classes.secondary
+          root: clsx(
+            'selection-button',
+            classes.root,
+            overrides.root,
+            className
+          )
         }}
-        {...TextProps}
-      />
-      <ListItemSecondaryAction
-        className={classes.secondaryAction}
-        {...SecondaryActionProps}>
-        {secondaryIcon}
-      </ListItemSecondaryAction>
-    </ListItem>
-  )
-}
+        button
+        {...props}>
+        {icon && (
+          <ListItemIcon
+            classes={{
+              root: clsx(
+                'selection-button__icon',
+                classes.icon,
+                overrides.icon
+              )
+            }}>
+            {icon}
+          </ListItemIcon>
+        )}
+        <ListItemText
+          primary={primary}
+          secondary={secondary}
+          classes={{
+            root: classes.text,
+            secondary: classes.secondary
+          }}
+          {...TextProps}
+        />
+        <ListItemSecondaryAction
+          className={classes.secondaryAction}
+          {...SecondaryActionProps}>
+          {secondaryIcon}
+        </ListItemSecondaryAction>
+      </ListItem>
+    )
+  }
+)
 
 SelectionButton.defaultProps = {
   secondaryIcon: <RightIcon />,

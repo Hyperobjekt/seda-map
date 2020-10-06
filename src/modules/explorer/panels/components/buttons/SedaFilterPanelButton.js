@@ -8,7 +8,7 @@ export default function SedaFilterPanelButton(props) {
   const activeFilters = useActiveFilters()
   return (
     <SedaPanelButton
-      selectionId="filter"
+      panelId="filter"
       secondary={activeFilters.length + ' active filters'}
       icon={
         <IndicatorIcon indicator={activeFilters.length}>

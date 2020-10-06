@@ -7,3 +7,6 @@ export {
 export {
   default as useActivePanel
 } from './hooks/useActivePanel'
+export {
+  default as useTogglePanel
+} from './hooks/useTogglePanel'

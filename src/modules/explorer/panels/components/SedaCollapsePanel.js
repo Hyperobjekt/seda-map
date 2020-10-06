@@ -68,6 +68,9 @@ const useStyles = makeStyles(theme => ({
     '&:hover': {
       background: theme.palette.primary.main,
       color: '#fff'
+    },
+    '&:focus': {
+      opacity: '1!important'
     }
   },
   footerPanel: {
@@ -87,15 +90,43 @@ const AnimatedSidePanel = animated(SidePanel)
 const AnimatedSidePanelFooter = animated(SidePanelFooter)
 
 /**
+ * Gets the offset to transform the panel footer containing the preview chart based on the current UI context
+ * @param {*} param0
+ */
+const getFooterStyleProps = ({
+  condensed,
+  view,
+  hovered,
+  showChart,
+  activePanel
+}) => {
+  const verticalOffset =
+    !condensed && view === 'map'
+      ? 0
+      : view !== 'map' || hovered || activePanel
+      ? 264
+      : !showChart
+      ? 216
+      : showChart
+      ? -24
+      : 0
+  return {
+    transform: `translate(0px, ${verticalOffset}px)`,
+    height: !condensed && !showChart ? 48 : 264
+  }
+}
+
+/**
  * Expanded version of the control panel
  */
 const SedaCollapsePanel = ({
   style: initialStyle,
   ...props
 }) => {
-  const [hovered, setHovered] = useState(false)
   const classes = useStyles()
   const theme = useTheme()
+  const condenseButtonRef = useRef(null)
+  const [hovered, setHovered] = useState(false)
   const [view] = useActiveView()
   const [activePanel] = useActivePanel()
   const [condensed, toggleCondensed] = useCondensedPanel()
@@ -107,21 +138,18 @@ const SedaCollapsePanel = ({
         : theme.app.panelWidth,
     delay: condensed ? 200 : 0
   })
-  const verticalOffset =
-    !condensed && view === 'map'
-      ? 0
-      : view !== 'map' || hovered || activePanel
-      ? 264
-      : !showChart
-      ? 216
-      : showChart
-      ? -24
-      : 0
-  const footerStyle = useSpring({
-    transform: `translate(0px, ${verticalOffset}px)`,
-    height: !condensed && !showChart ? 48 : 264
+
+  const footerStyleProps = getFooterStyleProps({
+    condensed,
+    view,
+    hovered,
+    showChart,
+    activePanel
   })
+  const footerStyle = useSpring(footerStyleProps)
   const footerRef = useRef(null)
+
+  // trigger panel expand on mouse enter
   const handleMouseEnter = e => {
     // ignore if it's the preview chart
     if (
@@ -131,9 +159,11 @@ const SedaCollapsePanel = ({
       return
     setHovered(true)
   }
+  // trigger panel collapse on mouse leave
   const handleMouseLeave = e => {
     setHovered(false)
   }
+  // toggle between condensed / expanded mode
   const handleToggleCondensed = e => {
     !condensed && setHovered(false)
     toggleCondensed()
@@ -150,9 +180,10 @@ const SedaCollapsePanel = ({
           Data Options
         </Typography>
         <IconButton
+          ref={condenseButtonRef}
           className={classes.toggleCondensed}
           style={{
-            opacity: condensed && !hovered ? 0 : 1
+            opacity: !condensed && !hovered ? 0 : 1
           }}
           onClick={handleToggleCondensed}>
           {condensed ? (
