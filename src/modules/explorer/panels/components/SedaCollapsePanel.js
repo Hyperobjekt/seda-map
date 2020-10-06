@@ -41,7 +41,8 @@ const useStyles = makeStyles(theme => ({
   },
   details: { padding: 0 },
   body: {
-    padding: '4px 0'
+    padding: '4px 0',
+    overflow: 'hidden'
   },
   list: {
     minWidth: theme.app.panelWidth
