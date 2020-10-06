@@ -31,3 +31,20 @@ export const removeIrrelevantFilters = (filters, region) => {
 }
 
 export const getHumanReadableFilters = filters => {}
+
+/**
+ * Returns the search indicies for the current region
+ * @param {*} region
+ */
+export const getIndiciesForSearch = region => {
+  switch (region) {
+    case 'states':
+      return []
+    case 'counties':
+      return ['states']
+    case 'districts':
+      return ['states']
+    default:
+      return ['states', 'districts']
+  }
+}

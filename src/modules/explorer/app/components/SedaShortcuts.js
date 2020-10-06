@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react'
-import PropTypes from 'prop-types'
+import { useEffect } from 'react'
 import { useKeyPress } from '../../../../shared'
 import { useHelpVisibility } from '../../help'
 
@@ -8,11 +7,11 @@ import { useHelpVisibility } from '../../help'
  * @param {*} props
  */
 const SedaShortcuts = props => {
-  // const helpPress = useKeyPress('h')
-  // const [, toggleHelp] = useHelpVisibility()
-  // useEffect(() => {
-  //   helpPress && toggleHelp()
-  // }, [helpPress])
+  const helpPress = useKeyPress('?')
+  const [, toggleHelp] = useHelpVisibility()
+  useEffect(() => {
+    helpPress && toggleHelp()
+  }, [helpPress, toggleHelp])
   return null
 }
 

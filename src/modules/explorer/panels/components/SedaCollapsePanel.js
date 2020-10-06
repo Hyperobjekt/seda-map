@@ -13,7 +13,6 @@ import {
   SidePanelFooter
 } from '../../../../shared'
 import clsx from 'clsx'
-import { getLang } from '../../app/selectors/lang'
 import {
   SidebarCloseIcon,
   SidebarOpenIcon
@@ -30,6 +29,7 @@ import {
   SedaSubgroupPanelButton
 } from './buttons'
 import { useSpring, animated } from 'react-spring'
+import useActivePanel from '../hooks/useActivePanel'
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -96,24 +96,26 @@ const SedaCollapsePanel = ({
   const classes = useStyles()
   const theme = useTheme()
   const [view] = useActiveView()
+  const [activePanel] = useActivePanel()
   const [condensed, toggleCondensed] = useCondensedPanel()
   const [showChart] = usePanelChartVisible()
   const panelStyle = useSpring({
     width:
-      condensed && !hovered
+      condensed && !hovered && !activePanel
         ? theme.app.condensedPanelWidth
         : theme.app.panelWidth,
     delay: condensed ? 200 : 0
   })
-  const verticalOffset = !condensed
-    ? 0
-    : view !== 'map' || hovered
-    ? 264
-    : !showChart
-    ? 216
-    : showChart
-    ? -24
-    : 0
+  const verticalOffset =
+    !condensed && view === 'map'
+      ? 0
+      : view !== 'map' || hovered || activePanel
+      ? 264
+      : !showChart
+      ? 216
+      : showChart
+      ? -24
+      : 0
   const footerStyle = useSpring({
     transform: `translate(0px, ${verticalOffset}px)`,
     height: !condensed && !showChart ? 48 : 264

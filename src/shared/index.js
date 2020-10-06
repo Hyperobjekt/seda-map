@@ -18,6 +18,7 @@ export {
   SidePanelGroup,
   SidePanelList,
   ExpansionPanel,
+  BasicSidePanel,
   DetailedTooltip,
   Tooltip,
   DivergingStatValue,

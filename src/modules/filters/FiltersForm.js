@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
+import React from 'react'
 import useFilterStore from './useFilterStore'
 import FilterAdd from './FilterAdd'
 import FilterList from './FilterList'

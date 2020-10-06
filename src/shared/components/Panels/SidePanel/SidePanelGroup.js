@@ -9,11 +9,7 @@ const useStyles = makeStyles(theme => ({
     minWidth: props =>
       props.condensed
         ? theme.app.condensedPanelWidth
-        : theme.app.panelWidth,
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen
-    })
+        : theme.app.panelWidth
   }
 }))
 
@@ -66,7 +62,7 @@ const SidePanelGroup = ({ children, maxVisible, condensed }) => {
     maxVisible,
     {
       fullWidth: theme.app.panelWidth,
-      condensedWidth: theme.app.condensedPanelWidth
+      condensedWidth: theme.app.condensedPanelWidth - 16
     }
   )
   const openPanelCount = getOpenPanelCount(children)

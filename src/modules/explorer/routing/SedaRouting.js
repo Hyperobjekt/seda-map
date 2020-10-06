@@ -4,7 +4,7 @@ import useRouting from './hooks/useRouting'
 /**
  * Null component with hook that handles loading the initial route and pushing updates
  */
-export default () => {
+export default function SedaRouting() {
   useRouting()
-  return null
+  return <></>
 }

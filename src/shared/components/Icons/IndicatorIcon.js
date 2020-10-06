@@ -52,6 +52,14 @@ const IndicatorIcon = ({
   )
 }
 
-IndicatorIcon.propTypes = {}
+IndicatorIcon.propTypes = {
+  /** text or number to display as indicator */
+  indicator: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
+  ]),
+  /** class name for root element */
+  className: PropTypes.string
+}
 
 export default IndicatorIcon

@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import SedaMap from '../../map'
 import { PageBody, SplitView } from '../../../../shared'
 import { SedaScatterplot } from '../../scatterplot'
@@ -32,7 +31,5 @@ const SedaExplorer = props => {
     </PageBody>
   )
 }
-
-SedaExplorer.propTypes = {}
 
 export default SedaExplorer

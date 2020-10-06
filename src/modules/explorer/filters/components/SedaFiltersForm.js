@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import PropTypes from 'prop-types'
 import { useFilterStore } from '../../../filters'
 import {
   List,
@@ -29,6 +28,7 @@ import { useDemographic, useRegion } from '../../app/hooks'
 import { SedaSearch } from '../../search'
 import { getPropFromHit } from '../../search/selectors'
 import { useLocationName } from '../../location'
+import { getIndiciesForSearch } from '../selectors'
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -49,23 +49,6 @@ const useStyles = makeStyles(theme => ({
     height: theme.spacing(6)
   }
 }))
-
-/**
- * Returns the search indicies for the current region
- * @param {*} region
- */
-const getIndiciesForSearch = region => {
-  switch (region) {
-    case 'states':
-      return []
-    case 'counties':
-      return ['states']
-    case 'districts':
-      return ['states']
-    default:
-      return ['states', 'districts']
-  }
-}
 
 /**
  * Contains all inputs for modifying filters
@@ -157,12 +140,12 @@ const SedaFiltersForm = props => {
         hasLimit
           ? setFilter(['limit', value])
           : setFilters(
-              [['sort', 'sz', 'asc'], ['limit', value]],
+              [['limit', value], ['sort', 'sz', 'asc']],
               true
             )
       }
     },
-    [region, setFilter, setFilters, removeFilter]
+    [region, filters, setFilter, setFilters, removeFilter]
   )
 
   /**
@@ -180,11 +163,11 @@ const SedaFiltersForm = props => {
   /**
    * Clear the current filter and remove the selected location
    */
-  const handleLocationClear = () => {
+  const handleLocationClear = useCallback(() => {
     const index = getFilterIndex(filters, ['startsWith', 'id'])
     index > -1 && removeFilter(filters[index])
     setSelectedLocation('')
-  }
+  }, [filters, setSelectedLocation, removeFilter])
 
   /**
    * Adds / removes items from the `checked` array on change
@@ -228,11 +211,10 @@ const SedaFiltersForm = props => {
       locationPrefix.length > 0
     )
       handleLocationClear()
-  }, [region, filters])
+  }, [region, filters, handleLocationClear])
 
   // get the location filter place name
   useEffect(() => {
-    console.log('sedafiltersform', locationName)
     if (locationName) setSelectedLocation(locationName)
   }, [locationName])
 
@@ -359,7 +341,5 @@ const SedaFiltersForm = props => {
     </List>
   )
 }
-
-SedaFiltersForm.propTypes = {}
 
 export default SedaFiltersForm

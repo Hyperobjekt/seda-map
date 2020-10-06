@@ -1,7 +1,5 @@
 import create from 'zustand'
-import * as _isEqual from 'lodash.isequal'
 import logger from '../logger'
-import shallow from 'zustand/shallow'
 
 /**
  * Updates the the filters with the provided updated filter rule
@@ -47,6 +45,11 @@ export const getFilterIndex = (filters, params) =>
     return isEqual ? filterIndex : -1
   }, -1)
 
+/**
+ * Pulls a the value for a filter matching the given params
+ * @param {*} filters array of filter rules
+ * @param {*} params filter rule params to match (e.g. ["range", "avg"])
+ */
 export const getFilterValue = (filters, params) => {
   const rule = filters.find(f =>
     params.reduce(
@@ -88,6 +91,18 @@ const insertFilter = (filters, filter, atIndex) => {
   const startValues = filters.slice(0, insertIndex)
   const endValues = filters.slice(insertIndex)
   const result = [...startValues, filter, ...endValues]
+  // ensure that "limit" is the last rule
+  result.sort((a, b) => {
+    if (a[0] === 'limit') return 1
+    if (b[0] === 'limit') return -1
+    return 0
+  })
+  logger.debug(
+    'useFilterStore insertFilter:',
+    filter,
+    filters,
+    result
+  )
   return result
 }
 
@@ -180,7 +195,7 @@ export const setFilters = set => (rules, extend) => {
 export const DEFAULT_FILTERS = [['sort', 'sz', 'asc']]
 
 const [useFilterStore] = create((set, get) => ({
-  filters: DEFAULT_FILTERS,
+  filters: [...DEFAULT_FILTERS],
   addFilter: addFilter(set),
   setFilters: setFilters(set),
   setFilter: setFilter(set),

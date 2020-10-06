@@ -4,6 +4,7 @@ export {
   SidePanelBody,
   SidePanelFooter,
   SidePanelGroup,
-  SidePanelList
+  SidePanelList,
+  BasicSidePanel
 } from './SidePanel'
 export { ExpansionPanel } from './ExpansionPanel'

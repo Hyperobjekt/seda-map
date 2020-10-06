@@ -340,57 +340,26 @@ const isCircleId = id => {
   return featureRegion === 'schools'
 }
 
-const getLayerFilter = ({
-  region,
-  demographic,
-  filter: [type, prop, value]
-}) => {
-  const demProp = demographic + '_' + prop
-  switch (type) {
-    case 'startsWith':
-      return value
-        ? [
-            '==',
-            value,
-            ['slice', ['get', demProp], 0, value.length]
-          ]
-        : null
-    case 'range':
-      if (region === 'schools' && prop === 'ses') return null
-      if (region !== 'schools' && prop === 'frl') return null
-      return [
-        'all',
-        ['>=', ['get', demProp], value[0]],
-        ['<=', ['get', demProp], value[1]]
-      ]
-    default:
-      return null
-  }
-}
-
-const getLayerFilters = ({ region, demographic, filters }) => {
-  const layerFilters = filters
-    .map(filter =>
-      getLayerFilter({ region, demographic, filter })
-    )
-    .filter(f => !!f)
-  return ['all', ...layerFilters]
-}
-
+/**
+ * Returns a filter definition for a chorpleth layer based on the provided params
+ */
 const getChoroplethFilter = ({ region, filters, ids }) => {
   const prefixIndex = getFilterIndex(filters, [
     'startsWith',
     'id'
   ])
+  // if schools and filtering within a region, only show district choropleths for that region
   if (region === 'schools' && prefixIndex > -1) {
     const prefix = filters[prefixIndex][2]
     return {
       filter: ['in', prefix, ['get', 'id']]
     }
   }
+  // if not schools and filtering a set of id's, only show choropleths with those ids
   if (region !== 'schools' && ids && ids.length > 0) {
     return { filter: ['in', ['get', 'id'], ['literal', ids]] }
   }
+  // no filter needed
   return {}
 }
 
@@ -409,7 +378,6 @@ export const getChoroplethLayer = ({
     'source-layer': region === 'schools' ? 'districts' : region,
     type: 'fill',
     interactive: true,
-    // filter: getLayerFilters({ region, demographic, filters }),
     ...getChoroplethFilter({ region, filters, ids }),
     paint: {
       'fill-color': getFillStyle(

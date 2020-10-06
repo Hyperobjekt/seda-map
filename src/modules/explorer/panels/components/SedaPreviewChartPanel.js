@@ -1,7 +1,7 @@
 import React from 'react'
 import { ExpansionPanel } from '../../../../shared'
 import { makeStyles, Typography } from '@material-ui/core'
-import { ExpandIcon, CloseIcon } from '../../../icons'
+import { ExpandIcon } from '../../../icons'
 import { useCurrentVars } from '../../app/hooks'
 import { getPreviewChartTitle } from '../../scatterplot/lang'
 import { SedaScatterplotPreview } from '../../scatterplot'

@@ -16,7 +16,7 @@ import { getClosest } from '../utils'
 import { useMapViewport, useFlyToReset } from '../store'
 import ZoomToControl from './ZoomToControl'
 import useMapStore from '../store'
-import { useDidUpdateEffect } from '../../../shared'
+
 /**
  * Returns an array of layer ids for layers that have the
  * interactive property set to true
@@ -224,14 +224,9 @@ const MapBase = ({
   }
 
   // set the default / reset viewport when it changes
-  useDidUpdateEffect(() => {
+  useEffect(() => {
     defaultViewport && setResetViewport({ ...defaultViewport })
   }, [defaultViewport, setResetViewport])
-
-  // set the default viewport on mount
-  useEffect(() => {
-    defaultViewport && setViewport({ ...defaultViewport })
-  }, [])
 
   // set the map dimensions when the size changes
   useEffect(() => {

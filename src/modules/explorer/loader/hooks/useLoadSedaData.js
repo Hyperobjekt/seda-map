@@ -1,7 +1,6 @@
-import { useEffect, useCallback } from 'react'
+import { useCallback } from 'react'
 import { autoType } from 'd3-dsv'
 import { useStaticData } from '../../../data'
-import { useDataOptions } from '../../app/hooks'
 
 /** Parser for data, ensures ID stays a string */
 const SEDA_PARSER = ({ id, ...rest }) => {

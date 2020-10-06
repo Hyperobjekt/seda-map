@@ -389,22 +389,22 @@ const overlays = (variant, context) => {
   return getOverlaysForContext(variant, context)
 }
 
-/**
- * Returns where to place the diagonal line label
- * for the provided metric
- */
-const getLabelCoordsForMetric = metricId => {
-  switch (metricId) {
-    case 'avg':
-      return [[-3, -3], [-2, -2]]
-    case 'grd':
-      return [[0.5, 0.5], [0.7, 0.7]]
-    case 'coh':
-      return [[-0.3, -0.3], [-0.4, -0.4]]
-    default:
-      return [[-0.1, -0.1], [0.1, 0.1]]
-  }
-}
+// /**
+//  * Returns where to place the diagonal line label
+//  * for the provided metric
+//  */
+// const getLabelCoordsForMetric = metricId => {
+//   switch (metricId) {
+//     case 'avg':
+//       return [[-3, -3], [-2, -2]]
+//     case 'grd':
+//       return [[0.5, 0.5], [0.7, 0.7]]
+//     case 'coh':
+//       return [[-0.3, -0.3], [-0.4, -0.4]]
+//     default:
+//       return [[-0.1, -0.1], [0.1, 0.1]]
+//   }
+// }
 
 /** Return a series with a diagonal line */
 const getVersusOverlay = (xVar, yVar) => {
@@ -418,12 +418,12 @@ const getVersusOverlay = (xVar, yVar) => {
       markLine: { data: [], lineStyle: { color: 'transparent' } }
     }
   }
-  const xDem = getDemographicFromVarName(xVar)
-  const yDem = getDemographicFromVarName(yVar)
-  const metricId = getMetricIdFromVarName(xVar)
-  const [labelStart, labelEnd] = getLabelCoordsForMetric(
-    metricId
-  )
+  // const xDem = getDemographicFromVarName(xVar)
+  // const yDem = getDemographicFromVarName(yVar)
+  // const metricId = getMetricIdFromVarName(xVar)
+  // const [labelStart, labelEnd] = getLabelCoordsForMetric(
+  //   metricId
+  //   )
   return {
     id: 'versus',
     type: 'line',

@@ -28,13 +28,13 @@ const getDemographicsForRegion = region => {
     : getDemographics().map(d => d.id)
 }
 
-/**
- * Gets the secondary metrics for the region
- * @param {*} region
- */
-const getSecondaryMetricsForRegion = region => {
-  return region === 'schools' ? ['frl'] : ['ses', 'seg', 'min']
-}
+// /**
+//  * Gets the secondary metrics for the region
+//  * @param {*} region
+//  */
+// const getSecondaryMetricsForRegion = region => {
+//   return region === 'schools' ? ['frl'] : ['ses', 'seg', 'min']
+// }
 
 /**
  * Gets available gaps for region
@@ -50,7 +50,7 @@ const SedaLocationPanel = props => {
   const [metric, setMetric] = useMetric()
   const [demographic, setDemographic] = useDemographic()
   const region = getRegionFromLocationId(activeLocation)
-  const secondary = getSecondaryMetricsForRegion(region)
+  // const secondary = getSecondaryMetricsForRegion(region)
 
   const metrics = ['avg', 'grd', 'coh']
   const demographics = getDemographicsForRegion(region)
@@ -62,7 +62,6 @@ const SedaLocationPanel = props => {
   const handleDemographicSelect = e => {
     setDemographic(e.currentTarget.value)
   }
-  console.log(data)
   // TODO: better handling when data isn't ready yet
   return data ? (
     <SidePanel {...props}>

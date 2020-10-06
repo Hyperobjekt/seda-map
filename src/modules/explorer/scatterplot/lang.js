@@ -15,8 +15,6 @@ import {
 } from '../app/selectors'
 import { titleCase } from '../../../shared/utils'
 
-import { getStateName } from '../../../shared/utils/states'
-
 /**
  * Returns the title for the preview chart
  * @param {*} xVar

@@ -5,8 +5,6 @@ import SedaMetricPanel from './SedaMetricPanel'
 import SedaRegionPanel from './SedaRegionPanel'
 import SedaFilterPanel from './SedaFilterPanel'
 import SedaLocationListPanel from './SedaLocationListPanel'
-import SedaFullPanel from './SedaFullPanel'
-import SedaCondensedPanel from './SedaCondensedPanel'
 import { useHelpVisibility, SedaHelpPanel } from '../../help'
 import {
   useActiveLocation,
@@ -25,10 +23,6 @@ const SedaPanelGroup = props => {
   const [condensed] = useCondensedPanel()
   const [selection, setSelection] = useActivePanel()
 
-  // boolean that determines when full panel is shown
-  const isFullPanel =
-    !condensed && !selection && !activeLocation && !showHelp
-
   // boolean that determines if condensed panel is shown
   const isCondensedPanel =
     condensed || selection || activeLocation || showHelp
@@ -46,24 +40,8 @@ const SedaPanelGroup = props => {
         style={{ zIndex: 1001 }}>
         Help Panel
       </SedaHelpPanel>
-      {/* <SedaCondensedPanel
-        className="panel--condensed"
-        style={{ zIndex: 1000 }}
-        offset={showHelp ? 1 : 0}
-        condensed
-        open={isCondensedPanel}
-      />
-      <SedaFullPanel
-        className="panel--full"
-        style={{
-          zIndex: condensed || showHelp ? 998 : 999,
-          width: 384
-        }}
-        offset={showHelp ? 1 : 0}
-        open={isFullPanel}
-      /> */}
       <SedaCollapsePanel
-        className="panel--full"
+        className="panel--collapse"
         style={{
           zIndex: condensed || showHelp ? 998 : 999
         }}

@@ -7,7 +7,6 @@ import {
 } from '@material-ui/core'
 import SedaViewControls from './SedaViewControls'
 import {
-  getLang,
   getMetricLabel,
   getDemographicLabel,
   getRegionLabel,
@@ -19,7 +18,6 @@ import {
   PageHeader
 } from '../../../../../shared'
 import { useActiveOptions } from '../../hooks'
-import { getStateName } from '../../../../../shared/utils/states'
 import { SedaHelpButton } from '../../../help'
 import { SedaMenuButton } from '../../../menu'
 import { SedaSearch } from '../../../search'

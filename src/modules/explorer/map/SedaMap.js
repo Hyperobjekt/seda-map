@@ -1,7 +1,7 @@
 import React, { useMemo, useEffect, useRef } from 'react'
 import { makeStyles } from '@material-ui/core'
-import { getLayers, SEDA_SOURCES } from './selectors'
-import MapBase, { useIdMap, useFlyToReset } from '../../map'
+import { getLayers } from './selectors'
+import MapBase, { useIdMap } from '../../map'
 import {
   getSelectedColors,
   getFeatureProperty,
@@ -22,6 +22,7 @@ import {
   useActiveLocationData
 } from '../location'
 import useFlyToLocation from './hooks/useFlyToLocation'
+import { SEDA_SOURCES } from './constants'
 
 const selectedColors = getSelectedColors()
 
@@ -55,7 +56,6 @@ const SedaMap = props => {
 
   const [idMap, addToIdMap] = useIdMap()
   const flyToLocation = useFlyToLocation()
-  const flyToReset = useFlyToReset()
   const isLoaded = useRef(false)
   /** memoized array of choropleth and dot layers */
   const layers = useMemo(() => {

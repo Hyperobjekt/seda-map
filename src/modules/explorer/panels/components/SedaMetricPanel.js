@@ -2,15 +2,15 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import SedaMetricSelect from './SedaMetricSelect'
 import { getPrefixLang } from '../../app/selectors/lang'
-import SedaSidePanel from './SedaSidePanel'
 import { Typography } from '@material-ui/core'
+import { BasicSidePanel } from '../../../../shared'
 
 /**
  * Side panel for metric selection
  */
 const SedaMetricPanel = ({ onClose, ...props }) => {
   return (
-    <SedaSidePanel
+    <BasicSidePanel
       title={getPrefixLang('metric', 'PANEL_TITLE')}
       onClose={onClose}
       {...props}>
@@ -24,7 +24,7 @@ const SedaMetricPanel = ({ onClose, ...props }) => {
           2009 - 2016.
         </Typography>
       </>
-    </SedaSidePanel>
+    </BasicSidePanel>
   )
 }
 

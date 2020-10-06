@@ -19,7 +19,8 @@ export {
   SidePanelFooter,
   SidePanelGroup,
   SidePanelList,
-  ExpansionPanel
+  ExpansionPanel,
+  BasicSidePanel
 } from './Panels'
 export { Tooltip, DetailedTooltip } from './Tooltips'
 export { DivergingStatValue, TableStats } from './Stats'

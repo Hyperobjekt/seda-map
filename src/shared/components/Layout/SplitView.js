@@ -104,6 +104,11 @@ export default function SplitView({
     pointerEvents: 'none'
   })
 
+  const areaStyle = useSpring({
+    transform:
+      view === 'right' ? 'translateX(-50%)' : 'translateX(0%)'
+  })
+
   // Set the drag hook and define component movement based on gesture data
   const bind = useDrag(
     ({ down, first, last, initial, movement: [mx, my] }) => {
@@ -131,14 +136,11 @@ export default function SplitView({
       ref={rootRef}
       className={clsx('split-view', classes.root)}
       {...props}>
-      <div
+      <animated.div
         className={clsx('split-view__area', classes.area)}
         style={{
           width: view === 'split' ? '100%' : '200%',
-          transform:
-            view === 'right'
-              ? 'translateX(-50%)'
-              : 'translateX(0)'
+          ...areaStyle
         }}>
         <div
           className={clsx(
@@ -170,7 +172,7 @@ export default function SplitView({
             {RightComponent}
           </div>
         </div>
-      </div>
+      </animated.div>
       <animated.div
         className={classes.blocker}
         style={blockerProps}

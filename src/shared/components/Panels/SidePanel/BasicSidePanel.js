@@ -9,10 +9,8 @@ import {
   SidePanel,
   SidePanelHeader,
   SidePanelBody
-} from '../../../../shared'
-import { CloseIcon } from '../../../icons'
-import { useHelpVisibility } from '../../help'
-import useCondensedPanel from '../hooks/useCondensedPanel'
+} from './index.js'
+import { CloseIcon } from '../../../../modules/icons'
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -25,15 +23,13 @@ const useStyles = makeStyles(theme => ({
 /**
  * Generic selection panel wrapper
  */
-const SedaSidePanel = ({
+const BasicSidePanel = ({
   title,
   children,
   onClose,
   ...props
 }) => {
-  const [condensed] = useCondensedPanel()
-  const [showHelp] = useHelpVisibility()
-  const classes = useStyles({ condensed, showHelp })
+  const classes = useStyles()
 
   return (
     <SidePanel classes={{ root: classes.root }} {...props}>
@@ -52,10 +48,10 @@ const SedaSidePanel = ({
   )
 }
 
-SedaSidePanel.propTypes = {
+BasicSidePanel.propTypes = {
   title: PropTypes.string,
   onClose: PropTypes.func,
   children: PropTypes.any
 }
 
-export default SedaSidePanel
+export default BasicSidePanel

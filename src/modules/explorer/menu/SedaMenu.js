@@ -1,7 +1,7 @@
 import React from 'react'
 import { makeStyles, Button, Drawer } from '@material-ui/core'
 import useMenuVisibility from './useMenuVisibility'
-import { useSiteStore } from '../app/hooks'
+// import { useSiteStore } from '../app/hooks'
 
 const useStyles = makeStyles(theme => ({
   root: { width: theme.app.panelWidth },
@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
 
 const SedaMenu = ({ ...props }) => {
   const classes = useStyles()
-  const links = useSiteStore(state => state.menu)
+  // const links = useSiteStore(state => state.menu)
   const [showMenu, toggleMenu] = useMenuVisibility()
   return (
     <Drawer
