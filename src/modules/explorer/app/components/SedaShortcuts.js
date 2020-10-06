@@ -19,27 +19,27 @@ const SedaShortcuts = props => {
   const metricPress = useKeyPress('m')
   useEffect(() => {
     metricPress && togglePanel('metric')
-  }, [metricPress, togglePanel])
+  }, [metricPress])
   // region panel shortcut
   const regionPress = useKeyPress('r')
   useEffect(() => {
     regionPress && togglePanel('region')
-  }, [regionPress, togglePanel])
+  }, [regionPress])
   // subgroup panel shortcut
   const subgroupPress = useKeyPress('g')
   useEffect(() => {
     subgroupPress && togglePanel('demographic')
-  }, [subgroupPress, togglePanel])
+  }, [subgroupPress])
   // filter panel shortcut
   const filterPress = useKeyPress('f')
   useEffect(() => {
     filterPress && togglePanel('filter')
-  }, [filterPress, togglePanel])
+  }, [filterPress])
   // location list panel shortcut
   const locationPress = useKeyPress('l')
   useEffect(() => {
     locationPress && togglePanel('location')
-  }, [locationPress, togglePanel])
+  }, [locationPress])
   return null
 }
 

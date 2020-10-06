@@ -168,6 +168,7 @@ const SedaCollapsePanel = ({
     !condensed && setHovered(false)
     toggleCondensed()
   }
+  console.log('active panel', activePanel)
 
   return (
     <AnimatedSidePanel
