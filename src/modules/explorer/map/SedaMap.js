@@ -1,7 +1,12 @@
-import React, { useMemo, useEffect, useRef } from 'react'
+import React, {
+  useMemo,
+  useEffect,
+  useRef,
+  useState
+} from 'react'
 import { makeStyles } from '@material-ui/core'
 import { getLayers } from './selectors'
-import MapBase, { useIdMap } from '../../map'
+import MapBase from '../../map'
 import {
   getSelectedColors,
   getFeatureProperty,
@@ -57,8 +62,8 @@ const SedaMap = props => {
   const [showHovered] = useMarkersVisibility()
   /** function to add a location to the selected locations */
   const addLocation = useAddLocation()
-
-  const [idMap, addToIdMap] = useIdMap()
+  /** id map is used to map long school identifiers to feature ids on the map for hover */
+  const [idMap, setIdMap] = useState({})
   const flyToLocation = useFlyToLocation()
   const isLoaded = useRef(false)
   /** memoized array of choropleth and dot layers */
@@ -88,7 +93,7 @@ const SedaMap = props => {
     if (id && id !== hoveredId) {
       // add schools to the ID map
       id.length === REGION_TO_ID_LENGTH['schools'] &&
-        addToIdMap(feature.id, id)
+        setIdMap({ ...idMap, [id]: feature.id })
     }
     setHovered(id, coords)
   }
