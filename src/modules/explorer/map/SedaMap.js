@@ -15,7 +15,11 @@ import {
   useMarkersVisibility
 } from '../app/hooks'
 import { REGION_TO_ID_LENGTH } from '../app/constants/regions'
-import { useFilters, useFilteredData } from '../filters'
+import {
+  useFilters,
+  useFilteredData,
+  getActiveFilterCount
+} from '../filters'
 import {
   useLocations,
   useAddLocation,
@@ -62,7 +66,10 @@ const SedaMap = props => {
     if (!metric || !demographic || !region) {
       return []
     }
-    const ids = data.map(d => d.id)
+    const ids =
+      getActiveFilterCount(filters) > 0
+        ? data.map(d => d.id)
+        : null
     const context = { region, metric, demographic, filters, ids }
     return getLayers(context)
   }, [region, metric, demographic, filters, data])

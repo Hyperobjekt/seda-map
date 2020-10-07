@@ -363,6 +363,9 @@ const getChoroplethFilter = ({ region, filters, ids }) => {
   return {}
 }
 
+/**
+ * Chhoropleth layer used for states, counties, district colors
+ */
 export const getChoroplethLayer = ({
   layerId,
   region,
@@ -403,7 +406,7 @@ export const getChoroplethLayer = ({
   })
 
 /**
- * Gets choropleth layer based on current context
+ * Gets all layers for rendering choropleths based on current context
  * @param {*} context { metric, demographic, region, filters}
  */
 export const getChoroplethLayers = context => {
@@ -418,6 +421,10 @@ export const getChoroplethLayers = context => {
   ]
 }
 
+/**
+ * Gets all layers for rendering circles (schools) based on context
+ * @param {*} context
+ */
 export const getCircleLayers = context => {
   return [
     { z: 50, style: getCircleHighlightLayer(context) },
@@ -431,24 +438,13 @@ export const getCircleLayers = context => {
   ]
 }
 
+/**
+ * Gets all map layers needed to render the current context
+ * @param {*} context
+ */
 export const getLayers = context => {
   return [
     ...getChoroplethLayers(context),
     ...getCircleLayers(context)
   ]
 }
-
-export const SEDA_SOURCES = fromJS({
-  seda: {
-    url:
-      'mapbox://hyperobjekt.states-v4-' +
-      process.env.REACT_APP_BUILD_ID +
-      ',hyperobjekt.counties-v4-' +
-      process.env.REACT_APP_BUILD_ID +
-      ',hyperobjekt.districts-v4-' +
-      process.env.REACT_APP_BUILD_ID +
-      ',hyperobjekt.schools-v4-' +
-      process.env.REACT_APP_BUILD_ID,
-    type: 'vector'
-  }
-})
