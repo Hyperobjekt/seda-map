@@ -1,14 +1,12 @@
 import create from 'zustand'
-import shallow from 'zustand/shallow'
 import WebMercatorViewport from 'viewport-mercator-project'
 import bbox from '@turf/bbox'
 
 import {
   DEFAULT_VIEWPORT,
   DEFAULT_FLIGHT_PROPS
-} from './constants'
-import { getStateViewportByFips } from './utils'
-import logger from '../logger'
+} from '../constants'
+import { getStateViewportByFips } from '../utils'
 
 const getFeatureGeometryType = feature => {
   if (!feature.geometry || !feature.geometry.type) return null
@@ -58,40 +56,24 @@ const [useMapStore] = create((set, get) => ({
   loaded: false,
   resetViewport: { ...DEFAULT_VIEWPORT },
   viewport: DEFAULT_VIEWPORT,
-  idMap: {},
   setViewport: viewport =>
     set(state => {
       const newViewport = {
         ...state.viewport,
         ...viewport
       }
-      logger.debug(
-        'useMapStore viewport update',
-        newViewport,
-        state.viewport,
-        viewport
-      )
       return {
         viewport: newViewport
       }
     }),
   setResetViewport: resetViewport => set({ resetViewport }),
   setLoaded: loaded => set({ loaded }),
-  addToIdMap: (featureId, locationId) => {
-    if (get().idMap.hasOwnProperty(featureId)) return
-    set(state => ({
-      idMap: {
-        ...state.idMap,
-        [locationId]: featureId
-      }
-    }))
-  },
   flyToFeature: feature => {
     const viewport = {
       ...getViewportForFeature(feature, get().viewport),
       ...DEFAULT_FLIGHT_PROPS
     }
-    set(state => ({ viewport }))
+    set({ viewport })
   },
   flyToBounds: bounds => {
     set(state => ({
@@ -128,80 +110,9 @@ const [useMapStore] = create((set, get) => ({
         ...state.resetViewport,
         ...DEFAULT_FLIGHT_PROPS
       }
-      logger.debug(
-        'useMapStore reset viewport',
-        newViewport,
-        state.viewport
-      )
-      return { viewport: newViewport }
-    })
-  },
-  setViewportFromRoute: params => {
-    set(state => {
-      const newViewport = {
-        ...state.viewport,
-        zoom: params.zoom,
-        latitude: params.lat,
-        longitude: params.lon
-      }
-      logger.debug(
-        'useMapStore set viewport from route',
-        newViewport,
-        state.viewport,
-        params
-      )
       return { viewport: newViewport }
     })
   }
 }))
-
-/**
- * Provides pixel dimensions of the map viewport
- * @returns {[number, number]} [width, height]
- */
-export const useMapSize = () => {
-  return useMapStore(
-    state => [state.viewport.width, state.viewport.height],
-    shallow
-  )
-}
-
-/**
- * Provides map viewport value and setter
- * @returns {[object, function]} [viewport, setViewport]
- */
-export const useMapViewport = () => {
-  return useMapStore(
-    state => [state.viewport, state.setViewport],
-    shallow
-  )
-}
-
-/**
- * Returns an ID map from feature ID to location ID
- * and method for adding id's to the map
- */
-export const useIdMap = () => {
-  return useMapStore(
-    state => [state.idMap, state.addToIdMap],
-    shallow
-  )
-}
-
-export const useFlyToState = () => {
-  return useMapStore(state => state.flyToState)
-}
-
-export const useFlyToFeature = () => {
-  return useMapStore(state => state.flyToFeature)
-}
-
-export const useFlyToLatLon = () => {
-  return useMapStore(state => state.flyToLatLon)
-}
-
-export const useFlyToReset = () => {
-  return useMapStore(state => state.flyToReset)
-}
 
 export default useMapStore

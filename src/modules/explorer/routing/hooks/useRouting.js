@@ -31,9 +31,7 @@ export default () => {
   const setViewOptions = useUiStore(
     state => state.setViewFromRoute
   )
-  const setViewportFromRoute = useMapStore(
-    state => state.setViewportFromRoute
-  )
+  const setViewport = useMapStore(state => state.setViewport)
 
   const setFilters = useFilterStore(state => state.setFilters)
 
@@ -44,6 +42,15 @@ export default () => {
 
   // debounce the route so it updates every 1 second max
   const debouncedRoute = useDebounce(route, 500)
+
+  const setViewportFromRoute = params => {
+    const viewport = {
+      zoom: params.zoom,
+      latitude: params.lat,
+      longitude: params.lon
+    }
+    setViewport(viewport)
+  }
 
   // update the hash when debounced route changes
   useEffect(() => {

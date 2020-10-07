@@ -48,7 +48,8 @@ const useStyles = makeStyles(theme => ({
     position: 'relative',
     width: '100%',
     height: '100%',
-    minWidth: 320
+    minWidth: 320,
+    overflow: 'hidden'
   },
   left: {
     width: props =>

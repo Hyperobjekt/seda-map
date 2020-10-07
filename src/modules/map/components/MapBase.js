@@ -13,9 +13,12 @@ import PropTypes from 'prop-types'
 import usePrevious from '../../../shared/hooks/usePrevious'
 import { defaultMapStyle } from '../selectors'
 import { getClosest } from '../utils'
-import { useMapViewport, useFlyToReset } from '../store'
 import ZoomToControl from './ZoomToControl'
-import useMapStore from '../store'
+import {
+  useFlyToReset,
+  useMapStore,
+  useMapViewport
+} from '../hooks'
 
 /**
  * Returns an array of layer ids for layers that have the
@@ -64,16 +67,21 @@ const MapBase = ({
   onLoad,
   ...rest
 }) => {
+  // local loaded value and setter
   const [loaded, setLoaded] = useState(false)
 
+  // resize listener for map size
   const [resizeListener, sizes] = useResizeAware()
 
+  // get map viewport and setter from store
   const [viewport, setViewport] = useMapViewport()
 
+  // function to set the reset viewport
   const setResetViewport = useMapStore(
     state => state.setResetViewport
   )
 
+  // function to fly to reset viewport
   const flyToReset = useFlyToReset()
 
   // reference to map container DOM element
@@ -140,12 +148,6 @@ const MapBase = ({
     [layers]
   )
 
-  useEffect(() => {
-    if (canvas) {
-      canvas.setAttribute('aria-label', ariaLabel)
-    }
-  }, [ariaLabel, canvas])
-
   // handler for map load
   const handleLoad = e => {
     if (!loaded) {
@@ -184,8 +186,7 @@ const MapBase = ({
     }
   }
 
-  // handler for viewport change, debounced to prevent
-  // race errors
+  // handler for viewport change
   const handleViewportChange = useCallback(
     (vp, options = {}) => {
       if (!loaded) return
@@ -222,6 +223,19 @@ const MapBase = ({
       !isControl &&
       onClick(features[0])
   }
+
+  /** handler for resetting the viewport */
+  const handleResetViewport = e => {
+    e.preventDefault()
+    flyToReset()
+  }
+
+  // set the aria label on the canvas element
+  useEffect(() => {
+    if (canvas) {
+      canvas.setAttribute('aria-label', ariaLabel)
+    }
+  }, [ariaLabel, canvas])
 
   // set the default / reset viewport when it changes
   useEffect(() => {
@@ -261,13 +275,6 @@ const MapBase = ({
     )
     // eslint-disable-next-line
   }, [selectedIds, loaded]) // update only when selected ids change
-
-  /** handler for resetting the viewport */
-  const handleResetViewport = e => {
-    e.preventDefault()
-    console.log('FLY TO RESET')
-    flyToReset()
-  }
 
   return (
     <div

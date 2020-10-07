@@ -11,6 +11,9 @@ import SedaShortcuts from './SedaShortcuts'
 
 const useStyles = makeStyles(theme => ({
   offset: theme.mixins.toolbar,
+  root: {
+    overflow: 'hidden'
+  },
   body: {
     overflow: 'hidden'
   }
@@ -20,7 +23,7 @@ const SedaApp = () => {
   const classes = useStyles()
 
   return (
-    <Page>
+    <Page className={classes.root}>
       <SedaShortcuts />
       <SedaRouting />
       <SedaHeader />
