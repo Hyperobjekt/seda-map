@@ -6,12 +6,15 @@ import SedaPanelButton from './SedaPanelButton'
 
 export default function SedaFilterPanelButton(props) {
   const activeFilters = useActiveFilters()
+  // do not include sort in the filter count, as it doesn't filter any data
+  const filterCount = activeFilters.filter(f => f[0] !== 'sort')
+    .length
   return (
     <SedaPanelButton
       panelId="filter"
-      secondary={activeFilters.length + ' active filters'}
+      secondary={filterCount + ' active filters'}
       icon={
-        <IndicatorIcon indicator={activeFilters.length}>
+        <IndicatorIcon indicator={filterCount}>
           <FilterIcon />
         </IndicatorIcon>
       }

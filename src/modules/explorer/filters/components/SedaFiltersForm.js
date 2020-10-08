@@ -29,6 +29,8 @@ import { SedaSearch } from '../../search'
 import { getPropFromHit } from '../../search/selectors'
 import { useLocationName } from '../../location'
 import { getIndiciesForSearch } from '../selectors'
+import useActiveFilters from '../hooks/useActiveFilters'
+import { FILTER_FLAGS } from '../../app/constants/flags'
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -57,7 +59,7 @@ const SedaFiltersForm = props => {
   // track state for location selection
   const [selectedLocation, setSelectedLocation] = useState(null)
   // grab filters array
-  const filters = useFilters()
+  const filters = useActiveFilters()
   // function to remove a single filter
   const removeFilter = useFilterStore(
     state => state.removeFilter
@@ -81,19 +83,6 @@ const SedaFiltersForm = props => {
   // indices for search
   const indicies = getIndiciesForSearch(region)
   // school type checkboxes
-  const checkboxes = [
-    'middle',
-    'elementary',
-    'combined',
-    'charter',
-    'public',
-    'magnet',
-    'rural',
-    'suburban',
-    'urban'
-  ]
-  // checked school types
-  const [checked, setChecked] = useState([...checkboxes])
 
   // get ranges from filter array
   const ranges = [
@@ -105,6 +94,13 @@ const SedaFiltersForm = props => {
     obj[key] = getFilterValue(filters, ['range', key])
     return obj
   }, {})
+
+  const checkboxes = FILTER_FLAGS[region]
+
+  // pull active flag filters from the filters array
+  const checked = filters
+    .filter(f => f[0] === 'eq')
+    .map(f => f[1])
 
   // get limit filter from filters array, or set to default for region
   const limitValue =
@@ -174,12 +170,12 @@ const SedaFiltersForm = props => {
    * @param {*} event
    * @param {*} key
    */
-  const handleSchoolTypeChange = (event, key) => {
-    const newChecked =
-      checked.indexOf(key) > -1
-        ? checked.filter(c => c !== key)
-        : [...checked, key]
-    setChecked(newChecked)
+  const handleCheckboxChange = (event, key) => {
+    console.log('checked', event, key)
+    const isOn = checked.indexOf(key) > -1
+    isOn
+      ? removeFilter(['eq', key, 1])
+      : setFilter(['eq', key, 1])
   }
 
   /**
@@ -307,14 +303,14 @@ const SedaFiltersForm = props => {
           </ListItem>
         )
       })}
-      {region === 'schools' && (
+      {(region === 'schools' || region === 'districts') && (
         <ListItem className={classes.listItem}>
           <ListItemText
             primaryTypographyProps={{
               className: classes.primaryText
             }}
             primary={getPrefixLang(
-              'school_type',
+              region + '_type',
               'FILTER_LABEL'
             )}
           />
@@ -325,14 +321,15 @@ const SedaFiltersForm = props => {
                 control={
                   <Checkbox
                     checked={checked.indexOf(key) > -1}
-                    onChange={e =>
-                      handleSchoolTypeChange(e, key)
-                    }
+                    onChange={e => handleCheckboxChange(e, key)}
                     name={key}
                     color="primary"
                   />
                 }
-                label={getPrefixLang(key, 'SCHOOL_TYPE')}
+                label={getPrefixLang(
+                  key,
+                  region.toUpperCase() + '_TYPE'
+                )}
               />
             ))}
           </FormGroup>

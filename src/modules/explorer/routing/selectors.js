@@ -42,6 +42,16 @@ export const ruleParamToArray = rule => {
     case 'ses':
     case 'frl':
       return ['range', type, rest[0].split(';')]
+    case 'r':
+    case 'u':
+    case 's':
+    case 't':
+    case 'm':
+    case 'e':
+    case 'c':
+    case 'ch':
+    case 'mg':
+      return ['eq', type, 1]
     case 'limit':
       return ['limit', rest[0]]
     default:
@@ -63,6 +73,8 @@ export const filterRuleToString = ruleArray => {
       return ['id', rest[1]].join(',')
     case 'range':
       return [rest[0], rest[1].join(';')].join(',')
+    case 'eq':
+      return rest[0]
     case 'limit':
       return ['limit', rest[0]].join(',')
     case 'sort':

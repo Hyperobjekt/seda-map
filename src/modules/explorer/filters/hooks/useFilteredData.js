@@ -6,31 +6,24 @@ import shallow from 'zustand/shallow'
 import useFilters from './useFilters'
 import useDataOptions from '../../app/hooks/useDataOptions'
 import { applyFilters } from '../../../filters'
-import {
-  getFiltersForDemographic,
-  removeIrrelevantFilters
-} from '../selectors'
+import { getFiltersForDemographic } from '../selectors'
+import useActiveFilters from './useActiveFilters'
 
 /**
  * Returns data object with current filters applied
  */
-export default () => {
+export default function useFilteredData() {
   const data = useStaticData(state => state.data)
-  const filters = useFilters()
+  const filters = useActiveFilters()
   const [demographic, region] = useDataOptions(
     state => [state.demographic, state.region],
     shallow
   )
   return useDebounce(
     useMemo(() => {
-      // drop filters that do not apply to current region
-      const cleanFilters = removeIrrelevantFilters(
-        filters,
-        region
-      )
       // update filters to apply to current demographic
       const dataFilters = getFiltersForDemographic(
-        cleanFilters,
+        filters,
         demographic
       )
       // get the filtered dataset
