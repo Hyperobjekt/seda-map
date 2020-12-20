@@ -29,10 +29,12 @@ export const getSingularRegion = rId =>
   rId ? getPrefixLang(rId, 'LABEL_SINGULAR') : ''
 
 /** Gets the domain for the given region */
-export const getRegionDomain = (demographic, region) =>
-  region === 'schools'
+export const getRegionDomain = (demographic, region) => {
+  console.log('get region domain', demographic, region)
+  return region === 'schools'
     ? REGION_DOMAINS['schools']
     : REGION_DOMAINS[demographic + '_' + region]
+}
 
 /**
  * Takes a location ID integer and pads it with 0's

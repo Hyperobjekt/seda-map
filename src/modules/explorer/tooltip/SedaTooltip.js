@@ -11,7 +11,8 @@ import {
   getMidpointForVarName,
   getFormatterForVarName,
   getRegionFromLocationId,
-  getSingularRegion
+  getSingularRegion,
+  isUnavailable
 } from '../app/selectors'
 import { getStateName } from '../../../shared/utils/states'
 import { Typography, makeStyles } from '@material-ui/core'
@@ -27,29 +28,42 @@ const useStatStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
     alignItems: 'flex-start',
-    justifyContent: 'flex-start',
+    justifyContent: 'space-between',
     paddingTop: theme.spacing(0.75),
     paddingBottom: theme.spacing(0.75)
   },
   label: {
-    minWidth: theme.spacing(19)
+    minWidth: theme.spacing(19),
+    marginRight: theme.spacing(2)
   },
-  value: {},
+  value: {
+    marginTop: 4,
+    minWidth: theme.spacing(10)
+  },
   primary: {
-    height: theme.typography.pxToRem(theme.spacing(2.5)),
+    // height: theme.typography.pxToRem(theme.spacing(2.5)),
     lineHeight: theme.typography.pxToRem(theme.spacing(2.5)),
-    textTransform: 'capitalize'
+    textTransform: 'capitalize',
+    justifyContent: 'flex-end'
   },
   secondary: {
     display: 'block',
-    height: theme.typography.pxToRem(theme.spacing(2)),
+    // height: theme.typography.pxToRem(theme.spacing(2)),
     lineHeight: theme.typography.pxToRem(theme.spacing(2)),
     color: theme.app.altDarkText
+  },
+  secondaryStat: {
+    maxWidth: theme.spacing(11),
+    textAlign: 'right'
+  },
+  unavailable: {
+    textAlign: 'right'
   }
 }))
 
 const StatDetailed = ({ varName, value }) => {
   const classes = useStatStyles()
+  const isNA = isUnavailable(value)
   return (
     <div className={clsx('stat-detailed', classes.root)}>
       <div
@@ -63,6 +77,7 @@ const StatDetailed = ({ varName, value }) => {
           {getDemographicLabel(varName, 'TOOLTIP_CONTEXT')}
         </Typography>
       </div>
+
       <div
         className={clsx('stat-detailed__value', classes.value)}>
         <DivergingStatValue
@@ -72,12 +87,17 @@ const StatDetailed = ({ varName, value }) => {
           mid={getMidpointForVarName(varName)}
           dark={true}
         />
-        <Typography
-          style={{ marginLeft: 4 }}
-          className={classes.secondary}
-          variant="caption">
-          {getTooltipMetricLang(varName, value)}
-        </Typography>
+        {!isNA && (
+          <Typography
+            style={{ marginLeft: 4 }}
+            className={clsx(
+              classes.secondary,
+              classes.secondaryStat
+            )}
+            variant="caption">
+            {getTooltipMetricLang(varName, value)}
+          </Typography>
+        )}
       </div>
     </div>
   )

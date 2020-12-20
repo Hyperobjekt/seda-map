@@ -23,7 +23,6 @@ import {
   DebouncedSlider as Slider
 } from '../../../../shared'
 import { hasFilterRule } from '../../../filters/utils'
-import useFilters from '../hooks/useFilters'
 import { useDemographic, useRegion } from '../../app/hooks'
 import { SedaSearch } from '../../search'
 import { getPropFromHit } from '../../search/selectors'

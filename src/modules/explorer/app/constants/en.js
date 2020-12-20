@@ -1,5 +1,6 @@
 const LANG = {
   NO_DATA: 'Unavailable',
+  NO_DATA_SHORT: '--',
 
   // Header
   LOGO_ALT_TEXT: 'Educational Opportunity Project',
@@ -86,6 +87,7 @@ const LANG = {
   LABEL_B_AVG: "Black students' average test scores",
   LABEL_A_AVG: "Asian students' average test scores",
   LABEL_H_AVG: "Hispanic students' average test scores",
+  LABEL_I_AVG: "Native American students' average test scores",
   LABEL_P_AVG: "Poor students' average test scores",
   LABEL_NP_AVG: "Non-poor students' average test scores",
   LABEL_M_AVG: "Male students' average test scores",
@@ -99,6 +101,7 @@ const LANG = {
   LABEL_B_GRD: "Black students' learning rates",
   LABEL_A_GRD: "Asian students' learning rates",
   LABEL_H_GRD: "Hispanic students' learning rates",
+  LABEL_I_GRD: "Native American students' learning rates",
   LABEL_P_GRD: "Poor students' learning rates",
   LABEL_NP_GRD: "Non-poor students' learning rates",
   LABEL_M_GRD: "Male students' learning rates",
@@ -110,6 +113,7 @@ const LANG = {
   LABEL_ALL_COH: 'Trend in Test Scores',
   LABEL_W_COH: "White students' trend in test scores",
   LABEL_H_COH: "Hispanic students' trend in test scores",
+  LABEL_I_COH: "Native American students' trend in test scores",
   LABEL_B_COH: "Black students' trend in test scores",
   LABEL_A_COH: "Asian students' trend in test scores",
   LABEL_P_COH: "Poor students' trend in test scores",
@@ -132,6 +136,7 @@ const LANG = {
   LABEL_B_SES: "Black families' socioeconomic status",
   LABEL_A_SES: "Asian families' socioeconomic status",
   LABEL_H_SES: "Hispanic families' socioeconomic status",
+  LABEL_I_SES: "Native American families' socioeconomic status",
   LABEL_M_SES: '$[region] socioeconomic status',
   LABEL_F_SES: '$[region] socioeconomic status',
   LABEL_P_SES: '$[region] socioeconomic status',
@@ -158,6 +163,7 @@ const LANG = {
   LABEL_B: 'Black',
   LABEL_W: 'White',
   LABEL_H: 'Hispanic',
+  LABEL_I: 'Native American',
   LABEL_A: 'Asian',
   LABEL_M: 'male',
   LABEL_F: 'female',
@@ -166,26 +172,30 @@ const LANG = {
   LABEL_N: 'non-poor',
 
   // Gap Labels
-  LABEL_WB: 'White / Black gap',
-  LABEL_WH: 'White / Hispanic gap',
-  LABEL_PN: 'non-poor / poor gap',
-  LABEL_MF: 'male / female gap',
+  LABEL_WB: 'White - Black gap',
+  LABEL_WH: 'White - Hispanic gap',
+  LABEL_WI: 'White - Native American gap',
+  LABEL_PN: 'non-poor - poor gap',
+  LABEL_MF: 'male - female gap',
   LABEL_GAP: '$[demographic1] and $[demographic2]',
 
   // Abbreviated Gap Labels
-  LABEL_SHORT_BW: 'White / Black',
-  LABEL_SHORT_HW: 'White / Hispanic',
-  LABEL_SHORT_PN: 'poor / non-poor',
-  LABEL_SHORT_FM: 'male / female',
-  LABEL_SHORT_WB: 'White / Black',
-  LABEL_SHORT_WH: 'White / Hispanic',
-  LABEL_SHORT_MF: 'male / female',
+  LABEL_SHORT_BW: 'White - Black',
+  LABEL_SHORT_HW: 'White - Hispanic',
+  LABEL_SHORT_IW: 'White - Native American',
+  LABEL_SHORT_PN: 'poor - non-poor',
+  LABEL_SHORT_FM: 'male - female',
+  LABEL_SHORT_WB: 'White - Black',
+  LABEL_SHORT_WH: 'White - Hispanic',
+  LABEL_SHORT_WI: 'White - Native American',
+  LABEL_SHORT_MF: 'male - female',
 
   // Demographic label for students
   LABEL_STUDENTS_ALL: 'all students',
   LABEL_STUDENTS_B: 'Black students',
   LABEL_STUDENTS_W: 'White students',
   LABEL_STUDENTS_H: 'Hispanic students',
+  LABEL_STUDENTS_I: 'Native American students',
   LABEL_STUDENTS_A: 'Asian students',
   LABEL_STUDENTS_M: 'male students',
   LABEL_STUDENTS_F: 'female students',
@@ -196,6 +206,8 @@ const LANG = {
     'difference between White and Black students',
   LABEL_STUDENTS_WH:
     'difference between White and Hispanic students',
+  LABEL_STUDENTS_WI:
+    'difference between White and Native American students',
   LABEL_STUDENTS_MF:
     'difference between male and female students',
   LABEL_STUDENTS_PN:
@@ -223,6 +235,7 @@ const LANG = {
   TOOLTIP_CONTEXT_W: 'for White students',
   TOOLTIP_CONTEXT_B: 'for Black students',
   TOOLTIP_CONTEXT_H: 'for Hispanic students',
+  TOOLTIP_CONTEXT_I: 'for Native American students',
   TOOLTIP_CONTEXT_A: 'for Asian students',
   TOOLTIP_CONTEXT_M: 'for male students',
   TOOLTIP_CONTEXT_F: 'for female students',
@@ -243,7 +256,7 @@ const LANG = {
   TOOLTIP_DESC_AVG_LOW: 'grades below U.S. average',
   TOOLTIP_DESC_GRD_LOW: 'less learned each year',
   TOOLTIP_DESC_COH_LOW: 'decrease in scores per year',
-  TOOLTIP_DESC_FRL_HIGH: 'have free/reduced price lunch',
+  TOOLTIP_DESC_FRL_HIGH: 'free/reduced price lunch',
   TOOLTIP_DESC_SES_ULTRA_HIGH: 'very far above national average',
   TOOLTIP_DESC_SES_VERY_HIGH: 'far above national average',
   TOOLTIP_DESC_SES_HIGH: 'above U.S. average',
@@ -729,10 +742,10 @@ const LANG = {
   FILTER_LABEL_SES: 'Socioeconomic Status Range',
   FILTER_LABEL_FRL: 'Free/Reduced Lunch Program Range',
   FILTER_LABEL_SCHOOL_TYPE: 'Show School Types',
-  FILTER_PLACEHOLDER_SCHOOLS: "Search for a state or district",
-  FILTER_PLACEHOLDER_DISTRICTS: "Search for a state",
-  FILTER_PLACEHOLDER_COUNTIES: "Search for a state",
-  FILTER_PLACEHOLDER_STATES: "Unavailable",
+  FILTER_PLACEHOLDER_SCHOOLS: 'Search for a state or district',
+  FILTER_PLACEHOLDER_DISTRICTS: 'Search for a state',
+  FILTER_PLACEHOLDER_COUNTIES: 'Search for a state',
+  FILTER_PLACEHOLDER_STATES: 'Unavailable',
   FILTER_HINT_LOCATION:
     'Show $[regions] within the below location',
   FILTER_HINT_SIZE:

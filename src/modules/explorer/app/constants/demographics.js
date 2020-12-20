@@ -21,6 +21,10 @@ export const DEMOGRAPHICS = [
     label: LANG['LABEL_H']
   },
   {
+    id: 'i',
+    label: LANG['LABEL_I']
+  },
+  {
     id: 'a',
     label: LANG['LABEL_A']
   },
@@ -53,6 +57,10 @@ export const GAPS = [
   {
     id: 'wh',
     label: LANG['LABEL_WH']
+  },
+  {
+    id: 'wi',
+    label: LANG['LABEL_WI']
   },
   {
     id: 'pn',

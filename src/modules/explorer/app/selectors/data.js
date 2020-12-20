@@ -217,3 +217,7 @@ export const getDataForId = (id, data, featureData = {}) => {
     return acc
   }, base)
 }
+
+export const isUnavailable = value => {
+  return value === -999 || (!value && value !== 0)
+}

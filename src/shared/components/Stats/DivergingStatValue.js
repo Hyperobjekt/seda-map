@@ -37,9 +37,6 @@ const useStyles = makeStyles(theme => ({
   unavailable: {
     fontSize: theme.typography.pxToRem(14),
     lineHeight: 1,
-    textAlign: 'center',
-    width: '100%',
-    display: 'block',
     color: props =>
       props.dark ? '#fff' : theme.palette.grey[500]
   },
@@ -139,7 +136,7 @@ const DivergingStatValue = ({
             classes.unavailable,
             overrides.unavailable
           )}>
-          N/A
+          {unavailableValue}
         </Typography>
       )}
     </div>

@@ -9,9 +9,10 @@ import { useMemo } from 'react'
 export default () => {
   const filters = useFilters()
   const [region] = useRegion()
-  const flags = FILTER_FLAGS[region]
-  return useMemo(
-    () =>
+
+  return useMemo(() => {
+    const flags = FILTER_FLAGS[region]
+    return (
       filters
         // remove flags that don't apply to the current region
         .filter(f =>
@@ -30,7 +31,7 @@ export default () => {
           if (f[1] === 'ses' && region === 'schools')
             return false
           return true
-        }),
-    [filters, region]
-  )
+        })
+    )
+  }, [filters, region])
 }

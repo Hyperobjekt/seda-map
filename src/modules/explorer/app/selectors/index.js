@@ -105,7 +105,8 @@ export {
   getMidpointForVarName,
   getMetricRangeFromVarName,
   getVarNames,
-  getDataForId
+  getDataForId,
+  isUnavailable
 } from './data'
 export {
   getRegionLabel,

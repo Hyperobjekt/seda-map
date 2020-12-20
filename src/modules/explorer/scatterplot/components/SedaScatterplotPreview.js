@@ -44,7 +44,7 @@ const useStyles = makeStyles(theme => ({
     }
   },
   yAxis: {
-    right: -20,
+    right: -12,
     '& .MuiTypography-root': { width: 200 }
   },
   markers: {
