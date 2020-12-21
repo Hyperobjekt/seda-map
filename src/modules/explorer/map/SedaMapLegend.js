@@ -2,7 +2,6 @@ import React from 'react'
 import { MapLegend } from '../../map'
 import {
   getChoroplethColors,
-  getMetricRangeFromVarName as getRange,
   getMetricIdFromVarName,
   getDemographicIdFromVarName,
   getFormatterForVarName,
@@ -15,7 +14,6 @@ import {
 } from '../app/selectors/lang'
 import {
   useHovered,
-  useRegion,
   useMarkersVisibility,
   useDemographicType,
   useCurrentVars
@@ -23,6 +21,7 @@ import {
 import { getValuePositionInRange } from '../../../shared/utils'
 import { useMapSize } from '../../map'
 import { useLocationData } from '../location'
+import useScatterplotContext from '../scatterplot/hooks/useScatterplotContext'
 
 const SedaMapLegend = props => {
   /** variable to show on the map */
@@ -35,10 +34,9 @@ const SedaMapLegend = props => {
   const hoveredData = useLocationData(hovered)
   /** boolean determining f the current demographic is a gap or not */
   const isGap = useDemographicType() === 'gap'
-  /** current map region */
-  const [region] = useRegion()
   /** width of the map viewport */
   const [width] = useMapSize()
+  const { colorExtent } = useScatterplotContext()
 
   /** boolean determinng if the scale is inverted for the given var */
   const inverted = getInvertedFromVarName(yVar)
@@ -51,9 +49,9 @@ const SedaMapLegend = props => {
     ? [...getChoroplethColors()].reverse()
     : getChoroplethColors()
   /** range of values for start color to end color */
-  const colorRange = getRange(yVar, region, 'map')
+  const colorRange = colorExtent
   /** range of values to label on min / max in the legend */
-  const labelRange = getRange(yVar, region)
+  const labelRange = colorExtent
   /** number between 0 - 1 determining where the diverging point is on the scale */
   const midPosition = getValuePositionInRange(
     (colorRange[1] + colorRange[0]) / 2,

@@ -19,6 +19,8 @@ import {
 import SedaLocationMarkers from './SedaLocationMarkers'
 import useStaticData from '../../../data/useStaticData'
 import { useFilteredData } from '../../filters'
+import { getDataExtent } from '../selectors'
+import useScatterplotOptions from '../hooks/useScatterplotOptions'
 
 // scatterplot width / height where left / right hints are not shown
 const LABEL_BREAKPOINT = 500
@@ -65,13 +67,11 @@ function SedaScatterplotBase({
   classes: overrides,
   region,
   variant,
-  autoFetch,
   axisChildren,
   children,
   onHover,
   onClick,
   onReady,
-  onError,
   ...props
 }) {
   // classnames for markers and axis
@@ -80,9 +80,6 @@ function SedaScatterplotBase({
   // track size of scatterplot
   const [resizeListener, sizes] = useResizeAware()
 
-  // scatterplot data store
-  const data = useFilteredData()
-
   // boolean indicating if data is loading
   const loading = useStaticData(state => state.isLoading)
 
@@ -90,17 +87,7 @@ function SedaScatterplotBase({
   const isVersus = isVersusFromVarNames(xVar, yVar)
 
   // memoize the scatterplot options
-  const options = useMemo(() => {
-    if (loading) return {}
-    const newOptions = getScatterplotOptions(
-      variant,
-      data.slice(0, 4000),
-      { xVar, yVar, zVar },
-      [],
-      region
-    )
-    return newOptions
-  }, [xVar, yVar, zVar, region, variant, data, loading])
+  const options = useScatterplotOptions(variant)
 
   // boolean determining if X axis labels should show
   const showLabelsX =
@@ -190,11 +177,9 @@ function SedaScatterplotBase({
 
 SedaScatterplotBase.defaultProps = {
   classes: {},
-  autoFetch: true,
   onHover: () => {},
   onClick: () => {},
-  onReady: () => {},
-  onError: () => {}
+  onReady: () => {}
 }
 
 SedaScatterplotBase.propTypes = {

@@ -9,7 +9,6 @@ import {
   getDemographicFromVarName,
   getMetricFromVarName,
   getChoroplethColors,
-  getMetricRangeFromVarName,
   getMidpointForVarName,
   getDemographicForVarNames,
   getFormatterForVarName,
@@ -21,10 +20,13 @@ import { getScatterplotBaseOptions } from '../../scatterplot'
 import { getLangKeyForAxisLabel } from './lang'
 import { getLang } from '../app/selectors/lang'
 import {
-  getIncrementForVarName,
-  getPositionArray
-} from './utils'
-import { getSizerFunctionForRegion } from './selectors'
+  getDataExtent,
+  getSizerFunctionForRegion
+} from './selectors'
+
+import { max, tickStep, ticks } from 'd3-array'
+
+var STEPS = 6
 
 /** GRID CONFIGURATION  */
 
@@ -307,24 +309,69 @@ const getOverlay = (points, lines) => {
   }
 }
 
+const getTickArray = (center, extent) => {
+  const distance = extent.map(v => Math.abs(center - v))
+  const maxDistance = max(distance)
+  const balancedExtent = [
+    center - maxDistance,
+    center + maxDistance
+  ]
+}
+
+export const getBalancedExtent = (center, extent) => {
+  const distance = extent.map(v => Math.abs(center - v))
+  const maxDistance = max(distance)
+  return [center - maxDistance, center + maxDistance]
+}
+
+const getIncrementForExtent = extent => {
+  return tickStep(extent[0], extent[1], STEPS)
+}
+
+/** Returns an amount for how much to increment each step for the axis overlay */
+const getIncrementForVarName = (varName, region) => {
+  const metricId = getMetricIdFromVarName(varName)
+  const isGap = isGapVarName(varName)
+  const key = metricId + (isGap ? '_gap' : '')
+  switch (key) {
+    case 'avg':
+      return region === 'schools' ? 2 : 1
+    case 'grd':
+      return region === 'schools' ? 0.4 : 0.2
+    case 'coh':
+      return region === 'schools' ? 0.25 : 0.2
+    case 'frl':
+      return 0.25
+    case 'coh_gap':
+    case 'grd_gap':
+      return 0.1
+    case 'ses_gap':
+      return 1
+    case 'seg':
+    case 'seg_gap':
+      return 0.25
+    case 'min':
+    case 'min_gap':
+      return 0.2
+    default:
+      return 1
+  }
+}
+
 /**
  * Get the line and label overlays based on the variable name
  * @param {*} varName
  * @param {*} region
  */
-const getOverlayForVarName = (varName, axis = 'y', region) => {
+const getOverlayForVarName = ({
+  varName,
+  axis = 'y',
+  extent
+}) => {
   const isGap = isGapVarName(varName)
   const metricId = getMetricIdFromVarName(varName)
-  const numLines = 9
-  const inc = getIncrementForVarName(varName, region)
   const midPoint = getMidpointForVarName(varName)
-  const range = getMetricRangeFromVarName(varName, region)
-  const positions = getPositionArray(
-    numLines,
-    inc,
-    midPoint,
-    range
-  )
+  const positions = ticks(extent[0], extent[1], STEPS)
   const langPrefix = isGap ? metricId + '_gap' : metricId
   const formatter = getFormatterForVarName(varName)
   const labels =
@@ -369,12 +416,26 @@ const getPreviewOverlayForVarName = (varName, axis = 'y') => {
 
 const getOverlaysForContext = (
   variant,
-  { xVar, yVar, region }
+  { xVar, yVar, region, extents }
 ) => {
   const overlays = []
   if (variant === 'map') {
-    overlays.push(getOverlayForVarName(xVar, 'x', region))
-    overlays.push(getOverlayForVarName(yVar, 'y', region))
+    overlays.push(
+      getOverlayForVarName({
+        varName: xVar,
+        axis: 'x',
+        region,
+        extent: extents[0]
+      })
+    )
+    overlays.push(
+      getOverlayForVarName({
+        varName: yVar,
+        axis: 'y',
+        region,
+        extent: extents[1]
+      })
+    )
     overlays.push(getVersusOverlay(xVar, yVar))
   }
   if (variant === 'preview') {
@@ -465,9 +526,9 @@ const getMapVisualMap = ({
   xVar,
   yVar,
   highlightIds,
-  region
+  colorExtent
 }) => {
-  const range = getMetricRangeFromVarName(yVar, region, 'map')
+  const range = colorExtent
   const colors = getChartColorsFromVarNames(xVar, yVar)
 
   return {
@@ -504,11 +565,8 @@ const visualMap = (variant, options) => {
 
 /** X AXIS CONFIGURATION */
 
-const getXAxis = ({ metric, demographic, region, ...rest }) => {
-  const [min, max] = getMetricRangeFromVarName(
-    [demographic.id, metric.id].join('_'),
-    region
-  )
+const getXAxis = ({ region, extent, ...rest }) => {
+  const [min, max] = extent
   return {
     min,
     max,
@@ -523,12 +581,8 @@ const getXAxis = ({ metric, demographic, region, ...rest }) => {
   }
 }
 
-const getMapXAxis = ({ metric, demographic, region }) => {
-  const [min, max] = getMetricRangeFromVarName(
-    [demographic.id, metric.id].join('_'),
-    region
-  )
-  const varName = `${demographic.id}_${metric.id}`
+const getMapXAxis = ({ varName, metric, region, extent }) => {
+  const [min, max] = extent
   const formatter = getFormatterForVarName(varName)
   return {
     min,
@@ -548,27 +602,34 @@ const getMapXAxis = ({ metric, demographic, region }) => {
   }
 }
 
-const xAxis = (variant, { varName, region }) => {
+const xAxis = ({ variant, varName, region, extent }) => {
+  console.log('xExtent', extent)
   const metric = getMetricFromVarName(varName)
   const demographic = getDemographicFromVarName(varName)
-  if (!metric || !demographic) {
-    return {}
-  }
   switch (variant) {
     case 'map':
-      return getMapXAxis({ metric, demographic, region })
+      return getMapXAxis({
+        varName,
+        metric,
+        demographic,
+        region,
+        extent
+      })
     default:
-      return getXAxis({ metric, demographic, region })
+      return getXAxis({
+        varName,
+        metric,
+        demographic,
+        region,
+        extent
+      })
   }
 }
 
 /** Y AXIS CONFIGURATION */
 
-const getYAxis = ({ metric, demographic, region, ...rest }) => {
-  const [min, max] = getMetricRangeFromVarName(
-    [demographic.id, metric.id].join('_'),
-    region
-  )
+const getYAxis = ({ extent, ...rest }) => {
+  const [min, max] = extent
   return {
     min,
     max,
@@ -584,16 +645,8 @@ const getYAxis = ({ metric, demographic, region, ...rest }) => {
   }
 }
 
-const getMapYAxis = ({
-  metric,
-  demographic,
-  region,
-  ...rest
-}) => {
-  const [min, max] = getMetricRangeFromVarName(
-    [demographic.id, metric.id].join('_'),
-    region
-  )
+const getMapYAxis = ({ region, extent, ...rest }) => {
+  const [min, max] = extent
   return {
     min,
     max,
@@ -614,40 +667,48 @@ const getMapYAxis = ({
   }
 }
 
-const yAxis = (variant, { varName, region }) => {
-  const metric = getMetricFromVarName(varName)
-  const demographic = getDemographicFromVarName(varName)
-  if (!metric || !demographic) {
-    return {}
-  }
+const yAxis = ({ variant, region, extent }) => {
+  console.log('yExtent', extent)
   switch (variant) {
     case 'map':
-      return getMapYAxis({ metric, demographic, region })
+      return getMapYAxis({ extent, region })
     default:
-      return getYAxis({ metric, demographic, region })
+      return getYAxis({ extent, region })
   }
 }
 
 export const getScatterplotOptions = (
   variant,
   data = [],
-  { xVar, yVar, zVar },
+  { xVar, yVar, zVar, extents, colorExtent },
   highlightIds = [],
   region
 ) => {
   if (!data || data.length === 0) return {}
-  const sizerDem = getDemographicForVarNames(xVar, yVar)
-  const sizer = getSizerFunctionForRegion(region, sizerDem)
+  const sizer = getSizerFunctionForRegion({
+    extent: extents[2]
+  })
   const options = {
     grid: grid(variant),
     visualMap: visualMap(variant, {
       xVar,
       yVar,
       highlightIds,
-      region
+      region,
+      colorExtent
     }),
-    xAxis: xAxis(variant, { varName: xVar, region }),
-    yAxis: yAxis(variant, { varName: yVar, region }),
+    xAxis: xAxis({
+      variant,
+      varName: xVar,
+      region,
+      extent: extents[0]
+    }),
+    yAxis: yAxis({
+      variant,
+      varName: yVar,
+      region,
+      extent: extents[1]
+    }),
     series: [
       series('base', variant, {
         highlightIds,
@@ -659,7 +720,7 @@ export const getScatterplotOptions = (
         highlightIds,
         sizer
       }),
-      ...overlays(variant, { xVar, yVar, region })
+      ...overlays(variant, { xVar, yVar, region, extents })
     ]
   }
 

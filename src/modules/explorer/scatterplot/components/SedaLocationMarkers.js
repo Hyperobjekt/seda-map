@@ -9,26 +9,23 @@ import {
   useHovered,
   useMarkersVisibility
 } from '../../app/hooks'
-import {
-  getMetricRangeFromVarName,
-  getDemographicForVarNames
-} from '../../app/selectors'
 import { getSizerFunctionForRegion } from '../selectors'
 import {
   useLocationData,
   useCurrentRegionLocationsData
 } from '../../location'
 import { ScatterplotOverlay } from '../../../scatterplot'
+import useScatterplotContext from '../hooks/useScatterplotContext'
 
 /**
  * Provides functions for positioning and sizing
  * based on x, y, z values
  * @returns {[function, function, function]} [xValueToPercent, yValueToPercent, zValueToRadius]
  */
-export const getXyzTransformers = (xVar, yVar, region) => {
+export const getXyzTransformers = (region, extents) => {
   const invertX = region === 'schools'
-  const xRange = getMetricRangeFromVarName(xVar, region)
-  const yRange = getMetricRangeFromVarName(yVar, region)
+  const xRange = extents[0]
+  const yRange = extents[1]
   // function that converts xValue to the % position on the scale
   const xValToPosition = val =>
     getValuePercentInRange(val, xRange, invertX)
@@ -36,33 +33,33 @@ export const getXyzTransformers = (xVar, yVar, region) => {
   const yValToPosition = val =>
     100 - getValuePercentInRange(val, yRange)
   // function that converts z value to circle radius in px
-  const dem = getDemographicForVarNames(xVar, yVar)
-  const zValToSize = getSizerFunctionForRegion(region, dem)
+  // const dem = getDemographicForVarNames(xVar, yVar)
+  const zValToSize = getSizerFunctionForRegion({
+    extent: extents[2]
+  })
   // return transformers
   return [xValToPosition, yValToPosition, zValToSize]
 }
 
-const SedaLocationMarkers = ({
-  xVar,
-  yVar,
-  zVar,
-  region,
-  ...props
-}) => {
+const SedaLocationMarkers = ({ ...props }) => {
   const [showHovered] = useMarkersVisibility()
   const [hoveredId, setHovered] = useHovered()
   const hoveredData = useLocationData(hoveredId)
   const locations = useCurrentRegionLocationsData()
   const theme = useTheme()
+  const {
+    vars: [xVar, yVar, zVar],
+    region,
+    extents
+  } = useScatterplotContext()
   const canRender = xVar && yVar && zVar && region
 
   // if props are not ready, don't render
   if (!canRender) return null
 
   const [xValToPos, yValToPos, zValToSize] = getXyzTransformers(
-    xVar,
-    yVar,
-    region
+    region,
+    extents
   )
 
   // base props for circles

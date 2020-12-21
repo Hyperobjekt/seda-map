@@ -201,65 +201,6 @@ export const fetchScatterplotVars = (
   )
 }
 
-/** Returns an amount for how much to increment each step for the axis overlay */
-export const getIncrementForVarName = (varName, region) => {
-  const metricId = getMetricIdFromVarName(varName)
-  const isGap = isGapVarName(varName)
-  const key = metricId + (isGap ? '_gap' : '')
-  switch (key) {
-    case 'avg':
-      return region === 'schools' ? 2 : 1
-    case 'grd':
-      return region === 'schools' ? 0.4 : 0.2
-    case 'coh':
-      return region === 'schools' ? 0.25 : 0.2
-    case 'frl':
-      return 0.25
-    case 'coh_gap':
-    case 'grd_gap':
-      return 0.1
-    case 'ses_gap':
-      return 1
-    case 'seg':
-    case 'seg_gap':
-      return 0.25
-    case 'min':
-    case 'min_gap':
-      return 0.2
-    default:
-      return 1
-  }
-}
-
-/**
- * Returns an array with an equal number of lines
- * above / below a provided center, with a provided
- * increment.
- * @param {number} num length of the returned array (must be odd)
- * @param {number} inc amount to increment for each step
- * @param {number} center the center point of the array
- */
-export const getPositionArray = (
-  count,
-  inc,
-  center = 0,
-  range
-) => {
-  // numLines must be odd so it is balanced above / below axis
-  if (count % 2 === 0) {
-    count = count - 1
-  }
-  const offset = (count - 1) / 2
-  return new Array(count)
-    .fill()
-    .map((v, i) => (i - offset) * inc + center)
-    .filter(v =>
-      range && range.length === 2
-        ? v > range[0] && v < range[1]
-        : true
-    )
-}
-
 /** Helper to grab location ID from chart events */
 export const getLocatonIdFromEvent = e => {
   // index of the id property in the scatterplot data
@@ -295,7 +236,7 @@ export const isMarkerRelated = e => {
 }
 
 /** checks if value is present */
-const hasVal = val => val || val === 0
+export const hasVal = val => val || val === 0
 
 /**
  * Returns object with position and size of a circle for a feature

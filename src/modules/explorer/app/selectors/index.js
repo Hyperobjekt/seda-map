@@ -91,7 +91,6 @@ export {
   getRegionFromFeature,
   getRegionFromLocationId,
   getRegionById,
-  getRegionDomain,
   getSingularRegion,
   getSingularRegions,
   getRegions,

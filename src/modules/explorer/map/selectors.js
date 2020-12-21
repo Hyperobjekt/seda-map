@@ -37,32 +37,25 @@ export const getZoomLevelForRegion = region => {
  * @param {string} id
  * @returns {array}
  */
-export const getStopsForVarName = (
+export const getStopsForVarName = ({
   varName,
-  region,
-  colors = getChoroplethColors()
-) => {
-  const demId = getDemographicIdFromVarName(varName)
-  const metricId = getMetricIdFromVarName(varName)
+  colors = getChoroplethColors(),
+  colorExtent
+}) => {
   const isGap = isGapVarName(varName)
   colors = isGap ? [...colors].reverse() : colors
-  const [min, max] = getMetricRange(
-    metricId,
-    demId,
-    region,
-    'map'
-  )
+  const [min, max] = colorExtent
   const range = Math.abs(max - min)
   const stepSize = range / (colors.length - 1)
   return colors.map((c, i) => [min + i * stepSize, c])
 }
 
-const getFillStyle = (varName, region, colors) => {
-  const stops = getStopsForVarName(
+const getFillStyle = ({ varName, colors, colorExtent }) => {
+  const stops = getStopsForVarName({
     varName,
-    region,
-    colors
-  ).reduce((acc, curr) => [...acc, ...curr], [])
+    colors,
+    colorExtent
+  }).reduce((acc, curr) => [...acc, ...curr], [])
   return [
     'case',
     ['==', ['get', varName], -999],
@@ -148,10 +141,10 @@ export const getCircleHighlightLayer = ({ layerId, region }) =>
 export const getCircleLayer = ({
   layerId,
   region,
-  metric,
-  demographic,
+  varName,
   ids,
-  colors
+  colors,
+  colorExtent
 }) => {
   return fromJS({
     id: layerId || 'schools-circle',
@@ -164,15 +157,16 @@ export const getCircleLayer = ({
     ...(ids && ids.length > 0
       ? { filter: ['in', ['get', 'id'], ['literal', ids]] }
       : {}),
-    layout: {
-      visibility: demographic === 'all' ? 'visible' : 'none'
-    },
+    // layout: {
+    //   visibility: demographic === 'all' ? 'visible' : 'none'
+    // },
     paint: {
-      'circle-color': getFillStyle(
-        [demographic, metric].join('_'),
-        'schools',
-        colors
-      ),
+      'circle-color': getFillStyle({
+        varName,
+        region: 'schools',
+        colors,
+        colorExtent
+      }),
       'circle-opacity': getCircleOpacity(region),
       'circle-radius': getCircleRadius(region),
       'circle-stroke-opacity': getCircleOpacity(region),
@@ -369,11 +363,11 @@ const getChoroplethFilter = ({ region, filters, ids }) => {
 export const getChoroplethLayer = ({
   layerId,
   region,
-  metric,
-  demographic,
+  varName,
   filters,
   ids,
-  colors
+  colors,
+  colorExtent
 }) =>
   fromJS({
     id: layerId || region + '-choropleth',
@@ -383,11 +377,12 @@ export const getChoroplethLayer = ({
     interactive: true,
     ...getChoroplethFilter({ region, filters, ids }),
     paint: {
-      'fill-color': getFillStyle(
-        [demographic, metric].join('_'),
+      'fill-color': getFillStyle({
+        varName,
         region,
-        colors
-      ),
+        colors,
+        colorExtent
+      }),
       'fill-opacity':
         region === 'schools'
           ? [

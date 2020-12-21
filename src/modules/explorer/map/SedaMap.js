@@ -32,6 +32,7 @@ import {
 } from '../location'
 import useFlyToLocation from './hooks/useFlyToLocation'
 import { SEDA_SOURCES } from './constants'
+import useScatterplotContext from '../scatterplot/hooks/useScatterplotContext'
 
 const selectedColors = getSelectedColors()
 
@@ -48,10 +49,15 @@ const useStyles = makeStyles(theme => ({
  */
 const SedaMap = props => {
   /** current options for the map */
-  const [metric, demographic, region] = useActiveOptions()
+  const [metric, demographic] = useActiveOptions()
   // currently active data filters
   const filters = useFilters()
-  const data = useFilteredData()
+  const {
+    data,
+    region,
+    vars: [, yVar],
+    colorExtent
+  } = useScatterplotContext()
   /** currently selected location ids */
   const [locations] = useLocations()
   /** id of the currently hovered location */
@@ -68,16 +74,22 @@ const SedaMap = props => {
   const isLoaded = useRef(false)
   /** memoized array of choropleth and dot layers */
   const layers = useMemo(() => {
-    if (!metric || !demographic || !region) {
+    if (!yVar || !region) {
       return []
     }
     const ids =
       getActiveFilterCount(filters) > 0
         ? data.map(d => d.id)
         : null
-    const context = { region, metric, demographic, filters, ids }
+    const context = {
+      varName: yVar,
+      region,
+      filters,
+      ids,
+      colorExtent
+    }
     return getLayers(context)
-  }, [region, metric, demographic, filters, data])
+  }, [region, yVar, filters, data])
   /** aria label for screen readers */
   const ariaLabel = getLang('UI_MAP_SR', {
     metric: getLang('LABEL_' + metric),
