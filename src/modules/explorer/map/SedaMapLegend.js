@@ -16,16 +16,14 @@ import {
   useHovered,
   useMarkersVisibility,
   useDemographicType,
-  useCurrentVars
+  useCurrentVars,
+  useAppContext
 } from '../app/hooks'
 import { getValuePositionInRange } from '../../../shared/utils'
 import { useMapSize } from '../../map'
 import { useLocationData } from '../location'
-import useScatterplotContext from '../scatterplot/hooks/useScatterplotContext'
 
 const SedaMapLegend = props => {
-  /** variable to show on the map */
-  const [, yVar] = useCurrentVars('map')
   /** id of the hovered location */
   const [hovered] = useHovered()
   /** boolean determining if hovered location should show */
@@ -36,25 +34,24 @@ const SedaMapLegend = props => {
   const isGap = useDemographicType() === 'gap'
   /** width of the map viewport */
   const [width] = useMapSize()
-  const { colorExtent } = useScatterplotContext()
-
+  /** pull color extent and map y var from app context */
+  const {
+    colorExtent,
+    mapVars: [, yVar],
+    metric,
+    demographic
+  } = useAppContext()
   /** boolean determinng if the scale is inverted for the given var */
   const inverted = getInvertedFromVarName(yVar)
-  /** metric id for the current map var */
-  const metric = getMetricIdFromVarName(yVar)
-  /** demographic id for the current map var */
-  const demographic = getDemographicIdFromVarName(yVar)
   /** choroppleth colors for gradient (reversed if gap) */
   const colors = isGap
     ? [...getChoroplethColors()].reverse()
     : getChoroplethColors()
-  /** range of values for start color to end color */
-  const colorRange = colorExtent
   /** range of values to label on min / max in the legend */
   const labelRange = colorExtent
   /** number between 0 - 1 determining where the diverging point is on the scale */
   const midPosition = getValuePositionInRange(
-    (colorRange[1] + colorRange[0]) / 2,
+    (colorExtent[1] + colorExtent[0]) / 2,
     labelRange
   )
   /** number between 0 - 1 that determines where the hovered location is on the scale */
@@ -94,7 +91,7 @@ const SedaMapLegend = props => {
       midPosition={midPosition}
       markerPosition={markerPosition}
       labelRange={labelRange}
-      colorRange={colorRange}
+      colorRange={colorExtent}
       colors={colors}
       labelFormatter={labelFormatter}
       {...props}

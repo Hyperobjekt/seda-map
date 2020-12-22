@@ -16,3 +16,4 @@ export {
 export { default as useMetric } from './useMetric'
 export { default as useRegion } from './useRegion'
 export { default as useSecondary } from './useSecondary'
+export { default as useAppContext } from './useAppContext'

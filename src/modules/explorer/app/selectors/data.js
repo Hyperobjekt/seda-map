@@ -1,7 +1,4 @@
-import {
-  getMetricIdFromVarName,
-  getMetricRange
-} from './metrics'
+import { getMetricIdFromVarName, getColorRange } from './metrics'
 import {
   isGapVarName,
   getDemographicIdFromVarName,
@@ -56,14 +53,14 @@ export const getPredictedValue = (value, metricId, regionId) => {
  * Returns an array containing the min and max for the
  * provided varname and region
  */
-export const getMetricRangeFromVarName = (
+export const getColorRangeForVarName = (
   varName,
   region,
   type
 ) => {
   const metricId = getMetricIdFromVarName(varName)
   const demId = getDemographicIdFromVarName(varName)
-  return getMetricRange(metricId, demId, region, type)
+  return getColorRange(metricId, demId, region, type)
 }
 
 /**
@@ -177,16 +174,22 @@ export const getVarNames = (
   demographic,
   type = 'chart'
 ) => {
+  const isGap = isGapDemographic(demographic)
   // schools always use "all" subgroup
   if (region === 'schools') {
     return ['all_frl', 'all_' + metric, 'all_sz']
   }
   // default chart for gap demographics should be versus
-  if (type === 'chart' && isGapDemographic(demographic)) {
+  if (type === 'chart' && isGap) {
     return getVersusVarNames(metric, demographic)
   }
+  // always use SES as secondary when no gap
+  const secondaryVarName = getSecondaryVarName(
+    isGap ? secondary : 'ses',
+    demographic
+  )
   return [
-    getSecondaryVarName(secondary, demographic),
+    secondaryVarName,
     getMetricVarName(metric, demographic),
     getSizeVarName(demographic)
   ]

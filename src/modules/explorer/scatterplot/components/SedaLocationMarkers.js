@@ -6,16 +6,16 @@ import {
   getValuePercentInRange
 } from '../utils'
 import {
+  useAppContext,
   useHovered,
   useMarkersVisibility
 } from '../../app/hooks'
-import { getSizerFunctionForRegion } from '../selectors'
+import { getDotSizeScale } from '../selectors'
 import {
   useLocationData,
   useCurrentRegionLocationsData
 } from '../../location'
 import { ScatterplotOverlay } from '../../../scatterplot'
-import useScatterplotContext from '../hooks/useScatterplotContext'
 
 /**
  * Provides functions for positioning and sizing
@@ -34,24 +34,32 @@ export const getXyzTransformers = (region, extents) => {
     100 - getValuePercentInRange(val, yRange)
   // function that converts z value to circle radius in px
   // const dem = getDemographicForVarNames(xVar, yVar)
-  const zValToSize = getSizerFunctionForRegion({
+  const zValToSize = getDotSizeScale({
     extent: extents[2]
   })
   // return transformers
   return [xValToPosition, yValToPosition, zValToSize]
 }
 
-const SedaLocationMarkers = ({ ...props }) => {
+const SedaLocationMarkers = ({ gapChart = false, ...props }) => {
   const [showHovered] = useMarkersVisibility()
   const [hoveredId, setHovered] = useHovered()
   const hoveredData = useLocationData(hoveredId)
   const locations = useCurrentRegionLocationsData()
   const theme = useTheme()
+
+  // scatterplot data store
   const {
-    vars: [xVar, yVar, zVar],
-    region,
-    extents
-  } = useScatterplotContext()
+    scatterplotVars,
+    gapVars,
+    gapExtents,
+    scatterplotExtents,
+    region
+  } = useAppContext()
+
+  const [xVar, yVar, zVar] = gapChart ? gapVars : scatterplotVars
+  const extents = gapChart ? gapExtents : scatterplotExtents
+
   const canRender = xVar && yVar && zVar && region
 
   // if props are not ready, don't render

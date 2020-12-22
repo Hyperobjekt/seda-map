@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
-import useResizeAware from 'react-resize-aware'
 import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core'
 
@@ -8,22 +7,15 @@ import ScatterplotBase, {
   ScatterplotAxis
 } from '../../../scatterplot'
 import { theme } from '../theme'
-import { isVersusFromVarNames } from '../../app/selectors'
-import { getScatterplotOptions } from '../style'
 import {
   getLang,
-  getLegendEndLabelsForVarName as getEndLabels,
   getLabelForVarName,
   getRegionLabel
 } from '../../app/selectors/lang'
 import SedaLocationMarkers from './SedaLocationMarkers'
 import useStaticData from '../../../data/useStaticData'
-import { useFilteredData } from '../../filters'
-import { getDataExtent } from '../selectors'
-import useScatterplotOptions from '../hooks/useScatterplotOptions'
-
-// scatterplot width / height where left / right hints are not shown
-const LABEL_BREAKPOINT = 500
+import { useAppContext } from '../../app/hooks'
+import { getScatterplotOptions } from '../style'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -60,13 +52,10 @@ const useStyles = makeStyles(theme => ({
 }))
 
 function SedaScatterplotBase({
-  xVar,
-  yVar,
-  zVar,
   className,
   classes: overrides,
-  region,
   variant,
+  gapChart = false,
   axisChildren,
   children,
   onHover,
@@ -77,28 +66,44 @@ function SedaScatterplotBase({
   // classnames for markers and axis
   const classes = useStyles()
 
-  // track size of scatterplot
-  const [resizeListener, sizes] = useResizeAware()
-
   // boolean indicating if data is loading
   const loading = useStaticData(state => state.isLoading)
 
-  // boolean determining if vars have two different dems
-  const isVersus = isVersusFromVarNames(xVar, yVar)
+  // scatterplot data store
+  const {
+    scatterplotData,
+    scatterplotVars,
+    gapVars,
+    gapExtents,
+    scatterplotExtents,
+    colorExtent,
+    region
+  } = useAppContext()
+
+  const [xVar, yVar, zVar] = gapChart ? gapVars : scatterplotVars
+  const extents = gapChart ? gapExtents : scatterplotExtents
 
   // memoize the scatterplot options
-  const options = useScatterplotOptions(variant)
-
-  // boolean determining if X axis labels should show
-  const showLabelsX =
-    sizes && !isVersus && sizes.width > LABEL_BREAKPOINT
-
-  // boolean determining if Y axis labels should show
-  const showLabelsY =
-    sizes && !isVersus && sizes.height > LABEL_BREAKPOINT
-
-  const [startLabelX, endLabelX] = getEndLabels(xVar)
-  const [startLabelY, endLabelY] = getEndLabels(yVar)
+  const options = useMemo(() => {
+    return getScatterplotOptions(variant, {
+      data: scatterplotData,
+      xVar,
+      yVar,
+      zVar,
+      extents,
+      colorExtent,
+      region
+    })
+  }, [
+    variant,
+    scatterplotData,
+    xVar,
+    yVar,
+    zVar,
+    extents,
+    colorExtent,
+    region
+  ])
 
   return (
     <div
@@ -110,7 +115,6 @@ function SedaScatterplotBase({
       })}
       className={clsx('scatterplot', classes.root, className)}
       {...props}>
-      {resizeListener}
       <ScatterplotBase
         theme={theme}
         loading={loading}
@@ -127,10 +131,7 @@ function SedaScatterplotBase({
           classes.markers,
           overrides.markers
         )}
-        xVar={xVar}
-        yVar={yVar}
-        zVar={zVar}
-        region={region}
+        gapChart={gapChart}
       />
       <ScatterplotAxis
         className={clsx(
@@ -144,9 +145,7 @@ function SedaScatterplotBase({
           labelContainer: classes.endLabels,
           contentContainer: classes.centerLabelX
         }}
-        minLabel={startLabelX}
-        maxLabel={endLabelX}
-        showLabels={showLabelsX}
+        showLabels={false}
         label={getLabelForVarName(xVar, {
           region: getRegionLabel(region)
         })}>
@@ -164,9 +163,7 @@ function SedaScatterplotBase({
           labelContainer: classes.endLabels
         }}
         vertical
-        minLabel={startLabelY}
-        maxLabel={endLabelY}
-        showLabels={showLabelsY}
+        showLabels={false}
         label={getLabelForVarName(yVar, {
           region: getRegionLabel(region)
         })}

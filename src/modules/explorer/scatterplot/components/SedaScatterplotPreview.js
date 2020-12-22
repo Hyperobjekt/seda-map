@@ -3,8 +3,6 @@ import { makeStyles } from '@material-ui/core/styles'
 import { isVersusFromVarNames } from '../../app/selectors'
 import ScatterplotBase from './SedaScatterplotBase'
 import clsx from 'clsx'
-
-import { useRegion } from '../../app/hooks'
 import useScatterplotVars from '../hooks/useScatterplotVars'
 
 const useStyles = makeStyles(theme => ({
@@ -56,23 +54,15 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const SedaScatterplotPreview = props => {
-  // pull required data from store
-  const [region] = useRegion()
-  // const [filters] = useFilters()
-  const [xVar, yVar, zVar] = useScatterplotVars()
+  const [xVar, yVar] = useScatterplotVars()
   const isVersus = isVersusFromVarNames(xVar, yVar)
   const classes = useStyles()
   return (
     <ScatterplotBase
-      xVar={xVar}
-      yVar={yVar}
-      zVar={zVar}
       className={clsx(classes.root, {
         'scatterplot--versus': isVersus
       })}
       classes={classes}
-      region={region}
-      // filters={filters}
       autoFetch={false}
       variant="preview"
       {...props}

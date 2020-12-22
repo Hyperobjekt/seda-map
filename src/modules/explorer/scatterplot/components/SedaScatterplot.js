@@ -1,31 +1,22 @@
 import React, { useCallback, useRef, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import {
-  isVersusFromVarNames,
-  getDemographicIdFromVarName,
-  getSecondaryForDemographic
-} from '../../app/selectors'
-import ScatterplotBase from './SedaScatterplotBase'
+import SedaScatterplotBase from './SedaScatterplotBase'
 import clsx from 'clsx'
 import useResizeAware from 'react-resize-aware'
-
 import {
-  useRegion,
+  useAppContext,
   useSecondary,
   useUiStore
 } from '../../app/hooks'
-import { Typography } from '@material-ui/core'
-import Footnotes from './Footnotes'
 import { LinkButton, SplitView } from '../../../../shared'
 import SedaGenericSelect from '../../../../shared/components/Inputs/SelectMenu'
-import { getFootnotes, getChartTitle } from '../lang'
 import {
   getLocatonIdFromEvent,
   getCoordsFromEvent,
   isMarkerRelated
 } from '../utils'
-import useScatterplotVars from '../hooks/useScatterplotVars'
 import { useAddLocation } from '../../location'
+import SedaScatterplotHeader from './SedaScatterplotHeader'
 
 /** Breakpoint where gap chart is split vs overlay */
 const SPLIT_BREAKPOINT = 1024
@@ -39,38 +30,23 @@ const useStyles = makeStyles(theme => ({
   },
   chart: {
     position: 'absolute',
-    top: theme.spacing(5),
-    left: 0,
+    top: theme.spacing(9),
+    left: theme.spacing(4),
     right: theme.spacing(8),
-    bottom: theme.spacing(8)
+    bottom: theme.spacing(6)
   },
-  header: {
-    position: 'absolute',
-    padding: theme.spacing(2),
-    left: theme.spacing(0.5),
-    top: -1 * theme.spacing(5),
-    right: -1 * theme.spacing(6),
-    textAlign: 'center',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    '& .MuiTypography-root': {
-      fontSize: theme.typography.pxToRem(12),
-      lineHeight: 1.25,
-      whiteSpace: 'normal',
-      background: theme.palette.background.default
-    }
-  },
-  footnote: {
-    position: 'absolute',
-    left: 0,
-    right: -1 * theme.spacing(6),
-    bottom: -64,
-    padding: `0 ${theme.spacing(2)}px`,
-    height: 44
+  // make space for toggle button
+  headerOffset: {
+    right: 88
   },
   toggleButton: {
-    display: 'block'
+    position: 'absolute',
+    top: -1,
+    right: -88,
+    marginLeft: 0,
+    width: 80,
+    whiteSpace: 'normal',
+    fontSize: theme.typography.pxToRem(12)
   }
 }))
 
@@ -81,10 +57,15 @@ const SedaScatterplot = () => {
   // track size of chart area
   const [resizeListener, sizes] = useResizeAware()
 
-  // pull required data from store
-  const [region] = useRegion()
-  const [xVar, yVar, zVar] = useScatterplotVars()
-  const [xGapVar, yGapVar, zGapVar] = useScatterplotVars('gap')
+  // pull required items from the app context
+  const {
+    region,
+    scatterplotVars: [xVar, yVar, zVar],
+    gapVars: [xGapVar, yGapVar, zGapVar],
+    isVersus,
+    gapMetrics,
+    hasGapChart
+  } = useAppContext()
   const [, setSecondary] = useSecondary()
   const setHovered = useUiStore(state => state.setHovered)
   const addLocation = useAddLocation()
@@ -131,66 +112,41 @@ const SedaScatterplot = () => {
     [addLocation]
   )
 
-  const isVersus = isVersusFromVarNames(xVar, yVar)
-  const gapDem = getDemographicIdFromVarName(yGapVar)
-  const secondaryMetrics = getSecondaryForDemographic(gapDem)
-  const hasSecondaryChart =
-    isVersus && secondaryMetrics.length > 0
-
   const classes = useStyles()
   return (
     <div className={clsx(classes.root)}>
       {resizeListener}
       <SplitView
         LeftComponent={
-          <ScatterplotBase
+          <SedaScatterplotBase
             className={clsx(classes.chart, {
               'scatterplot--versus': isVersus
             })}
-            xVar={xVar}
-            yVar={yVar}
-            zVar={zVar}
-            // filters={filters}
-            region={region}
             variant="map"
             onHover={handleHover}
             onClick={handleClick}>
-            <div
-              className={clsx(
-                'scatterplot__header',
-                classes.header
-              )}>
-              <Typography variant="h6" color="textSecondary">
-                {getChartTitle(xVar, yVar, region)}{' '}
-                {!isSplit && hasSecondaryChart && (
-                  <LinkButton
-                    className={classes.toggleButton}
-                    onClick={() => setShowGapChart(true)}>
-                    Show gap vs. other metrics
-                  </LinkButton>
-                )}
-              </Typography>
-            </div>
-            <Footnotes
-              footnotes={getFootnotes(
-                xVar,
-                yVar,
-                region
-                // filters
+            <SedaScatterplotHeader
+              className={clsx({
+                [classes.headerOffset]: !isSplit && hasGapChart
+              })}
+              xVar={xVar}
+              yVar={yVar}
+              region={region}>
+              {!isSplit && hasGapChart && (
+                <LinkButton
+                  className={classes.toggleButton}
+                  onClick={() => setShowGapChart(true)}>
+                  Show gap vs. other metrics
+                </LinkButton>
               )}
-              className={classes.footnote}
-            />
-          </ScatterplotBase>
+            </SedaScatterplotHeader>
+          </SedaScatterplotBase>
         }
         RightComponent={
-          hasSecondaryChart ? (
-            <ScatterplotBase
+          hasGapChart ? (
+            <SedaScatterplotBase
               className={clsx('scatterplot--gap', classes.chart)}
-              xVar={xGapVar}
-              yVar={yGapVar}
-              zVar={zGapVar}
-              // filters={filters}
-              region={region}
+              gapChart
               variant="map"
               axisChildren={
                 <SedaGenericSelect
@@ -199,48 +155,37 @@ const SedaScatterplot = () => {
                     zIndex: 1000,
                     display: 'inline-block'
                   }}
-                  items={secondaryMetrics}
+                  items={gapMetrics}
                   onSelect={m => setSecondary(m)}>
                   Change
                 </SedaGenericSelect>
               }
               onHover={handleHover}
               onClick={handleClick}>
-              <div
-                className={clsx(
-                  'scatterplot__header',
-                  classes.header
-                )}>
-                <Typography variant="h6" color="textSecondary">
-                  {getChartTitle(xGapVar, yGapVar, region)}{' '}
-                  {!isSplit && isVersus && (
-                    <LinkButton
-                      className={classes.toggleButton}
-                      onClick={() => setShowGapChart(false)}>
-                      Show Versus
-                    </LinkButton>
-                  )}
-                </Typography>
-              </div>
-
-              <Footnotes
-                footnotes={getFootnotes(
-                  xGapVar,
-                  yGapVar,
-                  region
-                  // filters
+              <SedaScatterplotHeader
+                className={clsx({
+                  [classes.headerOffset]: !isSplit && isVersus
+                })}
+                xVar={xGapVar}
+                yVar={yGapVar}
+                region={region}>
+                {!isSplit && isVersus && (
+                  <LinkButton
+                    className={classes.toggleButton}
+                    onClick={() => setShowGapChart(false)}>
+                    Show Versus
+                  </LinkButton>
                 )}
-                className={classes.footnote}
-              />
-            </ScatterplotBase>
+              </SedaScatterplotHeader>
+            </SedaScatterplotBase>
           ) : (
             <></>
           )
         }
         view={
-          isSplit && hasSecondaryChart
+          isSplit && hasGapChart
             ? 'split'
-            : showGapChart && hasSecondaryChart
+            : showGapChart && hasGapChart
             ? 'right'
             : 'left'
         }

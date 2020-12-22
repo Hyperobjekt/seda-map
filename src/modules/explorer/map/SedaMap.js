@@ -16,15 +16,12 @@ import { getLang } from '../app/selectors/lang'
 import SedaMapLegend from './SedaMapLegend'
 import {
   useActiveOptions,
+  useAppContext,
   useHovered,
   useMarkersVisibility
 } from '../app/hooks'
 import { REGION_TO_ID_LENGTH } from '../app/constants/regions'
-import {
-  useFilters,
-  useFilteredData,
-  getActiveFilterCount
-} from '../filters'
+import { useFilters, getActiveFilterCount } from '../filters'
 import {
   useLocations,
   useAddLocation,
@@ -32,7 +29,6 @@ import {
 } from '../location'
 import useFlyToLocation from './hooks/useFlyToLocation'
 import { SEDA_SOURCES } from './constants'
-import useScatterplotContext from '../scatterplot/hooks/useScatterplotContext'
 
 const selectedColors = getSelectedColors()
 
@@ -55,9 +51,9 @@ const SedaMap = props => {
   const {
     data,
     region,
-    vars: [, yVar],
+    mapVars: [, yVar],
     colorExtent
-  } = useScatterplotContext()
+  } = useAppContext()
   /** currently selected location ids */
   const [locations] = useLocations()
   /** id of the currently hovered location */

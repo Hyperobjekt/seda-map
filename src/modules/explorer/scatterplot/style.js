@@ -10,7 +10,6 @@ import {
   getMetricFromVarName,
   getChoroplethColors,
   getMidpointForVarName,
-  getDemographicForVarNames,
   getFormatterForVarName,
   isVersusFromVarNames,
   isGapVarName,
@@ -19,14 +18,21 @@ import {
 import { getScatterplotBaseOptions } from '../../scatterplot'
 import { getLangKeyForAxisLabel } from './lang'
 import { getLang } from '../app/selectors/lang'
-import {
-  getDataExtent,
-  getSizerFunctionForRegion
-} from './selectors'
+import { getDotSizeScale } from './selectors'
 
 import { max, tickStep, ticks } from 'd3-array'
 
 var STEPS = 6
+
+const CUSTOM_AXIS_VARS = [
+  'avg',
+  'grd',
+  'coh',
+  'min',
+  'ses',
+  'seg',
+  'frl'
+]
 
 /** GRID CONFIGURATION  */
 
@@ -309,14 +315,14 @@ const getOverlay = (points, lines) => {
   }
 }
 
-const getTickArray = (center, extent) => {
-  const distance = extent.map(v => Math.abs(center - v))
-  const maxDistance = max(distance)
-  const balancedExtent = [
-    center - maxDistance,
-    center + maxDistance
-  ]
-}
+// const getTickArray = (center, extent) => {
+//   const distance = extent.map(v => Math.abs(center - v))
+//   const maxDistance = max(distance)
+//   const balancedExtent = [
+//     center - maxDistance,
+//     center + maxDistance
+//   ]
+// }
 
 export const getBalancedExtent = (center, extent) => {
   const distance = extent.map(v => Math.abs(center - v))
@@ -329,34 +335,34 @@ const getIncrementForExtent = extent => {
 }
 
 /** Returns an amount for how much to increment each step for the axis overlay */
-const getIncrementForVarName = (varName, region) => {
-  const metricId = getMetricIdFromVarName(varName)
-  const isGap = isGapVarName(varName)
-  const key = metricId + (isGap ? '_gap' : '')
-  switch (key) {
-    case 'avg':
-      return region === 'schools' ? 2 : 1
-    case 'grd':
-      return region === 'schools' ? 0.4 : 0.2
-    case 'coh':
-      return region === 'schools' ? 0.25 : 0.2
-    case 'frl':
-      return 0.25
-    case 'coh_gap':
-    case 'grd_gap':
-      return 0.1
-    case 'ses_gap':
-      return 1
-    case 'seg':
-    case 'seg_gap':
-      return 0.25
-    case 'min':
-    case 'min_gap':
-      return 0.2
-    default:
-      return 1
-  }
-}
+// const getIncrementForVarName = (varName, region) => {
+//   const metricId = getMetricIdFromVarName(varName)
+//   const isGap = isGapVarName(varName)
+//   const key = metricId + (isGap ? '_gap' : '')
+//   switch (key) {
+//     case 'avg':
+//       return region === 'schools' ? 2 : 1
+//     case 'grd':
+//       return region === 'schools' ? 0.4 : 0.2
+//     case 'coh':
+//       return region === 'schools' ? 0.25 : 0.2
+//     case 'frl':
+//       return 0.25
+//     case 'coh_gap':
+//     case 'grd_gap':
+//       return 0.1
+//     case 'ses_gap':
+//       return 1
+//     case 'seg':
+//     case 'seg_gap':
+//       return 0.25
+//     case 'min':
+//     case 'min_gap':
+//       return 0.2
+//     default:
+//       return 1
+//   }
+// }
 
 /**
  * Get the line and label overlays based on the variable name
@@ -375,7 +381,7 @@ const getOverlayForVarName = ({
   const langPrefix = isGap ? metricId + '_gap' : metricId
   const formatter = getFormatterForVarName(varName)
   const labels =
-    ['avg', 'grd', 'coh', 'min'].indexOf(metricId) > -1
+    CUSTOM_AXIS_VARS.indexOf(metricId) > -1
       ? createLabels(
           positions,
           langPrefix,
@@ -589,13 +595,12 @@ const getMapXAxis = ({ varName, metric, region, extent }) => {
     max,
     inverse: region === 'schools',
     axisLabel: {
-      show:
-        ['avg', 'grd', 'coh', 'min'].indexOf(metric.id) === -1,
+      show: CUSTOM_AXIS_VARS.indexOf(metric.id) === -1,
       inside: false,
       formatter: formatter
     },
     axisLine: { show: false },
-    interval: getIncrementForVarName(varName, region),
+    interval: getIncrementForExtent(extent),
     nameGap: 0,
     nameTextStyle: {},
     splitLine: { show: false }
@@ -603,7 +608,6 @@ const getMapXAxis = ({ varName, metric, region, extent }) => {
 }
 
 const xAxis = ({ variant, varName, region, extent }) => {
-  console.log('xExtent', extent)
   const metric = getMetricFromVarName(varName)
   const demographic = getDemographicFromVarName(varName)
   switch (variant) {
@@ -668,7 +672,6 @@ const getMapYAxis = ({ region, extent, ...rest }) => {
 }
 
 const yAxis = ({ variant, region, extent }) => {
-  console.log('yExtent', extent)
   switch (variant) {
     case 'map':
       return getMapYAxis({ extent, region })
@@ -679,13 +682,19 @@ const yAxis = ({ variant, region, extent }) => {
 
 export const getScatterplotOptions = (
   variant,
-  data = [],
-  { xVar, yVar, zVar, extents, colorExtent },
-  highlightIds = [],
-  region
+  {
+    data = [],
+    xVar,
+    yVar,
+    zVar,
+    extents,
+    colorExtent,
+    highlightIds = [],
+    region
+  }
 ) => {
   if (!data || data.length === 0) return {}
-  const sizer = getSizerFunctionForRegion({
+  const sizer = getDotSizeScale({
     extent: extents[2]
   })
   const options = {

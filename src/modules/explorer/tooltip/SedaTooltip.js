@@ -115,6 +115,7 @@ const getSecondaryVar = (activeRegion, featureRegion) =>
  * @param {*} param0
  */
 const getLocationName = ({ id, name }) => {
+  console.log('getlocaoto', id, name)
   if (!id && !name) return 'Unavailable'
   if (id && id.length === 2) return getStateName(id)
   return name

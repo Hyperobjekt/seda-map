@@ -105,7 +105,7 @@ const isRangeKeyMatch = (key, { region, demographic, type }) => {
  * @param {string} region region to get the range for
  * @param {string} type type of range, if using separate map / chart ranges (e.g. 'map')
  */
-export const getMetricRange = (
+export const getColorRange = (
   id,
   demographic,
   region,

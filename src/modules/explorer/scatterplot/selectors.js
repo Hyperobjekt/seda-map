@@ -26,11 +26,11 @@ const getDotSize = () => DOT_SIZES
 export const getBaseVars = () => BASE_VARS
 
 /** Gets the domain for the given region */
-const getRegionDomain = (demographic, region) => {
-  return region === 'schools'
-    ? REGION_DOMAINS['schools']
-    : REGION_DOMAINS[demographic + '_' + region]
-}
+// const getRegionDomain = (demographic, region) => {
+//   return region === 'schools'
+//     ? REGION_DOMAINS['schools']
+//     : REGION_DOMAINS[demographic + '_' + region]
+// }
 
 /**
  * Returns a scale function that can be used to map data values
@@ -38,7 +38,7 @@ const getRegionDomain = (demographic, region) => {
  * @param {object} data data to generate scale for (e.g. { '01001': 3.4, ... })
  * @param {object} options range and exponent options for scale
  */
-export const getSizerFunctionForRegion = ({
+export const getDotSizeScale = ({
   extent = [0, 1],
   range = getDotSize(),
   exponent = 0.5
@@ -62,8 +62,8 @@ export const getDataExtent = (data, accessor) => {
 /**
  * Pads a provided extent
  */
-export const getPaddedExtent = extent => {
-  const padding = (extent[1] - extent[0]) * 0.1
+export const getPaddedExtent = (extent, amount = 0.1) => {
+  const padding = (extent[1] - extent[0]) * amount
   // const interval = getIntervalForExtent(extent)
   const extendedExtent = [
     extent[0] - padding,

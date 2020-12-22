@@ -574,12 +574,14 @@ const LANG = {
     '$[value] grade levels\nper year difference',
 
   AXIS_SES_MID: 'national\naverage',
-  AXIS_SES_LOW: 'poorer',
-  AXIS_SES_HIGH: 'richer',
+  AXIS_SES_LOW: '← poorer',
+  AXIS_SES_LOW_SINGLE: '← poorer',
+  AXIS_SES_HIGH: 'richer →',
+  AXIS_SES_HIGH_SINGLE: 'richer →',
 
-  AXIS_SES_ZERO_GAP: 'no gap in\nsocioeconomic status',
-  AXIS_SES_LOW_GAP: '$[demographic1] richer',
-  AXIS_SES_HIGH_GAP: '$[demographic2] richer',
+  AXIS_SES_GAP_ZERO: 'no gap in\nsocioeconomic status',
+  AXIS_SES_GAP_LOW: '← larger gap',
+  AXIS_SES_GAP_HIGH: 'larger gap →',
   AXIS_SES_GAP_MID: 'no\ngap',
 
   AXIS_SEG_MID: 'no\ngap',
@@ -587,13 +589,16 @@ const LANG = {
   AXIS_SEG_HIGH: 'more',
 
   AXIS_SEG_GAP_MID: 'no gap',
-  AXIS_SEG_LOW_GAP: 'less',
-  AXIS_SEG_HIGH_GAP: 'more',
+  AXIS_SEG_GAP_LOW: '$[value]',
+  AXIS_SEG_GAP_HIGH: '$[value]',
 
+  AXIS_MIN_GAP_LOW: '$[value]',
   AXIS_MIN_GAP_MID: 'no gap',
   AXIS_MIN_GAP_HIGH: '$[value]',
 
-  AXIS_FRL_MID: ' ',
+  AXIS_FRL_HIGH: '← more poverty',
+  AXIS_FRL_HIGH_SINGLE: '← more poverty',
+  AXIS_FRL_MID: 'less poverty →',
 
   // PREVIEW CHART AXIS LABELS
   AXIS_PREV_ZERO: '',

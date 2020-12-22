@@ -5,7 +5,7 @@ import {
 } from '../constants/colors'
 import { interpolateRgbBasis } from 'd3-interpolate'
 import { isGapVarName } from './demographics'
-import { getMetricRangeFromVarName } from './data'
+import { getColorRangeForVarName } from './data'
 import { getValuePositionInRange } from '../../../../shared/utils'
 
 /**
@@ -46,7 +46,7 @@ export const getColorForVarNameValue = (
   if (!value && value !== 0) {
     return NO_DATA_COLOR
   }
-  const range = getMetricRangeFromVarName(varName, region, type)
+  const range = getColorRangeForVarName(varName, region, type)
   const percent = getValuePositionInRange(value, range)
 
   return isColorInvertedForVarName(varName)

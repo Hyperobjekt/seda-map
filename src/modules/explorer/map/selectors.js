@@ -2,9 +2,6 @@ import { fromJS } from 'immutable'
 import {
   getRegionFromLocationId,
   getChoroplethColors,
-  getDemographicIdFromVarName,
-  getMetricIdFromVarName,
-  getMetricRange,
   isGapVarName
 } from '../app/selectors'
 import { getFilterIndex } from '../../filters/useFilterStore'

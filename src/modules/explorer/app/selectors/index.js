@@ -83,7 +83,7 @@ export {
   getMetricIdFromVarName,
   getMetricById,
   getMetrics,
-  getMetricRange,
+  getColorRange,
   getKeyMetrics,
   getSecondaryForDemographic
 } from './metrics'
@@ -102,7 +102,7 @@ export {
   getPredictedValue,
   getFormatterForVarName,
   getMidpointForVarName,
-  getMetricRangeFromVarName,
+  getColorRangeForVarName,
   getVarNames,
   getDataForId,
   isUnavailable
