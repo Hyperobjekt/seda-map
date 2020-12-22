@@ -85,7 +85,7 @@ const SedaMap = props => {
       colorExtent
     }
     return getLayers(context)
-  }, [region, yVar, filters, data])
+  }, [region, yVar, filters, data, colorExtent])
   /** aria label for screen readers */
   const ariaLabel = getLang('UI_MAP_SR', {
     metric: getLang('LABEL_' + metric),

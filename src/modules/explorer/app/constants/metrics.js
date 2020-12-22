@@ -9,6 +9,7 @@ export const METRICS = [
     label: LANG['LABEL_AVG'],
     range: {
       'map_*_gap': [-6, 6],
+      map_states: [-2, 2],
       map_counties: [-3, 3],
       map_districts: [-3.5, 3.5],
       map_schools: [-5, 5],
@@ -43,6 +44,7 @@ export const METRICS = [
     label: LANG['LABEL_GRD'],
     range: {
       'map_*_gap': [-0.4, 0.4],
+      'map_states_*': [0.8, 1.2],
       'map_*_*': [0.5, 1.5],
       '*_states_a': [0.9, 1.5],
       // '*_states_h': [-2, 0.5],
