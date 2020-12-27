@@ -11,7 +11,7 @@ export default () => {
   const filters = useFilters()
   const [region] = useRegion()
   return useMemo(() => {
-    const flags = FILTER_FLAGS[region]
+    const flags = FILTER_FLAGS[region].flat()
     const locationId = getFilterValue(filters, [
       'startsWith',
       'id'
