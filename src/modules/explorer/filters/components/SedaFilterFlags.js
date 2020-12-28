@@ -5,9 +5,10 @@ import { CheckboxGroup } from '../../../../shared/components/Inputs/Checkboxes'
 import { useRegion } from '../../app/hooks'
 import { FILTER_FLAGS } from '../../app/constants/flags'
 import { PanelListItem } from '../../../../shared/components/Panels/PanelList'
-import { getPrefixLang } from '../../app/selectors/lang'
+import { getLang, getPrefixLang } from '../../app/selectors/lang'
 import useActiveFilters from '../hooks/useActiveFilters'
 import useFilterStore from '../../../filters'
+import { FormControl, FormLabel } from '@material-ui/core'
 
 const makeCheckboxes = (flags, checked) => {
   return flags.map(flag => ({
@@ -17,27 +18,36 @@ const makeCheckboxes = (flags, checked) => {
   }))
 }
 
+const GROUP_TITLES = [
+  getLang('FLAG_LABEL_AREA'),
+  getLang('FLAG_LABEL_SCHOOL'),
+  getLang('FLAG_LABEL_AGE')
+]
+
 const SedaFilterFlags = ({ ...props }) => {
   const [region] = useRegion()
+
+  const regionFlags = FILTER_FLAGS[region];
   // grab filters array
   const filters = useActiveFilters()
   // function to remove a single filter
   const removeFilter = useFilterStore(
     state => state.removeFilter
   )
-  // pull active flag filters from the filters array
-  const checked = filters
-    .filter(f => f[0] === 'eq')
+  // check filters for any flags that have been turned off
+  const uncheckedFlags = filters
+    .filter(f => f[0] === 'eq' && f[2] === 0)
     .map(f => f[1])
+  // pull active flag filters from the filters array
+  const checkedFlags = regionFlags.flat().filter(f => uncheckedFlags.indexOf(f) === -1)
   // function to set (add or update) single filter
   const setFilter = useFilterStore(state => state.setFilter)
   // get checkbox group from flags and active filters
   const checkboxGroups = useMemo(() => {
-    return FILTER_FLAGS[region].map(flagGroup =>
-      makeCheckboxes(flagGroup, checked)
+    return regionFlags.map(flagGroup =>
+      makeCheckboxes(flagGroup, checkedFlags)
     )
-  }, [region, checked])
-  console.log(checked, filters, checkboxGroups)
+  }, [region, checkedFlags])
 
   /**
    * Adds / removes items from the `checked` array on change
@@ -46,24 +56,26 @@ const SedaFilterFlags = ({ ...props }) => {
    */
   const handleCheckboxChange = (checkbox, event) => {
     const key = checkbox.id
-    console.log('checked', event, key)
-    const isOn = checked.indexOf(key) > -1
+    const isOn = checkedFlags.indexOf(key) > -1
     isOn
-      ? removeFilter(['eq', key, 1])
-      : setFilter(['eq', key, 1])
+      ? setFilter(['eq', key, 0])
+      : removeFilter(['eq', key])
   }
 
   return (
     <PanelListItem
-      title={getPrefixLang(region + '_type', 'FILTER_LABEL')}
       {...props}>
+      
       {checkboxGroups.map((group, i) => (
-        <CheckboxGroup
-          key={i}
-          checkboxes={group}
-          onChange={handleCheckboxChange}
-        />
+        <FormControl key={i} component="fieldset">
+          <FormLabel component="legend">{ GROUP_TITLES[i] }</FormLabel>
+          <CheckboxGroup
+            checkboxes={group}
+            onChange={handleCheckboxChange}
+          />
+        </FormControl>
       ))}
+      
     </PanelListItem>
   )
 }

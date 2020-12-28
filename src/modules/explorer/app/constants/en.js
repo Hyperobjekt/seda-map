@@ -312,6 +312,22 @@ const LANG = {
   FLAG_GIFTED:
     'This school has a high percentage of gifted students; keep in mind when interpreting test scores. See <a target="_blank" href="/help-faq/#data-adjustments">FAQ</a> for information.',
 
+  // Filter panel flags
+
+  FLAG_LABEL_AREA: "Area Classification",
+  FLAG_LABEL_R: "Rural",
+  FLAG_LABEL_T: "Town",
+  FLAG_LABEL_S: "Suburban",
+  FLAG_LABEL_U: "Urban",
+  FLAG_LABEL_SCHOOL: "School Type",
+  FLAG_LABEL_MG: "Magnet",
+  FLAG_LABEL_CH: "Charter",
+  FLAG_LABEL_AGE: "School Age Group",
+  FLAG_LABEL_M: "Middle",
+  FLAG_LABEL_E: "Elementary",
+  FLAG_LABEL_C: "Combined",
+
+  
   // Location Panel Summaries (Counties / Districts)
   SUMMARY_AVG_LOW:
     '$[name] provides <strong>lower than average</strong> educational opportunites.',
