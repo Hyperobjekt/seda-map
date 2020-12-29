@@ -2,8 +2,6 @@ import React from 'react'
 import { MapLegend } from '../../map'
 import {
   getChoroplethColors,
-  getMetricIdFromVarName,
-  getDemographicIdFromVarName,
   getFormatterForVarName,
   getGapDemographics,
   getInvertedFromVarName
@@ -16,7 +14,6 @@ import {
   useHovered,
   useMarkersVisibility,
   useDemographicType,
-  useCurrentVars,
   useAppContext
 } from '../app/hooks'
 import { getValuePositionInRange } from '../../../shared/utils'

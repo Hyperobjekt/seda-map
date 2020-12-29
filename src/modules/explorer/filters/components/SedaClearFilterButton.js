@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { getLang } from '../../app/selectors/lang'
 import { Button } from '@material-ui/core'
 import useFilterStore from '../../../filters'

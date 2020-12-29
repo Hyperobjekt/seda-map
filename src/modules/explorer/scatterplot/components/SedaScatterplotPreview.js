@@ -63,7 +63,6 @@ const SedaScatterplotPreview = props => {
         'scatterplot--versus': isVersus
       })}
       classes={classes}
-      autoFetch={false}
       variant="preview"
       {...props}
     />

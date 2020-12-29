@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react'
-import PropTypes from 'prop-types'
 import useFilterStore from '../../../filters'
 import { DEFAULT_RANGES } from '../../app/constants/metrics'
 import { PanelListItem } from '../../../../shared/components/Panels/PanelList'

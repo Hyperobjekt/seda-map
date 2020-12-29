@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react'
-import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import { CheckboxGroup } from '../../../../shared/components/Inputs/Checkboxes'
 import { useRegion } from '../../app/hooks'
@@ -65,7 +64,7 @@ const SedaFilterFlags = ({ classes, className, ...props }) => {
     return regionFlags.map(flagGroup =>
       makeCheckboxes(flagGroup, checkedFlags)
     )
-  }, [region, checkedFlags])
+  }, [checkedFlags, regionFlags])
 
   /**
    * Adds / removes items from the `checked` array on change

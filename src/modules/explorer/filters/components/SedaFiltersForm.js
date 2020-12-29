@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { List } from '@material-ui/core'
 import { useRegion } from '../../app/hooks'
 import { PanelListItem } from '../../../../shared/components/Panels/PanelList'

@@ -35,12 +35,6 @@ const SedaPanelButton = ({
       prevActivePanel === panelId &&
       buttonRef.current
     ) {
-      console.log(
-        'restore focus',
-        activePanel,
-        prevActivePanel,
-        buttonRef.current
-      )
       buttonRef.current.querySelector("[role='button']").focus()
     }
   }, [activePanel, prevActivePanel, panelId, buttonRef.current])

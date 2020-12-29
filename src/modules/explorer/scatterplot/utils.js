@@ -2,8 +2,6 @@ import axios from 'axios'
 import { parse } from 'papaparse'
 
 import {
-  isGapVarName,
-  getMetricIdFromVarName,
   getColorForVarNameValue,
   getSelectedColors
 } from '../app/selectors'

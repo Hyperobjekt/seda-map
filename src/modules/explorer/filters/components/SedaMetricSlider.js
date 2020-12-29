@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react'
-import PropTypes from 'prop-types'
 import useFilterStore, {
   getFilterValue
 } from '../../../filters/useFilterStore'
@@ -37,7 +36,7 @@ const SedaMetricSlider = ({ metricId, ...props }) => {
         ? removeFilter(['range', metricId], true)
         : setFilter(['range', metricId, value])
     },
-    [region, setFilter, removeFilter]
+    [setFilter, removeFilter, defaultValue, metricId]
   )
   return (
     <PanelListItem

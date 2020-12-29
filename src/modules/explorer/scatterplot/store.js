@@ -41,7 +41,6 @@ const [useScatterplotStore] = create((set, get, api) => ({
           varName.indexOf('sz') === -1 &&
           varName.indexOf('name') === -1
       )
-      console.log('pair vars', pairVars)
       promises.push(fetchReducedPair(VARS_ENDPOINT, ...pairVars))
     }
     Promise.all(promises).then(dataArray => {

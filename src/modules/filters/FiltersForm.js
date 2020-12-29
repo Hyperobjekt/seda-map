@@ -3,6 +3,9 @@ import useFilterStore from './useFilterStore'
 import FilterAdd from './FilterAdd'
 import FilterList from './FilterList'
 
+/**
+ * Note: Used for the experimental data view, NOT USED IN THE EXPLORER!
+ */
 const FiltersForm = props => {
   const filters = useFilterStore(state => state.filters)
   const addFilter = useFilterStore(state => state.addFilter)

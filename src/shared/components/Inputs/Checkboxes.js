@@ -1,17 +1,9 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import clsx from 'clsx'
 import {
   Checkbox,
   FormControlLabel,
-  FormGroup,
-  ListItem,
-  ListItemText
+  FormGroup
 } from '@material-ui/core'
-
-const styles = theme => ({
-  root: {}
-})
 
 export const LabelledCheckbox = ({
   id,

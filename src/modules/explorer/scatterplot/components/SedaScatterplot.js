@@ -60,8 +60,8 @@ const SedaScatterplot = () => {
   // pull required items from the app context
   const {
     region,
-    scatterplotVars: [xVar, yVar, zVar],
-    gapVars: [xGapVar, yGapVar, zGapVar],
+    scatterplotVars: [xVar, yVar],
+    gapVars: [xGapVar, yGapVar],
     isVersus,
     gapMetrics,
     hasGapChart

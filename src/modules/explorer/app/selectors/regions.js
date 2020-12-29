@@ -1,6 +1,5 @@
 import {
   REGIONS,
-  REGION_DOMAINS,
   ID_LENGTH_TO_REGION
 } from '../constants/regions'
 import { getPrefixLang } from './lang'
@@ -90,21 +89,4 @@ export const getLocationIdsForRegion = (region, locations) => {
   return locations.filter(
     id => id.length === getRegionById(region).idLength
   )
-}
-
-/**
- * Get the size filter for region
- * @param {*} regionId
- */
-export const getSizesForRegion = regionId => {
-  switch (regionId) {
-    case 'counties':
-      return [10, 50, 100, 500]
-    case 'districts':
-      return [10, 50, 100, 500, 1000]
-    case 'schools':
-      return [50, 100, 500, 1000, 5000]
-    default:
-      return []
-  }
 }

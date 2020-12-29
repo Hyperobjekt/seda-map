@@ -1,6 +1,5 @@
 import * as scale from 'd3-scale'
 import * as d3array from 'd3-array'
-import { REGION_DOMAINS } from '../app/constants/regions'
 
 /** min / max dot sizes */
 const DOT_SIZES = [4, 64]
