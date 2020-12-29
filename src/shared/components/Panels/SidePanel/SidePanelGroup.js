@@ -1,19 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles, useTheme } from '@material-ui/core'
+import clsx from 'clsx'
 
 const useStyles = makeStyles(theme => ({
   root: {
     position: 'relative',
     zIndex: 2,
-    width: props =>
+    minWidth: props =>
       props.condensed
         ? theme.app.condensedPanelWidth
-        : theme.app.fullPanelWidth,
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen
-    })
+        : theme.app.panelWidth
   }
 }))
 
@@ -59,14 +56,20 @@ const setChildPositions = (
   })
 }
 
-const SidePanelGroup = ({ children, maxVisible, condensed }) => {
+const SidePanelGroup = ({
+  children,
+  maxVisible,
+  condensed,
+  className,
+  ...props
+}) => {
   const theme = useTheme()
   const updatedChildren = setChildPositions(
     children,
     maxVisible,
     {
       fullWidth: theme.app.panelWidth,
-      condensedWidth: theme.app.condensedPanelWidth
+      condensedWidth: theme.app.condensedPanelWidth - 16
     }
   )
   const openPanelCount = getOpenPanelCount(children)
@@ -75,7 +78,17 @@ const SidePanelGroup = ({ children, maxVisible, condensed }) => {
     panelCount: Math.min(openPanelCount, maxVisible),
     condensed
   })
-  return <div className={classes.root}>{updatedChildren}</div>
+  return (
+    <div
+      className={clsx(
+        'side-panel-group',
+        classes.root,
+        className
+      )}
+      {...props}>
+      {updatedChildren}
+    </div>
+  )
 }
 
 SidePanelGroup.propTypes = {

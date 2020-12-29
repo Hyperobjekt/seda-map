@@ -406,5 +406,13 @@ export const STATES = {
     xmax: -104.05216,
     ymin: 40.994746,
     ymax: 45.005904
+  },
+  '72': {
+    full: 'Puerto Rico',
+    abbr: 'PR',
+    xmin: -67.2424275377,
+    xmax: -65.5910037909,
+    ymin: 17.946553453,
+    ymax: 18.5206011011
   }
 }

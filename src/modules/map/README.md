@@ -69,14 +69,6 @@ Provides pixel dimensions of the map viewport
 const [width, height] = useMapSize()
 ```
 
-## useIdMap()
-
-Provides map of GeoJSON feature ID to feature property ID. This is only used when a feature property ID is a non-numeric value.
-
-```js
-const [idMap, addToIdMap] = useIdMap()
-```
-
 ## useFlyToState()
 
 Provides a function that will fly the map to a state when given a fips code.

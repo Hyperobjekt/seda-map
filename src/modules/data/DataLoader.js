@@ -1,16 +1,8 @@
 import React, { useEffect } from 'react'
-import PropTypes from 'prop-types'
 import useStaticData from './useStaticData'
 import { autoType } from 'd3-dsv'
 
-const SEDA_PARSER = ({ id, ...rest }) => {
-  return {
-    id,
-    ...autoType(rest)
-  }
-}
-
-const DataLoader = props => {
+const DataLoader = () => {
   const loadDataForRegion = useStaticData(
     state => state.loadDataSet
   )
@@ -20,8 +12,8 @@ const DataLoader = props => {
   const regions = ['states', 'counties', 'districts', 'schools']
 
   useEffect(() => {
-    regions.forEach(r => loadDataForRegion(r, SEDA_PARSER))
-  }, [loadDataForRegion])
+    regions.forEach(r => loadDataForRegion(r, autoType))
+  }, [loadDataForRegion, regions])
 
   return (
     <ul>

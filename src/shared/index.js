@@ -1,11 +1,12 @@
 export {
-  IconLabelButton,
+  IconTooltipButton,
   LinkButton,
   SelectionButton,
   HideOnScroll,
   NumberSlider,
   SearchInput,
   Slider,
+  DebouncedSlider,
   Page,
   PageBody,
   PageFooter,
@@ -17,6 +18,7 @@ export {
   SidePanelGroup,
   SidePanelList,
   ExpansionPanel,
+  BasicSidePanel,
   DetailedTooltip,
   Tooltip,
   DivergingStatValue,
@@ -24,5 +26,13 @@ export {
   GradientLegend,
   Stack,
   BookEnds,
-  Marker
+  Marker,
+  SplitView
 } from './components'
+export {
+  useDebounce,
+  useDidUpdateEffect,
+  useInterval,
+  useKeyPress,
+  usePrevious
+} from './hooks'

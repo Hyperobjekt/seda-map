@@ -135,7 +135,7 @@ const theme = createMuiTheme({
   app: {
     panelWidth: 360,
     fullPanelWidth: 384,
-    condensedPanelWidth: 72,
+    condensedPanelWidth: 80,
     boldFont: boldFontFamily,
     darkBackground: 'rgba(3, 18, 50, 0.94)',
     darkText: '#fff',

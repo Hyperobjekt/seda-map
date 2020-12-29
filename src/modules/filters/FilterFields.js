@@ -16,6 +16,10 @@ const useStyles = makeStyles(theme => ({
   field: {}
 }))
 
+/**
+ * UI for displaying and changing active filter rules
+ * @param {*} param0
+ */
 const FilterFields = ({
   fields,
   values,
@@ -51,6 +55,12 @@ FilterFields.defaultProps = {
   classes: {}
 }
 
-FilterFields.propTypes = {}
+FilterFields.propTypes = {
+  fields: PropTypes.array,
+  values: PropTypes.array,
+  onChange: PropTypes.func,
+  classes: PropTypes.object,
+  className: PropTypes.string
+}
 
 export default FilterFields

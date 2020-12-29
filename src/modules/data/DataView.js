@@ -3,6 +3,7 @@ import useStaticData from './useStaticData'
 import { applyFilters, FiltersForm } from '../filters'
 import useFilterStore from '../filters/useFilterStore'
 import DataLoader from './DataLoader'
+import shallow from 'zustand/shallow'
 
 const DataSection = ({ title, total, data, ...props }) => {
   const cols = [
@@ -42,9 +43,7 @@ const DataSection = ({ title, total, data, ...props }) => {
 
 const DataView = props => {
   const data = useStaticData(state => state.data)
-  const filters = useFilterStore(state => state.filters)
-
-  console.log('dataview', data, filters)
+  const filters = useFilterStore(state => state.filters, shallow)
 
   const filtered = useMemo(() => {
     return Object.keys(data).reduce((dataObj, key, i) => {

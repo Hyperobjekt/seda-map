@@ -17,6 +17,7 @@ const makeId = function() {
 
 const Field = ({ label, widget, ...props }) => {
   const [id] = useState(makeId())
+  const options = props.options
   switch (widget) {
     case 'boolean':
       return (
@@ -35,7 +36,6 @@ const Field = ({ label, widget, ...props }) => {
         />
       )
     case 'select':
-      const { options, ...rest } = props
       if (!options) throw new Error('no options for select')
       return (
         <TextField id={id} select label={label} {...props}>

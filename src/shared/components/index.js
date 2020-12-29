@@ -1,10 +1,16 @@
 export {
-  IconLabelButton,
+  IconTooltipButton,
   LinkButton,
   SelectionButton
 } from './Buttons'
 export { HideOnScroll } from './Helpers'
-export { NumberSlider, SearchInput, Slider } from './Inputs'
+export {
+  NumberSlider,
+  SearchInput,
+  Slider,
+  DebouncedSlider,
+  SelectMenu
+} from './Inputs'
 export { Page, PageBody, PageFooter, PageHeader } from './Page'
 export {
   SidePanel,
@@ -13,11 +19,12 @@ export {
   SidePanelFooter,
   SidePanelGroup,
   SidePanelList,
-  ExpansionPanel
+  ExpansionPanel,
+  BasicSidePanel
 } from './Panels'
 export { Tooltip, DetailedTooltip } from './Tooltips'
 export { DivergingStatValue, TableStats } from './Stats'
 export { default as GradientLegend } from './GradientLegend'
 export { default as BookEnds } from './BookEnds'
 export { default as Marker } from './Marker'
-export { Stack } from './Layout'
+export { Stack, SplitView } from './Layout'
