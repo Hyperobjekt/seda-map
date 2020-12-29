@@ -13,7 +13,8 @@ const listItemStyles = theme => ({
     paddingBottom: theme.spacing(2)
   },
   title: {
-    fontSize: theme.typography.pxToRem(16)
+    fontSize: theme.typography.pxToRem(14),
+    color: theme.palette.text.secondary
   }
 })
 

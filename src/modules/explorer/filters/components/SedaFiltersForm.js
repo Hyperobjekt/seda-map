@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { List } from '@material-ui/core'
 import { useRegion } from '../../app/hooks'
 import { PanelListItem } from '../../../../shared/components/Panels/PanelList'
@@ -14,9 +14,11 @@ import SedaLimitSlider from './SedaLimitSlider'
 const SedaFiltersForm = props => {
   // get active demographic
   const [region] = useRegion()
+  // TODO: only show metric sliders that are added
+  // const [filterMetrics, setFilterMetrics] = useState([])
 
   // get ranges from filter array
-  const metrics = [
+  const availableMetrics = [
     'avg',
     'grd',
     'coh',
@@ -30,7 +32,7 @@ const SedaFiltersForm = props => {
       </PanelListItem>
       {region !== 'states' && <SedaFilterLocation />}
       <SedaLimitSlider />
-      {metrics.map(metric => (
+      {availableMetrics.map(metric => (
         <SedaMetricSlider key={metric} metricId={metric} />
       ))}
       {(region === 'schools' || region === 'districts') && (

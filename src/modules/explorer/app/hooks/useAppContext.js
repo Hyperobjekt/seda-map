@@ -17,7 +17,7 @@ import {
 } from '../selectors'
 import { hasVal } from '../../scatterplot/utils'
 
-const MAX_DOTS = 20000
+const MAX_DOTS = 2000
 
 export default function useAppContext() {
   const data = useFilteredData()
@@ -99,6 +99,7 @@ export default function useAppContext() {
     return {
       data,
       dataExtents,
+      allVars,
       scatterplotData,
       scatterplotVars,
       scatterplotExtents,
