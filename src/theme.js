@@ -130,6 +130,20 @@ const theme = createMuiTheme({
       arrow: {
         color: 'rgba(3, 18, 50, 0.94)'
       }
+    },
+    MuiListSubheader: {
+      root: {
+        backgroundColor: "#fff",
+        background: "#fff",
+        textTransform: "uppercase",
+        letterSpacing: 1,
+        fontSize: "0.8rem",
+        fontWeight: 500
+      },
+      sticky: {
+        background: "#fff",
+        backgroundColor: "#fff",
+      }
     }
   },
   app: {

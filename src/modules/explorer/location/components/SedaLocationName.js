@@ -32,7 +32,7 @@ const SedaLocationName = ({ locationId, ...props }) => {
         isState ? 'United States' : getStateName(locationId)
       }
       label={locationNumber}
-      color={color}
+      color={color || "#ccc"}
       {...props}
     />
   ) : null

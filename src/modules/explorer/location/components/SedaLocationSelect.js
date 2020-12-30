@@ -8,15 +8,11 @@ import {
   ListSubheader,
   ListItemSecondaryAction,
   IconButton,
-  Button
 } from '@material-ui/core'
-import { getRegions, getRegionLabel } from '../../app/selectors'
-import { getLocationsByRegion } from '../../app/selectors/regions'
 import { getLang } from '../../app/selectors/lang'
 import { CloseIcon } from '../../../icons'
 import { useRegion } from '../../app/hooks'
 import useUiStore from '../../app/hooks/useUiStore'
-import logger from '../../../logger'
 import { SedaLocationName, useActiveLocation } from '..'
 import useRemoveLocation from '../hooks/useRemoveLocation'
 import useLocations from '../hooks/useLocations'
@@ -27,15 +23,11 @@ const useStyles = makeStyles(theme => ({
     paddingTop: 4,
     paddingBottom: 4
   },
-  subheader: {
-    textTransform: 'capitalize'
-  }
 }))
 
 const LocationList = ({
   title,
   locations,
-  active,
   emptyMessage,
   children,
   ListItemProps = {},
@@ -97,20 +89,12 @@ const LocationList = ({
   )
 }
 
-const SedaLocationSelect = ({ onSelect }) => {
+const SedaLocationSelect = () => {
   const removeLocation = useRemoveLocation()
-  const [activeRegion, setRegion] = useRegion()
+  const [activeRegion] = useRegion()
   const [locations] = useLocations()
   const [, setActiveLocation] = useActiveLocation()
   const setHovered = useUiStore(state => state.setHovered)
-  const locationsByRegion = getLocationsByRegion(locations)
-  logger.debug(
-    'selected locations by region:',
-    locationsByRegion
-  )
-  const inactiveRegions = getRegions()
-    .map(r => r.id)
-    .filter(r => r !== activeRegion)
 
   const handleLocationClick = location => {
     setActiveLocation(location)
@@ -127,48 +111,22 @@ const SedaLocationSelect = ({ onSelect }) => {
     removeLocation(location)
   }
 
-  const handleRegionChange = region => {
-    setRegion(region)
-  }
-
-  const bind = {
-    onLocationClick: handleLocationClick,
-    onLocationHover: handleLocationHover,
-    onLocationDismiss: handleLocationDismiss
-  }
-
   return (
     <div style={{ padding: '4px 0', width: '100%' }}>
       <SedaSearch
         indices={['states', 'counties', 'districts', 'schools']}
-        placeholder="Find a county, district, or school"
+        placeholder={getLang('LOCATIONS_SEARCH')}
       />
       <LocationList
-        title={getRegionLabel(activeRegion)}
-        locations={locationsByRegion[activeRegion]}
+        title={getLang("LOCATIONS_SELECTED")}
+        locations={locations}
         emptyMessage={getLang('LOCATIONS_ACTIVE_NONE', {
           region: activeRegion
         })}
-        active
-        {...bind}
+        onLocationClick={handleLocationClick}
+        onLocationHover={handleLocationHover}
+        onLocationDismiss={handleLocationDismiss}
       />
-      {inactiveRegions.map(r => (
-        <LocationList
-          key={r}
-          title={getRegionLabel(r)}
-          locations={locationsByRegion[r]}
-          emptyMessage={getLang('LOCATIONS_NONE', { region: r })}
-          {...bind}>
-          <ListItem style={{ paddingLeft: 44 }}>
-            <Button
-              fullWidth
-              variant="outlined"
-              onClick={() => handleRegionChange(r)}>
-              Switch to {getRegionLabel(r)} view
-            </Button>
-          </ListItem>
-        </LocationList>
-      ))}
     </div>
   )
 }
