@@ -1,20 +1,22 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { ListItem, ListItemText } from '@material-ui/core'
+import { ListItem, ListItemText, withStyles } from '@material-ui/core'
 import { getPrefixLang } from '../../app/selectors/lang'
 import { getDemographicIdFromVarName } from '../../app/selectors'
 import SedaStat from '../../stats/SedaStat'
+import { styles } from "./SedaKeyMetricListItem"
 
 const SedaDemographicListItem = ({
   varName,
   value,
   interval,
+  classes,
   ...props
 }) => {
   const demId = getDemographicIdFromVarName(varName)
-  const title = getPrefixLang(demId, 'LABEL')
+  const title = getPrefixLang(demId, 'LABEL_STUDENTS')
   return (
-    <ListItem {...props}>
+    <ListItem  classes={{root: classes.root, selected: classes.selected}} {...props}>
       <ListItemText primary={title} />
       <SedaStat
         varName={varName}
@@ -27,4 +29,4 @@ const SedaDemographicListItem = ({
 
 SedaDemographicListItem.propTypes = {}
 
-export default SedaDemographicListItem
+export default withStyles(styles)(SedaDemographicListItem)

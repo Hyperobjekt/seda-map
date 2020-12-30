@@ -9,7 +9,6 @@ import useDataOptions from '../../app/hooks/useDataOptions'
 export default id => {
   return useDataOptions(state => {
     const index = state.locations
-      .filter(l => l.length === id.length)
       .findIndex(l => l === id)
     return index + 1
   })
