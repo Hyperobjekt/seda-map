@@ -13,7 +13,11 @@ const borderRadius = 3
 
 const spacing = num => num * 8
 
-const primary = { main: '#0071DB', highlight: '#EBFBFF' }
+const primary = {
+  main: '#0071DB',
+  highlight: '#F5F8FA',
+  outline: 'rgba(0,113,219,0.2)'
+}
 const altDarkText = 'rgba(255,255,255,0.66)'
 const highlightColor = '#EBFBFF'
 
