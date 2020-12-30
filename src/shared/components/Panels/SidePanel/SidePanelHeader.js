@@ -1,13 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { makeStyles } from '@material-ui/core'
 import clsx from 'clsx'
+import { withStyles } from '@material-ui/core'
 
-const useStyles = makeStyles(theme => ({
+const styles = theme => ({
   root: {
-    position: props => (props.sticky ? 'sticky' : 'relative'),
+    position: 'relative',
     top: 0,
-    padding: `${theme.spacing(1)}px ${theme.spacing(3)}px`,
+    padding: theme.spacing(1, 3),
     borderBottom: `1px solid ${theme.palette.divider}`,
     display: 'flex',
     alignItems: 'center',
@@ -17,23 +17,25 @@ const useStyles = makeStyles(theme => ({
       marginRight: theme.spacing(-1.5),
       padding: 8
     }
+  },
+  sticky: {
+    position: 'sticky'
   }
-}))
+})
 
 const SidePanelHeader = ({
   sticky,
   children,
   className,
-  classes: overrides,
+  classes,
   ...props
 }) => {
-  const classes = useStyles()
   return (
     <div
       className={clsx(
         'panel__header',
         classes.root,
-        overrides.root,
+        { [classes.sticky]: sticky },
         className
       )}
       {...props}>
@@ -55,4 +57,4 @@ SidePanelHeader.defaultProps = {
   classes: {}
 }
 
-export default SidePanelHeader
+export default withStyles(styles)(SidePanelHeader)
