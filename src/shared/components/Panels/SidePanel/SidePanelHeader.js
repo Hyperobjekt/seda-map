@@ -13,6 +13,7 @@ const styles = theme => ({
     alignItems: 'center',
     justifyContent: 'space-between',
     minHeight: theme.spacing(7),
+    zIndex: 999,
     '& .MuiIconButton-root': {
       marginRight: theme.spacing(-1.5),
       padding: 8

@@ -1,5 +1,6 @@
 import React from 'react'
 import {
+  Button,
   IconButton,
   List,
   ListSubheader,
@@ -9,7 +10,8 @@ import {
 import {
   SidePanel,
   SidePanelHeader,
-  SidePanelBody
+  SidePanelBody,
+  SidePanelFooter
 } from '../../../../shared'
 import {
   getMetricIdFromVarName,
@@ -23,11 +25,26 @@ import useActiveLocation from '../hooks/useActiveLocation'
 import SedaKeyMetricListItem from './SedaKeyMetricListItem'
 import SedaDemographicListItem from './SedaDemographicListItem'
 import { getLang, getPrefixLang } from '../../app/selectors/lang'
+import {CompareButton} from '../../compare'
+import DownloadReportButton from './DownloadReportButton'
 
 const styles = theme => ({
   root: {},
   header: {
     minHeight: theme.spacing(8)
+  },
+  footer: {
+    display: 'flex',
+    justifyContent: 'stretch',
+    alignItems: 'stretch',
+    height: theme.spacing(6),
+    "& .MuiButton-root": {
+      flex: 1,
+      "&:first-child": {
+        borderRight: "1px solid",
+        borderRightColor: theme.palette.divider
+      }
+    }
   }
 })
 
@@ -38,7 +55,6 @@ const SedaLocationPanel = ({ classes, ...props }) => {
   const [demographic, setDemographic] = useDemographic()
   const region = getRegionFromLocationId(activeLocation)
 
-  console.log(data)
 
   const varNames = ['all_avg', 'all_grd', 'all_coh']
   // groups of subgroups for full readout
@@ -135,6 +151,10 @@ const SedaLocationPanel = ({ classes, ...props }) => {
           </List>
         )}
       </SidePanelBody>
+      <SidePanelFooter className={classes.footer}>
+        <CompareButton />
+        <DownloadReportButton location={data} />
+      </SidePanelFooter>
     </SidePanel>
   )
 }

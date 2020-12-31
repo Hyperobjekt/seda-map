@@ -306,6 +306,9 @@ const LANG = {
   LOCATION_SUBHEADING_SUBGROUP: '$[metric] By Subgroup',
   LOCATION_SUBHEADING_GAPS: 'Differences in $[metric]',
 
+  LOCATION_REPORT_BUTTON: 'Download Report',
+  LOCATION_COMPARE_BUTTON: 'Compare Locations',
+
   // Location panel flags
   FLAG_SPED:
     'This school serves primarily special education students; keep in mind when interpreting test scores. See <a target="_blank" href="/help-faq/#data-adjustments">FAQ</a> for information.',

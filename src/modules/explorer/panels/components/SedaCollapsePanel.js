@@ -42,7 +42,8 @@ const useStyles = makeStyles(theme => ({
   details: { padding: 0 },
   body: {
     padding: '4px 0',
-    overflow: 'hidden'
+    overflowX: 'hidden',
+    overflowY: 'auto'
   },
   list: {
     minWidth: theme.app.panelWidth
@@ -77,13 +78,21 @@ const useStyles = makeStyles(theme => ({
     width: theme.app.panelWidth,
     height: 264,
     minWidth: theme.app.panelWidth,
-    transformOrigin: 'left bottom'
+    transformOrigin: 'left bottom',
+
   },
   footerCondensed: {
     position: 'absolute',
     left: theme.app.condensedPanelWidth + theme.spacing(3),
-    bottom: 0
-  }
+    bottom: 0,
+  },
+  footerShowChart: {
+
+  },
+  footerNoChart: {
+    position: 'absolute',
+    bottom:0
+  },
 }))
 
 const AnimatedSidePanel = animated(SidePanel)
@@ -100,6 +109,7 @@ const getFooterStyleProps = ({
   showChart,
   activePanel
 }) => {
+  // get vertical offset for preview chart
   const verticalOffset =
     !condensed && view === 'map'
       ? 0
@@ -112,7 +122,7 @@ const getFooterStyleProps = ({
       : 0
   return {
     transform: `translate(0px, ${verticalOffset}px)`,
-    height: !condensed && !showChart ? 48 : 264
+    height: !condensed && !showChart ? 48 : 264,
   }
 }
 
@@ -168,6 +178,7 @@ const SedaCollapsePanel = ({
     !condensed && setHovered(false)
     toggleCondensed()
   }
+  
 
   return (
     <AnimatedSidePanel
@@ -206,7 +217,9 @@ const SedaCollapsePanel = ({
         sticky
         ref={footerRef}
         className={clsx(classes.footerPanel, {
-          [classes.footerCondensed]: condensed
+          [classes.footerCondensed]: condensed,
+          [classes.footerShowChart]: showChart,
+          [classes.footerNoChart]: view !== 'map'
         })}
         style={footerStyle}>
         <SedaPreviewChartPanel />
