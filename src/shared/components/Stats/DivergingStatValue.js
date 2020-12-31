@@ -57,7 +57,9 @@ const styles = theme => ({
     color: theme.palette.grey[500]
   },
   marginOfError: {
-    color: theme.palette.text.secondary
+    color: theme.palette.text.secondary,
+    lineHeight: 1,
+    marginTop: 4
   }
 })
 
@@ -132,7 +134,7 @@ const DivergingStatValue = ({
             'stat-value__marginOfError',
             classes.marginOfError
           )}>
-          {marginOfError}
+          ± {marginOfError}
         </Typography>
       )}
       {isNA && (

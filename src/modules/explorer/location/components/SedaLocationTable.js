@@ -60,7 +60,9 @@ const useStyles = makeStyles(theme => ({
   activeCell: {
     background: theme.app.highlightColor,
     '& button': {
-      boxShadow: `inset 0 -3px 0 ${theme.palette.primary.main}`
+      boxShadow: `inset 0 -3px 0 ${
+        theme.palette.primary.outline
+      }`
     },
     '&$activeValue': {
       background: theme.app.highlightColorAlt

@@ -202,16 +202,11 @@ const LANG = {
   LABEL_STUDENTS_P: 'Poor students',
   LABEL_STUDENTS_NP: 'Non-poor students',
   LABEL_STUDENTS_N: 'Non-poor students',
-  LABEL_STUDENTS_WB:
-    'White - Black',
-  LABEL_STUDENTS_WH:
-    'White - Hispanic',
-  LABEL_STUDENTS_WI:
-    'White - Native American',
-  LABEL_STUDENTS_MF:
-    'Male - Female',
-  LABEL_STUDENTS_PN:
-    'Non-poor - Poor',
+  LABEL_STUDENTS_WB: 'White - Black',
+  LABEL_STUDENTS_WH: 'White - Hispanic',
+  LABEL_STUDENTS_WI: 'White - Native American',
+  LABEL_STUDENTS_MF: 'Male - Female',
+  LABEL_STUDENTS_PN: 'Non-poor - Poor',
 
   // Region Labels
   LABEL_STATES: 'states',
@@ -302,8 +297,14 @@ const LANG = {
   // Location Selection Panel
   LOCATIONS_ACTIVE_NONE:
     'You have not selected any schools, districts, counties, or states. Use the search above or select place in the map or chart view.',
-  LOCATIONS_SELECTED: "Selected Places",
+  LOCATIONS_SELECTED: 'Selected Places',
   LOCATIONS_NONE: 'No places selected.',
+
+  // Location Panel
+  LOCATION_SUBHEADING_OVERALL:
+    'Opportunity Metrics For All Students',
+  LOCATION_SUBHEADING_SUBGROUP: '$[metric] By Subgroup',
+  LOCATION_SUBHEADING_GAPS: 'Differences in $[metric]',
 
   // Location panel flags
   FLAG_SPED:
@@ -315,20 +316,19 @@ const LANG = {
 
   // Filter panel flags
 
-  FLAG_LABEL_AREA: "Area Classification",
-  FLAG_LABEL_R: "Rural",
-  FLAG_LABEL_T: "Town",
-  FLAG_LABEL_S: "Suburban",
-  FLAG_LABEL_U: "Urban",
-  FLAG_LABEL_SCHOOL: "School Type",
-  FLAG_LABEL_MG: "Magnet",
-  FLAG_LABEL_CH: "Charter",
-  FLAG_LABEL_AGE: "School Age Group",
-  FLAG_LABEL_M: "Middle",
-  FLAG_LABEL_E: "Elementary",
-  FLAG_LABEL_C: "Combined",
+  FLAG_LABEL_AREA: 'Area Classification',
+  FLAG_LABEL_R: 'Rural',
+  FLAG_LABEL_T: 'Town',
+  FLAG_LABEL_S: 'Suburban',
+  FLAG_LABEL_U: 'Urban',
+  FLAG_LABEL_SCHOOL: 'School Type',
+  FLAG_LABEL_MG: 'Magnet',
+  FLAG_LABEL_CH: 'Charter',
+  FLAG_LABEL_AGE: 'School Age Group',
+  FLAG_LABEL_M: 'Middle',
+  FLAG_LABEL_E: 'Elementary',
+  FLAG_LABEL_C: 'Combined',
 
-  
   // Location Panel Summaries (Counties / Districts)
   // SUMMARY_AVG_LOW:
   //   '$[name] provides <strong>lower than average</strong> educational opportunites.',
@@ -458,8 +458,7 @@ const LANG = {
   // Description of metric value for location
   VALUE_AVG_HIGH:
     'scores are <strong>$[value] grade levels above</strong> U.S. average',
-  VALUE_AVG_MID:
-    "test scores are at the national average",
+  VALUE_AVG_MID: 'test scores are at the national average',
   VALUE_AVG_LOW:
     'scores are <strong>$[value] grade levels below</strong> U.S. average',
   VALUE_GRD_HIGH:
@@ -469,11 +468,11 @@ const LANG = {
   VALUE_GRD_LOW:
     'students learn <strong>$[value] less each grade</strong> than the U.S. average',
   VALUE_COH_HIGH:
-    "test scores <strong>increased an average of $[value] grade levels</strong> each year",
+    'test scores <strong>increased an average of $[value] grade levels</strong> each year',
   VALUE_COH_MID:
-    "test scores were did not change from 2009-2016",
+    'test scores were did not change from 2009-2016',
   VALUE_COH_LOW:
-    "test scores <strong>decreased an average of $[value] grade levels</strong> each year",
+    'test scores <strong>decreased an average of $[value] grade levels</strong> each year',
 
   VALUE_SES_ULTRA_HIGH:
     'Socioeconomic status is <strong>very far above national average</strong>.',

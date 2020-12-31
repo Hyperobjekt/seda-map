@@ -12,24 +12,17 @@ import {
   SidePanelBody
 } from '../../../../shared'
 import {
-  getDemographics,
-  getGaps,
   getMetricIdFromVarName,
   getRegionFromLocationId
 } from '../../app/selectors'
 import { CloseIcon } from '../../../icons'
-import {
-  useMetric,
-  useDemographic,
-  useAppContext
-} from '../../app/hooks'
+import { useMetric, useDemographic } from '../../app/hooks'
 import { SedaLocationName } from '..'
 import useActiveLocationData from '../hooks/useActiveLocationData'
 import useActiveLocation from '../hooks/useActiveLocation'
-import LocationTable from './LocationTable'
 import SedaKeyMetricListItem from './SedaKeyMetricListItem'
-import SedaLocationStatsList from './SedaLocationStatsList'
 import SedaDemographicListItem from './SedaDemographicListItem'
+import { getLang, getPrefixLang } from '../../app/selectors/lang'
 
 const styles = theme => ({
   root: {},
@@ -37,22 +30,6 @@ const styles = theme => ({
     minHeight: theme.spacing(8)
   }
 })
-
-// /**
-//  * Gets the secondary metrics for the region
-//  * @param {*} region
-//  */
-// const getSecondaryMetricsForRegion = region => {
-//   return region === 'schools' ? ['frl'] : ['ses', 'seg', 'min']
-// }
-
-/**
- * Gets available gaps for region
- * @param {*} region
- */
-const getGapsForRegion = region => {
-  return region === 'schools' ? [] : getGaps().map(d => d.id)
-}
 
 const SedaLocationPanel = ({ classes, ...props }) => {
   const data = useActiveLocationData()
@@ -84,10 +61,10 @@ const SedaLocationPanel = ({ classes, ...props }) => {
   }
 
   // TODO: better handling when data isn't ready yet
-  return data ? (
+  return (
     <SidePanel {...props}>
       <SidePanelHeader sticky className={classes.header}>
-        {data['id'] && (
+        {data && data['id'] && (
           <SedaLocationName locationId={data['id']} />
         )}
         <IconButton onClick={() => setActiveLocation(null)}>
@@ -95,59 +72,71 @@ const SedaLocationPanel = ({ classes, ...props }) => {
         </IconButton>
       </SidePanelHeader>
       <SidePanelBody>
-        <List>
-          <ListSubheader>
-            Average For All Subgroups
-          </ListSubheader>
-          {varNames.map(varName => (
-            <SedaKeyMetricListItem
-              key={varName}
-              varName={varName}
-              value={data[varName]}
-              interval={data[varName + '_e']}
-              selected={
-                getMetricIdFromVarName(varName) === metric
-              }
-              button
-              onClick={() => handleMetricSelect(varName)}
-            />
-          ))}
-          <ListSubheader>Average By Subgroup</ListSubheader>
-          {groups.flat().map(subgroup => {
-            const varName = subgroup + '_' + metric
-            return (
-              <SedaDemographicListItem
-                key={subgroup}
+        {data && (
+          <List>
+            <ListSubheader>
+              {getLang('LOCATION_SUBHEADING_OVERALL')}
+            </ListSubheader>
+            {varNames.map(varName => (
+              <SedaKeyMetricListItem
+                key={varName}
                 varName={varName}
                 value={data[varName]}
                 interval={data[varName + '_e']}
-                selected={subgroup === demographic}
+                selected={
+                  getMetricIdFromVarName(varName) === metric
+                }
                 button
-                onClick={() => handleDemographicSelect(subgroup)}
+                onClick={() => handleMetricSelect(varName)}
               />
-            )
-          })}
-          <ListSubheader>
-            Difference Between Subgroups
-          </ListSubheader>
-          {gaps.map(subgroup => {
-            const varName = subgroup + '_' + metric
-            return (
-              <SedaDemographicListItem
-                key={subgroup}
-                varName={varName}
-                value={data[varName]}
-                interval={data[varName + '_e']}
-                selected={subgroup === demographic}
-                button
-                onClick={() => handleDemographicSelect(subgroup)}
-              />
-            )
-          })}
-        </List>
+            ))}
+            <ListSubheader>
+              {getLang('LOCATION_SUBHEADING_SUBGROUP', {
+                metric: getPrefixLang(metric, 'LABEL')
+              })}
+            </ListSubheader>
+            {groups.flat().map(subgroup => {
+              const varName = subgroup + '_' + metric
+              return (
+                <SedaDemographicListItem
+                  key={subgroup}
+                  varName={varName}
+                  value={data[varName]}
+                  interval={data[varName + '_e']}
+                  selected={subgroup === demographic}
+                  button
+                  onClick={() =>
+                    handleDemographicSelect(subgroup)
+                  }
+                />
+              )
+            })}
+            <ListSubheader>
+              {getLang('LOCATION_SUBHEADING_GAPS', {
+                metric: getPrefixLang(metric, 'LABEL')
+              })}
+            </ListSubheader>
+            {gaps.map(subgroup => {
+              const varName = subgroup + '_' + metric
+              return (
+                <SedaDemographicListItem
+                  key={subgroup}
+                  varName={varName}
+                  value={data[varName]}
+                  interval={data[varName + '_e']}
+                  selected={subgroup === demographic}
+                  button
+                  onClick={() =>
+                    handleDemographicSelect(subgroup)
+                  }
+                />
+              )
+            })}
+          </List>
+        )}
       </SidePanelBody>
     </SidePanel>
-  ) : null
+  )
 }
 
 export default withStyles(styles)(SedaLocationPanel)

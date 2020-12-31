@@ -14,7 +14,9 @@ export default withStyles(theme => ({
       background: theme.palette.primary.highlight,
       color: theme.palette.primary.main,
       borderRadius: theme.shape.borderRadius,
-      boxShadow: `inset 0 0 0 1px ${theme.palette.primary.light}`,
+      boxShadow: `inset 0 0 0 1px ${
+        theme.palette.primary.outline
+      }`,
       '&:before': {
         position: 'absolute',
         content: '""',
@@ -24,8 +26,7 @@ export default withStyles(theme => ({
         display: 'block',
         background: theme.palette.primary.main,
         left: theme.spacing(2.5),
-        borderRadius: theme.shape.borderRadius,
-
+        borderRadius: theme.shape.borderRadius
       }
     }
   }

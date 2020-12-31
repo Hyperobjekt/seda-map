@@ -84,15 +84,14 @@ const SedaPanelGroup = props => {
         open={selection === 'location'}
         onClose={handlePanelClose}
       />
-      {activeLocation && (
-        <SedaLocationPanel
-          className="panel--location"
-          open={activeLocation}
-          style={{
-            zIndex: 1000
-          }}
-        />
-      )}
+      <SedaLocationPanel
+        className="panel--location"
+        open={activeLocation}
+        offset={showHelp ? 1 : 0}
+        style={{
+          zIndex: 1000
+        }}
+      />
     </SidePanelGroup>
   )
 }
