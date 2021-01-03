@@ -3,7 +3,11 @@ import {
   Button,
   IconButton,
   List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
   ListSubheader,
+  Typography,
   withStyles
 } from '@material-ui/core'
 
@@ -15,7 +19,8 @@ import {
 } from '../../../../shared'
 import {
   getMetricIdFromVarName,
-  getRegionFromLocationId
+  getRegionFromLocationId,
+  valueToLowMidHigh
 } from '../../app/selectors'
 import { CloseIcon } from '../../../icons'
 import { useMetric, useDemographic } from '../../app/hooks'
@@ -24,9 +29,18 @@ import useActiveLocationData from '../hooks/useActiveLocationData'
 import useActiveLocation from '../hooks/useActiveLocation'
 import SedaKeyMetricListItem from './SedaKeyMetricListItem'
 import SedaDemographicListItem from './SedaDemographicListItem'
-import { getLang, getPrefixLang } from '../../app/selectors/lang'
-import {CompareButton} from '../../compare'
+import {
+  getDescriptionForVarName,
+  getLang,
+  getPrefixLang
+} from '../../app/selectors/lang'
+import { CompareButton } from '../../compare'
 import DownloadReportButton from './DownloadReportButton'
+import {
+  getMetricIdsForRegion,
+  getMetricsForRegion
+} from '../../app/selectors/metrics'
+import LocationSummaryListItem from './LocationSummaryListItem'
 
 const styles = theme => ({
   root: {},
@@ -38,15 +52,41 @@ const styles = theme => ({
     justifyContent: 'stretch',
     alignItems: 'stretch',
     height: theme.spacing(6),
-    "& .MuiButton-root": {
+    '& .MuiButton-root': {
       flex: 1,
-      "&:first-child": {
-        borderRight: "1px solid",
+      '&:first-child': {
+        borderRight: '1px solid',
         borderRightColor: theme.palette.divider
       }
     }
   }
 })
+
+const getSummaryItem = (location, metricId, demId = 'all') => {
+  const varName = [demId, metricId].join('_')
+  if (!location || !location[varName]) return null
+  const quantifier = valueToLowMidHigh(
+    metricId,
+    location[varName]
+  )
+  const description = getLang(
+    ['SUMMARY', metricId, quantifier].join('_')
+  )
+  return {
+    metricId,
+    quantifier,
+    description
+  }
+}
+
+const getSummaryItems = location => {
+  if (!location) return []
+  const region = getRegionFromLocationId(location.id)
+  const metrics = getMetricIdsForRegion(region)
+  return metrics
+    .map(m => getSummaryItem(location, m))
+    .filter(v => !!v)
+}
 
 const SedaLocationPanel = ({ classes, ...props }) => {
   const data = useActiveLocationData()
@@ -54,7 +94,6 @@ const SedaLocationPanel = ({ classes, ...props }) => {
   const [metric, setMetric] = useMetric()
   const [demographic, setDemographic] = useDemographic()
   const region = getRegionFromLocationId(activeLocation)
-
 
   const varNames = ['all_avg', 'all_grd', 'all_coh']
   // groups of subgroups for full readout
@@ -66,6 +105,8 @@ const SedaLocationPanel = ({ classes, ...props }) => {
     ['m', 'f']
   ]
   const gaps = ['wb', 'wh', 'wi', 'pn', 'mf']
+
+  const summaryItems = getSummaryItems(data)
 
   const handleMetricSelect = varName => {
     const metric = getMetricIdFromVarName(varName)
@@ -87,9 +128,19 @@ const SedaLocationPanel = ({ classes, ...props }) => {
           <CloseIcon />
         </IconButton>
       </SidePanelHeader>
-      <SidePanelBody>
+      <SidePanelBody style={{ overflowY: 'scroll' }}>
         {data && (
-          <List>
+          <List disablePadding>
+            <ListSubheader>
+              {getLang('LOCATION_SUBHEADING_SUMMARY')}
+            </ListSubheader>
+            {summaryItems.map((summary, i) => (
+              <LocationSummaryListItem
+                key={summary.metricId}
+                indicator={summary.quantifier}
+                description={summary.description}
+              />
+            ))}
             <ListSubheader>
               {getLang('LOCATION_SUBHEADING_OVERALL')}
             </ListSubheader>
