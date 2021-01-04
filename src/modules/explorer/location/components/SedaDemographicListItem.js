@@ -5,7 +5,7 @@ import {
   withStyles
 } from '@material-ui/core'
 import { getPrefixLang } from '../../app/selectors/lang'
-import { getDemographicIdFromVarName, isGapDemographic, isGapVarName, isUnavailable } from '../../app/selectors'
+import { getDemographicIdFromVarName, isGapVarName, isUnavailable } from '../../app/selectors'
 import SedaStat from '../../stats/SedaStat'
 import { styles as baseStyles } from './SedaKeyMetricListItem'
 import clsx from 'clsx'

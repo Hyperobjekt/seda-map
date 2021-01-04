@@ -8,8 +8,6 @@ import {
 import {
   isVersusFromVarNames,
   getDemographicForVarNames,
-  getMidpointForVarName,
-  getFormatterForVarName,
   getRegionFromLocationId,
   getSingularRegion,
   isUnavailable
@@ -17,7 +15,7 @@ import {
 import { getStateName } from '../../../shared/utils/states'
 import { Typography, makeStyles } from '@material-ui/core'
 import clsx from 'clsx'
-import { Tooltip, DivergingStatValue } from '../../../shared'
+import { Tooltip } from '../../../shared'
 import { useHovered, useRegion } from '../app/hooks'
 import { useScatterplotVars } from '../scatterplot'
 import useTooltipVisibility from './hooks/useTooltipVisibility'

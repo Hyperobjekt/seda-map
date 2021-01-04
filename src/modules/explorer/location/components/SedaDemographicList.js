@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { ListSubheader } from '@material-ui/core'
 import SedaDemographicListItem from './SedaDemographicListItem'
 import { useDemographic } from '../../app/hooks'

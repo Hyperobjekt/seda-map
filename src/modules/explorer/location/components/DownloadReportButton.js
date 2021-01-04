@@ -7,7 +7,6 @@ import { formatNumber } from '../../../../shared/utils';
 import { hasVal } from '../../app/selectors/data';
 import { getStateName } from '../../../../shared/utils/states';
 import axios from 'axios';
-import useActiveLocationData from '../hooks/useActiveLocationData';
 
 /**
  * Returns a singular region name for the PDF export

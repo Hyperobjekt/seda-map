@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import useCompareDialog from '../hooks/useCompareDialog'
 import { Button } from '@material-ui/core';
 import { getLang } from '../../app/selectors/lang';
