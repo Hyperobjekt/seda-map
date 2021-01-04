@@ -18,6 +18,7 @@ import { titleCase } from '../../../../shared/utils'
 
 export const styles = theme => ({
   root: {
+    position: 'relative',
     margin: theme.spacing(0, 1),
     width: `calc(100% - ${theme.spacing(2)}px)`,
     borderRadius: theme.shape.borderRadius,

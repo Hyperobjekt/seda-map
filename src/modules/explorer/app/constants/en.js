@@ -344,9 +344,9 @@ const LANG = {
   SUMMARY_GRD_MID: 'roughly average school effectiveness',
   SUMMARY_GRD_HIGH: 'higher than average school effectiveness',
 
-  SUMMARY_COH_LOW: 'declining educational opportunity',
+  SUMMARY_COH_LOW: 'educational opportunity is declining over time',
   SUMMARY_COH_MID: 'relatively stable educational opportunity',
-  SUMMARY_COH_HIGH: 'improving educational opportunity',
+  SUMMARY_COH_HIGH: 'educational opportunity is improving over time',
 
   SUMMARY_SES_ULTRA_HIGH:
     'socioeconomic status very far above national average',
@@ -366,7 +366,7 @@ const LANG = {
   SUMMARY_AVGSES_MID:
     'roughly equal opportunity to $[region] with similar socioeconomic status',
   SUMMARY_AVGSES_HIGH:
-    'higher educational opportunity than $[region] with similar socioeconomic status.',
+    'higher educational opportunity than $[region] with similar socioeconomic status',
 
   SUMMARY_GRDSES_LOW:
     'lower school effectiveness than $[region] with similar socioeconomic status',
@@ -376,32 +376,32 @@ const LANG = {
     'higher school effectiveness than $[region] with similar socioeconomic status',
 
   SUMMARY_COHSES_LOW:
-    'educational opportunity declining less than $[region] with similar socioeconomic status.',
+    'educational opportunity declining faster than $[region] with similar socioeconomic status',
   SUMMARY_COHSES_MID:
-    'educational opportunity is staying roughly the same as $[region] with similar socioeconomic status.',
+    'educational opportunity is staying roughly the same as $[region] with similar socioeconomic status',
   SUMMARY_COHSES_HIGH:
-    'educational opportunity improving more than more than $[region] with similar socioeconomic status.',
+    'educational opportunity improving more than $[region] with similar socioeconomic status',
 
   SUMMARY_AVGFRL_LOW:
-    'Average scores are $[value] grade levels lower than $[region] with similar free/reduced-price lunch percentage.',
+    'educational opportunity lower than $[region] with similar free/reduced-price lunch percentage',
   SUMMARY_AVGFRL_MID:
-    'Average scores are equal to $[region] with similar free/reduced-price lunch percentage.',
+    'educational opportunity is equal to $[region] with similar free/reduced-price lunch percentage',
   SUMMARY_AVGFRL_HIGH:
-    'Average scores are $[value] grade levels higher than $[region] with similar free/reduced-price lunch percentage.',
+    'educational opportunity is higher than $[region] with similar free/reduced-price lunch percentage',
 
   SUMMARY_GRDFRL_LOW:
-    'Learning rates are $[value] lower than $[region] with similar free/reduced-price lunch percentage.',
+    'school effectiveness is lower than $[region] with similar free/reduced-price lunch percentage',
   SUMMARY_GRDFRL_MID:
-    'Learning rates are equal to $[region] with similar free/reduced-price lunch percentage.',
+    'school effectiveness is equal to $[region] with similar free/reduced-price lunch percentage',
   SUMMARY_GRDFRL_HIGH:
-    'Learning rates are $[value] higher than $[region] with similar free/reduced-price lunch percentage.',
+    'school effectiveness is higher than $[region] with similar free/reduced-price lunch percentage',
 
   SUMMARY_COHFRL_LOW:
-    'Average scores have declined by $[value] grade levels less than $[region] with similar free/reduced-price lunch percentage.',
+    'educational opportunity declining faster than $[region] with similar free/reduced-price lunch percentage',
   SUMMARY_COHFRL_MID:
-    'Trends in test scores are similar to $[region] with similar free/reduced-price lunch percentage.',
+    'educational opportunity is changing at a similar rate to $[region] with similar free/reduced-price lunch percentage',
   SUMMARY_COHFRL_HIGH:
-    'Average scores have improved by $[value] grade levels more than $[region] with similar free/reduced-price lunch percentage.',
+    'educational opportunity improving more than $[region] with similar free/reduced-price lunch percentage',
 
   // BUTTON_DOWNLOAD_REPORT: 'Download Report',
 

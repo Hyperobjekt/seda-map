@@ -1,5 +1,5 @@
 import * as scale from 'd3-scale'
-import * as d3array from 'd3-array'
+import { quantile } from 'd3-array'
 
 /**
  * Pulls provided vars from the data, with ID as the last array element
@@ -20,8 +20,8 @@ const getDataRange = values => {
     .filter(v => v > -999)
     .sort((a, b) => a - b)
   return [
-    d3array.quantile(sortedValues, 0.001),
-    d3array.quantile(sortedValues, 0.999)
+    quantile(sortedValues, 0.001),
+    quantile(sortedValues, 0.999)
   ]
 }
 
