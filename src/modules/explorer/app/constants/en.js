@@ -191,27 +191,22 @@ const LANG = {
   LABEL_SHORT_MF: 'male - female',
 
   // Demographic label for students
-  LABEL_STUDENTS_ALL: 'all students',
+  LABEL_STUDENTS_ALL: 'Overall Average',
   LABEL_STUDENTS_B: 'Black students',
   LABEL_STUDENTS_W: 'White students',
   LABEL_STUDENTS_H: 'Hispanic students',
   LABEL_STUDENTS_I: 'Native American students',
   LABEL_STUDENTS_A: 'Asian students',
-  LABEL_STUDENTS_M: 'male students',
-  LABEL_STUDENTS_F: 'female students',
-  LABEL_STUDENTS_P: 'poor students',
-  LABEL_STUDENTS_NP: 'non-poor students',
-  LABEL_STUDENTS_N: 'non-poor students',
-  LABEL_STUDENTS_WB:
-    'difference between White and Black students',
-  LABEL_STUDENTS_WH:
-    'difference between White and Hispanic students',
-  LABEL_STUDENTS_WI:
-    'difference between White and Native American students',
-  LABEL_STUDENTS_MF:
-    'difference between male and female students',
-  LABEL_STUDENTS_PN:
-    'difference between non-poor and poor students',
+  LABEL_STUDENTS_M: 'Male students',
+  LABEL_STUDENTS_F: 'Female students',
+  LABEL_STUDENTS_P: 'Poor students',
+  LABEL_STUDENTS_NP: 'Non-poor students',
+  LABEL_STUDENTS_N: 'Non-poor students',
+  LABEL_STUDENTS_WB: 'White - Black',
+  LABEL_STUDENTS_WH: 'White - Hispanic',
+  LABEL_STUDENTS_WI: 'White - Native American',
+  LABEL_STUDENTS_MF: 'Male - Female',
+  LABEL_STUDENTS_PN: 'Non-poor - Poor',
 
   // Region Labels
   LABEL_STATES: 'states',
@@ -301,8 +296,20 @@ const LANG = {
 
   // Location Selection Panel
   LOCATIONS_ACTIVE_NONE:
-    'You have not selected any $[region]. Use the search above or select $[region] in the map or chart view.',
-  LOCATIONS_NONE: 'No $[region] selected.',
+    'You have not selected any schools, districts, counties, or states. Use the search above or select place in the map or chart view.',
+  LOCATIONS_SELECTED: 'Selected Places',
+  LOCATIONS_NONE: 'No places selected.',
+
+  // Location Panel
+  LOCATION_SUBHEADING_SUMMARY:
+    'Educational Opportunity Overview',
+  LOCATION_SUBHEADING_OVERALL:
+    'Opportunity Metrics For All Students',
+  LOCATION_SUBHEADING_SUBGROUP: '$[metric] By Subgroup',
+  LOCATION_SUBHEADING_GAPS: 'Differences in $[metric]',
+
+  LOCATION_REPORT_BUTTON: 'Download Report',
+  LOCATION_COMPARE_BUTTON: 'Compare Locations',
 
   // Location panel flags
   FLAG_SPED:
@@ -314,165 +321,131 @@ const LANG = {
 
   // Filter panel flags
 
-  FLAG_LABEL_AREA: "Area Classification",
-  FLAG_LABEL_R: "Rural",
-  FLAG_LABEL_T: "Town",
-  FLAG_LABEL_S: "Suburban",
-  FLAG_LABEL_U: "Urban",
-  FLAG_LABEL_SCHOOL: "School Type",
-  FLAG_LABEL_MG: "Magnet",
-  FLAG_LABEL_CH: "Charter",
-  FLAG_LABEL_AGE: "School Age Group",
-  FLAG_LABEL_M: "Middle",
-  FLAG_LABEL_E: "Elementary",
-  FLAG_LABEL_C: "Combined",
+  FLAG_LABEL_AREA: 'Area Classification',
+  FLAG_LABEL_R: 'Rural',
+  FLAG_LABEL_T: 'Town',
+  FLAG_LABEL_S: 'Suburban',
+  FLAG_LABEL_U: 'Urban',
+  FLAG_LABEL_SCHOOL: 'School Type',
+  FLAG_LABEL_MG: 'Magnet',
+  FLAG_LABEL_CH: 'Charter',
+  FLAG_LABEL_AGE: 'School Age Group',
+  FLAG_LABEL_M: 'Middle',
+  FLAG_LABEL_E: 'Elementary',
+  FLAG_LABEL_C: 'Combined',
 
-  
   // Location Panel Summaries (Counties / Districts)
-  SUMMARY_AVG_LOW:
-    '$[name] provides <strong>lower than average</strong> educational opportunites.',
-  SUMMARY_AVG_MID:
-    '$[name] provides <strong>roughly average</strong> educational opportunites.',
+  SUMMARY_AVG_LOW: 'lower than average educational opportunity',
+  SUMMARY_AVG_MID: 'roughly average educational opportunity',
   SUMMARY_AVG_HIGH:
-    '$[name] provides <strong>higher than average</strong> educational opportunites.',
+    'higher than average educational opportunity',
+
+  SUMMARY_GRD_LOW: 'lower than average school effectiveness',
+  SUMMARY_GRD_MID: 'roughly average school effectiveness',
+  SUMMARY_GRD_HIGH: 'higher than average school effectiveness',
+
+  SUMMARY_COH_LOW: 'educational opportunity is declining over time',
+  SUMMARY_COH_MID: 'relatively stable educational opportunity',
+  SUMMARY_COH_HIGH: 'educational opportunity is improving over time',
+
+  SUMMARY_SES_ULTRA_HIGH:
+    'socioeconomic status very far above national average',
+  SUMMARY_SES_VERY_HIGH:
+    'socioeconomic status far above national average',
+  SUMMARY_SES_HIGH:
+    'socioeconomic status above national average',
+  SUMMARY_SES_MID: 'socioeconomic status about average',
+  SUMMARY_SES_LOW: 'socioeconomic status below national average',
+  SUMMARY_SES_VERY_LOW:
+    'socioeconomic status far below national average',
+  SUMMARY_SES_ULTRA_LOW:
+    'socioeconomic status very far below national average',
 
   SUMMARY_AVGSES_LOW:
-    'Average scores are $[value] grade levels lower than $[region] with similar socioeconomic status.',
+    'lower educational opportunity than $[region] with similar socioeconomic status',
   SUMMARY_AVGSES_MID:
-    'Average scores are equal to $[region] with similar socioeconomic status.',
+    'roughly equal opportunity to $[region] with similar socioeconomic status',
   SUMMARY_AVGSES_HIGH:
-    'Average scores are $[value] grade levels higher than $[region] with similar socioeconomic status.',
-  SUMMARY_AVGSES_NONE: ' ',
-
-  SUMMARY_GRD_LOW:
-    '$[name] provides lower than average educational opportunities while children are in school.',
-  SUMMARY_GRD_MID:
-    '$[name] provides roughly average educational opportunities while children are in school.',
-  SUMMARY_GRD_HIGH:
-    '$[name] provides higher than average educational opportunities while children are in school.',
+    'higher educational opportunity than $[region] with similar socioeconomic status',
 
   SUMMARY_GRDSES_LOW:
-    'Learning rates are $[value] lower than $[region] with similar socioeconomic status.',
+    'lower school effectiveness than $[region] with similar socioeconomic status',
   SUMMARY_GRDSES_MID:
-    'Learning rates are equal to $[region] with similar socioeconomic status.',
+    'roughly equal school effectiveness to $[region] with similar socioeconomic status',
   SUMMARY_GRDSES_HIGH:
-    'Learning rates are $[value] higher than $[region] with similar socioeconomic status.',
-  SUMMARY_GRDSES_NONE: ' ',
-
-  SUMMARY_COH_LOW:
-    '$[name] shows declining educational opportunity.',
-  SUMMARY_COH_MID:
-    '$[name] shows relatively stable educational opportunity.',
-  SUMMARY_COH_HIGH:
-    '$[name] shows improving educational opportunity.',
+    'higher school effectiveness than $[region] with similar socioeconomic status',
 
   SUMMARY_COHSES_LOW:
-    'Average scores have declined by $[value] grade levels less than $[region] with similar socioeconomic status.',
+    'educational opportunity declining faster than $[region] with similar socioeconomic status',
   SUMMARY_COHSES_MID:
-    'Trends in test scores are similar to $[region] with similar socioeconomic status.',
+    'educational opportunity is staying roughly the same as $[region] with similar socioeconomic status',
   SUMMARY_COHSES_HIGH:
-    'Average scores have improved by $[value] grade levels more than $[region] with similar socioeconomic status.',
-  SUMMARY_COHSES_NONE: ' ',
-
-  // Location Panel Summaries (Schools)
-  SUMMARY_SCHOOL_AVG_LOW:
-    'The children attending $[name] have <strong>lower than average</strong> educational opportunites.',
-  SUMMARY_SCHOOL_AVG_MID:
-    'The children attending $[name] have <strong>roughly average</strong> educational opportunites.',
-  SUMMARY_SCHOOL_AVG_HIGH:
-    'The children attending $[name] have <strong>higher than average</strong> educational opportunites.',
+    'educational opportunity improving more than $[region] with similar socioeconomic status',
 
   SUMMARY_AVGFRL_LOW:
-    'Average scores are $[value] grade levels lower than $[region] with similar free/reduced-price lunch percentage.',
+    'educational opportunity lower than $[region] with similar free/reduced-price lunch percentage',
   SUMMARY_AVGFRL_MID:
-    'Average scores are equal to $[region] with similar free/reduced-price lunch percentage.',
+    'educational opportunity is equal to $[region] with similar free/reduced-price lunch percentage',
   SUMMARY_AVGFRL_HIGH:
-    'Average scores are $[value] grade levels higher than $[region] with similar free/reduced-price lunch percentage.',
-  SUMMARY_AVGFRL_NONE: ' ',
-
-  SUMMARY_SCHOOL_GRD_LOW:
-    '$[name] provides lower than average educational opportunities while children are in school.',
-  SUMMARY_SCHOOL_GRD_MID:
-    '$[name] provides roughly average educational opportunities while children are in school.',
-  SUMMARY_SCHOOL_GRD_HIGH:
-    '$[name] provides higher than average educational opportunities while children are in school.',
+    'educational opportunity is higher than $[region] with similar free/reduced-price lunch percentage',
 
   SUMMARY_GRDFRL_LOW:
-    'Learning rates are $[value] lower than $[region] with similar free/reduced-price lunch percentage.',
+    'school effectiveness is lower than $[region] with similar free/reduced-price lunch percentage',
   SUMMARY_GRDFRL_MID:
-    'Learning rates are equal to $[region] with similar free/reduced-price lunch percentage.',
+    'school effectiveness is equal to $[region] with similar free/reduced-price lunch percentage',
   SUMMARY_GRDFRL_HIGH:
-    'Learning rates are $[value] higher than $[region] with similar free/reduced-price lunch percentage.',
-  SUMMARY_GRDFRL_NONE: ' ',
-
-  SUMMARY_SCHOOL_COH_LOW:
-    'Educational opportunities for the children attending $[name] declined in the years 2009-2016.',
-  SUMMARY_SCHOOL_COH_MID:
-    'Educational opportunities for the children attending $[name] were roughly stable in the years 2009-2016',
-  SUMMARY_SCHOOL_COH_HIGH:
-    'Educational opportunities for the children attending $[name] improved in the years 2009-2016.',
+    'school effectiveness is higher than $[region] with similar free/reduced-price lunch percentage',
 
   SUMMARY_COHFRL_LOW:
-    'Average scores have declined by $[value] grade levels less than $[region] with similar free/reduced-price lunch percentage.',
+    'educational opportunity declining faster than $[region] with similar free/reduced-price lunch percentage',
   SUMMARY_COHFRL_MID:
-    'Trends in test scores are similar to $[region] with similar free/reduced-price lunch percentage.',
+    'educational opportunity is changing at a similar rate to $[region] with similar free/reduced-price lunch percentage',
   SUMMARY_COHFRL_HIGH:
-    'Average scores have improved by $[value] grade levels more than $[region] with similar free/reduced-price lunch percentage.',
-  SUMMARY_COHFRL_NONE: ' ',
+    'educational opportunity improving more than $[region] with similar free/reduced-price lunch percentage',
 
-  SUMMARY_AVG_NONE:
-    'No community educational opportunity data for $[name].',
-  SUMMARY_GRD_NONE:
-    'No school-based opportunity data for $[name].',
-  SUMMARY_COH_NONE:
-    'No change in community educational opportunity data for $[name].',
-  SUMMARY_SES_NONE: '',
-  SUMMARY_FRL_NONE: '',
+  // BUTTON_DOWNLOAD_REPORT: 'Download Report',
 
-  BUTTON_DOWNLOAD_REPORT: 'Download Report',
+  // LOCATION_COMPARE_FEATURES_TITLE: '$[region] Comparison',
+  // LOCATION_COMPARE_FEATURES_NONE:
+  //   'Select another place from the map, chart, or search to compare it with $[name].',
+  // LOCATION_COMPARE_FEATURES:
+  //   'Below are your previous location selections.  The arrows mark where $[name] falls on the scale.',
+  // LOCATION_EXPORT_REPORT_TITLE: 'Export a Report',
+  // LOCATION_EXPORT_REPORT: `Press the button below to generate a PDF report about educational opportunity in $[name].`,
+  // LOCATION_DIFFERENCES_TITLE: 'Opportunity Differences',
+  // LOCATION_DIFFERENCES: '',
+  // LOCATION_SIMILAR_PLACES_TITLE: 'Similar $[region]',
+  // LOCATION_SIMILAR_PLACES: `The following places are similar to $[name] based on size, socioeconomic status, and other factors:`,
+  // LOCATION_SIMILAR_PLACES_SUMMARY:
+  //   'Find places similar to $[name] based on size, socioeconomic status:',
+  // LOCATION_SIMILAR_SHOW: 'Show similar places',
+  // LOCATION_SHOW_PLACE: 'Show data for $[name]',
 
-  LOCATION_COMPARE_FEATURES_TITLE: '$[region] Comparison',
-  LOCATION_COMPARE_FEATURES_NONE:
-    'Select another place from the map, chart, or search to compare it with $[name].',
-  LOCATION_COMPARE_FEATURES:
-    'Below are your previous location selections.  The arrows mark where $[name] falls on the scale.',
-  LOCATION_EXPORT_REPORT_TITLE: 'Export a Report',
-  LOCATION_EXPORT_REPORT: `Press the button below to generate a PDF report about educational opportunity in $[name].`,
-  LOCATION_DIFFERENCES_TITLE: 'Opportunity Differences',
-  LOCATION_DIFFERENCES: '',
-  LOCATION_SIMILAR_PLACES_TITLE: 'Similar $[region]',
-  LOCATION_SIMILAR_PLACES: `The following places are similar to $[name] based on size, socioeconomic status, and other factors:`,
-  LOCATION_SIMILAR_PLACES_SUMMARY:
-    'Find places similar to $[name] based on size, socioeconomic status:',
-  LOCATION_SIMILAR_SHOW: 'Show similar places',
-  LOCATION_SHOW_PLACE: 'Show data for $[name]',
-
-  LOCATION_SHOW_AVG: 'more details on average test scores',
-  LOCATION_SHOW_GRD: 'more details on learning rates',
-  LOCATION_SHOW_COH: 'more details on test score trends',
-  LOCATION_HIDE_AVG: 'hide details on average test scores',
-  LOCATION_HIDE_GRD: 'hide details on learning rates',
-  LOCATION_HIDE_COH: 'hide details on test score trends',
+  // LOCATION_SHOW_AVG: 'more details on average test scores',
+  // LOCATION_SHOW_GRD: 'more details on learning rates',
+  // LOCATION_SHOW_COH: 'more details on test score trends',
+  // LOCATION_HIDE_AVG: 'hide details on average test scores',
+  // LOCATION_HIDE_GRD: 'hide details on learning rates',
+  // LOCATION_HIDE_COH: 'hide details on test score trends',
 
   // Description of metric value for location
   VALUE_AVG_HIGH:
-    '$[students] score <strong>$[value] grade levels above</strong> U.S. average.',
-  VALUE_AVG_MID:
-    "$[students]' test scores are at the national average.",
+    'scores are <strong>$[value] grade levels above</strong> U.S. average',
+  VALUE_AVG_MID: 'test scores are at the national average',
   VALUE_AVG_LOW:
-    '$[students] score <strong>$[value] grade levels below</strong> U.S. average.',
+    'scores are <strong>$[value] grade levels below</strong> U.S. average',
   VALUE_GRD_HIGH:
-    '$[students] learn <strong>$[value] more each grade</strong> than the U.S. average.',
+    'students learn <strong>$[value] more each grade</strong> than the U.S. average',
   VALUE_GRD_MID:
-    '$[students] learn the same each grade as the U.S. average.',
+    'students learn the same each grade as the U.S. average',
   VALUE_GRD_LOW:
-    '$[students] learn <strong>$[value] less each grade</strong> than the U.S. average.',
+    'students learn <strong>$[value] less each grade</strong> than the U.S. average',
   VALUE_COH_HIGH:
-    "$[students]' test scores <strong>increased an average of $[value] grade levels</strong> each year from 2009-2016.",
+    'test scores <strong>increased an average of $[value] grade levels</strong> each year',
   VALUE_COH_MID:
-    "$[students]' test scores were stable from 2009-2016.",
+    'test scores were did not change from 2009-2016',
   VALUE_COH_LOW:
-    "$[students]' test scores <strong>decreased an average of $[value] grade levels</strong> each year from 2009-2016.",
+    'test scores <strong>decreased an average of $[value] grade levels</strong> each year',
 
   VALUE_SES_ULTRA_HIGH:
     'Socioeconomic status is <strong>very far above national average</strong>.',
@@ -516,24 +489,24 @@ const LANG = {
   DIFF_VERY_LOW: 'much lower than',
 
   // Scatterplot Titles
-  SP_TITLE_AVG_SES:
-    'Educational Opportunity vs. Socioeconomic Status',
-  SP_TITLE_AVG_FRL:
-    'Educational Opportunity vs. % Free or Reduced Lunch Program ',
-  SP_TITLE_GRD_SES:
-    'School Effectiveness vs. Socioeconomic Status',
-  SP_TITLE_GRD_FRL:
-    'School Effectiveness vs. % Free or Reduced Lunch Program',
-  SP_TITLE_COH_SES:
-    'Changes in Educational Opportunity and Socioeconomic Status',
-  SP_TITLE_COH_FRL:
-    'Changes in Educational Opportunity and % Free or Reduced Lunch Program',
-  SP_TITLE_AVG_SES_GAP:
-    'Differences in Educational Opportunity vs. Socioeconomic Status',
-  SP_TITLE_GRD_SES_GAP:
-    'Differences in School Effectiveness vs. Socioeconomic Status',
-  SP_TITLE_COH_SES_GAP:
-    'Differences in Educational Opportunity Change and Socioeconomic Status',
+  // SP_TITLE_AVG_SES:
+  //   'Educational Opportunity vs. Socioeconomic Status',
+  // SP_TITLE_AVG_FRL:
+  //   'Educational Opportunity vs. % Free or Reduced Lunch Program ',
+  // SP_TITLE_GRD_SES:
+  //   'School Effectiveness vs. Socioeconomic Status',
+  // SP_TITLE_GRD_FRL:
+  //   'School Effectiveness vs. % Free or Reduced Lunch Program',
+  // SP_TITLE_COH_SES:
+  //   'Changes in Educational Opportunity and Socioeconomic Status',
+  // SP_TITLE_COH_FRL:
+  //   'Changes in Educational Opportunity and % Free or Reduced Lunch Program',
+  // SP_TITLE_AVG_SES_GAP:
+  //   'Differences in Educational Opportunity vs. Socioeconomic Status',
+  // SP_TITLE_GRD_SES_GAP:
+  //   'Differences in School Effectiveness vs. Socioeconomic Status',
+  // SP_TITLE_COH_SES_GAP:
+  //   'Differences in Educational Opportunity Change and Socioeconomic Status',
 
   SP_TITLE: '$[metric] vs. $[secondary]',
   SP_TITLE_GAP: 'Difference in $[metric] vs. $[secondary]',
@@ -782,15 +755,15 @@ const LANG = {
   FILTER_HINT_FRL:
     'show schools within this range of % qualifying for free or reduced lunch program',
 
-  SCHOOL_TYPE_MIDDLE: 'Middle Schools',
-  SCHOOL_TYPE_ELEMENTARY: 'Elementary Schools',
-  SCHOOL_TYPE_COMBINED: 'Combined Schools',
-  SCHOOL_TYPE_CHARTER: 'Charter Schools',
-  SCHOOL_TYPE_PUBLIC: 'Traditional Public Schools',
-  SCHOOL_TYPE_MAGNET: 'Magnet Schools',
-  SCHOOL_TYPE_RURAL: 'Rural Schools',
-  SCHOOL_TYPE_SUBURBAN: 'Suburban Schools',
-  SCHOOL_TYPE_URBAN: 'Urban Schools',
+  // SCHOOL_TYPE_MIDDLE: 'Middle Schools',
+  // SCHOOL_TYPE_ELEMENTARY: 'Elementary Schools',
+  // SCHOOL_TYPE_COMBINED: 'Combined Schools',
+  // SCHOOL_TYPE_CHARTER: 'Charter Schools',
+  // SCHOOL_TYPE_PUBLIC: 'Traditional Public Schools',
+  // SCHOOL_TYPE_MAGNET: 'Magnet Schools',
+  // SCHOOL_TYPE_RURAL: 'Rural Schools',
+  // SCHOOL_TYPE_SUBURBAN: 'Suburban Schools',
+  // SCHOOL_TYPE_URBAN: 'Urban Schools',
 
   HELP_PANEL_TITLE: 'Help',
   HELP_PANEL_HOW_TAB: 'How to explore',

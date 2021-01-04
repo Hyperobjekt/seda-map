@@ -2,34 +2,49 @@ import React, { useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import {
   Typography,
-  makeStyles,
-  IconButton
+  IconButton,
+  withStyles
 } from '@material-ui/core'
 import {
   SidePanel,
   SidePanelHeader,
-  SidePanelBody
+  SidePanelBody,
+  SidePanelFooter
 } from './index.js'
 import { CloseIcon } from '../../../../modules/icons'
 
-const useStyles = makeStyles(theme => ({
+const styles = theme => ({
   root: {},
   title: theme.mixins.boldType,
   body: {
     padding: theme.spacing(1)
+  },
+  footer: {
+    display: 'flex',
+    justifyContent: 'stretch',
+    alignItems: 'stretch',
+    height: theme.spacing(6),
+    '& .MuiButton-root': {
+      flex: 1,
+      '&:first-child': {
+        borderRight: '1px solid',
+        borderRightColor: theme.palette.divider
+      }
+    }
   }
-}))
+})
 
 /**
  * Generic selection panel wrapper
  */
 const BasicSidePanel = ({
   title,
+  footer,
+  classes,
   children,
   onClose,
   ...props
 }) => {
-  const classes = useStyles()
   const closeRef = useRef(null)
   // set focus to close button when the panel opens
   useEffect(() => {
@@ -48,6 +63,11 @@ const BasicSidePanel = ({
       <SidePanelBody classes={{ root: classes.body }}>
         {children}
       </SidePanelBody>
+      {footer && (
+        <SidePanelFooter className={classes.footer}>
+          {footer}
+        </SidePanelFooter>
+      )}
     </SidePanel>
   )
 }
@@ -58,4 +78,4 @@ BasicSidePanel.propTypes = {
   children: PropTypes.any
 }
 
-export default BasicSidePanel
+export default withStyles(styles)(BasicSidePanel)

@@ -6,6 +6,16 @@ import { isGapDemographic } from './demographics'
  */
 export const getMetrics = () => METRICS
 
+/**
+ * Returns metric ID's available for the provided region
+ * @param {*} region
+ */
+export const getMetricIdsForRegion = region => {
+  return METRICS.filter(
+    m => !m.regions || m.regions.indexOf(region) > -1
+  ).map(m => m.id)
+}
+
 export const getKeyMetrics = () =>
   METRICS.filter(m => KEY_METRIC_IDS.indexOf(m.id) > -1)
 
@@ -70,11 +80,37 @@ export const valueToLowMidHigh = (metricId, value) => {
       return getMidLowHigh(value, [0.965, 1.035])
     case 'coh':
       return getMidLowHigh(value, [-0.025, 0.025])
+    case 'ses':
+      return getSesQuantifier(value)
     default:
       return getMidLowHigh(value, [0, 0])
   }
 }
 
+/**
+ * Returns a quantifier for the provided SES value
+ * @param {*} value
+ */
+export const getSesQuantifier = value => {
+  return value > 2.5
+    ? `ULTRA_HIGH`
+    : value > 1.5
+    ? `VERY_HIGH`
+    : value > 0.5
+    ? `HIGH`
+    : value > -0.5
+    ? `MID`
+    : value > -1.5
+    ? `LOW`
+    : value > -2.5
+    ? `LOW`
+    : `ULTRA_LOW`
+}
+
+/**
+ * Returns true for any variable names that should be inverted
+ * @param {*} varName
+ */
 export const getInvertedFromVarName = varName =>
   varName.includes('frl')
 

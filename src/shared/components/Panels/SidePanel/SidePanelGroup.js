@@ -1,27 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { makeStyles, useTheme } from '@material-ui/core'
+import { useTheme, withStyles } from '@material-ui/core'
 import clsx from 'clsx'
 
-const useStyles = makeStyles(theme => ({
+const styles = theme => ({
   root: {
     position: 'relative',
     zIndex: 2,
-    minWidth: props =>
-      props.condensed
-        ? theme.app.condensedPanelWidth
-        : theme.app.panelWidth
+    minWidth: theme.app.panelWidth
+  },
+  condensed: {
+    minWidth: theme.app.condensedPanelWidth
   }
-}))
-
-/**
- * Returns number of children panels that are open
- * @param {*} children
- */
-const getOpenPanelCount = children =>
-  React.Children.toArray(children)
-    .map(child => child.props.open)
-    .filter(c => c).length
+})
 
 /**
  * Goes through open panels in the children and sets a style
@@ -32,14 +23,11 @@ const getOpenPanelCount = children =>
  */
 const setChildPositions = (
   children,
-  maxVisible,
-  { fullWidth, condensedWidth }
+  { condensedWidth, stackOffset, condensed }
 ) => {
   let openPanels = 0
   let leftOffset = 0
   return React.Children.map(children, (child, i) => {
-    // only set panel positions
-    // if (child.type.name !== "Panel") return child
     // only set position if panel is open
     if (!child || !child.props.open) return child
     // get left offset
@@ -48,34 +36,28 @@ const setChildPositions = (
       ...baseStyle,
       marginLeft: leftOffset
     }
-    const w = child.props.condensed ? condensedWidth : fullWidth
+    // set left offset to the condensed sidebar width
     leftOffset =
-      maxVisible > openPanels ? leftOffset + w : leftOffset
-    if (!child.props.condensed) openPanels++
+      (condensed ? condensedWidth : 0) + openPanels * stackOffset
+    // increment open panels
+    openPanels++
     return React.cloneElement(child, { style })
   })
 }
 
 const SidePanelGroup = ({
   children,
-  maxVisible,
+  classes,
   condensed,
+  stackOffset = 0,
   className,
   ...props
 }) => {
   const theme = useTheme()
-  const updatedChildren = setChildPositions(
-    children,
-    maxVisible,
-    {
-      fullWidth: theme.app.panelWidth,
-      condensedWidth: theme.app.condensedPanelWidth - 16
-    }
-  )
-  const openPanelCount = getOpenPanelCount(children)
-
-  const classes = useStyles({
-    panelCount: Math.min(openPanelCount, maxVisible),
+  const updatedChildren = setChildPositions(children, {
+    fullWidth: theme.app.panelWidth,
+    condensedWidth: theme.app.condensedPanelWidth,
+    stackOffset: stackOffset,
     condensed
   })
   return (
@@ -83,6 +65,9 @@ const SidePanelGroup = ({
       className={clsx(
         'side-panel-group',
         classes.root,
+        {
+          [classes.condensed]: condensed
+        },
         className
       )}
       {...props}>
@@ -99,4 +84,4 @@ SidePanelGroup.defaultProps = {
   maxVisible: 1
 }
 
-export default SidePanelGroup
+export default withStyles(styles)(SidePanelGroup)

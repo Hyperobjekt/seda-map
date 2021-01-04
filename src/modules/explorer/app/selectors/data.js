@@ -49,6 +49,9 @@ export const getPredictedValue = (value, metricId, regionId) => {
   )
 }
 
+/** checks if value is present */
+export const hasVal = val => val || val === 0
+
 /**
  * Returns an array containing the min and max for the
  * provided varname and region

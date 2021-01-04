@@ -5,6 +5,16 @@ import { DEMOGRAPHICS, GAPS } from '../constants/demographics'
  */
 export const getDemographics = () => DEMOGRAPHICS
 
+export const getDemographicsForRegion = (region) => {
+  if (!region) return []
+  return DEMOGRAPHICS.filter(d => d.regions.indexOf(region) > -1).map(d => d.id)
+}
+
+export const getGapsForRegion = (region) => {
+  if (!region) return []
+  return GAPS.filter(d => d.regions.indexOf(region) > -1).map(d => d.id)
+}
+
 /**
  * Gets the demographic object corresponding to the provided ID
  * @param {*} id

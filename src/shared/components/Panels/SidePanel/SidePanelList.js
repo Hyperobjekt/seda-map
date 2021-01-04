@@ -14,6 +14,9 @@ export default withStyles(theme => ({
       background: theme.palette.primary.highlight,
       color: theme.palette.primary.main,
       borderRadius: theme.shape.borderRadius,
+      boxShadow: `inset 0 0 0 1px ${
+        theme.palette.primary.outline
+      }`,
       '&:before': {
         position: 'absolute',
         content: '""',

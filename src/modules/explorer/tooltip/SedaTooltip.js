@@ -8,8 +8,6 @@ import {
 import {
   isVersusFromVarNames,
   getDemographicForVarNames,
-  getMidpointForVarName,
-  getFormatterForVarName,
   getRegionFromLocationId,
   getSingularRegion,
   isUnavailable
@@ -17,12 +15,13 @@ import {
 import { getStateName } from '../../../shared/utils/states'
 import { Typography, makeStyles } from '@material-ui/core'
 import clsx from 'clsx'
-import { Tooltip, DivergingStatValue } from '../../../shared'
+import { Tooltip } from '../../../shared'
 import { useHovered, useRegion } from '../app/hooks'
 import { useScatterplotVars } from '../scatterplot'
 import useTooltipVisibility from './hooks/useTooltipVisibility'
 import useTooltipCoords from './hooks/useTooltipCoords'
 import { useLocationData } from '../location'
+import SedaStat from '../stats/SedaStat'
 
 const useStatStyles = makeStyles(theme => ({
   root: {
@@ -80,11 +79,10 @@ const StatDetailed = ({ varName, value }) => {
 
       <div
         className={clsx('stat-detailed__value', classes.value)}>
-        <DivergingStatValue
+        <SedaStat
           className={classes.primary}
           value={value}
-          formatter={getFormatterForVarName(varName)}
-          mid={getMidpointForVarName(varName)}
+          varName={varName}
           dark={true}
         />
         {!isNA && (

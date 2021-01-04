@@ -1,105 +1,115 @@
 import React from 'react'
-import { IconButton } from '@material-ui/core'
+import {
+  IconButton,
+  List,
+  withStyles
+} from '@material-ui/core'
 
 import {
   SidePanel,
   SidePanelHeader,
-  SidePanelBody
+  SidePanelBody,
+  SidePanelFooter
 } from '../../../../shared'
 import {
-  getDemographics,
-  getGaps,
   getRegionFromLocationId
 } from '../../app/selectors'
 import { CloseIcon } from '../../../icons'
-import { useMetric, useDemographic } from '../../app/hooks'
+import { useMetric } from '../../app/hooks'
 import { SedaLocationName } from '..'
 import useActiveLocationData from '../hooks/useActiveLocationData'
 import useActiveLocation from '../hooks/useActiveLocation'
-import LocationTable from './LocationTable'
 
-/**
- * Gets available demographics for region
- * @param {*} region
- */
-const getDemographicsForRegion = region => {
-  return region === 'schools'
-    ? ['all']
-    : getDemographics().map(d => d.id)
-}
+import {
+  getLang,
+  getPrefixLang
+} from '../../app/selectors/lang'
+import { CompareButton } from '../../compare'
+import DownloadReportButton from './DownloadReportButton'
+import SedaLocationKeyMetrics from './SedaLocationKeyMetrics'
+import SedaLocationSummary from './SedaLocationSummary'
+import SedaDemographicList from './SedaDemographicList'
+import { getDemographicsForRegion, getGapsForRegion } from '../../app/selectors/demographics'
 
-// /**
-//  * Gets the secondary metrics for the region
-//  * @param {*} region
-//  */
-// const getSecondaryMetricsForRegion = region => {
-//   return region === 'schools' ? ['frl'] : ['ses', 'seg', 'min']
-// }
+const styles = theme => ({
+  root: {},
+  header: {
+    minHeight: theme.spacing(8)
+  },
+  footer: {
+    display: 'flex',
+    justifyContent: 'stretch',
+    alignItems: 'stretch',
+    height: theme.spacing(6),
+    '& .MuiButton-root': {
+      flex: 1,
+      '&:first-child': {
+        borderRight: '1px solid',
+        borderRightColor: theme.palette.divider
+      }
+    }
+  }
+})
 
-/**
- * Gets available gaps for region
- * @param {*} region
- */
-const getGapsForRegion = region => {
-  return region === 'schools' ? [] : getGaps().map(d => d.id)
-}
+// determines which subgroup should have a divider below it
+const SUBGROUP_BREAKS = ['all', 'a', 'f']
 
-const SedaLocationPanel = props => {
+const SedaLocationPanel = ({ classes, ...props }) => {
   const data = useActiveLocationData()
-  const [activeLocation, setActiveLocation] = useActiveLocation()
-  const [metric, setMetric] = useMetric()
-  const [demographic, setDemographic] = useDemographic()
-  const region = getRegionFromLocationId(activeLocation)
-  // const secondary = getSecondaryMetricsForRegion(region)
+  const [, setActiveLocation] = useActiveLocation()
+  const [metric] = useMetric()
+  const region = data ? getRegionFromLocationId(data.id) : null
 
-  const metrics = ['avg', 'grd', 'coh']
-  const demographics = getDemographicsForRegion(region)
+  // groups of subgroups for full readout
+  const subgroups = getDemographicsForRegion(region)
   const gaps = getGapsForRegion(region)
 
-  const handleMetricSelect = e => {
-    setMetric(e.currentTarget.value)
-  }
-  const handleDemographicSelect = e => {
-    setDemographic(e.currentTarget.value)
-  }
+  const subgroupTitle = getLang('LOCATION_SUBHEADING_SUBGROUP', {
+    metric: getPrefixLang(metric, 'LABEL')
+  })
+
+  const gapTitle = getLang('LOCATION_SUBHEADING_GAPS', {
+    metric: getPrefixLang(metric, 'LABEL')
+  })
+
   // TODO: better handling when data isn't ready yet
-  return data ? (
+  return (
     <SidePanel {...props}>
-      <SidePanelHeader sticky>
-        {data['id'] && (
+      <SidePanelHeader sticky className={classes.header}>
+        {data && data['id'] && (
           <SedaLocationName locationId={data['id']} />
         )}
         <IconButton onClick={() => setActiveLocation(null)}>
           <CloseIcon />
         </IconButton>
       </SidePanelHeader>
-      <SidePanelBody>
-        <LocationTable
-          data={data}
-          label={'Subgroups'}
-          metrics={metrics}
-          demographics={demographics}
-          activeMetric={metric}
-          activeDemographic={demographic}
-          labelPrefix="LABEL_STUDENTS"
-          onMetricSelect={handleMetricSelect}
-          onDemographicSelect={handleDemographicSelect}
-        />
-        {gaps.length > 0 && (
-          <LocationTable
-            data={data}
-            label={'Gaps'}
-            metrics={metrics}
-            demographics={gaps}
-            activeMetric={metric}
-            activeDemographic={demographic}
-            onMetricSelect={handleMetricSelect}
-            onDemographicSelect={handleDemographicSelect}
-          />
+      <SidePanelBody style={{ overflowY: 'scroll' }}>
+        {data && (
+          <List disablePadding>
+            <SedaLocationSummary location={data} />
+            <SedaLocationKeyMetrics location={data} />
+            <SedaDemographicList
+              title={subgroupTitle}
+              metric={metric}
+              subgroups={subgroups}
+              location={data}
+              breaks={SUBGROUP_BREAKS}
+            />
+            <SedaDemographicList
+              title={gapTitle}
+              metric={metric}
+              subgroups={gaps}
+              location={data}
+            />
+          </List>
         )}
       </SidePanelBody>
+      <SidePanelFooter className={classes.footer}>
+        <CompareButton />
+        <DownloadReportButton location={data} />
+      </SidePanelFooter>
     </SidePanel>
-  ) : null
+  )
 }
 
-export default SedaLocationPanel
+export default withStyles(styles)(SedaLocationPanel)
