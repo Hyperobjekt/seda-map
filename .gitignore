@@ -23,3 +23,6 @@ yarn-error.log*
 notes
 
 src/_old
+
+# lang file generated on build
+src/modules/explorer/app/constants/en.js
