@@ -251,7 +251,7 @@ const LANG = {
   TOOLTIP_DESC_AVG_LOW: 'grades below U.S. average',
   TOOLTIP_DESC_GRD_LOW: 'less learned each year',
   TOOLTIP_DESC_COH_LOW: 'decrease in scores per year',
-  TOOLTIP_DESC_FRL_HIGH: 'free/reduced price lunch',
+  TOOLTIP_DESC_FRL_NONE: 'qualify for free/reduced price lunch',
   TOOLTIP_DESC_SES_ULTRA_HIGH: 'very far above national average',
   TOOLTIP_DESC_SES_VERY_HIGH: 'far above national average',
   TOOLTIP_DESC_SES_HIGH: 'above U.S. average',
@@ -344,9 +344,11 @@ const LANG = {
   SUMMARY_GRD_MID: 'roughly average school effectiveness',
   SUMMARY_GRD_HIGH: 'higher than average school effectiveness',
 
-  SUMMARY_COH_LOW: 'educational opportunity is declining over time',
+  SUMMARY_COH_LOW:
+    'educational opportunity is declining over time',
   SUMMARY_COH_MID: 'relatively stable educational opportunity',
-  SUMMARY_COH_HIGH: 'educational opportunity is improving over time',
+  SUMMARY_COH_HIGH:
+    'educational opportunity is improving over time',
 
   SUMMARY_SES_ULTRA_HIGH:
     'socioeconomic status very far above national average',
@@ -381,6 +383,9 @@ const LANG = {
     'educational opportunity is staying roughly the same as $[region] with similar socioeconomic status',
   SUMMARY_COHSES_HIGH:
     'educational opportunity improving more than $[region] with similar socioeconomic status',
+
+  SUMMARY_FRL_NONE:
+    '$[value] of students qualify for free or reduced lunch program',
 
   SUMMARY_AVGFRL_LOW:
     'educational opportunity lower than $[region] with similar free/reduced-price lunch percentage',

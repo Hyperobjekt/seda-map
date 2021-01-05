@@ -1,3 +1,7 @@
+
+/**
+ * Filter flags available for location types
+ */
 export const FILTER_FLAGS = {
   states: [],
   counties: [],

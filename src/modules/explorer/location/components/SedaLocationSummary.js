@@ -1,6 +1,7 @@
 import React from 'react'
 import LocationSummaryListItem from './LocationSummaryListItem'
 import {
+  getFormatterForVarName,
   getPredictedValue,
   getRegionFromLocationId,
   isUnavailable,
@@ -12,6 +13,7 @@ import {
   getMetricIdsForRegion
 } from '../../app/selectors/metrics'
 import { ListSubheader } from '@material-ui/core'
+import { formatNumber } from '../../../../shared/utils'
 
 const getSesComparisonItem = (
   location,
@@ -27,8 +29,15 @@ const getSesComparisonItem = (
   const diffVal =
     location[varName] - getPredictedValue(ses, metricId, region)
   const indicator = valueToLowMidHigh(metricId, diffVal)
-  const langKey = ['SUMMARY', metricId + secondaryId, indicator].join('_')
-  const description = getLang(langKey, { region })
+  const langKey = [
+    'SUMMARY',
+    metricId + secondaryId,
+    indicator
+  ].join('_')
+  const description = getLang(langKey, {
+    region,
+    value: formatNumber(diffVal)
+  })
   return {
     metricId: metricId + secondaryId,
     indicator,
@@ -38,9 +47,9 @@ const getSesComparisonItem = (
 
 /**
  * Returns a summary object for the metrics of a location
- * @param {*} location 
- * @param {*} metricId 
- * @param {*} demId 
+ * @param {*} location
+ * @param {*} metricId
+ * @param {*} demId
  */
 const getSummaryItem = (location, metricId, demId = 'all') => {
   const varName = [demId, metricId].join('_')
@@ -49,8 +58,10 @@ const getSummaryItem = (location, metricId, demId = 'all') => {
     metricId,
     location[varName]
   )
+  const formatter = getFormatterForVarName(varName)
   const description = getLang(
-    ['SUMMARY', metricId, indicator].join('_')
+    ['SUMMARY', metricId, indicator].join('_'),
+    { value: formatter(location[varName]) }
   )
   return {
     metricId,
@@ -61,7 +72,7 @@ const getSummaryItem = (location, metricId, demId = 'all') => {
 
 /**
  * Returns an array of summary objects for the given location
- * @param {*} location 
+ * @param {*} location
  */
 const getSummaryItems = location => {
   if (!location) return []

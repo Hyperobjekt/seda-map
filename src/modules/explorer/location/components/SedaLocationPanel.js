@@ -1,9 +1,5 @@
 import React from 'react'
-import {
-  IconButton,
-  List,
-  withStyles
-} from '@material-ui/core'
+import { IconButton, List, withStyles } from '@material-ui/core'
 
 import {
   SidePanel,
@@ -11,25 +7,24 @@ import {
   SidePanelBody,
   SidePanelFooter
 } from '../../../../shared'
-import {
-  getRegionFromLocationId
-} from '../../app/selectors'
+import { getRegionFromLocationId } from '../../app/selectors'
 import { CloseIcon } from '../../../icons'
 import { useMetric } from '../../app/hooks'
 import { SedaLocationName } from '..'
 import useActiveLocationData from '../hooks/useActiveLocationData'
 import useActiveLocation from '../hooks/useActiveLocation'
 
-import {
-  getLang,
-  getPrefixLang
-} from '../../app/selectors/lang'
+import { getLang, getPrefixLang } from '../../app/selectors/lang'
 import { CompareButton } from '../../compare'
 import DownloadReportButton from './DownloadReportButton'
 import SedaLocationKeyMetrics from './SedaLocationKeyMetrics'
 import SedaLocationSummary from './SedaLocationSummary'
 import SedaDemographicList from './SedaDemographicList'
-import { getDemographicsForRegion, getGapsForRegion } from '../../app/selectors/demographics'
+import {
+  getDemographicsForRegion,
+  getGapsForRegion
+} from '../../app/selectors/demographics'
+import SedaLocationFlags from './SedaLocationFlags'
 
 const styles = theme => ({
   root: {},
@@ -86,21 +81,28 @@ const SedaLocationPanel = ({ classes, ...props }) => {
       <SidePanelBody style={{ overflowY: 'scroll' }}>
         {data && (
           <List disablePadding>
+            {region === 'schools' && (
+              <SedaLocationFlags locationId={data.id} />
+            )}
             <SedaLocationSummary location={data} />
             <SedaLocationKeyMetrics location={data} />
-            <SedaDemographicList
-              title={subgroupTitle}
-              metric={metric}
-              subgroups={subgroups}
-              location={data}
-              breaks={SUBGROUP_BREAKS}
-            />
-            <SedaDemographicList
-              title={gapTitle}
-              metric={metric}
-              subgroups={gaps}
-              location={data}
-            />
+            {region !== 'schools' && (
+              <SedaDemographicList
+                title={subgroupTitle}
+                metric={metric}
+                subgroups={subgroups}
+                location={data}
+                breaks={SUBGROUP_BREAKS}
+              />
+            )}
+            {region !== 'schools' && (
+              <SedaDemographicList
+                title={gapTitle}
+                metric={metric}
+                subgroups={gaps}
+                location={data}
+              />
+            )}
           </List>
         )}
       </SidePanelBody>
