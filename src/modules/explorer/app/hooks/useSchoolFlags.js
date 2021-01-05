@@ -12,16 +12,13 @@ export const loadFlaggedData = type => {
 /**
  * loads flagged schools
  */
-export const loadFlaggedSchools = () => 
+export const loadFlaggedSchools = () =>
   Promise.all(
     ['sped', 'lep', 'gifted'].map(type => {
-      return loadFlaggedData(type)
-        .catch(error => {
-          // dispatch(onLoadFlaggedError(error))
-          window.SEDA.trackProblem(
-            'error loading flagged schools'
-          )
-        })
+      return loadFlaggedData(type).catch(error => {
+        // dispatch(onLoadFlaggedError(error))
+        window.SEDA.trackProblem('error loading flagged schools')
+      })
     })
   )
 
@@ -34,17 +31,19 @@ const [useFlagStore] = create((set, get) => ({
 }))
 
 export default function useSchoolFlags() {
-  const { loaded, sped, lep, gifted, set } = useFlagStore(state => state, shallow)
+  const { loaded, sped, lep, gifted, set } = useFlagStore(
+    state => state,
+    shallow
+  )
   if (!loaded) {
-    loadFlaggedSchools()
-      .then(data => {
-        set({
-          loaded: true,
-          sped: data[0],
-          lep: data[1],
-          gifted: data[2]
-        })
+    loadFlaggedSchools().then(res => {
+      set({
+        loaded: true,
+        sped: res[0].data,
+        lep: res[1].data,
+        gifted: res[2].data
       })
+    })
   }
   return [sped, lep, gifted]
 }
