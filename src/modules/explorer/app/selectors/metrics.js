@@ -82,6 +82,8 @@ export const valueToLowMidHigh = (metricId, value) => {
       return getMidLowHigh(value, [-0.025, 0.025])
     case 'ses':
       return getSesQuantifier(value)
+    case 'frl':
+      return 'NONE'
     default:
       return getMidLowHigh(value, [0, 0])
   }
