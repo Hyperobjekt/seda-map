@@ -1,5 +1,4 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
 import Dialog from '@material-ui/core/Dialog'
@@ -10,17 +9,15 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import { InputAdornment, IconButton } from '@material-ui/core'
 import CopyIcon from '@material-ui/icons/FileCopy'
 import copy from 'copy-to-clipboard'
-import { toggleLinkShareDialog } from '../actions'
 import { onShare } from '../actions'
 import { getLang } from '../../app/selectors/lang'
+import {
+  useLinkDialogVisibility,
+} from '..'
 
-export const ShareLinkDialog = ({
-  open,
-  shareUrl,
-  onClose,
-  onCopy
-}) => {
+export const ShareLinkDialog = () => {
   const [copied, setCopied] = React.useState(false)
+  const [open, toggleLinkDialog] = useLinkDialogVisibility()
 
   const handleFocus = event => event.target.select()
 
@@ -29,7 +26,7 @@ export const ShareLinkDialog = ({
       className="dialog dialog__container"
       classes={{ paper: 'dialog__container' }}
       open={open}
-      onClose={onClose}
+      onClose={toggleLinkDialog}
       aria-labelledby="form-dialog-title">
       <DialogTitle id="form-dialog-title">
         {getLang('LINK_DIALOG_TITLE')}
@@ -41,7 +38,7 @@ export const ShareLinkDialog = ({
         <TextField
           label={getLang('LINK_INPUT_LABEL')}
           type="text"
-          value={shareUrl}
+          value={window.location.href}
           fullWidth
           onFocus={handleFocus}
           InputProps={{
@@ -51,9 +48,9 @@ export const ShareLinkDialog = ({
                   edge="end"
                   aria-label={getLang('LINK_COPY_LABEL')}
                   onClick={() => {
-                    copy(shareUrl)
+                    copy(window.location.href)
+                    onShare(window.location.href, 'link')
                     setCopied(true)
-                    onCopy()
                   }}>
                   <CopyIcon />
                 </IconButton>
@@ -64,27 +61,10 @@ export const ShareLinkDialog = ({
         {copied && <span className="copied">Copied!</span>}
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="primary">
+        <Button onClick={toggleLinkDialog} color="primary">
           Close
         </Button>
       </DialogActions>
     </Dialog>
   )
 }
-
-const mapStateToProps = state => ({
-  open: state.ui.shareLinkOpen,
-  shareUrl: window.location.href
-})
-
-const mapDispatchToProps = dispatch => ({
-  onClose: () => dispatch(toggleLinkShareDialog(false)),
-  onCopy: () => {
-    dispatch(onShare(window.location.href, 'link'))
-  }
-})
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ShareLinkDialog)
