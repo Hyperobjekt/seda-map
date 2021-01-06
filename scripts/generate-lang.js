@@ -4,13 +4,17 @@ if (typeof fetch !== "function") {
 const fs = require('fs');
 const { csv: fetchCsv } = require("d3-fetch")
 
+// set empty object and set lang doc url
 var langJson = {};
-const lang = 'https://docs.google.com/spreadsheets/d/1L633lO5wfQGLbaVnaSnIg9TrprX9k4Ie8qe_CLDmQN8/export?gid=0&format=csv'
+const langUrl = 'https://docs.google.com/spreadsheets/d/1L633lO5wfQGLbaVnaSnIg9TrprX9k4Ie8qe_CLDmQN8/export?gid=0&format=csv'
 
+// d3 csv fetcher calls the parser for each row of the fetched csv. add key value pair
+// on iteration
 const parseLang = (csv) => {
     langJson[csv.key] = csv.value;
 }
 
+// write json to en.js
 const writeLang = (langJson) => {
     fs.writeFile("./src/modules/explorer/app/constants/en.js", `const LANG = ${JSON.stringify(langJson, null, 2)} \n\nexport default LANG`, function(err) {
         if (err) {
@@ -19,12 +23,7 @@ const writeLang = (langJson) => {
     })
 };
 
-async function getData(url, parser) {
-    return await fetchCsv(url, parser)
-}
-
-const getLang = () => getData(lang, parseLang)
-
-getLang().then(() => {
+// fetch csv, parse, write to file
+fetchCsv(langUrl, parseLang).then(() => {
     writeLang(langJson);
 })

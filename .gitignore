@@ -25,4 +25,4 @@ notes
 src/_old
 
 # lang file generated on build
-src/modules/explorer/app/constants/en.js
+en.js
