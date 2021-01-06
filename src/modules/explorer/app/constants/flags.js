@@ -1,4 +1,3 @@
-
 /**
  * Filter flags available for location types
  */
@@ -6,5 +5,13 @@ export const FILTER_FLAGS = {
   states: [],
   counties: [],
   districts: [['r', 't', 's', 'u']],
-  schools: [['r', 't', 's', 'u'], ['ch', 'mg'], ['m', 'e', 'c']]
+  schools: [
+    ['r', 't', 's', 'u'],
+    ['ch', 'mg'],
+    ['m', 'e', 'c'],
+    ['bie']
+  ]
 }
+
+// these flags only show locations with corresponding flags when active
+export const EXCLUSIVE_FLAGS = ['bie']

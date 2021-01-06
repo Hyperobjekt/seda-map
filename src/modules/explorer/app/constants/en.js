@@ -333,6 +333,8 @@ const LANG = {
   FLAG_LABEL_M: 'Middle',
   FLAG_LABEL_E: 'Elementary',
   FLAG_LABEL_C: 'Combined',
+  FLAG_LABEL_BIE_GROUP: 'Bureau of Indian Education',
+  FLAG_LABEL_BIE: 'Show only BIE schools',
 
   // Location Panel Summaries (Counties / Districts)
   SUMMARY_AVG_LOW: 'lower than average educational opportunity',
