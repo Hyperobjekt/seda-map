@@ -106,12 +106,12 @@ const SedaFilterFlags = ({ classes, className, ...props }) => {
     // exclusive flag filters are set to 1 when checked
     if (isExclusive(key))
       return isOn
-        ? removeFilter(['eq', key])
+        ? removeFilter(['eq', key], true)
         : setFilter(['eq', key, 1])
     // non-excluse filters are removed when checked, or set to 0 when checked
     return isOn
       ? setFilter(['eq', key, 0])
-      : removeFilter(['eq', key])
+      : removeFilter(['eq', key], true)
   }
 
   return (
