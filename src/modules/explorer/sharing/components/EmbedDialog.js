@@ -1,7 +1,4 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { compose } from 'redux'
-import { withRouter } from 'react-router-dom'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
 import Dialog from '@material-ui/core/Dialog'
@@ -9,14 +6,20 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import { getLang } from '../selectors/lang'
+import { getLang } from '../../app/selectors/lang'
 // import { getScatterplotVars } from '../selectors'
 import { InputAdornment, IconButton } from '@material-ui/core'
 import CopyIcon from '@material-ui/icons/FileCopy'
 import copy from 'copy-to-clipboard'
-import { toggleEmbedDialog } from '../actions'
 import { onShare } from '../actions'
-// import { getMapVars } from '../map'
+import {
+  useEmbedDialogVisibility,
+} from '..'
+import { useAppContext, useDataOptions } from '../../app/hooks'
+import { useMapViewport } from '../../../map'
+import { getVarNames } from '../../app/selectors'
+import shallow from 'zustand/shallow'
+
 
 const BASE_URL = `${window.location.origin}${
   window.location.pathname
@@ -52,18 +55,12 @@ const getMapEmbedLink = ({
 const getChartEmbedLink = ({
   highlightedState,
   region,
-  demographic,
-  metric,
-  locations
+  locations,
+  scatterPlotVars: [xVar, yVar, zVar]
 }) => {
-  // const { xVar, yVar, zVar } = getScatterplotVars(
-  //   region,
-  //   metric,
-  //   demographic
-  // )
-  // return locations
-  //   ? `${BASE_URL}#/embed/chart/${highlightedState}/${region}/${xVar}/${yVar}/${zVar}/${locations}`
-  //   : `${BASE_URL}#/embed/chart/${highlightedState}/${region}/${xVar}/${yVar}/${zVar}`
+  return locations
+    ? `${BASE_URL}#/embed/chart/${highlightedState}/${region}/${xVar}/${yVar}/${zVar}/${locations}`
+    : `${BASE_URL}#/embed/chart/${highlightedState}/${region}/${xVar}/${yVar}/${zVar}`
 }
 
 const getSecondaryChartEmbedLink = ({
@@ -94,14 +91,26 @@ const getEmbedCode = link => {
   return `<iframe src="${link}" style="width:720px;height:405px;max-width:100%;" frameborder="0"></iframe>`
 }
 
-function EmbedDialog({
-  open,
-  onClose,
-  onCopy,
-  secondaryChart,
-  ...rest
-}) {
+export const EmbedDialog = () => {
   const [copied, setCopied] = React.useState('')
+  const [open, toggleEmbedDialog] = useEmbedDialogVisibility()
+  
+  const {
+    hasGapChart: secondaryChart,
+  } = useAppContext()
+  const [viewport] = useMapViewport()
+  const rest = useDataOptions(state => ({
+    ...state,
+    ...viewport,
+    scatterPlotVars: getVarNames(
+      state.region,
+      state.metric,
+      state.secondary,
+      state.demographic,
+      'chart'
+    )
+  }), shallow)
+  
   const mapLink = getMapEmbedLink(rest)
   const chartLink = getChartEmbedLink(rest)
   const mapEmbedCode = getEmbedCode(mapLink)
@@ -123,7 +132,7 @@ function EmbedDialog({
       className="dialog dialog--embed"
       classes={{ paper: 'dialog__container' }}
       open={open}
-      onClose={onClose}
+      onClose={toggleEmbedDialog}
       aria-labelledby="form-dialog-title">
       <DialogTitle id="form-dialog-title">
         {getLang('EMBED_DIALOG_TITLE')}
@@ -154,7 +163,7 @@ function EmbedDialog({
                   onClick={() => {
                     copy(mapEmbedCode)
                     setCopied('map')
-                    onCopy()
+                    onShare(window.location.href, 'embed')
                   }}>
                   <CopyIcon />
                 </IconButton>
@@ -190,7 +199,7 @@ function EmbedDialog({
                   onClick={() => {
                     copy(chartEmbedCode)
                     setCopied('chart')
-                    onCopy()
+                    onShare(window.location.href, 'embed')
                   }}>
                   <CopyIcon />
                 </IconButton>
@@ -229,6 +238,9 @@ function EmbedDialog({
                       onClick={() => {
                         copy(chartEmbedCode)
                         setCopied('secondary')
+
+                        // maybe
+                        onShare(window.location.href, 'embed')
                       }}>
                       <CopyIcon />
                     </IconButton>
@@ -245,7 +257,7 @@ function EmbedDialog({
         )}
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="primary">
+        <Button onClick={toggleEmbedDialog} color="primary">
           Close
         </Button>
       </DialogActions>
@@ -253,51 +265,42 @@ function EmbedDialog({
   )
 }
 
-const mapStateToProps = (
-  { sections: { gapChartX, gapChart }, ui: { embedOpen } },
-  {
-    match: {
-      params: {
-        region,
-        demographic,
-        metric,
-        zoom,
-        lat,
-        lon,
-        locations,
-        highlightedState
-      }
-    }
-  }
-) => {
-  return {
-    region,
-    demographic,
-    metric,
-    secondary: gapChartX,
-    secondaryChart: gapChart,
-    zoom,
-    lat,
-    lon,
-    locations,
-    highlightedState,
-    open: embedOpen
-  }
-}
+// const mapStateToProps = (
+//   { sections: { gapChartX, gapChart }, ui: { embedOpen } },
+//   {
+//     match: {
+//       params: {
+//         region,
+//         demographic,
+//         metric,
+//         zoom,
+//         lat,
+//         lon,
+//         locations,
+//         highlightedState
+//       }
+//     }
+//   }
+// ) => {
+//   return {
+//     region,
+//     demographic,
+//     metric,
+//     secondary: gapChartX,
+//     secondaryChart: gapChart,
+//     zoom,
+//     lat,
+//     lon,
+//     locations,
+//     highlightedState,
+//     open: embedOpen
+//   }
+// }
 
-const mapDispatchToProps = dispatch => ({
-  onClose: () => {
-    dispatch(toggleEmbedDialog(false))
-  },
-  onCopy: () => {
-    dispatch(onShare(window.location.href, 'embed'))
-  }
-})
-
-export default compose(
-  withRouter,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )
-)(EmbedDialog)
+// export default compose(
+//   withRouter,
+//   connect(
+//     mapStateToProps,
+//     mapDispatchToProps
+//   )
+// )(EmbedDialog)
