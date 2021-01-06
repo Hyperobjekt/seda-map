@@ -102,7 +102,6 @@ const SedaFilterFlags = ({ classes, className, ...props }) => {
   const handleCheckboxChange = (checkbox, event) => {
     const key = checkbox.id
     const isOn = checkedFlags.indexOf(key) > -1
-    console.log('handle change', key, isExclusive(key))
     // exclusive flag filters are set to 1 when checked
     if (isExclusive(key))
       return isOn
