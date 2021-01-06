@@ -20,10 +20,13 @@ const writeLang = (langJson) => {
         if (err) {
             return console.log(err);
         }
+        console.log('en.js written!')
     })
 };
 
-// fetch csv, parse, write to file
-fetchCsv(langUrl, parseLang).then(() => {
+// fetch csv, parse, write to file, catch errors
+fetchCsv(langUrl, parseLang)
+.then(() => {
     writeLang(langJson);
 })
+.catch(err => console.log(err))
