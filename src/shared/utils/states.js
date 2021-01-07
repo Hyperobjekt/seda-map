@@ -37,6 +37,8 @@ export const getStateAbbrFromName = name => {
   return stateKey ? STATES[stateKey].abbr.toLowerCase() : 'us'
 }
 
+export const allStateAbbrs = ["us", ...Object.keys(STATES).map(getStateAbbr).map(abbr => abbr.toLowerCase())]
+
 /**
  * Gets the state name for the provided identifier
  * @param {string} id identifier for any geography

@@ -3,6 +3,7 @@ import create from 'zustand'
 const [useUiStore] = create(set => ({
   // current view of the data
   view: 'map',
+  isEmbed: false,
   setView: view => set({ view }),
   // currently hovered id
   hovered: null,
@@ -61,7 +62,7 @@ const [useUiStore] = create(set => ({
   filterPanel: null,
   setFilterPanel: filterPanel => set({ filterPanel }),
   setViewFromRoute: params => {
-    set({ view: params.view })
+    set({ view: params.view, isEmbed: !!params.embed })
   }
 }))
 

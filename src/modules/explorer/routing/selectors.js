@@ -4,8 +4,9 @@ import {
   getRegionFromLocationId,
   getRegionFromFeature
 } from '../app/selectors'
-import { getStateFipsFromAbbr } from '../../../shared/utils/states'
+import { allStateAbbrs, getStateFipsFromAbbr } from '../../../shared/utils/states'
 import { formatNumber } from '../../../shared/utils'
+import { DEFAULT_VIEWPORT } from '../../map'
 
 const push = newRoute => {
   window.location.hash = newRoute
@@ -24,6 +25,29 @@ const DEFAULT_ROUTEVARS = [
   'zoom',
   'lat',
   'lon',
+  'locations'
+]
+
+// Legacy map route structure
+const LEGACY_MAP_ROUTEVARS = [
+  'view',
+  'region',
+  'metric',
+  'demographic',
+  'zoom',
+  'lat',
+  'lon',
+  'locations'
+]
+
+// Legacy chart route structure
+const LEGACY_CHART_ROUTEVARS = [
+  'view',
+  'highlightedState',
+  'region',
+  'xVar',
+  'yVar',
+  'zVar',
   'locations'
 ]
 
@@ -314,6 +338,76 @@ export const removeLocationFromPathname = (
 }
 
 /**
+ * Transform legacy path to a valid path following current route structure
+ * @param {string} params
+ * @param {string} routeVars
+ * @returns {object} e.g. { region: 'counties', metric: 'avg', ... }
+ */
+export const transformLegacyPath = (path, routeVars) => {
+  const route = path.replace(/^#\/+/g, '')
+  const legacyParams = route.split('/').reduce(
+    (acc, curr, i) => ({
+      ...acc,
+      [routeVars[i]]:
+        ['zoom', 'lat', 'lon'].indexOf(routeVars[i]) > -1
+          ? parseFloat(curr)
+          : curr
+    }),
+    {}
+  )
+
+  // console.log("legacyParams", legacyParams)
+
+  const validParams = []
+  if(legacyParams.embed) validParams.push("embed")
+  validParams.push(legacyParams.view)
+  if(legacyParams.highlightedState) {
+    validParams.push(legacyParams.highlightedState === "us" ? "none" : "id," + getStateFipsFromAbbr(legacyParams.highlightedState))
+  }else {
+    validParams.push("none")
+  }
+  validParams.push(legacyParams.region)
+  if(legacyParams.metric) {
+    validParams.push(legacyParams.metric)
+  }else {
+    validParams.push(legacyParams.yVar.split("_")[1])
+  }
+  if(legacyParams.xVar) {
+    validParams.push(computeSecondary(legacyParams.xVar, legacyParams.yVar))
+  } else {
+    validParams.push("ses")
+  }
+  if(legacyParams.demographic) {
+    validParams.push(legacyParams.demographic)
+  }else {
+    validParams.push(legacyParams.zVar.split("_")[0])
+  }
+  if(legacyParams.zoom) {
+    validParams.push(legacyParams.zoom)
+    validParams.push(legacyParams.lat)
+    validParams.push(legacyParams.lon)
+  }else {
+    validParams.push(DEFAULT_VIEWPORT.zoom.toString())
+    validParams.push(DEFAULT_VIEWPORT.latitude.toString())
+    validParams.push(DEFAULT_VIEWPORT.longitude.toString())
+  }
+  if(legacyParams.locations) validParams.push(getLocationsRoute(legacyParams.locations))
+
+  // console.log("#/" + validParams.join('/'))
+
+  // return "#/map/none/counties/avg/ses/all/3.15/37.39/-97.57/"
+  return "#/" + validParams.join('/')
+}
+
+const computeSecondary = (xVar, yVar) => {
+  // check for post-underscore parts of xVar and yVar – if they don't match, take xVar's and add +secondary
+  const xAxis = xVar.split("_")[1]
+  const yAxis = yVar.split("_")[1]
+
+  return xAxis === yAxis ? "ses" : xAxis + "+secondary"
+}
+
+/**
  * Get a route parameters object based on the string
  * @param {string} path
  * @returns {object} e.g. { region: 'counties', metric: 'avg', ... }
@@ -324,7 +418,28 @@ export const getParamsFromPathname = (
 ) => {
   // strip starting "#" and "/" chars
   const route = path.replace(/^#\/+/g, '')
-  return route.split('/').reduce(
+  const routeSplit = route.split('/')
+
+  // check for embed
+  const isEmbedRoute = routeSplit[0] === 'embed'
+  if(isEmbedRoute) {
+    routeVars = ['embed', ...DEFAULT_ROUTEVARS]
+  }
+
+  // checking for legacy routes
+  // if a legacy route is found, rerun with the transformed route
+  if(routeSplit[isEmbedRoute ? 1 : 0] === 'map' && isValidRegion(routeSplit[isEmbedRoute ? 2 : 1])) {
+    // legacy map link – transform to new hash structure
+    routeVars = isEmbedRoute ? ['embed', ...LEGACY_MAP_ROUTEVARS] : LEGACY_MAP_ROUTEVARS
+    return getParamsFromPathname(transformLegacyPath(path, routeVars))
+  }
+  if(routeSplit[isEmbedRoute ? 1 : 0] === 'chart' && allStateAbbrs.indexOf(routeSplit[isEmbedRoute ? 2 : 1]) > -1) {
+    // legacy chart link, transform
+    routeVars = isEmbedRoute ? ['embed', ...LEGACY_CHART_ROUTEVARS] : LEGACY_CHART_ROUTEVARS
+    return getParamsFromPathname(transformLegacyPath(path, routeVars))
+  }
+
+  return routeSplit.reduce(
     (acc, curr, i) => ({
       ...acc,
       [routeVars[i]]:
@@ -348,6 +463,12 @@ export const getPathnameFromParams = (
   routeVars = DEFAULT_ROUTEVARS
 ) => {
   const matches = { ...params, ...updates }
+
+  // check for embed
+  const isEmbedRoute = !!params.embed
+  // console.log("params isEmbedRoute:", isEmbedRoute)
+  routeVars = isEmbedRoute ? ['embed', ...DEFAULT_ROUTEVARS] : DEFAULT_ROUTEVARS
+
   return (
     '/' +
     routeVars

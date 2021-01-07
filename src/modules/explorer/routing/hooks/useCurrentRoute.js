@@ -14,7 +14,7 @@ import { useAllLocationsData } from '../../location'
  * @returns {string}
  */
 export default () => {
-  const view = useUiStore(state => state.view)
+  const view = useUiStore(state => state.isEmbed ? 'embed/' + state.view : state.view)
   const viewportRoute = useMapStore(state =>
     getViewportRoute(state.viewport)
   )
