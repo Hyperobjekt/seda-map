@@ -245,7 +245,7 @@ export const EmbedDialog = () => {
                       edge="end"
                       aria-label={getLang('EMBED_COPY_LABEL')}
                       onClick={() => {
-                        copy(chartEmbedCode)
+                        copy(secondaryEmbedCode)
                         setCopied('secondary')
 
                         // maybe
