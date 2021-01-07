@@ -3,6 +3,7 @@
   "homepage": "./",
   "scripts": {
     "start": "react-scripts start",
+    "prebuild": "node scripts/generate-lang.js",
     "build": "react-scripts build",
     "build:staging": "env-cmd .env.staging npm run build",
     "build:production": "env-cmd .env.prod npm run build",
@@ -15,7 +16,9 @@
     "env-cmd": "^10.1.0",
     "npm-run-all": "^4.1.5",
     "prettier": "1.16.4",
-    "react-scripts": "3.4.4"
+    "react-scripts": "3.4.4",
+    "d3-fetch": "^2.0.0",
+    "node-fetch": "^2.6.1"
   },
   "dependencies": {
     "@material-ui/core": "^4.9.5",

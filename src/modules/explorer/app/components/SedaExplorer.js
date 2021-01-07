@@ -6,6 +6,7 @@ import { SedaTooltip } from '../../tooltip'
 import { useActiveView } from '../hooks'
 import { SedaPanelGroup } from '../../panels'
 import { SedaError } from '../../errors'
+import { ShareLinkDialog } from '../../sharing/components/ShareLinkDialog'
 
 /**
  * Body of the explorer, consisting of side panel, splitview, tooltip, and alert area
@@ -28,6 +29,7 @@ const SedaExplorer = props => {
       />
       <SedaTooltip />
       <SedaError />
+      <ShareLinkDialog />
     </PageBody>
   )
 }
