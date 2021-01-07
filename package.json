@@ -26,7 +26,7 @@
     "@redux-beacon/google-tag-manager": "^1.0.1",
     "@turf/bbox": "^6.0.1",
     "algoliasearch": "3.32.0",
-    "axios": "^0.18.1",
+    "axios": "^0.21.1",
     "classnames": "^2.2.6",
     "clsx": "^1.1.0",
     "copy-to-clipboard": "^3.2.0",
