@@ -36,132 +36,57 @@ The following is a set of guidelines for contributing to the [Educational Opport
 The main libraries and frameworks used in this project include:
 
 - React
-- Redux (for application state)
+- [Zustand](https://github.com/pmndrs/zustand) (for hook based application state management)
 - [Material UI](https://material-ui.com/) (for base components)
 - [Mapbox](https://mapbox.com): provided map styles and vector tile hosting.
 - MapboxGL (for map rendering)
 - [E-Charts](https://www.echartsjs.com/) (for scatterplots)
 - [Algolia](https://www.algolia.com/) (for search)
 
-Some pieces of functionality have been separated into their own separate module so they can be reused on the container site. These modules are:
-
-- `react-seda-scatterplot`: provides base functionality for rendering charts with SEDA data
-- `react-seda-search`: allows searching locations in SEDA data
-
 Relevant, but not included in this project is the [Educational Opportunity Website](https://github.com/Hyperobjekt/seda-site). Any issues relevant to the website that are not in the explorer should be filed there.
 
 ### Application Structure
 
-#### Constants (`src/constants`)
+#### Constants (`src/modules/explorer/app/constants`)
 
 The constants folder contains the configuration values and language used within the explorer.
 
 Common tasks relevant to this folder include:
 
-- updating some text used in the explorer (`en.js`)
 - updating the links in the fly open menu (`site.js`)
-- updating options related to the seda data, such as scatterplot ranges (`dataOptions.js`)
-
-#### Components (`/src/components`)
-
-This structure of the `/src/components` folder is based on [atomic design principles](https://bradfrost.com/blog/post/atomic-web-design/) as described below:
-
-- **Atoms** (`src/components/atoms`): smallest base components (e.g. icons, markers)
-- **Molecules** (`/src/components/molecules`): small components build from one or more atom components (e.g. Panel, Card, etc.)
-- **Organisms** (`/src/components/organisms`): organisms tie together molecules and atoms to provide more complex but isolated functionality (e.g. Header, SiteMenu, Scatterplot, etc.)
-- **Templates** (`/src/components/templated`): templates determine how the organisms, molecules and atoms are arranged on a page. (e.g. Section)
-
-All of the components in the atomic design structure (atoms, molecules, organisms, templates) are [presentational components](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0). Presentational components are components that render based on the props provided and do not depend on connecting to the data store or loading / mutating data.
-
-##### Connected Components(`/src/components/seda`)
-
-Unlike all the presentational components listed above, these components are connected to the state data store provided by Redux. (e.g. `SedaHeader`)
-
-Connected components are responsible for getting data from the application state and providing it to the presentational components to render the current view.
-
-> **tangent:** structuring components this way has been working okay for me (lane), but i'm not convinced it is the best way. the goal has been to keep the presentational components separate so that they could be utilized in future project if need be. open to changes or discussion on slack if anyone has suggestions.
+- updating configuration options (`metrics.js`, `regions.js`, `demographics.js`)
 
 #### Modules (`/src/modules`)
 
-This folder contains reducers and selectors for getting and mutating data in the application state, or router.
+The application structure attempts to maintain a modularized approach, where pieces of functionality are contained within their own module.
 
-Common tasks relative to this folder would include:
-
-- making modifications to routing behaviour (`router.js`)
-- adding custom getters for configuration based on the `dataOptions` constant. (`config.js`)
-- adding / modifying reducers that mutate application state based on actions (all reducers referenced in `index.js`)
-
-#### Actions (`/src/actions`)
-
-This folder contains all actions that are dispatched to the reducers to handle application state mutation.
-
-#### Other Folders
-
-- `/src/hooks`: contains any custom hooks that are used in the project
-- `/src/css`: styles for components in the project
-- `/src/style`: contains the material UI theme for setting overrides to the material UI components.
-- `/src/utils`: contains general purpose utility functions and data fetching from map tiles
-- `/src/views`: contains default `App` component and page component for the explorer.
+- `/src/modules`: most modules in this folder are general purpose and do not contain application logic for SEDA or the explorer, with the exception of the `/explorer` module.
+- `/src/modules/explorer`: this folder contains modules for the explorer that have application logic specific to the explorer
+  - `./app/`: contains configuration, hooks, selectors used throughout the entire application. also contains components for the application layout.
+  - `./compare/`: location comparison dialog module
+  - `./errors/`: error messaging module, with components and hooks for displaying error messages to the user
+  - `./filters/`: components and hooks used for filtering data in the explorer
+  - `./help/`: components and hooks used for the help panel
+  - `./loader/`: components and hooks that handle loading data for the explorer
+  - `./location/`: components and hooks for the location panel and selected locations
+  - `./map/`: module for the explorer map
+  - `./menu/`: module for the site menu
+  - `./panels/`: module for various side panels used in the explorer
+  - `./routing/`: module for handling routing in the explorer
+  - `./scatterplot/`: module for the explorer scatterplots
+  - `./search/`: module for SEDA data search
+  - `./sharing/`: module for social sharing components of the explorer
+  - `./tooltip/`: module for the tooltip displayed when hovering map / scatterplot
 
 ### Application State
 
-The application state is managed by Redux. The store is configured in `/src/store.js` contains middleware for:
+Application state is managed through a few different zustand stores, located in `/src/modules/explorer/app/hooks`
 
-- Sending events to analytics when certain actions happen.
-- Saving user selections to local storage so they are restored when the user returns.
+- `useDataOptions.js`: store for selected data options
+- `useSiteStore.js`: store for site configuration (menu and social sharing)
+- `useUiStore.js`: store for UI state settings (e.g. active dialogs, chart visibility)
 
-The application is only read and mutated by [connected components](#connected-components). The application state is structured as follows:
-
-```js
-{
-  map: {
-    coords: {}, // contains x / y coords for the tooltip
-    viewport: {}, // contains parameters for the current view of the map
-    idMap: {} // contains a mapping of feature IDs on the map to school IDs in the data set
-  },
-  scatterplot: {
-    data: {
-      schools: {}, // school data stored here
-      districts: {}, // districts data stored here
-      counties: {} // counties data stored here
-    },
-    loaded: {}, // tracks loading status for scatterplots
-    error: false // true if error fetching data
-  },
-  search: {
-    results: {}, // contains current results for search
-    errorMessage: null // contains error message if there's an error fetching from search
-  },
-  selected: {
-    all: [], // all selected location IDs
-    counties: [], // all selected county IDs
-    districts: [], // selected district IDs
-    schools: [] // selected schoold IDs
-  },
-  features: {}, // contains all features that full data has been loaded for
-  ui: {
-    menuOpen: false, // true when menu is open
-    helpOpen: false, // true when help is open
-    embedOpen: false, // true when embed dialog is open
-    legendType: 'chart', // legend type to show on map
-    shareLinkOpen: false, //  true if share link dialog open
-    reportLoading: false, // true if report is loading
-    reportError: false // true if there is an error generating report
-  },
-  active: {}, // contains the active feature
-  tooltip: {
-    xVar: 'all_ses', // contains x variable to show in tooltip
-    yVar: 'all_avg' // contains y variable to show in tooltip
-  },
-  help: [],
-  flagged: {
-    sped: [], // IDs of special ed schools
-    lep: [], // IDs of language program schools
-    gifted: [] // IDs of gifted schools
-  },
-  loading: [] // contains IDs of data that is still loading
-}
-```
+When using data from the stores, it is important to only pull the data needed in order to prevent additional re-renders. There are a number of helper hooks that combine selections from the stores above that should cover most cases of selections from the stores.
 
 ### Environment Variables
 
@@ -239,7 +164,7 @@ Before a pull request is approved it must meet the following requirements:
 When deploying new code to the explorer, the code will proceed through the following steps:
 
 1. **Development**: development happens locally and is pushed to branches in the repository named by the contribution type (see [Local Development](#local-development)). When local development is complete a pull request is submitted to the master branch.
-2. **Master**: the `master` branch contains the working copy of the current code base. once your code is merged into the `master` branch a live copy can be viewed at dev.edopportunity.org/explorer (IN PROGRESS)
+2. **Master**: the `master` branch contains the working copy of the current code base. once your code is merged into the `master` branch a live copy can be viewed at dev.edopportunity.org/explorer
 3. **Staging**: when a new version of the working copy in the `master` branch is ready to be deployed, it is merged into the `staging` branch. a live copy of the code in the staging environment can be seen at staging.edopportunity.org/explorer
 4. **Production**: once the new version has been tested and approved on the staging site it is merged into the `production` branch. code in the `production` branch is deployed to the live version of the explorer at edopportunity.org/explorer
 
@@ -271,14 +196,9 @@ When creating React components
 - :white_check_mark: opt for using functional components with hooks over class based components
 - :white_check_mark: opt to keep presentation logic separate from application logic by using presentational and container components.
 
+typically we try to follow patterns used throughout the [React Patterns](https://reactpatterns.com/) website.
+
 ### Styling / CSS
 
 - if modifying the style of a base component provided by React Material, do so in the Material Theme used by the app (`/src/style/theme.js`)
-- all other styles should be in `/src/css` and placed accordingly based on the atomic design structure
-
-## Resources
-
-The following are some complementary resources to the concepts and frameworks used in this application:
-
-- [Getting Started with Redux](https://egghead.io/courses/getting-started-with-redux): Free Redux introductory course, Redux is used for state management in the app.
-- [Atomic Design Overview](https://bradfrost.com/blog/post/atomic-web-design/): Atomic design is the methodology for the design system and determines how the components and styles are structured.
+- styling specific to components is done on the component levels using [React Material Styles](https://material-ui.com/styles/basics/), typically with the [Higher-order Component API](https://material-ui.com/styles/basics/#higher-order-component-api), but feel free to use whichever method you feel is suited to the piece you are developing.

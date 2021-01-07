@@ -8,6 +8,7 @@ import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
 import Typography from '@material-ui/core/Typography'
 import useCompareDialog from '../hooks/useCompareDialog'
+import CompareTable from './CompareTable'
 
 const styles = theme => ({
   root: {
@@ -65,27 +66,12 @@ export default function CompareDialog() {
       open={open}>
       <DialogTitle
         id="customized-dialog-title"
-        onClose={handleClose}>
-        Modal title
-      </DialogTitle>
+        title="Modal Title"
+        subtitle="location name"
+        onClose={handleClose}
+      />
       <DialogContent dividers>
-        <Typography gutterBottom>
-          Cras mattis consectetur purus sit amet fermentum. Cras
-          justo odio, dapibus ac facilisis in, egestas eget quam.
-          Morbi leo risus, porta ac consectetur ac, vestibulum at
-          eros.
-        </Typography>
-        <Typography gutterBottom>
-          Praesent commodo cursus magna, vel scelerisque nisl
-          consectetur et. Vivamus sagittis lacus vel augue
-          laoreet rutrum faucibus dolor auctor.
-        </Typography>
-        <Typography gutterBottom>
-          Aenean lacinia bibendum nulla sed consectetur. Praesent
-          commodo cursus magna, vel scelerisque nisl consectetur
-          et. Donec sed odio dui. Donec ullamcorper nulla non
-          metus auctor fringilla.
-        </Typography>
+        <CompareTable />
       </DialogContent>
     </Dialog>
   )

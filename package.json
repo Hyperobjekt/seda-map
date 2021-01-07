@@ -3,6 +3,7 @@
   "homepage": "./",
   "scripts": {
     "start": "react-scripts start",
+    "prebuild": "node scripts/generate-lang.js",
     "build": "react-scripts build",
     "build:staging": "env-cmd .env.staging npm run build",
     "build:production": "env-cmd .env.prod npm run build",
@@ -15,7 +16,9 @@
     "env-cmd": "^10.1.0",
     "npm-run-all": "^4.1.5",
     "prettier": "1.16.4",
-    "react-scripts": "3.4.4"
+    "react-scripts": "3.4.4",
+    "d3-fetch": "^2.0.0",
+    "node-fetch": "^2.6.1"
   },
   "dependencies": {
     "@material-ui/core": "^4.9.5",
@@ -23,7 +26,7 @@
     "@redux-beacon/google-tag-manager": "^1.0.1",
     "@turf/bbox": "^6.0.1",
     "algoliasearch": "3.32.0",
-    "axios": "^0.18.1",
+    "axios": "^0.21.1",
     "classnames": "^2.2.6",
     "clsx": "^1.1.0",
     "copy-to-clipboard": "^3.2.0",
@@ -50,6 +53,7 @@
     "react-map-gl": "^5.2.3",
     "react-resize-aware": "^3.0.0",
     "react-spring": "^8.0.27",
+    "react-table": "^7.6.2",
     "react-use-gesture": "^7.0.5",
     "zustand": "^2.2.3"
   },

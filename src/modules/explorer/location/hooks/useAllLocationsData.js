@@ -3,6 +3,7 @@ import shallow from 'zustand/shallow'
 import useStaticData from '../../../data/useStaticData'
 import { getRegionFromLocationId } from '../../app/selectors'
 import { useLoadSedaData } from '../../loader'
+import { useMemo } from 'react'
 
 /**
  * Provides all selected locations as an array of object data
@@ -20,7 +21,7 @@ export default function useAllLocationsData() {
   const uniqueRegions = [...new Set(regions)]
   const data = useStaticData(state => state.data)
   uniqueRegions.forEach(r => loadSedaData(r))
-  return data
+  return useMemo(() => data
     ? locations.map(locationId => {
         const region = getRegionFromLocationId(locationId)
         const regionData = data[region]
@@ -29,4 +30,5 @@ export default function useAllLocationsData() {
           : null
       })
     : []
+  , [data, locations])
 }
