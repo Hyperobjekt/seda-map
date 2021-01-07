@@ -113,8 +113,6 @@ export const EmbedDialog = () => {
     ...viewport,
     filters: filters,
   }), shallow)
-
-  console.log("rest", rest)
   
   const mapLink = getMapEmbedLink(rest)
   const chartLink = getChartEmbedLink(rest)
