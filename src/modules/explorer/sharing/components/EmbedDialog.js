@@ -17,9 +17,9 @@ import {
 } from '..'
 import { useAppContext, useDataOptions } from '../../app/hooks'
 import { useMapViewport } from '../../../map'
-import { getVarNames } from '../../app/selectors'
 import shallow from 'zustand/shallow'
-
+import { filterArrayToString } from '../../routing/selectors'
+import { useFilters } from '../../filters'
 
 const BASE_URL = `${window.location.origin}${
   window.location.pathname
@@ -41,35 +41,39 @@ const getSecondaryChartsForDemographic = dem => {
 const getMapEmbedLink = ({
   region,
   demographic,
+  secondary,
   metric,
   zoom,
-  lat,
-  lon,
-  locations
+  latitude,
+  longitude,
+  locations,
+  filters
 }) => {
-  return locations
-    ? `${BASE_URL}#/embed/map/${region}/${metric}/${demographic}/${zoom}/${lat}/${lon}/${locations}`
-    : `${BASE_URL}#/embed/map/${region}/${metric}/${demographic}/${zoom}/${lat}/${lon}`
+  return (locations && locations.length > 0)
+    ? `${BASE_URL}#/embed/map/${filterArrayToString(filters)}/${region}/${metric}/${secondary}/${demographic}/${zoom}/${latitude}/${longitude}/${locations}`
+    : `${BASE_URL}#/embed/map/${filterArrayToString(filters)}/${region}/${metric}/${secondary}/${demographic}/${zoom}/${latitude}/${longitude}`
 }
 
 const getChartEmbedLink = ({
-  highlightedState,
   region,
+  metric,
+  secondary,
+  demographic,
   locations,
-  scatterPlotVars: [xVar, yVar, zVar]
+  filters,
 }) => {
-  return locations
-    ? `${BASE_URL}#/embed/chart/${highlightedState}/${region}/${xVar}/${yVar}/${zVar}/${locations}`
-    : `${BASE_URL}#/embed/chart/${highlightedState}/${region}/${xVar}/${yVar}/${zVar}`
+  return (locations && locations.length > 0)
+    ? `${BASE_URL}#/embed/chart/${filterArrayToString(filters)}/${region}/${metric}/${secondary}/${demographic}/${locations}`
+    : `${BASE_URL}#/embed/chart/${filterArrayToString(filters)}/${region}/${metric}/${secondary}/${demographic}`
 }
 
 const getSecondaryChartEmbedLink = ({
-  highlightedState,
   region,
   demographic,
   metric,
   locations,
-  secondary
+  secondary,
+  filters
 }) => {
   // let { xVar, yVar, zVar } = getMapVars(
   //   region,
@@ -82,9 +86,9 @@ const getSecondaryChartEmbedLink = ({
   // } else {
   //   xVar = xVar.split('_')[0] + '_' + secondary
   // }
-  // return locations
-  //   ? `${BASE_URL}#/embed/chart/${highlightedState}/${region}/${xVar}/${yVar}/${zVar}/${locations}`
-  //   : `${BASE_URL}#/embed/chart/${highlightedState}/${region}/${xVar}/${yVar}/${zVar}`
+  return (locations && locations.length > 0)
+    ? `${BASE_URL}#/embed/chart/${filterArrayToString(filters)}/${region}/${metric}/${secondary}+secondary/${demographic}/${locations}`
+    : `${BASE_URL}#/embed/chart/${filterArrayToString(filters)}/${region}/${metric}/${secondary}+secondary/${demographic}`
 }
 
 const getEmbedCode = link => {
@@ -99,17 +103,18 @@ export const EmbedDialog = () => {
     hasGapChart: secondaryChart,
   } = useAppContext()
   const [viewport] = useMapViewport()
-  const rest = useDataOptions(state => ({
-    ...state,
+  const filters = useFilters()
+  const rest = useDataOptions(({ region, metric, secondary, demographic, locations }) => ({
+    region,
+    metric,
+    secondary,
+    demographic,
+    locations,
     ...viewport,
-    scatterPlotVars: getVarNames(
-      state.region,
-      state.metric,
-      state.secondary,
-      state.demographic,
-      'chart'
-    )
+    filters: filters,
   }), shallow)
+
+  console.log("rest", rest)
   
   const mapLink = getMapEmbedLink(rest)
   const chartLink = getChartEmbedLink(rest)
