@@ -21,6 +21,7 @@ import {
   useLinkDialogVisibility,
   useEmbedDialogVisibility
 } from '../../../sharing'
+import { useActiveView } from '../../hooks'
 
 const links = {
   id: 'share',
@@ -139,6 +140,7 @@ const SedaFooter = () => {
 
   const [, toggleLinkDialog] = useLinkDialogVisibility()
   const [, toggleEmbedDialog] = useEmbedDialogVisibility()
+  const [view, _, isEmbed] = useActiveView()
   const classes = useStyles()
 
   const handleClick = item => {
@@ -155,7 +157,7 @@ const SedaFooter = () => {
         return null
     }
   }
-  return (
+  return (!isEmbed &&
     <PageFooter className={classes.root}>
       <div
         className={clsx('footer__branding', classes.branding)}>

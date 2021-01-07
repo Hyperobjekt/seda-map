@@ -8,13 +8,13 @@ import {
 import { useFilters } from '../../filters'
 import useDataOptions from '../../app/hooks/useDataOptions'
 import { useAllLocationsData } from '../../location'
-
+import shallow from 'zustand/shallow'
 /**
  * Gets the route string for the current options
  * @returns {string}
  */
 export default () => {
-  const view = useUiStore(state => state.isEmbed ? 'embed/' + state.view : state.view)
+  const [view, embedSecondary] = useUiStore(state => [state.isEmbed ? 'embed/' + state.view : state.view, state.embedSecondary], shallow)
   const viewportRoute = useMapStore(state =>
     getViewportRoute(state.viewport)
   )
@@ -26,7 +26,7 @@ export default () => {
       filterArrayToString(filters),
       state.region,
       state.metric,
-      state.secondary,
+      embedSecondary ? state.secondary + "+secondary" : state.secondary,
       state.demographic,
       viewportRoute,
       getLocationsRoute(locationsData)

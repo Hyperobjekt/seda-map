@@ -7,7 +7,7 @@ import shallow from 'zustand/shallow'
  */
 export default function useActiveView() {
   return useUiStore(
-    state => [state.view, state.setView],
+    state => [state.view, state.setView, state.isEmbed],
     shallow
   )
 }

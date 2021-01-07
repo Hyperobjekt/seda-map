@@ -61,10 +61,13 @@ const getChartEmbedLink = ({
   demographic,
   locations,
   filters,
+  zoom,
+  latitude,
+  longitude,
 }) => {
   return (locations && locations.length > 0)
-    ? `${BASE_URL}#/embed/chart/${filterArrayToString(filters)}/${region}/${metric}/${secondary}/${demographic}/${locations}`
-    : `${BASE_URL}#/embed/chart/${filterArrayToString(filters)}/${region}/${metric}/${secondary}/${demographic}`
+    ? `${BASE_URL}#/embed/chart/${filterArrayToString(filters)}/${region}/${metric}/${secondary}/${demographic}/${zoom}/${latitude}/${longitude}/${locations}`
+    : `${BASE_URL}#/embed/chart/${filterArrayToString(filters)}/${region}/${metric}/${secondary}/${demographic}/${zoom}/${latitude}/${longitude}`
 }
 
 const getSecondaryChartEmbedLink = ({
@@ -73,7 +76,10 @@ const getSecondaryChartEmbedLink = ({
   metric,
   locations,
   secondary,
-  filters
+  filters,
+  zoom,
+  latitude,
+  longitude,
 }) => {
   // let { xVar, yVar, zVar } = getMapVars(
   //   region,
@@ -87,8 +93,8 @@ const getSecondaryChartEmbedLink = ({
   //   xVar = xVar.split('_')[0] + '_' + secondary
   // }
   return (locations && locations.length > 0)
-    ? `${BASE_URL}#/embed/chart/${filterArrayToString(filters)}/${region}/${metric}/${secondary}+secondary/${demographic}/${locations}`
-    : `${BASE_URL}#/embed/chart/${filterArrayToString(filters)}/${region}/${metric}/${secondary}+secondary/${demographic}`
+    ? `${BASE_URL}#/embed/chart/${filterArrayToString(filters)}/${region}/${metric}/${secondary}+secondary/${demographic}/${zoom}/${latitude}/${longitude}/${locations}`
+    : `${BASE_URL}#/embed/chart/${filterArrayToString(filters)}/${region}/${metric}/${secondary}+secondary/${demographic}/${zoom}/${latitude}/${longitude}`
 }
 
 const getEmbedCode = link => {

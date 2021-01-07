@@ -17,6 +17,7 @@ import {
 } from '../utils'
 import { useAddLocation } from '../../location'
 import SedaScatterplotHeader from './SedaScatterplotHeader'
+import shallow from 'zustand/shallow'
 
 /** Breakpoint where gap chart is split vs overlay */
 const SPLIT_BREAKPOINT = 1024
@@ -67,13 +68,12 @@ const SedaScatterplot = () => {
     hasGapChart
   } = useAppContext()
   const [, setSecondary] = useSecondary()
-  const setHovered = useUiStore(state => state.setHovered)
+  const [setHovered, isEmbed, embedSecondary] = useUiStore(state => [state.setHovered, state.isEmbed, state.embedSecondary], shallow)
   const addLocation = useAddLocation()
-
   // track state for split view of charts
   const [showGapChart, setShowGapChart] = useState(false)
 
-  const isSplit = sizes && sizes.width > SPLIT_BREAKPOINT
+  const isSplit = !isEmbed && sizes && sizes.width > SPLIT_BREAKPOINT
 
   // handle hover events
   const handleHover = useCallback(
@@ -118,6 +118,7 @@ const SedaScatterplot = () => {
       {resizeListener}
       <SplitView
         LeftComponent={
+          isEmbed && embedSecondary ? <></> : (
           <SedaScatterplotBase
             className={clsx(classes.chart, {
               'scatterplot--versus': isVersus
@@ -132,7 +133,7 @@ const SedaScatterplot = () => {
               xVar={xVar}
               yVar={yVar}
               region={region}>
-              {!isSplit && hasGapChart && (
+              {!isSplit && hasGapChart && !isEmbed && (
                 <LinkButton
                   className={classes.toggleButton}
                   onClick={() => setShowGapChart(true)}>
@@ -141,6 +142,7 @@ const SedaScatterplot = () => {
               )}
             </SedaScatterplotHeader>
           </SedaScatterplotBase>
+          )
         }
         RightComponent={
           hasGapChart ? (
@@ -169,7 +171,7 @@ const SedaScatterplot = () => {
                 xVar={xGapVar}
                 yVar={yGapVar}
                 region={region}>
-                {!isSplit && isVersus && (
+                {!isSplit && isVersus && !isEmbed && (
                   <LinkButton
                     className={classes.toggleButton}
                     onClick={() => setShowGapChart(false)}>
@@ -185,7 +187,7 @@ const SedaScatterplot = () => {
         view={
           isSplit && hasGapChart
             ? 'split'
-            : showGapChart && hasGapChart
+            : (showGapChart || embedSecondary) && hasGapChart
             ? 'right'
             : 'left'
         }

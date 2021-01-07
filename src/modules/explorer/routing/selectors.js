@@ -167,7 +167,7 @@ const isValidMetric = metric =>
   ['avg', 'grd', 'coh'].indexOf(metric) > -1
 
 const isValidSecondary = secondary =>
-  ['ses', 'frl', 'seg', 'min'].indexOf(secondary) > -1
+  ['ses', 'frl', 'seg', 'min'].indexOf(secondary.split("+")[0]) > -1
 
 const isValidViewport = (zoom, lat, lon) =>
   !isNaN(zoom) && !isNaN(lat) && !isNaN(lon)

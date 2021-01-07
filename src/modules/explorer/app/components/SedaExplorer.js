@@ -13,7 +13,7 @@ import { EmbedDialog } from '../../sharing/components/EmbedDialog'
  * @param {*} props
  */
 const SedaExplorer = props => {
-  const [view] = useActiveView()
+  const [view, _, isEmbed] = useActiveView()
 
   // determines the active portion of the split view
   const splitView =
@@ -21,11 +21,11 @@ const SedaExplorer = props => {
 
   return (
     <PageBody {...props}>
-      <SedaPanelGroup />
+      {!isEmbed && <SedaPanelGroup />}
       <SplitView
         view={splitView}
-        LeftComponent={<SedaMap />}
-        RightComponent={<SedaScatterplot />}
+        LeftComponent={isEmbed && view === 'chart' ? <></> : <SedaMap />}
+        RightComponent={isEmbed && view === 'map' ? <></> : <SedaScatterplot />}
       />
       <SedaTooltip />
       <SedaError />
