@@ -2,7 +2,10 @@ import React, { useMemo } from 'react'
 import clsx from 'clsx'
 import { CheckboxGroup } from '../../../../shared/components/Inputs/Checkboxes'
 import { useRegion } from '../../app/hooks'
-import { FILTER_FLAGS } from '../../app/constants/flags'
+import {
+  EXCLUSIVE_FLAGS,
+  FILTER_FLAGS
+} from '../../app/constants/flags'
 import { PanelListItem } from '../../../../shared/components/Panels/PanelList'
 import { getLang, getPrefixLang } from '../../app/selectors/lang'
 import useActiveFilters from '../hooks/useActiveFilters'
@@ -12,6 +15,7 @@ import {
   FormLabel,
   withStyles
 } from '@material-ui/core'
+import { hasFilterRule } from '../../../filters/useFilterStore'
 
 const styles = theme => ({
   root: {},
@@ -36,8 +40,34 @@ const makeCheckboxes = (flags, checked) => {
 const GROUP_TITLES = [
   getLang('FLAG_LABEL_AREA'),
   getLang('FLAG_LABEL_SCHOOL'),
-  getLang('FLAG_LABEL_AGE')
+  getLang('FLAG_LABEL_AGE'),
+  getLang('FLAG_LABEL_BIE_GROUP')
 ]
+
+/**
+ * Returns true if the given flag is marked as exclusive
+ * @param {*} flag
+ */
+const isExclusive = flag => {
+  return EXCLUSIVE_FLAGS.indexOf(flag) > -1
+}
+
+/**
+ * Gets all of the flag IDs that should be unchecked from
+ * the provided filters.
+ * @param {*} filters
+ */
+const getUncheckedFlags = filters => {
+  const uncheckedExclusive = EXCLUSIVE_FLAGS.filter(
+    flag => !hasFilterRule(filters, ['eq', flag, 1])
+  )
+  const uncheckedNonExclusive = filters
+    .filter(
+      f => f[0] === 'eq' && f[2] === 0 && !isExclusive(f[1])
+    )
+    .map(f => f[1])
+  return [...uncheckedNonExclusive, ...uncheckedExclusive]
+}
 
 const SedaFilterFlags = ({ classes, className, ...props }) => {
   const [region] = useRegion()
@@ -50,9 +80,7 @@ const SedaFilterFlags = ({ classes, className, ...props }) => {
     state => state.removeFilter
   )
   // check filters for any flags that have been turned off
-  const uncheckedFlags = filters
-    .filter(f => f[0] === 'eq' && f[2] === 0)
-    .map(f => f[1])
+  const uncheckedFlags = getUncheckedFlags(filters)
   // pull active flag filters from the filters array
   const checkedFlags = regionFlags
     .flat()
@@ -74,7 +102,15 @@ const SedaFilterFlags = ({ classes, className, ...props }) => {
   const handleCheckboxChange = (checkbox, event) => {
     const key = checkbox.id
     const isOn = checkedFlags.indexOf(key) > -1
-    isOn ? setFilter(['eq', key, 0]) : removeFilter(['eq', key])
+    // exclusive flag filters are set to 1 when checked
+    if (isExclusive(key))
+      return isOn
+        ? removeFilter(['eq', key], true)
+        : setFilter(['eq', key, 1])
+    // non-excluse filters are removed when checked, or set to 0 when checked
+    return isOn
+      ? setFilter(['eq', key, 0])
+      : removeFilter(['eq', key], true)
   }
 
   return (
