@@ -1,7 +1,6 @@
 import React from 'react'
 import { makeStyles, Button, Drawer, Link } from '@material-ui/core'
 import useMenuVisibility from './useMenuVisibility'
-import clsx from 'clsx'
 
 import { MENU } from '../app/constants/site.js'
 // import { useSiteStore } from '../app/hooks'
