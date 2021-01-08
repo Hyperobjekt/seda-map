@@ -38,12 +38,7 @@ const MenuLinks = ({
   classes = {},
   ...props
 }) => (
-  <div
-    className={clsx(
-      'menu__link-collection',
-      classes.linkCollection
-    )}
-    {...props}>
+  <div>
     {Boolean(links.length) &&
       links.map((item, i) => (
           <Link
