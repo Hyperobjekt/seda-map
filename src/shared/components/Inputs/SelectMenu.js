@@ -4,6 +4,7 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import { makeId } from '../../utils'
 import { LinkButton } from '../Buttons'
+import { getPrefixLang } from '../../../modules/explorer/app/selectors/lang'
 
 /**
  * A basic select menu
@@ -11,7 +12,7 @@ import { LinkButton } from '../Buttons'
 export default function SelectMenu({
   items,
   ButtonComponent,
-  getLabel,
+  langPrefix,
   onSelect,
   children,
   ...props
@@ -35,15 +36,14 @@ export default function SelectMenu({
   }
 
   return (
-    <div {...props}>
-      (
+    <>
       <ButtonComponent
         aria-controls={id}
         aria-haspopup="true"
-        onClick={handleClick}>
+        onClick={handleClick}
+        {...props}>
         {children}
       </ButtonComponent>
-      )
       <Menu
         id={id}
         anchorEl={anchorEl}
@@ -54,17 +54,17 @@ export default function SelectMenu({
           <MenuItem
             key={item}
             onClick={e => handleSelect(item, e)}>
-            {getLabel(item)}
+            {getPrefixLang(item, langPrefix)}
           </MenuItem>
         ))}
       </Menu>
-    </div>
+    </>
   )
 }
 
 SelectMenu.defaultProps = {
   ButtonComponent: LinkButton,
-  getLabel: v => v
+  langPrefix: 'LABEL'
 }
 
 SelectMenu.propTypes = {

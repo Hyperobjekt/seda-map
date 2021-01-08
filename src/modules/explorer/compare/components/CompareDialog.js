@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
@@ -9,11 +9,23 @@ import CloseIcon from '@material-ui/icons/Close'
 import Typography from '@material-ui/core/Typography'
 import useCompareDialog from '../hooks/useCompareDialog'
 import CompareTable from './CompareTable'
+import CompareDemographicSelect from './CompareDemographicSelect'
+import CompareSearch from './CompareSearch'
+import CompareLoadSimilarButton from './CompareLoadSimilarButton'
+import CompareExportButton from './CompareExportButton'
+import {
+  useActiveLocation,
+  useAllLocationsData
+} from '../../location'
+import { useActiveOptions } from '../../app/hooks'
 
 const styles = theme => ({
   root: {
     margin: 0,
     padding: theme.spacing(2)
+  },
+  toolbar: {
+    display: 'flex'
   },
   closeButton: {
     position: 'absolute',
@@ -52,12 +64,21 @@ const DialogContent = withStyles(theme => ({
   }
 }))(MuiDialogContent)
 
-export default function CompareDialog() {
+function CompareDialog({ classes, ...props }) {
   const [open, setOpen] = useCompareDialog()
 
   const handleClose = () => {
     setOpen(false)
   }
+
+  const [activeLocation] = useActiveLocation()
+  const locations = useAllLocationsData()
+  const [metric, demographic] = useActiveOptions()
+
+  // useEffect(() => {
+  //   if (open) {
+  //   }
+  // }, [open])
 
   return (
     <Dialog
@@ -71,8 +92,16 @@ export default function CompareDialog() {
         onClose={handleClose}
       />
       <DialogContent dividers>
+        <div className={classes.toolbar}>
+          <CompareDemographicSelect />
+          <CompareSearch />
+          <CompareLoadSimilarButton />
+          <CompareExportButton />
+        </div>
         <CompareTable />
       </DialogContent>
     </Dialog>
   )
 }
+
+export default withStyles(styles)(CompareDialog)
