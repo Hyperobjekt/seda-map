@@ -13,7 +13,7 @@ import { EmbedDialog } from '../../sharing/components/EmbedDialog'
  * @param {*} props
  */
 const SedaExplorer = props => {
-  const [view, _, isEmbed] = useActiveView()
+  const [view, , isEmbed] = useActiveView()
 
   // determines the active portion of the split view
   const splitView =

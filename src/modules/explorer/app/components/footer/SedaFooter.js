@@ -140,7 +140,7 @@ const SedaFooter = () => {
 
   const [, toggleLinkDialog] = useLinkDialogVisibility()
   const [, toggleEmbedDialog] = useEmbedDialogVisibility()
-  const [view, _, isEmbed] = useActiveView()
+  const [, , isEmbed] = useActiveView()
   const classes = useStyles()
 
   const handleClick = item => {

@@ -63,7 +63,7 @@ const useActionStyles = makeStyles(theme => ({
 
 const HeaderActions = ({ ...props }) => {
   const classes = useActionStyles()
-  const [view, _, isEmbed] = useActiveView()
+  const [, , isEmbed] = useActiveView()
   return (!isEmbed &&
     <div className={classes.root} {...props}>
       <SedaSearch
