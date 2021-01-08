@@ -34,9 +34,7 @@ const useStyles = makeStyles(theme => ({
 const links = MENU.navItems;
 
 const MenuLinks = ({
-  label,
   links,
-  onClick,
   classes = {},
   ...props
 }) => (
@@ -46,12 +44,10 @@ const MenuLinks = ({
       classes.linkCollection
     )}
     {...props}>
-    <span className="menu__link-label">{label}</span>
     {Boolean(links.length) &&
       links.map((item, i) => (
           <Link
             className={classes.item}
-            onClick={() => onClick(item.link)}
             aria-label={item.label}
             href={item.url}>
             {item.label}
