@@ -15,13 +15,15 @@ export default function useAllLocationsData() {
     state => state.locations,
     shallow
   )
+  // pull regions from locations
   const regions = locations.map(locationId =>
     getRegionFromLocationId(locationId)
   )
   const uniqueRegions = [...new Set(regions)]
-  const data = useStaticData(state => state.data)
+  // trigger loads for region data in case they haven't been loaded
   uniqueRegions.forEach(r => loadSedaData(r))
-  return useMemo(() => data
+  const data = useStaticData(state => state.data)
+  return useMemo(() => data && locations[0]
     ? locations.map(locationId => {
         const region = getRegionFromLocationId(locationId)
         const regionData = data[region]
@@ -29,6 +31,8 @@ export default function useAllLocationsData() {
           ? regionData.find(d => d.id === locationId)
           : null
       })
+      // filter out any locations that weren't found
+      .filter(l => !!l)
     : []
   , [data, locations])
 }

@@ -1,8 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import SedaRegionSelect from './SedaRegionSelect'
+import SedaRegionSelect from '../../controls/SedaRegionSelect'
 import { getPrefixLang } from '../../app/selectors/lang'
-import { BasicSidePanel } from '../../../../shared'
+import {
+  BasicSidePanel,
+  SidePanelList
+} from '../../../../shared'
 
 /**
  * Side panel for demographic selection
@@ -13,7 +16,11 @@ const SedaRegionPanel = ({ onClose, ...props }) => {
       title={getPrefixLang('region', 'PANEL_TITLE')}
       onClose={onClose}
       {...props}>
-      <SedaRegionSelect onSelect={onClose} />
+      <SedaRegionSelect
+        component={SidePanelList}
+        onSelect={onClose}
+        aria-label="region selection"
+      />
     </BasicSidePanel>
   )
 }

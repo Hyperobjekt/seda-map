@@ -26,8 +26,8 @@ export {
   default as useLocationName
 } from './hooks/useLocationName'
 export {
-  default as useLocationNumber
-} from './hooks/useLocationNumber'
+  default as useLocationMarker
+} from './hooks/useLocationMarker'
 export { default as useLocations } from './hooks/useLocations'
 export {
   default as useCurrentRegionLocationsData
@@ -41,3 +41,4 @@ export {
 export {
   default as useAddLocation
 } from './hooks/useAddLocation'
+export * from './selectors'

@@ -1,28 +1,74 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import SedaMetricSelect from './SedaMetricSelect'
-import { getPrefixLang } from '../../app/selectors/lang'
-import { Typography } from '@material-ui/core'
-import { BasicSidePanel } from '../../../../shared'
+import { getLang, getPrefixLang } from '../../app/selectors/lang'
+import { ListItem, ListItemSecondaryAction, ListItemText, Typography, withStyles } from '@material-ui/core'
+import { BasicSidePanel, SidePanelList } from '../../../../shared'
+import { MetricIcon } from '../../../icons'
+import SedaMetricSelect from '../../controls/SedaMetricSelect'
+import PanelDescription from './PanelDescription'
+
+const styles = theme => ({
+  root: {
+    paddingTop: 4,
+    paddingBottom: 4,
+    '& .MuiListItem-button': {
+      borderRadius: theme.shape.borderRadius,  
+    },
+    '& .MuiListItemText-prmary': {
+      textTransform: 'capitalize',
+    },
+    '& .MuiListItemText-secondary': {
+      fontSize: theme.typography.pxToRem(12)
+    },
+    '& .MuiListItemSecondaryAction-root': {
+      fontSize: theme.spacing(3),
+      pointerEvents: 'none',
+      right: theme.spacing(3)
+    },
+    '& .Mui-selected .MuiListItemSecondaryAction-root': {
+      color: theme.palette.primary.main  
+    },
+  }
+})
+
+const SedaMetricPanelItem = ({value, selected, children, ...props}) => {
+  const secondary = getPrefixLang(value, 'LABEL_REFLECTS')
+
+  return (
+    <ListItem button selected={selected} {...props}>
+      <ListItemText
+        primary={children}
+        secondary={secondary}
+      />
+      <ListItemSecondaryAction>
+        <MetricIcon
+          metricId={value}
+        />
+      </ListItemSecondaryAction>
+    </ListItem>
+  )
+}
 
 /**
  * Side panel for metric selection
  */
-const SedaMetricPanel = ({ onClose, ...props }) => {
+const SedaMetricPanel = ({ classes, onClose, ...props }) => {
   return (
     <BasicSidePanel
       title={getPrefixLang('metric', 'PANEL_TITLE')}
       onClose={onClose}
       {...props}>
       <>
-        <SedaMetricSelect onSelect={onClose} />
-        <Typography
-          style={{ display: 'block', padding: 16 }}
-          variant="caption">
-          The educational opportunity metrics above are based on
-          test scores for students in grades 3 - 8 for the years
-          2009 - 2016.
-        </Typography>
+        <SedaMetricSelect
+          className={classes.root}
+          component={SidePanelList}
+          itemComponent={SedaMetricPanelItem}
+          onSelect={onClose}
+          aria-label="educational opportunity metric selection"
+        />
+        <PanelDescription>
+          { getLang("PANEL_DESCRIPTION_METRICS") }
+        </PanelDescription>
       </>
     </BasicSidePanel>
   )
@@ -32,4 +78,4 @@ SedaMetricPanel.propTypes = {
   onClose: PropTypes.func
 }
 
-export default SedaMetricPanel
+export default withStyles(styles)(SedaMetricPanel)

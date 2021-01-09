@@ -10,7 +10,7 @@ export default withStyles(theme => ({
       paddingLeft: 44,
       textTransform: 'capitalize'
     },
-    '& .MuiListItem-button.MuiListItem--active': {
+    '& .MuiListItem-button.MuiListItem--active, & .MuiListItem-button.Mui-selected': {
       background: theme.palette.primary.highlight,
       color: theme.palette.primary.main,
       borderRadius: theme.shape.borderRadius,

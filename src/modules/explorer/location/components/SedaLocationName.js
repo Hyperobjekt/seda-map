@@ -1,38 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {
-  getSelectedColors,
-  getRegionFromLocationId
-} from '../../app/selectors'
-import { useRegion } from '../../app/hooks'
-import { getStateName } from '../../../../shared/utils/states'
 import useLocationData from '../hooks/useLocationData'
-import useLocationNumber from '../hooks/useLocationNumber'
 import LocationName from './LocationName'
-
-const selectedColors = getSelectedColors()
+import useLocationMarker from '../hooks/useLocationMarker'
 
 const SedaLocationName = ({ locationId, ...props }) => {
   const locationData = useLocationData(locationId)
-  const locationNumber = useLocationNumber(locationId)
-  const [activeRegion] = useRegion()
-  const featureRegion = getRegionFromLocationId(locationId)
-  const color =
-    activeRegion === featureRegion
-      ? selectedColors[locationNumber - 1]
-      : '#ccc'
-  const isState = locationId.length === 2
-  // TODO: better handling of missing location data
+  const {number, color} = useLocationMarker(locationId)
   return locationData ? (
     <LocationName
-      name={
-        isState ? getStateName(locationId) : locationData['name']
-      }
-      parentLocation={
-        isState ? 'United States' : getStateName(locationId)
-      }
-      label={locationNumber}
-      color={color || "#ccc"}
+      name={locationData.name}
+      parentLocation={locationData.parentLocation}
+      label={number}
+      color={color}
       {...props}
     />
   ) : null

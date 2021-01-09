@@ -14,10 +14,15 @@ import CompareSearch from './CompareSearch'
 import CompareLoadSimilarButton from './CompareLoadSimilarButton'
 import CompareExportButton from './CompareExportButton'
 import {
+  getLocationNameString,
   useActiveLocation,
   useAllLocationsData
 } from '../../location'
 import { useActiveOptions } from '../../app/hooks'
+import shallow from 'zustand/shallow'
+import useCompareStore from '../hooks/useCompareStore'
+import { getLang, getPrefixLang } from '../../app/selectors/lang'
+import { getRegionFromLocationId } from '../../app/selectors'
 
 const styles = theme => ({
   root: {
@@ -44,7 +49,9 @@ const DialogTitle = withStyles(styles)(props => {
       {...other}>
       <div>
         <Typography variant="h6">{title}</Typography>
-        <Typography variant="body2">{subtitle}</Typography>
+        {subtitle && (
+          <Typography variant="body2">{subtitle}</Typography>
+        )}
       </div>
       {onClose ? (
         <IconButton
@@ -65,20 +72,48 @@ const DialogContent = withStyles(theme => ({
 }))(MuiDialogContent)
 
 function CompareDialog({ classes, ...props }) {
+  // get required state
   const [open, setOpen] = useCompareDialog()
+  const [activeLocation] = useActiveLocation()
+  const locations = useAllLocationsData()
+  const selectedLocation = locations.find(
+    l => l.id === activeLocation
+  )
+  const [metric, demographic] = useActiveOptions()
+  const setCompareStore = useCompareStore(
+    state => state.setCompareStore
+  )
 
+  // pull required info from the app store into
+  // the compare store when the dialog is open
+  useEffect(() => {
+    if (open) {
+      setCompareStore({
+        metric,
+        demographic,
+        locations,
+        selectedLocation: activeLocation
+      })
+    }
+  }, [open, metric, demographic, locations, activeLocation])
+
+  // create dialog heading
+  const region =
+    activeLocation && getRegionFromLocationId(activeLocation)
+  const dialogTitle = getLang('COMPARE_TITLE', {
+    region: region ? getPrefixLang(region) : 'Locations'
+  })
+  // only show subtitle if there is active location
+  const dialogSubtitle =
+    activeLocation &&
+    getLang('COMPARE_SUBTITLE', {
+      location: getLocationNameString(selectedLocation)
+    })
+
+  // close button handler
   const handleClose = () => {
     setOpen(false)
   }
-
-  const [activeLocation] = useActiveLocation()
-  const locations = useAllLocationsData()
-  const [metric, demographic] = useActiveOptions()
-
-  // useEffect(() => {
-  //   if (open) {
-  //   }
-  // }, [open])
 
   return (
     <Dialog
@@ -87,8 +122,8 @@ function CompareDialog({ classes, ...props }) {
       open={open}>
       <DialogTitle
         id="customized-dialog-title"
-        title="Modal Title"
-        subtitle="location name"
+        title={dialogTitle}
+        subtitle={dialogSubtitle}
         onClose={handleClose}
       />
       <DialogContent dividers>

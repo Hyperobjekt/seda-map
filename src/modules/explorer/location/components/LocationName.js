@@ -47,8 +47,9 @@ const LocationName = ({
   className,
   ...props
 }) => {
+  const hasLabel = label || label === 0
   const classes = useStyles({ small })
-  const marker = label && color && (
+  const marker = hasLabel && color && (
     <Marker
       className={clsx('location-name__marker', classes.marker, {
         [classes.markerInline]: markerPosition === 'inline',

@@ -8,6 +8,8 @@ import {
 import { getLang } from '../../app/selectors/lang'
 import { useDemographic, useMetric } from '../../app/hooks'
 import SedaStat from '../../stats/SedaStat'
+import useCompareStore from '../hooks/useCompareStore'
+import shallow from 'zustand/shallow'
 
 const styles = theme => ({
   root: {
@@ -52,14 +54,21 @@ const renderMetricCell = varName => props => {
 }
 
 const CompareTable = ({ classes, ...props }) => {
-  // pull active metric from the store, with setter
-  const [metric, setMetric] = useMetric()
-  const [demographic] = useDemographic()
-
-  // data for table
-  const data = useAllLocationsData()
-
-  console.log('locations data', data)
+  // pull active metric + demographic from the store, with setter
+  const [
+    locations,
+    metric,
+    demographic,
+    setMetric
+  ] = useCompareStore(
+    state => [
+      state.locations,
+      state.metric,
+      state.demographic,
+      state.setMetric
+    ],
+    shallow
+  )
 
   // column configuration for the table
   const columns = React.useMemo(
@@ -125,17 +134,17 @@ const CompareTable = ({ classes, ...props }) => {
   const handleRowClick = React.useCallback(row => {
     console.log('clicked row', row)
   }, [])
-  return (
+  return locations ? (
     <Table
       className={classes.table}
-      data={data}
+      data={locations}
       columns={columns}
       options={options}
       sortColumn={metric}
       onSort={handleSortChange}
       onRowClick={handleRowClick}
     />
-  )
+  ) : null
 }
 
 export default withStyles(styles)(CompareTable)

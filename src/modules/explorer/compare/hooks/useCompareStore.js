@@ -2,7 +2,7 @@ import create from 'zustand'
 
 const [useCompareStore] = create((set, get) => ({
   // dialog visibility state
-  dialogOpen: false,
+  dialogOpen: true,
   setDialogOpen: dialogOpen => set({ dialogOpen }),
   // stores metric for comparison (separate from explorer metric so map / chart doesn't re-render)
   metric: 'avg',
@@ -16,7 +16,9 @@ const [useCompareStore] = create((set, get) => ({
     set({ selectedLocation }),
   // stores locations active in the comparison dialog
   locations: [],
-  setLocations: locations => set({ locations })
+  setLocations: locations => set({ locations }),
+  // expose setter for setting multiple things
+  setCompareStore: set
 }))
 
 export default useCompareStore

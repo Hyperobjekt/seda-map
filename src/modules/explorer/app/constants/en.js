@@ -235,7 +235,7 @@ const LANG = {
   "PANEL_LOCATION_MANY": "$[num] locations selected",
   "PANEL_LOCATION_SINGLE": "One location selected",
   "PANEL_LOCATION_NONE": "No locations selected",
-  "LOCATIONS_ACTIVE_NONE": "You have not selected any schools, districts, counties, or states. Use the search above or select place in the map or chart view.",
+  "LOCATIONS_ACTIVE_NONE": "You have not selected any schools, districts, counties, or states.",
   "LOCATIONS_SELECTED": "Selected Places",
   "LOCATIONS_NONE": "No places selected.",
   "LOCATION_SUBHEADING_SUMMARY": "Educational Opportunity Overview",
@@ -607,7 +607,15 @@ const LANG = {
   "LINK_DIALOG_TITLE": "Share a Link",
   "LINK_INSTRUCTIONS": "Copy the link below to share the current view of the explorer.",
   "LINK_INPUT_LABEL": "Current View URL",
-  "LINK_COPY_LABEL": "copy link"
+  "LINK_COPY_LABEL": "copy link",
+  // add these
+  "COMPARE_TITLE": "Compare $[region]",
+  "COMPARE_SUBTITLE": "to $[location]",
+  "LABEL_NO_NAME": "Unknown",
+  "PANEL_DESCRIPTION_METRICS": "The educational opportunity metrics above are based on test scores for students in grades 3 - 8 for the years 2009 - 2018.",
+  "PANEL_DESCRIPTION_SUBGROUPS": "Subgroups and gaps are not available when viewing school level data.  Switch to state, county, or districts to view subgroup data.",
+  "PANEL_DESCRIPTION_GAPS": "Gaps show the difference between two subgroup's educational opportunity by subtracting one subgroups values from another.  The further a gap value is from 0, the larger the imbalance between the two subgroups.",
+  "PANEL_DESCRIPTION_LOCATIONS": "Locations that you have previously selected show up here.  Select states, counties, districts, and schools using the map, chart, or search."
 } 
 
 export default LANG
