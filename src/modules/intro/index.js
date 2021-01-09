@@ -23,13 +23,14 @@ export const IntroScreen = () => {
   
     useEffect(() => {
       if(hideIntro && isShowing) {
-        setIntroStyles({
-          transform: "translateY(-100%)"
-        })
+        // setIntroStyles({
+        //   transform: "translateY(-100%)"
+        // })
+        setIsShowing(false)
       }else {
         if(!isLoaded) setIsLoaded(true)
       }
-    }, [metric])
+    }, [metric, isLoaded, isShowing, setIntroStyles])
   
     useEffect(() => {
       if(isLoaded) {
@@ -42,20 +43,20 @@ export const IntroScreen = () => {
           pointerEvents: "initial"
         })
       }
-    }, [isLoaded])
+    }, [isLoaded, setLoadingStyles, setCardStyles])
   
     useEffect(() => {
       setIntroStyles({
         transform: isShowing ? "translateY(0%)" : "translateY(-100%)"
       })
-    }, [isShowing])
+    }, [isShowing, setIntroStyles])
   
     return (
       <animated.div style={introStyles} className="section section--intro ">
         <div className="section__header">
           <BackgroundIcon />
           <SedaLightIcon className="section__brand" />
-          <h1 className="section__title"><span role="text">The Educational Opportunity Project at&nbsp;<br />Stanford University</span></h1>
+          <h1 className="section__title"><span>The Educational Opportunity Project at&nbsp;<br />Stanford University</span></h1>
           <p className="section__description">
             Using public-school test scores in grades 3–8 from  2008–09 through 2015–16, we have created the first comprehensive view of educational opportunity in the United States.
           </p>
