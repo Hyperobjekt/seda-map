@@ -298,11 +298,23 @@
         padding: 0;
       }
 
-      /* button .icon {
+      button .icon {
         width: 14px;
         height: 14px;
         margin-left: 8px;
-      } */
+      }
+
+      .icon {
+        width: 16px;
+        height: 16px;
+      }
+
+      .icon.card__icon {
+        width: 26px;
+        height: 26px;
+        margin-right: 16px;
+      }
+
       .blocker {
         background: rgba(255, 255, 255, 0.9);
         position: absolute;
@@ -326,6 +338,409 @@
           display: none;
         }
       }
+
+      /** Intro Container */ 
+
+      .section.section--intro {
+        background: #061D56; 
+        color: #fff;
+        min-height: 440px;
+        margin-top:0;
+        padding:0 16px;
+        position: absolute;
+        width:100%;
+        height:100%;
+        top:0;
+        left:0;
+        z-index:10000;
+        display: block;
+        text-align: center;
+        transition: transform 0.6s ease-in-out 1s;
+        transform: translate3d(0, 0, 0);
+        overflow:auto;
+        background-image: linear-gradient(-180deg, #061D56 3%, #04143C 84%);
+        overflow: auto;
+        overflow-x: hidden;
+      }
+
+      @media(min-width: 1023px) {
+        .section.section--intro {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-direction: column;
+        }
+      }
+
+      .section.section--intro.section--hidden {
+        transform: translate3d(-100%, 0, 0);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .section.section--intro {
+          transition: opacity 0.6s ease-in-out 0.4s;
+          opacity:1;
+        }
+        .section.section--intro.section--hidden {
+          transform: translate3d(0, 0, 0);
+          opacity:0;
+          z-index:-1;
+        }
+      }
+
+
+      @media(min-width: 1023px) {
+        .section.section--intro.section--hidden {
+          transform: translate3d(0, -100%, 0);
+        }
+      }
+
+      /** Intro Header */
+
+      .section--intro .section__header {
+        position:relative;
+        margin: 32px auto 8px auto;
+        max-width: 576px;
+      }
+
+      /** Logo Mark */
+
+      .section__brand {
+        position:relative;
+        width: 32px;
+        height: 35px;
+      }
+
+      @media(min-width: 1023px) {
+        .section__brand {
+          width: 34px;
+          height: 37px;
+          margin-top: -48px;
+        }
+      }
+
+      /** Title */
+
+      .section--intro .section__title {
+        font-size: 18.52px;
+        line-height: 27.24px;
+        letter-spacing: 0.18px;
+        position:relative;
+      }
+
+      .section--intro .section__title br {
+        display: none;
+      }
+
+      @media(min-width: 480px) {
+        .section--intro .section__title br {
+          display: block;
+        }
+      }
+
+      @media(min-width: 1023px) {
+        .section--intro .section__title {
+          font-size: 22px;
+          letter-spacing: 0.22px;
+          line-height: 33.59px;
+        }
+
+      }
+
+
+      /** Intro Description */
+
+      .section--intro .section__description {
+        max-width: 660px;
+        margin: 24px auto;
+        text-align: center;
+        line-height: 1.5;
+        font-size: 15px;
+        position:relative;
+      }
+
+      @media(min-width: 1023px) {
+        .section--intro .section__description {
+          margin-bottom: 48px;
+          font-size: 14px;
+          letter-spacing: 0.23px;
+          text-align: center;
+          line-height: 21px;
+        }
+      }
+
+      /** Explorer Heading */
+    
+      .section--intro .section__heading {
+        font-size: 18.5px;
+        font-family: var(--heading-font);
+        font-weight: normal;
+        max-width: 200px;
+        margin: 32px auto 24px; 
+        line-height: 27px;
+        letter-spacing: 0.18px;
+      }
+
+      @media(min-width: 1023px) {
+        .section--intro .section__heading {
+          font-size: var(--large-font-size);
+          margin-bottom:0;
+          max-width: none;
+        }
+      }
+
+      /** Section Body */
+
+      .section--intro .section__body {
+        position: relative;
+      }
+
+      .section--intro .section__cards {
+        display: flex;
+        align-items: stretch;
+        justify-content: center;
+        flex-direction: column;
+      }
+
+      @media(min-width: 1023px) {
+        .section--intro .section__cards {
+          flex-direction: row;
+        }
+      }
+
+      .section--intro .section__loading {
+        position:absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items:center;
+        justify-content: flex-start;
+        opacity:0;
+        visibility: hidden;
+        transition: opacity 0.4s ease;
+      }
+
+      @media(min-width: 1023px) {
+        .section--intro .section__loading {
+          justify-content: flex-start;
+        }
+      }
+
+      .section--intro .section__body--loading .section__loading {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .section--intro .loading__text {
+        font-family: var(--alt-font);
+        letter-spacing: 0.02em;
+        color: #fff;
+        text-transform: uppercase;
+      }
+
+      .section--intro .section__user-prompt {
+        opacity:1;
+        transition: opacity 0.6s ease;
+      }
+
+      .section--intro .section__body--loading .section__user-prompt {
+        opacity:0;
+      }
+
+      .section--intro .section__body--unsupported .section__user-prompt {
+        display: none;
+      }
+
+      .section--intro .section__body .section__unsupported {
+        display:none;
+        font-family: sans-serif;
+        font-size: var(--large-font-size);
+        max-width: 620px;
+        margin:auto;
+        padding: 16px;
+        background: rgba(255, 0, 0, 0.12);
+        border: 1px solid #c00;
+      }
+
+      .section--intro .section__body--unsupported .section__unsupported {
+        display:block;
+      }
+
+      /** Cards */
+
+      .card {
+        position:relative;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;        
+        text-align: left;
+        margin: 0 auto 32px auto;
+        width: 100%;
+        flex:1;
+        max-width: 320px;
+        min-width: 140px;
+      }
+
+      @media(min-width: 1023px) {
+        .card {
+          margin: 16px;
+          max-width: 320px;
+        }
+      }
+
+      .card__header {
+        position:relative;
+        z-index:9;
+        width: 100%;
+        flex: 0;
+        text-align:center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        padding: 0px 16px;
+        min-height: 48px;
+      }
+
+      .card__title {
+        font-size: 16px;
+        letter-spacing: 0.16px;
+        line-height: 1;
+        text-transform: capitalize;
+        white-space: normal;
+      }
+
+      .card__body {
+        padding: 0px 16px 16px 16px;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        align-items: flex-start;
+        justify-content: stretch;
+        width: 100%;
+        text-align: center;
+        font-size: 15px;
+        letter-spacing: 0.24px;
+        line-height: 22px;
+      }
+
+      @media(min-width: 1023px) {
+        .card__body {
+          font-size: 14px;
+          color: #FFFFFF;
+          letter-spacing: 0;
+          text-align: center;
+          line-height: 21px;
+        }
+      }
+
+      .card__body p { margin: 0; }
+
+      .card__actions {
+        width:100%;
+        z-index: 1;
+        padding: 0 16px;
+      }
+
+      @media(min-width: 1023px) {
+        .card__actions {
+          top:auto;
+          bottom:0;
+          height: 48px;
+        }
+      }
+
+      .card__actions button {
+        font-family: var(--alt-font);
+        font-size: 15.12px;
+        letter-spacing: 0.26px;
+        line-height: 18.36px;
+        text-transform: uppercase;
+        padding: 8px 16px;
+        height: 48px;
+        background: none;
+        border:none;
+        display: flex;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+        color:#fff;
+        border: 1px solid #fff;
+        margin: 0 auto;
+        border-radius: 2px;
+        max-width: 264px;
+      }
+      .card__actions button:hover {
+        cursor: pointer;
+        background: rgba(255,255,255,0.15);
+      }
+      .card__actions button:focus {
+        outline-color: #fff;
+      }
+      .card__actions button svg {
+        width: 12px;
+        height: 12px;
+      }
+
+      @media(min-width: 1023px) {
+        .card__actions button {
+          justify-content: center;
+          font-size: 16.8px;
+          letter-spacing: 0.29px;
+          line-height: 20.4px;
+          max-width: 88px;
+        }
+        .card__actions button svg {
+          transform: rotate(90deg);
+        }
+      }
+
+      /** App container */
+
+      #root {
+        position: relative;
+        width: 100%;
+        height:100%;
+      }
+
+      .hidden {
+        visibility: hidden;
+      }
+
+      .bg {
+        position: absolute;
+        top: -62px;
+        width: 420px;
+        margin-left: -187px;
+      }
+
+      @media(min-width: 1023px) {
+        .bg {
+          top: -102px;
+          width: 626px;
+          margin-left: -297px;
+        }
+      }
+
+      .bg__dots {
+        fill: rgba(12,49,141,0.82);
+        opacity:0.46;
+      }
+
+      .bg__mainland {
+        fill: none;
+        stroke-width: 0.8;
+        stroke: #06287C;
+        opacity:0.76;
+      }
+
+      /*!
+      * Load Awesome v1.1.0 (http://github.danielcardoso.net/load-awesome/)
+      * Copyright 2015 Daniel Cardoso <@DanielCardoso>
+      * Licensed under MIT
+      */
+      .la-ball-pulse,.la-ball-pulse>div{position:relative;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}.la-ball-pulse{display:block;font-size:0;color:#fff}.la-ball-pulse.la-dark{color:var(--alt-text)}.la-ball-pulse>div{display:inline-block;float:none;background-color:var(--alt-text);border:0 solid var(--alt-text)}.la-ball-pulse{width:54px;height:18px}.la-ball-pulse>div:nth-child(1){-webkit-animation-delay:-.2s;-moz-animation-delay:-.2s;-o-animation-delay:-.2s;animation-delay:-.2s}.la-ball-pulse>div:nth-child(2){-webkit-animation-delay:-.1s;-moz-animation-delay:-.1s;-o-animation-delay:-.1s;animation-delay:-.1s}.la-ball-pulse>div:nth-child(3){-webkit-animation-delay:0s;-moz-animation-delay:0s;-o-animation-delay:0s;animation-delay:0s}.la-ball-pulse>div{width:10px;height:10px;margin:4px;border-radius:100%;-webkit-animation:ball-pulse 1s ease infinite;-moz-animation:ball-pulse 1s ease infinite;-o-animation:ball-pulse 1s ease infinite;animation:ball-pulse 1s ease infinite}.la-ball-pulse.la-sm{width:26px;height:8px}.la-ball-pulse.la-sm>div{width:4px;height:4px;margin:2px}.la-ball-pulse.la-2x{width:108px;height:36px}.la-ball-pulse.la-2x>div{width:20px;height:20px;margin:8px}.la-ball-pulse.la-3x{width:162px;height:54px}.la-ball-pulse.la-3x>div{width:30px;height:30px;margin:12px}@-webkit-keyframes ball-pulse{0%,100%,60%{opacity:1;-webkit-transform:scale(1);transform:scale(1)}30%{opacity:.1;-webkit-transform:scale(.01);transform:scale(.01)}}@-moz-keyframes ball-pulse{0%,100%,60%{opacity:1;-moz-transform:scale(1);transform:scale(1)}30%{opacity:.1;-moz-transform:scale(.01);transform:scale(.01)}}@keyframes ball-pulse{0%,100%,60%{opacity:1;-webkit-transform:scale(1);-moz-transform:scale(1);-o-transform:scale(1);transform:scale(1)}30%{opacity:.1;-webkit-transform:scale(.01);-moz-transform:scale(.01);-o-transform:scale(.01);transform:scale(.01)}}
     </style>
   </head>
 
@@ -344,7 +759,7 @@
     ></noscript>
     <!-- End Google Tag Manager (noscript) -->
 
-    <div id="root" class="hidden"></div>
+    <div id="root"></div>
     <script>
       // test for local storage support
       window.supportsLocalStorage = (function() {
@@ -567,7 +982,7 @@
 
         // default route to load if none specified, or invalid
         var defaultRoute =
-          '/map/us/districts/avg/ses/all/3.5/38/-97'
+          '/map/none/counties/avg/ses/all/3.15/37.39/-96.78'
 
         // track start time
         var startTime = new Date()
@@ -711,6 +1126,7 @@
           loadRoute()
           hideCards()
           showLoadRemainingAssets()
+          trigger('map')
         }
 
         // load the route from local storage, or default options
@@ -727,13 +1143,13 @@
           var route =
             '/' +
             view +
-            '/us/' +
+            '/none/' +
             region +
             '/' +
             metric +
             '/ses/' +
             demographic +
-            '/3.5/38/-97'
+            '/3.15/37.39/-96.78'
           if (!validRoute(route)) {
             route = defaultRoute
             trackProblem('tried to load invalid route')
@@ -743,7 +1159,7 @@
             trackView(view)
             trackDemographic(demographic)
           }
-          replaceHash(route)
+          // replaceHash(route)
         }
 
         // updates the loading message
@@ -870,29 +1286,25 @@
 
         // handler for when the 'app' event fires, indicating app assets are available
         var appLoadedHandler = function() {
-          // var appLoadTime = new Date()
-          // var appLoadSeconds = parseInt(appLoadTime - startTime)
-          // trackTiming('load', 'loading assets', appLoadSeconds)
-          // if (location.hash.length < 3) {
-          //   if (supportsLocalStorage && localStorage.getItem('metric')) {
-          //     // load route from local storage
-          //     loadRoute()
-          //     showLoadRemainingAssets()
-          //   } else {
-          //     // no route in local storage, show selection
-          //     showCards()
-          //   }
-          // } else {
-          //   // route already exists, load
-          //   if (validRoute(window.location.hash)) {
-          //     trackDirectLink()
-          //   } else {
-          //     trackProblem('tried to load invalid route')
-          //     replaceHash(defaultRoute)
-          //   }
-          //   showLoadRemainingAssets()
-          // }
-          showLoadRemainingAssets()
+          var appLoadTime = new Date()
+          var appLoadSeconds = parseInt(appLoadTime - startTime)
+          trackTiming('load', 'loading assets', appLoadSeconds)
+          if (location.hash.length < 3) {
+              // no route in local storage, show selection
+              showCards()
+          } else {
+            console.log("hhhh")
+            // route already exists, load
+            trigger('map')
+            if (validRoute(window.location.hash)) {
+              trackDirectLink()
+            } else {
+              trackProblem('tried to load invalid route')
+              replaceHash(defaultRoute)
+            }
+            showLoadRemainingAssets()
+          }
+          // showLoadRemainingAssets()
         }
 
         var getViewFromURL = function(url) {
