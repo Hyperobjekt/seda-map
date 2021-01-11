@@ -94,27 +94,27 @@ export const MENU = {
   socialItems: [
     {
       id: 'facebook',
-      url: '#',
+      url: 'https://www.facebook.com/edopportunity/',
       label: LANG['MENU_FACEBOOK'],
       icon: 'facebook'
     },
     {
       id: 'twitter',
-      url: '#',
+      url: 'https://twitter.com/seda_data',
       label: LANG['MENU_TWITTER'],
       icon: 'twitter'
     },
-    {
-      id: 'linkedin',
-      url: '#',
-      label: LANG['MENU_LINKEDIN'],
-      icon: 'linkedin'
-    },
-    {
-      id: '',
-      url: '#',
-      label: LANG['MENU_YOUTUBE'],
-      icon: 'youtube'
-    }
+    // {
+    //   id: 'linkedin',
+    //   url: '#',
+    //   label: LANG['MENU_LINKEDIN'],
+    //   icon: 'linkedin'
+    // },
+    // {
+    //   id: 'youtube',
+    //   url: '#',
+    //   label: LANG['MENU_YOUTUBE'],
+    //   icon: 'youtube'
+    // }
   ]
 }
