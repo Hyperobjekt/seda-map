@@ -10,7 +10,7 @@ import {
   TwitterIcon,
 } from '../../icons'
 import { MENU } from '../app/constants/site.js'
-// import { useSiteStore } from '../app/hooks'
+//import { useSiteStore } from '../app/hooks'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -91,7 +91,11 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const links = MENU.navItems;
-const socials = MENU.socialItems;
+const socials = MENU.socialItems.filter((item)=>{
+  if (item.id === 'facebook' || item.id === 'twitter'){
+    return item;
+  }
+});
 const socialIcons = {
   facebook: <FacebookIcon />,
   twitter: <TwitterIcon />,
@@ -137,7 +141,7 @@ const MenuFooter = ({
 
 const SedaMenu = ({ ...props }) => {
   const classes = useStyles()
-  // const links = useSiteStore(state => state.menu)
+  //const links = useSiteStore(state => state.menu)
   const [showMenu, toggleMenu] = useMenuVisibility()
   return (
     <Drawer
