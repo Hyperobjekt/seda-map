@@ -5,7 +5,6 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { IconButton } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import SedaFooter from '../app/components/footer/SedaFooter';
-import closeOutline from './close.png'
 import {
   FacebookIcon,
   TwitterIcon,
@@ -14,8 +13,14 @@ import { MENU } from '../app/constants/site.js'
 // import { useSiteStore } from '../app/hooks'
 
 const useStyles = makeStyles(theme => ({
-  root: { 
+  root: {
     width: theme.app.panelWidth,
+    [theme.breakpoints.down("sm")]: {
+      textAlign: 'center'
+    },
+    [theme.breakpoints.up("sm")]: {
+      textAlign: 'left'
+    },
     '& .MuiIconButton-root': {
       borderRadius: '50%'
     }
@@ -53,6 +58,7 @@ const useStyles = makeStyles(theme => ({
   },
   linkBox: {
     padding: theme.spacing(5),
+    paddingBottom: theme.spacing(3),
     flexGrow: '1',
   },
   linkRoot: {
@@ -75,10 +81,15 @@ const useStyles = makeStyles(theme => ({
   },
   footer: {
     paddingLeft: theme.spacing(5),
+    paddingRight: theme.spacing(5),
     paddingBottom: theme.spacing(3)
   },
   footerRoot: {},
-  footerItem: {}
+  footerItem: {
+    '& .MuiSvgIcon-root': {
+      fontSize: '3rem'
+    }
+  }
 }))
 
 const links = MENU.navItems;
