@@ -80,9 +80,7 @@ const useStyles = makeStyles(theme => ({
     },
   },
   footer: {
-    paddingLeft: theme.spacing(5),
-    paddingRight: theme.spacing(5),
-    paddingBottom: theme.spacing(3)
+    padding: `0px ${theme.spacing(5)}px ${theme.spacing(3)}px ${theme.spacing(5)}px`
   },
   footerRoot: {},
   footerItem: {
