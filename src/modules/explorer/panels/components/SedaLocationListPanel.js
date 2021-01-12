@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { SedaLocationSelect } from '../../location'
+import { SedaLocationSelect, useLocations } from '../../location'
 import { getLang, getPrefixLang } from '../../app/selectors/lang'
 import { BasicSidePanel } from '../../../../shared'
 import { CompareButton } from '../../compare'
@@ -18,7 +18,7 @@ const SedaLocationListPanel = ({ onClose, ...props }) => {
       {...props}>
       <SedaLocationSelect onSelect={onClose} />
       <PanelDescription>
-        { getLang("PANEL_DESCRIPTION_LOCATIONS") }
+        {getLang('PANEL_DESCRIPTION_LOCATIONS')}
       </PanelDescription>
     </BasicSidePanel>
   )

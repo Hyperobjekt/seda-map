@@ -8,7 +8,7 @@ import create from 'zustand'
  */
 const [useCompareStore] = create((set, get) => ({
   // dialog visibility state
-  dialogOpen: true,
+  dialogOpen: false,
   setDialogOpen: dialogOpen => set({ dialogOpen }),
   // stores metric for comparison (separate from explorer metric so map / chart doesn't re-render)
   metric: 'avg',
