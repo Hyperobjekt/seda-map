@@ -1,41 +1,48 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useMetric } from '../explorer/app/hooks'
 import { animated, useSpring } from 'react-spring'
+import shallow from 'zustand/shallow'
+import { useStaticData } from '../data'
 
 const hideIntro = window.location.hash.length > 2
 
 export const IntroScreen = () => {
-    const [metric, setMetric] = useMetric()
-    const [isLoaded, setIsLoaded] = useState(false)
+    const [, setMetric] = useMetric()
+    const [loaded, loading, isLoading] = useStaticData(state => [state.loaded, state.loading, state.isLoading], shallow)
     const [isShowing, setIsShowing] = useState(true)
   
     const [loadingStyles, setLoadingStyles] = useSpring(() => ({
-      opacity: isLoaded ? 0 : 1,
-      pointerEvents: isLoaded ? "none" : "initial"
+      opacity: 1,
+      pointerEvents: "initial"
     }))
     const [cardStyles, setCardStyles] = useSpring(() => ({
-      opacity: isLoaded ? 1 : 0,
-      pointerEvents: isLoaded ? "none" : "initial"
+      opacity: 0,
+      pointerEvents: "none"
     }))
     const [introStyles, setIntroStyles] = useSpring(() => ({
-      transform: isShowing ? "translateY(0%)" : "translateY(-100%)"
+      transform: "translateY(0%)" 
     }))
     const staticIntro = useRef(null)
+    const loadingMessageRef = useRef(null)
+
+    useEffect(() => {
+      if(loading.length > 0) {
+        loadingMessageRef.current.innerText = `loading ${loading[0]}`
+      }
+    }, [loading])
   
     useEffect(() => {
       if(!staticIntro.current && document.querySelector(".section--static")) {
         staticIntro.current = document.querySelector(".section--static")
         staticIntro.current.remove()
       }
-      if(hideIntro && isShowing) {
+      if(hideIntro && isShowing && loaded.length > 0 && !isLoading) {
         setIsShowing(false)
-      }else {
-        if(!isLoaded) setIsLoaded(true)
       }
-    }, [metric, isLoaded, isShowing])
+    }, [isShowing, loaded, isLoading])
   
     useEffect(() => {
-      if(isLoaded) {
+      if(!isLoading && loaded.length > 0) {
         setLoadingStyles({
           opacity: 0,
           pointerEvents: "none"
@@ -45,12 +52,14 @@ export const IntroScreen = () => {
           pointerEvents: "initial"
         })
       }
-    }, [isLoaded, setLoadingStyles, setCardStyles])
+    }, [isLoading, loaded, setLoadingStyles, setCardStyles])
   
     useEffect(() => {
-      setIntroStyles({
-        transform: isShowing ? "translateY(0%)" : "translateY(-100%)"
-      })
+      if(!isShowing) {
+        setIntroStyles({
+          transform: "translateY(-100%)"
+        })
+      }
     }, [isShowing, setIntroStyles])
   
     return (
@@ -70,7 +79,7 @@ export const IntroScreen = () => {
                 <div></div>
                 <div></div>
             </div>
-            <p className="loading__text" id="loadingText">Loading assets</p>
+            <p className="loading__text" ref={loadingMessageRef}>Loading assets</p>
           </animated.div>
           <div className="section__unsupported">
             <p>The browser you are using does not support the features required to use this tool.  Please switch to a modern browser (MS Edge, Safari, Firefox, Google Chrome, etc.) and ensure WebGL is enabled.</p>
