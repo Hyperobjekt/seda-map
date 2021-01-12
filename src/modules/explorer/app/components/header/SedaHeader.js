@@ -17,7 +17,7 @@ import {
   DetailedTooltip,
   PageHeader
 } from '../../../../../shared'
-import { useActiveOptions } from '../../hooks'
+import { useActiveOptions, useActiveView } from '../../hooks'
 import { SedaHelpButton } from '../../../help'
 import { SedaMenuButton } from '../../../menu'
 import { SedaSearch } from '../../../search'
@@ -63,7 +63,8 @@ const useActionStyles = makeStyles(theme => ({
 
 const HeaderActions = ({ ...props }) => {
   const classes = useActionStyles()
-  return (
+  const [, , isEmbed] = useActiveView()
+  return (!isEmbed &&
     <div className={classes.root} {...props}>
       <SedaSearch
         TextFieldProps={{
