@@ -9,7 +9,7 @@ import {
   useUiStore
 } from '../../app/hooks'
 import { LinkButton, SplitView } from '../../../../shared'
-import SedaGenericSelect from '../../../../shared/components/Inputs/SelectMenu'
+import SelectMenu from '../../../../shared/components/Inputs/SelectMenu'
 import {
   getLocatonIdFromEvent,
   getCoordsFromEvent,
@@ -67,13 +67,21 @@ const SedaScatterplot = () => {
     gapMetrics,
     hasGapChart
   } = useAppContext()
-  const [, setSecondary] = useSecondary()
-  const [setHovered, isEmbed, embedSecondary] = useUiStore(state => [state.setHovered, state.isEmbed, state.embedSecondary], shallow)
+  const [secondary, setSecondary] = useSecondary()
+  const [setHovered, isEmbed, embedSecondary] = useUiStore(
+    state => [
+      state.setHovered,
+      state.isEmbed,
+      state.embedSecondary
+    ],
+    shallow
+  )
   const addLocation = useAddLocation()
   // track state for split view of charts
   const [showGapChart, setShowGapChart] = useState(false)
 
-  const isSplit = !isEmbed && sizes && sizes.width > SPLIT_BREAKPOINT
+  const isSplit =
+    !isEmbed && sizes && sizes.width > SPLIT_BREAKPOINT
 
   // handle hover events
   const handleHover = useCallback(
@@ -118,30 +126,32 @@ const SedaScatterplot = () => {
       {resizeListener}
       <SplitView
         LeftComponent={
-          isEmbed && embedSecondary ? <></> : (
-          <SedaScatterplotBase
-            className={clsx(classes.chart, {
-              'scatterplot--versus': isVersus
-            })}
-            variant="map"
-            onHover={handleHover}
-            onClick={handleClick}>
-            <SedaScatterplotHeader
-              className={clsx({
-                [classes.headerOffset]: !isSplit && hasGapChart
+          isEmbed && embedSecondary ? (
+            <></>
+          ) : (
+            <SedaScatterplotBase
+              className={clsx(classes.chart, {
+                'scatterplot--versus': isVersus
               })}
-              xVar={xVar}
-              yVar={yVar}
-              region={region}>
-              {!isSplit && hasGapChart && !isEmbed && (
-                <LinkButton
-                  className={classes.toggleButton}
-                  onClick={() => setShowGapChart(true)}>
-                  Show gap vs. other metrics
-                </LinkButton>
-              )}
-            </SedaScatterplotHeader>
-          </SedaScatterplotBase>
+              variant="map"
+              onHover={handleHover}
+              onClick={handleClick}>
+              <SedaScatterplotHeader
+                className={clsx({
+                  [classes.headerOffset]: !isSplit && hasGapChart
+                })}
+                xVar={xVar}
+                yVar={yVar}
+                region={region}>
+                {!isSplit && hasGapChart && !isEmbed && (
+                  <LinkButton
+                    className={classes.toggleButton}
+                    onClick={() => setShowGapChart(true)}>
+                    Show gap vs. other metrics
+                  </LinkButton>
+                )}
+              </SedaScatterplotHeader>
+            </SedaScatterplotBase>
           )
         }
         RightComponent={
@@ -151,16 +161,16 @@ const SedaScatterplot = () => {
               gapChart
               variant="map"
               axisChildren={
-                <SedaGenericSelect
+                <SelectMenu
                   style={{
                     position: 'relative',
                     zIndex: 1000,
                     display: 'inline-block'
                   }}
+                  value={secondary}
                   items={gapMetrics}
-                  onSelect={m => setSecondary(m)}>
-                  Change
-                </SedaGenericSelect>
+                  onSelect={m => setSecondary(m)}
+                />
               }
               onHover={handleHover}
               onClick={handleClick}>

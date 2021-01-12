@@ -1,7 +1,8 @@
 import {
   SELECTED_COLORS,
   CHOROPLETH_COLORS,
-  NO_DATA_COLOR
+  NO_DATA_COLOR,
+  INACTIVE_COLOR
 } from '../constants/colors'
 import { interpolateRgbBasis } from 'd3-interpolate'
 import { isGapVarName } from './demographics'
@@ -12,6 +13,11 @@ import { getValuePositionInRange } from '../../../../shared/utils'
  * Gets the configuration for selected colors
  */
 export const getSelectedColors = () => SELECTED_COLORS
+
+/**
+ * Gets the color to use for inactive location markers
+ */
+export const getInactiveColor = () => INACTIVE_COLOR
 
 /**
  * Gets the configuration for choropleth colors

@@ -12,7 +12,6 @@ import {
   getSingularRegion,
   isUnavailable
 } from '../app/selectors'
-import { getStateName } from '../../../shared/utils/states'
 import { Typography, makeStyles } from '@material-ui/core'
 import clsx from 'clsx'
 import { Tooltip } from '../../../shared'
@@ -108,24 +107,6 @@ const useStyles = makeStyles(theme => ({
 const getSecondaryVar = (activeRegion, featureRegion) =>
   featureRegion === 'schools' ? 'all_frl' : 'all_ses'
 
-/**
- * Gets the location name based on the current location data
- * @param {*} param0
- */
-const getLocationName = ({ id, name }) => {
-  if (!id && !name) return 'Unavailable'
-  if (id && id.length === 2) return getStateName(id)
-  return name
-}
-
-/**
- * Gets the parent location name based on the location data
- */
-const getLocationParent = ({ id }) => {
-  if (!id) return ''
-  if (id && id.length === 2) return 'United States'
-  return getStateName(id)
-}
 
 const SedaTooltip = props => {
   const [hoveredId] = useHovered()
@@ -155,8 +136,8 @@ const SedaTooltip = props => {
 
   return data ? (
     <Tooltip
-      title={getLocationName(data)}
-      subtitle={getLocationParent(data)}
+      title={data.name}
+      subtitle={data.parentLocation}
       show={showTooltip}
       x={x}
       y={y}

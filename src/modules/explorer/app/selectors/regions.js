@@ -69,24 +69,3 @@ export const getRegionFromFeature = feature => {
   return getRegionFromLocationId(feature.properties.id)
 }
 
-/**
- * Returns the provided location IDs array as an object
- * with a key for each region and the corresponding locations.
- * @param {Array<string>} locations
- */
-export const getLocationsByRegion = locations =>
-  locations.reduce((obj, id) => {
-    if (!id) return obj
-    const r = getRegionFromLocationId(id)
-    if (!obj[r]) {
-      obj[r] = []
-    }
-    obj[r].push(id)
-    return obj
-  }, {})
-
-export const getLocationIdsForRegion = (region, locations) => {
-  return locations.filter(
-    id => id.length === getRegionById(region).idLength
-  )
-}

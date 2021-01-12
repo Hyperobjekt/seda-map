@@ -51,8 +51,7 @@ export {
   getRegionById,
   getSingularRegion,
   getSingularRegions,
-  getRegions,
-  getLocationIdsForRegion
+  getRegions
 } from './regions'
 export {
   getPositionForVarNameValue,

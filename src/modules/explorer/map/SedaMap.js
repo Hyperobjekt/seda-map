@@ -9,8 +9,7 @@ import { getLayers } from './selectors'
 import MapBase from '../../map'
 import {
   getSelectedColors,
-  getFeatureProperty,
-  getLocationIdsForRegion
+  getFeatureProperty
 } from '../app/selectors'
 import { getLang } from '../app/selectors/lang'
 import SedaMapLegend from './SedaMapLegend'
@@ -25,7 +24,8 @@ import { useFilters, getActiveFilterCount } from '../filters'
 import {
   useLocations,
   useAddLocation,
-  useActiveLocationData
+  useActiveLocationData,
+  getLocationIdsForRegion
 } from '../location'
 import useFlyToLocation from './hooks/useFlyToLocation'
 import { SEDA_SOURCES } from './constants'

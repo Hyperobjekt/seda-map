@@ -505,7 +505,7 @@ const getVersusOverlay = (xVar, yVar) => {
       show: false
     },
     lineStyle: {
-      color: '#0071DB',
+      color: '#40B875',
       type: 'dotted',
       width: 2,
       opacity: 0.8

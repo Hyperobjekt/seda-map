@@ -1,6 +1,7 @@
 import useStaticData from '../../../data/useStaticData'
 import { getRegionFromLocationId } from '../../app/selectors'
 import { useLoadSedaData } from '../../loader'
+import { getLocationNameParts } from '../selectors'
 
 /**
  * Provides data from the store for the given ID
@@ -14,7 +15,15 @@ export default id => {
   const regionData = data[region]
   // load data if it doesn't exist
   !regionData && region && loadSedaData(region)
-  return id && regionData && regionData.length
-    ? regionData.find(d => d.id === id)
-    : null
+  // null if data is not available
+  if (!id || !regionData || !regionData.length) return null
+  const location = regionData.find(d => d.id === id)
+  // null if location is not found in the data
+  if (!location) return null
+  const [ name, parentLocation ] = getLocationNameParts(location)
+  return {
+    ...location,
+    name,
+    parentLocation
+  }
 }

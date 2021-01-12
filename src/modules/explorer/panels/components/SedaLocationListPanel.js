@@ -1,9 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { SedaLocationSelect } from '../../location'
-import { getPrefixLang } from '../../app/selectors/lang'
+import { getLang, getPrefixLang } from '../../app/selectors/lang'
 import { BasicSidePanel } from '../../../../shared'
 import { CompareButton } from '../../compare'
+import PanelDescription from './PanelDescription'
 
 /**
  * Side panel for demographic selection
@@ -16,6 +17,9 @@ const SedaLocationListPanel = ({ onClose, ...props }) => {
       onClose={onClose}
       {...props}>
       <SedaLocationSelect onSelect={onClose} />
+      <PanelDescription>
+        {getLang('PANEL_DESCRIPTION_LOCATIONS')}
+      </PanelDescription>
     </BasicSidePanel>
   )
 }

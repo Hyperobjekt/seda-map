@@ -10,6 +10,8 @@ export const SELECTED_COLORS = [
   '#FF0C0C'
 ]
 
+
+
 /**
  * colors for map choropleths
  */
@@ -23,4 +25,12 @@ export const CHOROPLETH_COLORS = [
   '#136e4a'
 ]
 
+/**
+ * Color for areas on the map with no data
+ */
 export const NO_DATA_COLOR = '#ccc'
+
+/**
+ * Color for location markers for an inactive region (e.g. counties when districts are selected)
+ */
+export const INACTIVE_COLOR = '#ccc'

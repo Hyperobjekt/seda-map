@@ -2,19 +2,20 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
-import { makeId } from '../../utils'
-import { LinkButton } from '../Buttons'
-import { getPrefixLang } from '../../../modules/explorer/app/selectors/lang'
+import SedaMenu from './SedaMenu'
+import { makeId } from '../../../shared/utils'
+import { getPrefixLang } from '../app/selectors/lang'
+import { LinkButton } from '../../../shared'
 
 /**
  * A basic select menu
  */
-export default function SelectMenu({
-  value,
-  items,
+export default function SedaInlineMenu({
   ButtonComponent,
+  value,
   langPrefix,
   onSelect,
+  ButtonProps,
   ...props
 }) {
   // anchor element for managing focus
@@ -30,8 +31,8 @@ export default function SelectMenu({
     setAnchorEl(null)
   }
   // handler for menu item select
-  const handleSelect = e => {
-    onSelect && onSelect(e)
+  const handleSelect = (item, e) => {
+    onSelect && onSelect(item, e)
     handleClose()
   }
 
@@ -41,34 +42,31 @@ export default function SelectMenu({
         aria-controls={id}
         aria-haspopup="true"
         onClick={handleClick}
-        {...props}>
+        {...ButtonProps}>
         {getPrefixLang(value, langPrefix)}
       </ButtonComponent>
-      <Menu
-        id={id}
+      <SedaMenu
+        component={Menu}
+        itemComponent={MenuItem}
         anchorEl={anchorEl}
         keepMounted
         open={Boolean(anchorEl)}
-        onClose={handleClose}>
-        {items.map(item => (
-          <MenuItem
-            key={item}
-            selected={item === value}
-            onClick={e => handleSelect(item, e)}>
-            {getPrefixLang(item, langPrefix)}
-          </MenuItem>
-        ))}
-      </Menu>
+        value={value}
+        onSelect={handleSelect}
+        onClose={handleClose}
+        {...props}
+      />
     </>
   )
 }
 
-SelectMenu.defaultProps = {
+SedaInlineMenu.defaultProps = {
   ButtonComponent: LinkButton,
+  ButtonProps: {},
   langPrefix: 'LABEL'
 }
 
-SelectMenu.propTypes = {
+SedaInlineMenu.propTypes = {
   /** React element to use for the button (default: LinkButton) */
   ButtonComponent: PropTypes.element,
   /** Function that accepts the menu item and returns a label */

@@ -16,6 +16,11 @@ import { getRegionFromLocationId } from './regions'
 
 // values provided by SEDA team for calulation distance from regression
 const FUNC_VARS = {
+  states: {
+    avg: [-0.051, 0.795, 0.033, 0.023],
+    grd: [0.99, 0.046, 0.001, 0.001],
+    coh: [0.018, -0.003, 0.008, 0.006]
+  },
   counties: {
     avg: [-0.051, 0.795, 0.033, 0.023],
     grd: [0.99, 0.046, 0.001, 0.001],
