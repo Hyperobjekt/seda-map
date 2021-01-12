@@ -15,8 +15,18 @@ import { getMetricIdsForRegion } from '../../app/selectors/metrics'
 import useSetCompareLocation from '../hooks/useSetCompareLocation'
 import clsx from 'clsx'
 import useCompareLocationsData from '../hooks/useCompareLocationsData'
+import { isUnavailable } from '../../app/selectors'
 
 const TABLE_METRICS = ['avg', 'grd', 'coh', 'ses', 'frl']
+
+const numberSorter = (a, b, columnId) => {
+  const aVal = a.values[columnId]
+  const bVal = b.values[columnId]
+  if (isUnavailable(aVal)) return -1
+  if (isUnavailable(bVal)) return 1
+  const result = aVal - bVal
+  return result
+}
 
 const styles = theme => ({
   root: {
@@ -113,6 +123,7 @@ const CompareTable = ({ classes, ...props }) => {
       id: m,
       Header: TableHeaderMetric,
       accessor: [demographic, m].join('_'),
+      sortType: numberSorter,
       Cell: renderMetricCell([demographic, m].join('_'))
     }))
     return [
