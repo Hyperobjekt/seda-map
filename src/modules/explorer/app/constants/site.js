@@ -103,18 +103,6 @@ export const MENU = {
       url: 'https://twitter.com/seda_data',
       label: LANG['MENU_TWITTER'],
       icon: 'twitter'
-    },
-    {
-      id: 'linkedin',
-      url: '#',
-      label: LANG['MENU_LINKEDIN'],
-      icon: 'linkedin'
-    },
-    {
-      id: 'youtube',
-      url: '#',
-      label: LANG['MENU_YOUTUBE'],
-      icon: 'youtube'
     }
   ]
 }
