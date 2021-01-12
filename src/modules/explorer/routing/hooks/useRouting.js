@@ -65,6 +65,7 @@ export default () => {
     async function loadRoute() {
       isLoaded.current = true
       const path = window.location.hash
+
       if (!isEmptyRoute(path) && isValidExplorerRoute(path)) {
         const params = getParamsFromPathname(path)
         setDataOptions(params)

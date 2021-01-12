@@ -106,7 +106,7 @@ const [useDataOptions] = create((set, get) => ({
     set({
       region: params['region'],
       metric: params['metric'],
-      secondary: params['secondary'],
+      secondary: params['secondary'].split("+")[0],
       demographic: params['demographic']
     })
   }
