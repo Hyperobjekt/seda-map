@@ -22,6 +22,8 @@ import {
   useEmbedDialogVisibility
 } from '../../../sharing'
 import { useActiveView } from '../../hooks'
+import { EmbedDialog } from '../../../sharing/components/EmbedDialog'
+import { ShareLinkDialog } from '../../../sharing/components/ShareLinkDialog'
 
 const links = {
   id: 'share',
@@ -157,24 +159,31 @@ const SedaFooter = () => {
         return null
     }
   }
-  return (!isEmbed &&
-    <PageFooter className={classes.root}>
-      <div
-        className={clsx('footer__branding', classes.branding)}>
-        <StanfordLogo style={{ height: 16, width: 76 }} />
-      </div>
-      <div
-        className={clsx('footer__copyright', classes.copyright)}>
-        {copyright}
-      </div>
-      <div className={clsx('footer__links', classes.links)}>
-        <FooterLinks
-          label={links.label}
-          links={links.items}
-          onClick={handleClick}
-        />
-      </div>
-    </PageFooter>
+  return (
+    !isEmbed && (
+      <PageFooter className={classes.root}>
+        <div
+          className={clsx('footer__branding', classes.branding)}>
+          <StanfordLogo style={{ height: 16, width: 76 }} />
+        </div>
+        <div
+          className={clsx(
+            'footer__copyright',
+            classes.copyright
+          )}>
+          {copyright}
+        </div>
+        <div className={clsx('footer__links', classes.links)}>
+          <FooterLinks
+            label={links.label}
+            links={links.items}
+            onClick={handleClick}
+          />
+        </div>
+        <EmbedDialog />
+        <ShareLinkDialog />
+      </PageFooter>
+    )
   )
 }
 

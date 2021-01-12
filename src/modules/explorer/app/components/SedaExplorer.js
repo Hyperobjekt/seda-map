@@ -6,8 +6,6 @@ import { SedaTooltip } from '../../tooltip'
 import { useActiveView } from '../hooks'
 import { SedaPanelGroup } from '../../panels'
 import { SedaError } from '../../errors'
-import { EmbedDialog } from '../../sharing/components/EmbedDialog'
-
 /**
  * Body of the explorer, consisting of side panel, splitview, tooltip, and alert area
  * @param {*} props
@@ -20,10 +18,16 @@ const SedaExplorer = props => {
     view === 'chart' ? 'right' : view === 'map' ? 'left' : view
 
   const embedListener = useCallback(() => {
-    if(!isEmbed) return
+    if (!isEmbed) return
 
-    // open new tab with same settings, without 'embed' mode or '+secondary' flag 
-    window.open(window.location.href.split("+secondary").join("").split("/embed").join(""))
+    // open new tab with same settings, without 'embed' mode or '+secondary' flag
+    window.open(
+      window.location.href
+        .split('+secondary')
+        .join('')
+        .split('/embed')
+        .join('')
+    )
   }, [isEmbed])
 
   return (
@@ -32,12 +36,15 @@ const SedaExplorer = props => {
       <SplitView
         view={splitView}
         onClick={embedListener}
-        LeftComponent={isEmbed && view === 'chart' ? <></> : <SedaMap />}
-        RightComponent={isEmbed && view === 'map' ? <></> : <SedaScatterplot />}
+        LeftComponent={
+          isEmbed && view === 'chart' ? <></> : <SedaMap />
+        }
+        RightComponent={
+          isEmbed && view === 'map' ? <></> : <SedaScatterplot />
+        }
       />
       <SedaTooltip />
       <SedaError />
-      <EmbedDialog />
     </PageBody>
   )
 }
