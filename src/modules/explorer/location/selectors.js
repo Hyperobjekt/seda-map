@@ -1,5 +1,8 @@
 import { getStateName } from '../../../shared/utils/states'
-import { INACTIVE_COLOR, SELECTED_COLORS } from '../app/constants/colors'
+import {
+  INACTIVE_COLOR,
+  SELECTED_COLORS
+} from '../app/constants/colors'
 import { getRegionFromLocationId } from '../app/selectors'
 import { getRegionById } from '../app/selectors/regions'
 import { getLang } from '../app/selectors/lang'
@@ -75,21 +78,32 @@ export const getLocationIdsForRegion = (
  * @param {Array<object>} locations
  * @param {string} id
  */
-export const getLocationMarker = (locations, id, activeRegion) => {
-  const getResult = (number) => ({number, color: getLocationColor(number)})
+export const getLocationMarker = (
+  locations,
+  id,
+  activeRegion
+) => {
+  const getResult = number => ({
+    number,
+    color: getLocationColor(number)
+  })
   if (!locations || !id) return getResult(0)
   const locationRegions = getLocationsByRegion(locations)
   const region = getRegionFromLocationId(id)
-  console.log('getLocationMarker', locations,id,activeRegion, region)
   // 0 if active region is provided, and location is not a member
-  if (activeRegion && region !== activeRegion) return getResult(0)
+  if (activeRegion && region !== activeRegion)
+    return getResult(0)
   // no locations for the current region
   if (!locationRegions[region]) return getResult(0)
-  const number = locationRegions[region].findIndex(l => l === id) + 1
+  const number =
+    locationRegions[region].findIndex(l => l === id) + 1
   return getResult(number)
 }
 
 export const getLocationColor = (locationNumber = 0) => {
-  if (!locationNumber || locationNumber < 1) return INACTIVE_COLOR
-  return SELECTED_COLORS[(locationNumber-1) % SELECTED_COLORS.length]
+  if (!locationNumber || locationNumber < 1)
+    return INACTIVE_COLOR
+  return SELECTED_COLORS[
+    (locationNumber - 1) % SELECTED_COLORS.length
+  ]
 }

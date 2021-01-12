@@ -3,13 +3,12 @@ import { getLang } from '../../app/selectors/lang'
 import { SedaSearch } from '../../search'
 import useAddCompareLocations from '../hooks/useAddCompareLocations'
 
-const CompareSearch = ({...props}) => {
-
+const CompareSearch = ({ ...props }) => {
   const addCompareLocations = useAddCompareLocations()
 
-  const handleLocationSelect = (location) => {
-    console.log('selected location', location)
-    addCompareLocations([location.id])
+  const handleLocationSelect = (e, hit) => {
+    console.log('selected location', hit)
+    addCompareLocations([hit.suggestion?.id])
   }
 
   return (

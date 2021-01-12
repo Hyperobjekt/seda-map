@@ -10,12 +10,14 @@ import { theme } from '../theme'
 import {
   getLang,
   getLabelForVarName,
-  getRegionLabel
+  getRegionLabel,
+  getPrefixLang
 } from '../../app/selectors/lang'
 import SedaLocationMarkers from './SedaLocationMarkers'
 import useStaticData from '../../../data/useStaticData'
 import { useAppContext } from '../../app/hooks'
 import { getScatterplotOptions } from '../style'
+import { getDemographicIdFromVarName } from '../../app/selectors'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -83,6 +85,11 @@ function SedaScatterplotBase({
   const [xVar, yVar, zVar] = gapChart ? gapVars : scatterplotVars
   const extents = gapChart ? gapExtents : scatterplotExtents
 
+  const xLabel = gapChart
+    ? getDemographicIdFromVarName(xVar)
+    : xVar
+  const xLabelPrefix = gapChart ? 'LABEL_GAP' : 'LABEL'
+
   // memoize the scatterplot options
   const options = useMemo(() => {
     return getScatterplotOptions(variant, {
@@ -146,9 +153,7 @@ function SedaScatterplotBase({
           contentContainer: classes.centerLabelX
         }}
         showLabels={false}
-        label={getLabelForVarName(xVar, {
-          region: getRegionLabel(region)
-        })}>
+        label={getPrefixLang(xLabel, xLabelPrefix)}>
         {axisChildren}
       </ScatterplotAxis>
       <ScatterplotAxis

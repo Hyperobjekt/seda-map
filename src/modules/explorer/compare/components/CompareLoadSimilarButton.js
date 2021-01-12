@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
-import { Button } from '@material-ui/core'
+import React, { useEffect, useState } from 'react'
+import { Button, Tooltip } from '@material-ui/core'
 import { getLang } from '../../app/selectors/lang'
 import axios from 'axios'
 import useAddCompareLocations from '../hooks/useAddCompareLocations'
 import { getRegionFromLocationId } from '../../app/selectors'
-import { useActiveLocation } from '../../location'
+import useCompareStore from '../hooks/useCompareStore'
+import { useLocationData } from '../../location'
 
 const endpoint = process.env.REACT_APP_DATA_ENDPOINT + 'similar/'
 
@@ -32,27 +32,43 @@ const CompareLoadSimilarButton = ({ ...props }) => {
     loaded: false
   })
 
-  const [locationId] = useActiveLocation()
+  const selectedLocation = useCompareStore(
+    state => state.selectedLocation
+  )
+  const locationData = useLocationData(selectedLocation)
   const addCompareLocations = useAddCompareLocations()
 
+  // reset disabled state if selected location changes
+  useEffect(() => {
+    setState({
+      loading: false,
+      loaded: false
+    })
+  }, [selectedLocation])
+
   const handleLoadSimilar = () => {
-    console.log('load similar', locationId)
     setState({ loading: true, loaded: false })
-    fetchSimilarLocations(locationId).then(ids => {
+    fetchSimilarLocations(locationData.id).then(ids => {
       addCompareLocations(ids)
       setState({ loading: false, loaded: true })
     })
   }
 
-  return locationId ? (
-    <Button
-      disabled={state.loaded}
-      onClick={handleLoadSimilar}
-      {...props}>
-      {state.loading
-        ? getLang('LABEL_LOADING')
-        : getLang('LABEL_LOAD_SIMILAR')}
-    </Button>
+  return locationData ? (
+    <Tooltip
+      title={getLang('LOAD_SIMILAR_HINT', {
+        location: locationData.name
+      })}>
+      <Button
+        variant="outlined"
+        disabled={state.loaded}
+        onClick={handleLoadSimilar}
+        {...props}>
+        {state.loading
+          ? getLang('LABEL_LOADING')
+          : getLang('LOAD_SIMILAR_BUTTON')}
+      </Button>
+    </Tooltip>
   ) : null
 }
 

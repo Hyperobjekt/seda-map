@@ -22,6 +22,7 @@ const useStyles = makeStyles(theme => ({
   },
 
   marker: {
+    minWidth: 18,
     '& .marker__label': { fontSize: 12 }
   },
   markerInline: {

@@ -1,34 +1,83 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Button } from '@material-ui/core'
-import { getLang } from '../../app/selectors/lang'
-import useCompareStore from '../hooks/useCompareStore'
-import shallow from 'zustand/shallow'
+import { getLang, getPrefixLang } from '../../app/selectors/lang'
+import useCompareLocationsData from '../hooks/useCompareLocationsData'
 
-const makeCsv = (data) => {
-  const colNames = Object.keys(data[0])
-  data.map(d => colNames.map(col => d[col]).join(',')).join('\n')
+const makeCsv = data => {
+  const dontExport = [
+    'lat',
+    'lon',
+    'r',
+    's',
+    't',
+    'u',
+    'seg',
+    'min',
+    'sz'
+  ]
+  const header = Object.keys(data[0])
+    // filter out sizes
+    .filter(k => dontExport.indexOf(k.split('_').pop()) === -1)
+    // filter out margin of error data
+    .filter(k => k.slice(-2) !== '_e')
+  const rows = data.map(d => header.map(col => d[col]).join(','))
+  // map header to label if it exists
+  const headerRow = header
+    .map(h =>
+      getPrefixLang(h).indexOf('LABEL_') === -1
+        ? getPrefixLang(h)
+        : h
+    )
+    .join(',')
+  return [headerRow, ...rows].join('\n')
 }
 
-const CompareExportButton = ({...props}) => {
+// prompts a download of the provided text
+function download(filename, text) {
+  // for excel to interpret at UTF-8
+  var universalBOM = '\uFEFF'
+  // IE11 Download
+  if (navigator.msSaveBlob) {
+    navigator.msSaveBlob(
+      new Blob([universalBOM + text], {
+        type: 'text/csv;charset=utf-8;'
+      }),
+      filename
+    )
+    return
+  }
+  // all other browsers
+  var element = document.createElement('a')
+  element.setAttribute(
+    'href',
+    'data:text/csv;charset=utf-8,' +
+      encodeURIComponent(universalBOM + text)
+  )
+  element.setAttribute('download', filename)
+  element.style.display = 'none'
+  document.body.appendChild(element)
+  element.click()
+  document.body.removeChild(element)
+}
 
-  const locations = useCompareStore(state => state.locations, shallow)
-
+const CompareExportButton = ({ ...props }) => {
+  const locations = useCompareLocationsData()
   const handleExport = () => {
     const csvText = makeCsv(locations)
-    console.log('export', locations, csvText)
+    download('educational-opportunity-export.csv', csvText)
   }
 
   return (
-    <Button onClick={handleExport} {...props}>
-      {getLang("LABEL_EXPORT_CSV")}
+    <Button variant="outlined" onClick={handleExport} {...props}>
+      {getLang('LABEL_EXPORT_CSV')}
     </Button>
   )
 }
 
 CompareExportButton.propTypes = {
   /** an array of objects to export as CSV */
-  data: PropTypes.object,
+  data: PropTypes.object
 }
 
 export default CompareExportButton

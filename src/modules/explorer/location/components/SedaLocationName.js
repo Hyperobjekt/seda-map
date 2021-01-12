@@ -6,12 +6,12 @@ import useLocationMarker from '../hooks/useLocationMarker'
 
 const SedaLocationName = ({ locationId, ...props }) => {
   const locationData = useLocationData(locationId)
-  const {number, color} = useLocationMarker(locationId)
+  const { number, color } = useLocationMarker(locationId)
   return locationData ? (
     <LocationName
       name={locationData.name}
       parentLocation={locationData.parentLocation}
-      label={number}
+      label={number === 0 ? '-' : number}
       color={color}
       {...props}
     />

@@ -15,7 +15,12 @@ const SedaGapSelect = ({ onSelect, ...props }) => {
   }
 
   return (
-    <SedaMenu value={demographic} items={demographics} onClick={handleClick} {...props}/>
+    <SedaMenu
+      value={demographic}
+      items={demographics}
+      onSelect={handleClick}
+      {...props}
+    />
   )
 }
 

@@ -1,8 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { getLang, getPrefixLang } from '../../app/selectors/lang'
-import { ListItem, ListItemSecondaryAction, ListItemText, Typography, withStyles } from '@material-ui/core'
-import { BasicSidePanel, SidePanelList } from '../../../../shared'
+import {
+  ListItem,
+  ListItemSecondaryAction,
+  ListItemText,
+  withStyles
+} from '@material-ui/core'
+import {
+  BasicSidePanel,
+  SidePanelList
+} from '../../../../shared'
 import { MetricIcon } from '../../../icons'
 import SedaMetricSelect from '../../controls/SedaMetricSelect'
 import PanelDescription from './PanelDescription'
@@ -12,10 +20,10 @@ const styles = theme => ({
     paddingTop: 4,
     paddingBottom: 4,
     '& .MuiListItem-button': {
-      borderRadius: theme.shape.borderRadius,  
+      borderRadius: theme.shape.borderRadius
     },
     '& .MuiListItemText-prmary': {
-      textTransform: 'capitalize',
+      textTransform: 'capitalize'
     },
     '& .MuiListItemText-secondary': {
       fontSize: theme.typography.pxToRem(12)
@@ -26,24 +34,24 @@ const styles = theme => ({
       right: theme.spacing(3)
     },
     '& .Mui-selected .MuiListItemSecondaryAction-root': {
-      color: theme.palette.primary.main  
-    },
+      color: theme.palette.primary.main
+    }
   }
 })
 
-const SedaMetricPanelItem = ({value, selected, children, ...props}) => {
+const SedaMetricPanelItem = ({
+  value,
+  selected,
+  children,
+  ...props
+}) => {
   const secondary = getPrefixLang(value, 'LABEL_REFLECTS')
 
   return (
     <ListItem button selected={selected} {...props}>
-      <ListItemText
-        primary={children}
-        secondary={secondary}
-      />
+      <ListItemText primary={children} secondary={secondary} />
       <ListItemSecondaryAction>
-        <MetricIcon
-          metricId={value}
-        />
+        <MetricIcon metricId={value} />
       </ListItemSecondaryAction>
     </ListItem>
   )
@@ -67,7 +75,7 @@ const SedaMetricPanel = ({ classes, onClose, ...props }) => {
           aria-label="educational opportunity metric selection"
         />
         <PanelDescription>
-          { getLang("PANEL_DESCRIPTION_METRICS") }
+          {getLang('PANEL_DESCRIPTION_METRICS')}
         </PanelDescription>
       </>
     </BasicSidePanel>

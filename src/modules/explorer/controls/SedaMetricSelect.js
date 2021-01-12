@@ -19,7 +19,7 @@ const SedaMetricSelect = ({ onSelect, ...props }) => {
     <SedaMenu
       value={metric}
       items={metrics}
-      onClick={handleClick}
+      onSelect={handleClick}
       {...props}
     />
   )

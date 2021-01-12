@@ -9,7 +9,7 @@ const SedaRegionSelect = ({ onSelect, ...props }) => {
 
   const regions = getRegions().map(r => r.id)
 
-  const handleClick = regionId => {
+  const handleSelect = regionId => {
     if (region !== regionId) {
       setRegion(regionId)
       onSelect && onSelect(regionId)
@@ -17,7 +17,12 @@ const SedaRegionSelect = ({ onSelect, ...props }) => {
   }
 
   return (
-    <SedaMenu value={region} items={regions} onClick={handleClick} {...props}/>
+    <SedaMenu
+      value={region}
+      items={regions}
+      onSelect={handleSelect}
+      {...props}
+    />
   )
 }
 

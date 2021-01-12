@@ -1,8 +1,6 @@
-import React from 'react'
-import { makeStyles } from '@material-ui/core'
-import clsx from 'clsx'
+import { ButtonBase, withStyles } from '@material-ui/core'
 
-const useStyles = makeStyles(theme => ({
+export default withStyles(theme => ({
   root: {
     display: 'inline-block',
     cursor: 'pointer',
@@ -17,22 +15,4 @@ const useStyles = makeStyles(theme => ({
       textDecorationColor: theme.palette.secondary.main
     }
   }
-}))
-
-const LinkButton = ({ className, children, ...props }) => {
-  const classes = useStyles()
-  return (
-    <button
-      className={clsx(
-        'button',
-        'button--link',
-        classes.root,
-        className
-      )}
-      {...props}>
-      {children}
-    </button>
-  )
-}
-
-export default LinkButton
+}))(ButtonBase)

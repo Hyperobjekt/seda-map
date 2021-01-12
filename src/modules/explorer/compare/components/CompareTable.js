@@ -1,37 +1,66 @@
 import React from 'react'
 import Table from './Table'
-import { Typography, withStyles } from '@material-ui/core'
 import {
-  SedaLocationName,
-  useAllLocationsData
-} from '../../location'
-import { getLang } from '../../app/selectors/lang'
-import { useDemographic, useMetric } from '../../app/hooks'
+  TableSortLabel,
+  Typography,
+  withStyles
+} from '@material-ui/core'
+import { SedaLocationName } from '../../location'
+import { getPrefixLang } from '../../app/selectors/lang'
+import { useRegion } from '../../app/hooks'
 import SedaStat from '../../stats/SedaStat'
 import useCompareStore from '../hooks/useCompareStore'
 import shallow from 'zustand/shallow'
+import { getMetricIdsForRegion } from '../../app/selectors/metrics'
+import useSetCompareLocation from '../hooks/useSetCompareLocation'
+import clsx from 'clsx'
+import useCompareLocationsData from '../hooks/useCompareLocationsData'
+
+const TABLE_METRICS = ['avg', 'grd', 'coh', 'ses', 'frl']
 
 const styles = theme => ({
   root: {
-    background: theme.palette.background.paper
-  },
-  toggleContainer: {
-    margin: theme.spacing(2, 0, 1, -0.75),
-    [theme.breakpoints.up('md')]: {
-      margin: theme.spacing(0, 0, 0, -0.75)
-    }
-  },
-  name: {
-    fontSize: theme.typography.pxToRem(14),
-    fontWeight: 600,
-    whiteSpace: 'nowrap',
-    textOverflow: 'ellipsis',
-    overflow: 'hidden',
-    maxWidth: 224,
-    [theme.breakpoints.up(1440)]: {
-      maxWidth: 320
-    }
+    borderTop: `1px solid`,
+    borderTopColor: theme.palette.divider
   }
+})
+
+const TableHeaderMetric = withStyles(theme => ({
+  root: {
+    minWidth: 124,
+    textAlign: 'right'
+  },
+  sorted: {},
+  title: {
+    textTransform: 'capitalize',
+    whiteSpace: 'nowrap',
+    fontWeight: 'bold'
+  },
+  subtitle: {
+    fontSize: theme.typography.pxToRem(10),
+    color: theme.palette.text.secondary,
+    lineHeight: 1
+  }
+}))(({ column, classes, children }) => {
+  return (
+    <div
+      className={clsx(classes.root, {
+        [classes.sorted]: column.isSorted
+      })}>
+      <Typography className={classes.title}>
+        <TableSortLabel
+          active={column.isSorted}
+          // react-table has a unsorted state which is not treated here
+          direction={column.isSortedDesc ? 'desc' : 'asc'}
+        />
+        {getPrefixLang(column.id, 'LABEL')}
+      </Typography>
+      <Typography className={classes.subtitle} variant="caption">
+        {getPrefixLang(column.id, 'COMPARE_HINT')}
+      </Typography>
+      {children}
+    </div>
+  )
 })
 
 function renderLocationCell(props) {
@@ -56,60 +85,49 @@ const renderMetricCell = varName => props => {
 const CompareTable = ({ classes, ...props }) => {
   // pull active metric + demographic from the store, with setter
   const [
-    locations,
     metric,
     demographic,
-    setMetric
+    setMetric,
+    selectedLocation
   ] = useCompareStore(
     state => [
-      state.locations,
       state.metric,
       state.demographic,
-      state.setMetric
+      state.setMetric,
+      state.selectedLocation
     ],
     shallow
   )
+  const locations = useCompareLocationsData()
+  // current region in the explorer
+  const [region] = useRegion()
+  // function to set the current location for comparison
+  const setCompareLocation = useSetCompareLocation()
 
   // column configuration for the table
-  const columns = React.useMemo(
-    () => [
+  const columns = React.useMemo(() => {
+    const metrics = getMetricIdsForRegion(region).filter(
+      m => TABLE_METRICS.indexOf(m) > -1
+    )
+    const metricCols = metrics.map(m => ({
+      id: m,
+      Header: TableHeaderMetric,
+      accessor: [demographic, m].join('_'),
+      Cell: renderMetricCell([demographic, m].join('_'))
+    }))
+    return [
       {
         Header: 'Location',
         accessor: 'name',
-        disableSortBy: true,
         Cell: renderLocationCell,
         style: {
-          width: '25%',
+          width: '100%',
           minWidth: 260
         }
       },
-      {
-        id: 'avg',
-        Header: getLang('LABEL_AVG'),
-        accessor: [demographic, 'avg'].join('_'),
-        Cell: renderMetricCell([demographic, 'avg'].join('_'))
-      },
-      {
-        id: 'grd',
-        Header: getLang('LABEL_GRD'),
-        accessor: [demographic, 'grd'].join('_'),
-        Cell: renderMetricCell([demographic, 'grd'].join('_'))
-      },
-      {
-        id: 'coh',
-        Header: getLang('LABEL_COH'),
-        accessor: [demographic, 'coh'].join('_'),
-        Cell: renderMetricCell([demographic, 'coh'].join('_'))
-      },
-      {
-        id: 'ses',
-        Header: getLang('LABEL_SES'),
-        accessor: [demographic, 'ses'].join('_'),
-        Cell: renderMetricCell([demographic, 'ses'].join('_'))
-      }
-    ],
-    [classes.name]
-  )
+      ...metricCols
+    ]
+  }, [demographic, region])
 
   // memoized table options
   const options = React.useMemo(
@@ -131,16 +149,21 @@ const CompareTable = ({ classes, ...props }) => {
     [metric, setMetric]
   )
 
-  const handleRowClick = React.useCallback(row => {
-    console.log('clicked row', row)
-  }, [])
+  const handleRowClick = React.useCallback(
+    row => {
+      console.log('clicked row', row)
+      setCompareLocation(row.original.id)
+    },
+    [setCompareLocation]
+  )
   return locations ? (
     <Table
-      className={classes.table}
+      className={classes.root}
       data={locations}
       columns={columns}
       options={options}
       sortColumn={metric}
+      selected={selectedLocation}
       onSort={handleSortChange}
       onRowClick={handleRowClick}
     />

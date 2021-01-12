@@ -9,7 +9,7 @@ import {
   useUiStore
 } from '../../app/hooks'
 import { LinkButton, SplitView } from '../../../../shared'
-import SedaGenericSelect from '../../../../shared/components/Inputs/SelectMenu'
+import SelectMenu from '../../../../shared/components/Inputs/SelectMenu'
 import {
   getLocatonIdFromEvent,
   getCoordsFromEvent,
@@ -66,7 +66,7 @@ const SedaScatterplot = () => {
     gapMetrics,
     hasGapChart
   } = useAppContext()
-  const [, setSecondary] = useSecondary()
+  const [secondary, setSecondary] = useSecondary()
   const setHovered = useUiStore(state => state.setHovered)
   const addLocation = useAddLocation()
 
@@ -149,16 +149,16 @@ const SedaScatterplot = () => {
               gapChart
               variant="map"
               axisChildren={
-                <SedaGenericSelect
+                <SelectMenu
                   style={{
                     position: 'relative',
                     zIndex: 1000,
                     display: 'inline-block'
                   }}
+                  value={secondary}
                   items={gapMetrics}
-                  onSelect={m => setSecondary(m)}>
-                  Change
-                </SedaGenericSelect>
+                  onSelect={m => setSecondary(m)}
+                />
               }
               onHover={handleHover}
               onClick={handleClick}>
