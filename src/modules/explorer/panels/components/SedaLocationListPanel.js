@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { SedaLocationSelect, useLocations } from '../../location'
+import { SedaLocationSelect } from '../../location'
 import { getLang, getPrefixLang } from '../../app/selectors/lang'
 import { BasicSidePanel } from '../../../../shared'
 import { CompareButton } from '../../compare'
