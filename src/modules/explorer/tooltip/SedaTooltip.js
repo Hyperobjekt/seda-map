@@ -107,7 +107,6 @@ const useStyles = makeStyles(theme => ({
 const getSecondaryVar = (activeRegion, featureRegion) =>
   featureRegion === 'schools' ? 'all_frl' : 'all_ses'
 
-
 const SedaTooltip = props => {
   const [hoveredId] = useHovered()
   const [showTooltip] = useTooltipVisibility()
@@ -131,7 +130,12 @@ const SedaTooltip = props => {
   if (isVersus && data && !data[descriptionVars[0]]) {
     data[descriptionVars[0]] = data[yVar] - data[xVar]
   }
-
+  const bounds = [
+    0,
+    0,
+    window.innerWidth,
+    window.innerHeight - 80
+  ]
   const classes = useStyles()
 
   return data ? (
@@ -141,6 +145,7 @@ const SedaTooltip = props => {
       show={showTooltip}
       x={x}
       y={y}
+      bounds={bounds}
       {...props}>
       <StatDetailed varName={yVar} value={data[yVar]} />
       <StatDetailed
