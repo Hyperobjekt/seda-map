@@ -36,6 +36,8 @@ const [useStaticData] = create((set, get) => ({
       isLoading: true
     }))
     const data = await loadDataSet(dataSetId, parser)
+    // sort data by number of students (`all_sz`)
+    data.sort((a, b) => b['all_sz'] - a['all_sz'])
     const loadTime = performance.now() - t0
     set(state => ({
       loading: state.loading.filter(v => v !== dataSetId),

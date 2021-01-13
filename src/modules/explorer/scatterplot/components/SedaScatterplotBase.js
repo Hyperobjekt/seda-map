@@ -92,6 +92,10 @@ function SedaScatterplotBase({
 
   // memoize the scatterplot options
   const options = useMemo(() => {
+    // sort data by zVar, so large circles are rendered below small circles
+    // const sortedData = [...scatterplotData].sort((a, b) => {
+    //   return b[zVar] - a[zVar]
+    // })
     return getScatterplotOptions(variant, {
       data: scatterplotData,
       xVar,
