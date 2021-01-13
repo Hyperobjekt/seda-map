@@ -34,14 +34,16 @@ const SedaDemographicPanel = ({ onClose, ...props }) => {
           {getLang('PANEL_DESCRIPTION_SUBGROUPS')}
         </PanelDescription>
       )}
-      <SedaGapSelect
-        subheader={
-          <ListSubheader disableSticky>Gaps</ListSubheader>
-        }
-        component={SidePanelList}
-        onSelect={onClose}
-        aria-label="difference between subgroups selection"
-      />
+      {region !== 'schools' && (
+        <SedaGapSelect
+          subheader={
+            <ListSubheader disableSticky>Gaps</ListSubheader>
+          }
+          component={SidePanelList}
+          onSelect={onClose}
+          aria-label="difference between subgroups selection"
+        />
+      )}
       {region !== 'schools' && (
         <PanelDescription>
           {getLang('PANEL_DESCRIPTION_GAPS')}
