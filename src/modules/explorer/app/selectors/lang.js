@@ -41,7 +41,8 @@ const interpolate = (text, params = {}) => {
 export const getLang = (key = '', props = {}) => {
   key = key.toUpperCase()
   if (!LANG[key]) {
-    return key
+    console.warn('missing language for key: ', key)
+    return ''
   }
   return Object.keys(props).length > 0
     ? interpolate(LANG[key], props)
