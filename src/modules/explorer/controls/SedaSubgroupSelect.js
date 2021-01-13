@@ -1,11 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { getDemographics } from '../app/selectors'
-import { useDemographic } from '../app/hooks'
+import { useDemographic, useRegion } from '../app/hooks'
 import SedaMenu from './SedaMenu'
+import { getDemographicsForRegion } from '../app/selectors/demographics'
 
 const SedaSubgroupSelect = ({ onSelect, ...props }) => {
-  const demographics = getDemographics().map(d => d.id)
+  const [region] = useRegion()
+  const demographics = getDemographicsForRegion(region)
   const [demographic, setDemographic] = useDemographic()
   const handleClick = demId => {
     if (demographic !== demId) {
