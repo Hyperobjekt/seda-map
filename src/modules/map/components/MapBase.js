@@ -15,6 +15,7 @@ import { defaultMapStyle } from '../selectors'
 import { getClosest } from '../utils'
 import ZoomToControl from './ZoomToControl'
 import {
+  useFlyToLatLon,
   useFlyToReset,
   useMapStore,
   useMapViewport
@@ -84,8 +85,13 @@ const MapBase = ({
   // function to fly to reset viewport
   const flyToReset = useFlyToReset()
 
+  const flyToLatLon = useFlyToLatLon()
+
   // reference to map container DOM element
   const mapEl = useRef(null)
+
+  // geolocation control ref
+  const geoRef = useRef(null)
 
   // refernce to the ReactMapGL instance
   const mapRef = useRef(null)
@@ -165,7 +171,7 @@ const MapBase = ({
         canvas.setAttribute('aria-label', ariaLabel)
       }
       // add geolocation
-      const geolocateControl = new mapboxgl.GeolocateControl({
+      geoRef.current = new mapboxgl.GeolocateControl({
         positionOptions: {
           enableHighAccuracy: true
         },
@@ -176,7 +182,7 @@ const MapBase = ({
       )
       if (controlContainer && currentMap) {
         controlContainer.appendChild(
-          geolocateControl.onAdd(currentMap)
+          geoRef.current.onAdd(currentMap)
         )
       }
       // trigger load callback
@@ -275,6 +281,20 @@ const MapBase = ({
     )
     // eslint-disable-next-line
   }, [selectedIds, loaded]) // update only when selected ids change
+
+  // update map viewport when location is triggered
+  useEffect(() => {
+    if (!geoRef.current) return
+    const geolocateHandler = function() {
+      // wait until the map is done moving, update viewport
+      currentMap.once('moveend', function({ target }) {
+        var { lng, lat } = target.getCenter()
+        var zoom = target.getZoom()
+        setViewport({ latitude: lat, longitude: lng, zoom })
+      })
+    }
+    geoRef.current.on('trackuserlocationstart', geolocateHandler)
+  }, [geoRef.current, setViewport, currentMap])
 
   return (
     <div
