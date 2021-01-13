@@ -49,7 +49,12 @@ export default function useAppContext() {
     // get circles with valid values only, limit to 20,000 dots
     const scatterplotData = data
       .filter(d => scatterplotVars.every(v => hasVal(d[v])))
+      // limit number of dots
       .slice(0, MAX_DOTS)
+      // sort by size
+      .sort((a, b) => {
+        return b[scatterplotVars[2]] - a[scatterplotVars[2]]
+      })
 
     // all variables used in the scatterplot / map
     const allVars = [
