@@ -5,7 +5,12 @@ import {
   withStyles
 } from '@material-ui/core'
 import { getPrefixLang } from '../../app/selectors/lang'
-import { getDemographicIdFromVarName, isGapVarName, isUnavailable } from '../../app/selectors'
+import {
+  getDemographicIdFromVarName,
+  getMetricIdFromVarName,
+  isGapVarName,
+  isUnavailable
+} from '../../app/selectors'
 import SedaStat from '../../stats/SedaStat'
 import { styles as baseStyles } from './SedaKeyMetricListItem'
 import clsx from 'clsx'
@@ -25,15 +30,15 @@ const styles = theme => ({
     right: theme.spacing(10)
   },
   divider: {
-    borderBottom: "none",
+    borderBottom: 'none',
     marginBottom: theme.spacing(2),
     position: 'relative',
-    "&:after": {
+    '&:after': {
       content: "''",
-      display: "block",
-      position: "absolute",
-      left:theme.spacing(1),
-      right:theme.spacing(1),
+      display: 'block',
+      position: 'absolute',
+      left: theme.spacing(1),
+      right: theme.spacing(1),
       bottom: theme.spacing(-1),
       height: 1,
       backgroundColor: theme.palette.divider
@@ -49,9 +54,17 @@ const SedaDemographicListItem = ({
   classes,
   ...props
 }) => {
+  const metricId = getMetricIdFromVarName(varName)
   const demId = getDemographicIdFromVarName(varName)
   const isGap = isGapVarName(varName)
   const title = getPrefixLang(demId, 'LABEL_STUDENTS')
+
+  // learning rates must offset from 1 for non-gap value
+  const barValue =
+    metricId === 'grd' && !isGap ? value - 1 : value
+
+  console.log('bar values', value, barValue, maxValue)
+
   return (
     <ListItem
       classes={{
@@ -64,13 +77,13 @@ const SedaDemographicListItem = ({
         classes={{ primary: classes.primary }}
         primary={title}
       />
-      { !isUnavailable(value) && 
+      {!isUnavailable(value) && (
         <DivergingBar
           className={classes.bar}
-          value={value/maxValue}
+          value={barValue / maxValue}
           invert={isGap}
         />
-      }
+      )}
       <SedaStat
         varName={varName}
         value={value}
