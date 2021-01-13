@@ -2688,7 +2688,7 @@ export default {
       type: 'symbol',
       source: 'composite',
       'source-layer': 'road',
-      minzoom: 10,
+      minzoom: 14,
       filter: [
         'step',
         ['zoom'],
@@ -2794,7 +2794,7 @@ export default {
         ],
         'symbol-placement': 'line',
         'text-padding': 1,
-        visibility: 'none',
+        visibility: 'visible',
         'text-rotation-alignment': 'map',
         'text-pitch-alignment': 'viewport',
         'text-field': [
