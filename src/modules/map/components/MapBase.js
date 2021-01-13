@@ -87,18 +87,11 @@ const MapBase = ({
   // reference to map container DOM element
   const mapEl = useRef(null)
 
+  // geolocation control ref
+  const geoRef = useRef(null)
+
   // refernce to the ReactMapGL instance
   const mapRef = useRef(null)
-
-  const currentMap =
-    mapRef &&
-    mapRef.current &&
-    mapRef.current.getMap &&
-    mapRef.current.getMap()
-
-  // canvas element
-  const canvas =
-    currentMap && currentMap.getCanvas && currentMap.getCanvas()
 
   // storing previous hover / selected IDs
   const prev = usePrevious({
@@ -113,13 +106,7 @@ const MapBase = ({
    */
   const setFeatureState = useCallback(
     (featureId, state) => {
-      if (
-        !loaded ||
-        !featureId ||
-        !currentMap ||
-        !currentMap.setFeatureState
-      )
-        return
+      if (!loaded || !featureId) return
       const layer = layers.find(
         l => l.hasFeatureId && l.hasFeatureId(featureId)
       )
@@ -130,10 +117,10 @@ const MapBase = ({
           sourceLayer: layer.style.get('source-layer'),
           id
         }
-        currentMap.setFeatureState(source, state)
+        mapRef.current.setFeatureState(source, state)
       }
     },
-    [layers, idMap, currentMap, loaded]
+    [layers, idMap, loaded]
   )
 
   // update map style layers when layers change
@@ -151,7 +138,7 @@ const MapBase = ({
   // handler for map load
   const handleLoad = e => {
     if (!loaded) {
-      setLoaded(true)
+      mapRef.current = e.target
       // HACK: remove tabindex from map div
       const tabindexEl = document.querySelector(
         '.map:first-child'
@@ -159,13 +146,9 @@ const MapBase = ({
       if (tabindexEl) {
         tabindexEl.children[0].removeAttribute('tabindex')
       }
-      // add screen reader content for map
-      if (canvas) {
-        canvas.setAttribute('role', 'img')
-        canvas.setAttribute('aria-label', ariaLabel)
-      }
+
       // add geolocation
-      const geolocateControl = new mapboxgl.GeolocateControl({
+      geoRef.current = new mapboxgl.GeolocateControl({
         positionOptions: {
           enableHighAccuracy: true
         },
@@ -174,11 +157,12 @@ const MapBase = ({
       const controlContainer = document.querySelector(
         '.map__zoom:first-child'
       )
-      if (controlContainer && currentMap) {
+      if (controlContainer) {
         controlContainer.appendChild(
-          geolocateControl.onAdd(currentMap)
+          geoRef.current.onAdd(mapRef.current)
         )
       }
+      setLoaded(true)
       // trigger load callback
       if (typeof onLoad === 'function') {
         onLoad(e)
@@ -232,10 +216,11 @@ const MapBase = ({
 
   // set the aria label on the canvas element
   useEffect(() => {
-    if (canvas) {
-      canvas.setAttribute('aria-label', ariaLabel)
-    }
-  }, [ariaLabel, canvas])
+    if (!loaded) return
+    const canvas = mapRef.current.getCanvas()
+    canvas.setAttribute('role', 'img')
+    canvas.setAttribute('aria-label', ariaLabel)
+  }, [ariaLabel, loaded])
 
   // set the default / reset viewport when it changes
   useEffect(() => {
@@ -276,6 +261,24 @@ const MapBase = ({
     // eslint-disable-next-line
   }, [selectedIds, loaded]) // update only when selected ids change
 
+  // update map viewport when location is triggered
+  useEffect(() => {
+    if (!loaded) return
+    const geolocateHandler = function() {
+      // wait until the map is done moving, update viewport
+      mapRef.current.once('moveend', function({ target }) {
+        var { lng, lat } = target.getCenter()
+        var zoom = target.getZoom()
+        setViewport({
+          latitude: lat,
+          longitude: lng,
+          zoom
+        })
+      })
+    }
+    geoRef.current.on('trackuserlocationstart', geolocateHandler)
+  }, [loaded, setViewport])
+
   return (
     <div
       id="map"
@@ -294,7 +297,6 @@ const MapBase = ({
       }>
       {resizeListener}
       <ReactMapGL
-        ref={mapRef}
         attributionControl={attributionControl}
         mapStyle={mapStyle}
         dragRotate={false}
