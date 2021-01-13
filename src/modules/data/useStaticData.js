@@ -23,6 +23,23 @@ const loadDataSet = (
   })
 }
 
+/**
+ * Renames `np_seg` data attribute to `pn_seg` due to pipeline error
+ * @param {*} data
+ */
+const HACK_FIX_NP_SEG = data => {
+  if (
+    data &&
+    data[0] &&
+    Object.keys(data[0]).indexOf('np_seg') > -1
+  ) {
+    for (let i = 0; i < data.length; i++) {
+      data[i]['pn_seg'] = data[i]['np_seg']
+      delete data[i]['np_seg']
+    }
+  }
+}
+
 const [useStaticData] = create((set, get) => ({
   data: {},
   loading: [],
@@ -38,6 +55,10 @@ const [useStaticData] = create((set, get) => ({
     const data = await loadDataSet(dataSetId, parser)
     // sort data by number of students (`all_sz`)
     data.sort((a, b) => b['all_sz'] - a['all_sz'])
+    // HACK: rename `np_seg` to `pn_seg`, as it is a gap variable (not non-poor)
+    // this can be removed when this issue is closed: https://github.com/Hyperobjekt/seda-etl/issues/35
+    // mutates original to reduce performance impact
+    HACK_FIX_NP_SEG(data)
     const loadTime = performance.now() - t0
     set(state => ({
       loading: state.loading.filter(v => v !== dataSetId),

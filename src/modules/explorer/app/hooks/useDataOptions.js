@@ -1,5 +1,9 @@
 import create from 'zustand'
-import { getRegionFromLocationId } from '../selectors'
+import {
+  getRegionFromLocationId,
+  getSecondaryForDemographic,
+  isGapDemographic
+} from '../selectors'
 // import { getStateFipsFromAbbr } from '../../../shared/utils/states'
 import logger from '../../../logger'
 
@@ -50,7 +54,20 @@ const [useDataOptions] = create((set, get) => ({
   error: null,
   showError: false,
   setMetric: metric => set({ metric }),
-  setDemographic: demographic => set({ demographic }),
+  setDemographic: demographic => {
+    const changes = {}
+    // if gap, check that the secondary metric is available
+    if (isGapDemographic(demographic)) {
+      const secondaryOptions = getSecondaryForDemographic(
+        demographic
+      )
+      // if secondary option is unavailable, switch to one that is
+      if (secondaryOptions.indexOf(get().secondary) === -1)
+        changes['secondary'] = secondaryOptions[0]
+    }
+    changes['demographic'] = demographic
+    set(changes)
+  },
   setRegion: region => {
     const changes = {}
     // reset demographic to all for schools
