@@ -7,7 +7,8 @@ import useHelpVisibility from './useHelpVisibility'
 const useStyles = makeStyles(theme => ({
   root: {
     borderColor: theme.palette.secondary.main,
-    color: theme.palette.secondary.main
+    color: theme.palette.secondary.main,
+    height: window.innerWidth > 375 ? "auto" : "28px"
   }
 }))
 

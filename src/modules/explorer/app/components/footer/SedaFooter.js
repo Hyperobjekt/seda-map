@@ -24,6 +24,7 @@ import {
 import { useActiveView } from '../../hooks'
 import { EmbedDialog } from '../../../sharing/components/EmbedDialog'
 import { ShareLinkDialog } from '../../../sharing/components/ShareLinkDialog'
+import { SedaHelpButton } from '../../../help'
 
 const links = {
   id: 'share',
@@ -67,7 +68,11 @@ const FooterLinks = ({
       classes.linkCollection
     )}
     {...props}>
-    <span className="footer__link-label">{label}</span>
+    {
+      window.innerWidth > 375 && (
+        <span className="footer__link-label">{label}</span>
+      )
+    }
     {Boolean(links.length) &&
       links.map((item, i) => (
         <Tooltip
@@ -102,8 +107,8 @@ const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'stretch',
-    padding: `0 ${theme.spacing(3)}px`,
+    justifyContent: window.innerWidth > 375 ? 'stretch' : 'space-between',
+    padding: `0 ${theme.spacing(window.innerWidth > 375 ? 3 : 2)}px`,
     position: 'relative',
     zIndex: 1000,
     borderTop: `1px solid`,
@@ -166,21 +171,29 @@ const SedaFooter = () => {
           className={clsx('footer__branding', classes.branding)}>
           <StanfordLogo style={{ height: 16, width: 76 }} />
         </div>
-        <div
-          className={clsx(
-            'footer__copyright',
-            classes.copyright
-          )}>
-          {copyright}
-        </div>
+        {
+          window.innerWidth > 375 && (
+            <div
+              className={clsx(
+                'footer__copyright',
+                classes.copyright
+              )}>
+              {copyright}
+            </div>
+          )
+        }
         <div className={clsx('footer__links', classes.links)}>
           <FooterLinks
             label={links.label}
-            links={links.items}
+            links={window.innerWidth > 375 ? links.items : links.items.slice(0, links.items.length - 1)}
             onClick={handleClick}
           />
         </div>
-        <EmbedDialog />
+        {
+          window.innerWidth > 375
+            ? <EmbedDialog />
+            : <SedaHelpButton />
+        }
         <ShareLinkDialog />
       </PageFooter>
     )
