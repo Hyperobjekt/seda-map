@@ -4,33 +4,6 @@ import WebMercatorViewport from 'viewport-mercator-project'
 import { STATES } from '../../shared/constants/states'
 import { getStateFipsFromAbbr } from '../../shared/utils/states'
 
-// https://gomakethings.com/how-to-get-the-closest-parent-element-with-a-matching-selector-using-vanilla-javascript/
-export const getClosest = (elem, selector) => {
-  // Element.matches() polyfill
-  if (!Element.prototype.matches) {
-    Element.prototype.matches =
-      Element.prototype.matchesSelector ||
-      Element.prototype.mozMatchesSelector ||
-      Element.prototype.msMatchesSelector ||
-      Element.prototype.oMatchesSelector ||
-      Element.prototype.webkitMatchesSelector ||
-      function(s) {
-        var matches = (
-            this.document || this.ownerDocument
-          ).querySelectorAll(s),
-          i = matches.length
-        while (--i >= 0 && matches.item(i) !== this) {}
-        return i > -1
-      }
-  }
-
-  // Get the closest matching element
-  for (; elem && elem !== document; elem = elem.parentNode) {
-    if (elem.matches(selector)) return elem
-  }
-  return null
-}
-
 const getStateBoundingBoxByFips = fips => {
   const state = fips
     ? STATES[fips]

@@ -94,6 +94,15 @@ const [useMapStore] = create((set, get) => ({
       }
     }))
   },
+  flyToViewport: vp => {
+    set(state => ({
+      viewport: {
+        ...state.viewport,
+        ...vp,
+        ...DEFAULT_FLIGHT_PROPS
+      }
+    }))
+  },
   flyToState: stateId => {
     set(state => ({
       viewport: {
