@@ -7,18 +7,22 @@ import React, {
 } from 'react'
 import useResizeAware from 'react-resize-aware'
 import mapboxgl from 'mapbox-gl/dist/mapbox-gl'
-import ReactMapGL, { NavigationControl } from 'react-map-gl'
+import ReactMapGL from 'react-map-gl'
 import { fromJS } from 'immutable'
 import PropTypes from 'prop-types'
 import usePrevious from '../../../shared/hooks/usePrevious'
 import { defaultMapStyle } from '../selectors'
 import { getClosest } from '../utils'
-import ZoomToControl from './ZoomToControl'
-import {
-  useFlyToReset,
-  useMapStore,
-  useMapViewport
-} from '../hooks'
+import { useMapStore, useMapViewport } from '../hooks'
+
+const isMapEvent = event => {
+  // if first element in path is not overlays, hover is over something other than the map
+  return (
+    event?.path &&
+    event.path.length > 0 &&
+    event.path[0].classList.contains('overlays')
+  )
+}
 
 /**
  * Returns an array of layer ids for layers that have the
@@ -80,9 +84,6 @@ const MapBase = ({
   const setResetViewport = useMapStore(
     state => state.setResetViewport
   )
-
-  // function to fly to reset viewport
-  const flyToReset = useFlyToReset()
 
   // reference to map container DOM element
   const mapEl = useRef(null)
@@ -182,6 +183,7 @@ const MapBase = ({
 
   // handler for feature hover
   const handleHover = ({ features, point, srcEvent }) => {
+    if (!isMapEvent(srcEvent)) return onHover(null, [null, null])
     const newHoveredFeature =
       features && features.length > 0 ? features[0] : null
     const coords =
@@ -196,22 +198,9 @@ const MapBase = ({
 
   // handler for feature click
   const handleClick = ({ features, srcEvent, ...rest }) => {
-    // was the click on a control
-    const isControl = getClosest(
-      srcEvent.target,
-      '.mapboxgl-ctrl-group'
-    )
+    if (!isMapEvent(srcEvent)) return
     // activate feature if one was clicked and this isn't a control click
-    features &&
-      features.length > 0 &&
-      !isControl &&
-      onClick(features[0])
-  }
-
-  /** handler for resetting the viewport */
-  const handleResetViewport = e => {
-    e.preventDefault()
-    flyToReset()
+    features && features.length > 0 && onClick(features[0])
   }
 
   // set the aria label on the canvas element
@@ -310,16 +299,6 @@ const MapBase = ({
         onLoad={handleLoad}
         {...viewport}
         {...rest}>
-        <div className="map__zoom">
-          <NavigationControl
-            showCompass={false}
-            onViewportChange={setViewport}
-          />
-          <ZoomToControl
-            title="Reset Zoom"
-            onClick={handleResetViewport}
-          />
-        </div>
         {children}
       </ReactMapGL>
     </div>

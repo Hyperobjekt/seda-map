@@ -48,33 +48,6 @@ hr {
   bottom: 0px;
 }
 
-.map__zoom {
-  position: absolute;
-  top: auto;
-  bottom: 0px;
-  top: 0px;
-  height: 100%;
-  right: 24px;
-  left: auto;
-  margin: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-}
-
-.map__zoom > div:first-child {
-  margin-bottom: 8px;
-}
-
-@media (min-width: 1023px) {
-  .map__zoom {
-    left: auto;
-    right: 24px;
-    height: 160px;
-  }
-}
-
 .mapboxgl-ctrl.mapboxgl-ctrl-group:not(:empty) {
   border-radius: 0;
   box-shadow: var(--shadow10);
