@@ -6,7 +6,10 @@ import useMenuVisibility from './useMenuVisibility'
 const useStyles = makeStyles(theme => ({
   root: {
     borderColor: theme.palette.secondary.main,
-    color: theme.palette.secondary.main
+    color: theme.palette.secondary.main,
+    position: window.innerWidth > 375 ? 'static' : 'absolute',
+    top: window.innerWidth > 320 ? 0 : -2,
+    right: 0,
   }
 }))
 

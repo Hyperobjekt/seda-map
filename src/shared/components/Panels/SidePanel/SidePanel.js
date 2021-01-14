@@ -37,7 +37,9 @@ const SidePanel = ({
   const panelRef = useRef(null)
   const panelStyle = useSpring({
     transform: open ? 'translateX(0%)' : 'translateX(-100%)',
-    marginLeft: marginLeft ? marginLeft : 0,
+    marginLeft: window.innerWidth > 375 
+    ? marginLeft ? marginLeft : 0 
+    : 0,
     onStart: () => {
       if (!panelRef.current) return
       if (open) panelRef.current.style.visibility = 'visible'

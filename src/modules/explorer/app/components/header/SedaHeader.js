@@ -21,22 +21,24 @@ import { useActiveOptions, useActiveView } from '../../hooks'
 import { SedaHelpButton } from '../../../help'
 import { SedaMenuButton } from '../../../menu'
 import { SedaSearch } from '../../../search'
+import { useCondensedPanel } from '../../../panels'
 
 const useLogoStyles = makeStyles(theme => ({
   root: {
     display: 'block',
-    width: theme.spacing(4),
-    height: theme.spacing(4),
+    width: window.innerWidth > 375 ? theme.spacing(4) : theme.spacing(3),
+    height: window.innerWidth > 375 ? theme.spacing(4) : theme.spacing(3),
     overflow: 'hidden'
   },
   logo: {
     width: 'auto',
-    height: theme.spacing(4)
+    height: window.innerWidth > 375 ? theme.spacing(4) : theme.spacing(3)
   }
 }))
 
 const HeaderLogo = props => {
   const classes = useLogoStyles()
+
   return (
     <a className={classes.root} href="/">
       <SedaLogo className={classes.logo} />
@@ -44,14 +46,41 @@ const HeaderLogo = props => {
   )
 }
 
+const SettingsIcon = props => (
+  <svg {...props} width="19" height="20" viewBox="0 0 19 20" fill="none">
+    <line x1="16.425" y1="1.85773e-08" x2="16.425" y2="20" stroke="#031232" strokeWidth="0.85"/>
+    <line x1="9.425" y1="1.85773e-08" x2="9.425" y2="20" stroke="#031232" strokeWidth="0.85"/>
+    <line x1="2.425" y1="1.85773e-08" x2="2.425" y2="20" stroke="#031232" strokeWidth="0.85"/>
+    <circle cx="16.5" cy="6.5" r="2.075" fill="white" stroke="#031232" strokeWidth="0.85"/>
+    <circle cx="9.5" cy="14.5" r="2.075" fill="white" stroke="#031232" strokeWidth="0.85"/>
+    <circle cx="2.5" cy="5.5" r="2.075" fill="white" stroke="#031232" strokeWidth="0.85"/>
+  </svg>
+)
+
+const HeaderOptionsToggle = () => {
+  const classes = useLogoStyles()
+  const [, toggleCondensed] = useCondensedPanel()
+
+  return (
+    <div className={classes.root} onClick={() => toggleCondensed()}>
+      <SettingsIcon className={classes.logo} />
+    </div>
+  )
+}
+
 const useActionStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
-    alignItems: 'center'
+    alignItems:  window.innerWidth > 375 ? 'center' : 'unset',
+    flexDirection: window.innerWidth > 375 ? 'row' : 'row-reverse',
+    borderTop: window.innerWidth > 375 ? null : '1px solid #E5E5E5'
   },
   searchRoot: {
-    width: 180,
-    marginRight: theme.spacing(2)
+    width: window.innerWidth > 375 ? 180 : 'auto',
+    marginRight: window.innerWidth > 375 ? theme.spacing(2) : 0,
+    '& fieldset': {
+      border: window.innerWidth > 375 ? null : 0,
+    }
   },
   viewControls: {
     marginRight: theme.spacing(2)
@@ -73,7 +102,11 @@ const HeaderActions = ({ ...props }) => {
         placeholder="find a place"
       />
       <SedaViewControls className={classes.viewControls} />
-      <SedaHelpButton classes={{ root: classes.helpButton }} />
+      {
+        window.innerWidth > 375 && (
+          <SedaHelpButton classes={{ root: classes.helpButton }} />
+        )
+      }
       <SedaMenuButton />
     </div>
   )
@@ -171,20 +204,22 @@ const useHeaderStyles = makeStyles(theme => ({
     color: theme.palette.text.primary
   },
   logo: {
-    marginRight: theme.spacing(3)
+    marginRight: window.innerWidth > 375 ? theme.spacing(3) : theme.spacing(2)
   },
   heading: {
-    fontSize: theme.typography.pxToRem(14),
+    fontSize: window.innerWidth > 375 ? theme.typography.pxToRem(14) : theme.typography.pxToRem(12),
     textTransform: 'capitalize',
-    whiteSpace: 'nowrap',
+    whiteSpace: window.innerWidth > 375 ? 'nowrap' : 'wrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis'
   },
   subheading: {
+    fontSize: window.innerWidth > 375 ? theme.typography.pxToRem(12) : theme.typography.pxToRem(11),
     color: theme.palette.text.secondary
   },
   toolbar: {
-    paddingLeft: theme.spacing(3)
+    paddingLeft: window.innerWidth > 375 ? theme.spacing(3) : theme.spacing(2),
+    paddingRight: window.innerWidth > 375 ? theme.spacing(3) : theme.spacing(6)
   }
 }))
 
@@ -205,7 +240,7 @@ const SedaHeader = props => {
   return (
     <PageHeader
       classes={classes}
-      LogoComponent={<HeaderLogo />}
+      LogoComponent={window.innerWidth > 375 ? <HeaderLogo /> : <HeaderOptionsToggle />}
       ActionsComponent={<HeaderActions />}
       {...props}>
       <Typography className={classes.heading} variant="h1">

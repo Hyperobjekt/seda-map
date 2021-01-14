@@ -131,6 +131,7 @@ const getFooterStyleProps = ({
  */
 const SedaCollapsePanel = ({
   style: initialStyle,
+  open: isOpen,
   ...props
 }) => {
   const classes = useStyles()
@@ -182,9 +183,10 @@ const SedaCollapsePanel = ({
 
   return (
     <AnimatedSidePanel
-      style={{ ...initialStyle, ...panelStyle }}
+      style={window.innerWidth > 375 ? { ...initialStyle, ...panelStyle } : { ...initialStyle }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      open={window.innerWidth > 375 ? isOpen : !condensed}
       {...props}>
       <SidePanelHeader className={classes.headerPanel} sticky>
         <Typography className={classes.title}>
@@ -213,17 +215,21 @@ const SedaCollapsePanel = ({
           <SedaLocationsPanelButton />
         </List>
       </SidePanelBody>
-      <AnimatedSidePanelFooter
-        sticky
-        ref={footerRef}
-        className={clsx(classes.footerPanel, {
-          [classes.footerCondensed]: condensed,
-          [classes.footerShowChart]: showChart,
-          [classes.footerNoChart]: view !== 'map'
-        })}
-        style={footerStyle}>
-        <SedaPreviewChartPanel />
-      </AnimatedSidePanelFooter>
+      {
+        window.innerWidth > 375 && (
+          <AnimatedSidePanelFooter
+            sticky
+            ref={footerRef}
+            className={clsx(classes.footerPanel, {
+              [classes.footerCondensed]: condensed,
+              [classes.footerShowChart]: showChart,
+              [classes.footerNoChart]: view !== 'map'
+            })}
+            style={footerStyle}>
+            <SedaPreviewChartPanel />
+          </AnimatedSidePanelFooter>
+        )
+      }
     </AnimatedSidePanel>
   )
 }

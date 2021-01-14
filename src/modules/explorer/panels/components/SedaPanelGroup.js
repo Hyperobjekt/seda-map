@@ -45,7 +45,7 @@ const SedaPanelGroup = props => {
         style={{
           zIndex: condensed || showHelp ? 998 : 999
         }}
-        condensed={isCondensedPanel}
+        condensed={window.innerWidth > 375 ? isCondensedPanel : false}
         offset={0}
         open={true}
       />

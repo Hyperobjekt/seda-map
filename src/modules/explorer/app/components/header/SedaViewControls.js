@@ -13,10 +13,12 @@ import { useActiveView } from '../../hooks'
 const useStyles = makeStyles(theme => ({
   root: {},
   button: {
-    whiteSpace: 'nowrap'
+    whiteSpace: 'nowrap',
+    border: window.innerWidth > 375 ? null : 0
   },
   active: {
     color: theme.palette.primary.main,
+    background: window.innerWidth > 375 ? 'white' : theme.palette.primary.highlight,
     '& .icon .filled': {
       opacity: 1
     }
