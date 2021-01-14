@@ -12,7 +12,6 @@ import { fromJS } from 'immutable'
 import PropTypes from 'prop-types'
 import usePrevious from '../../../shared/hooks/usePrevious'
 import { defaultMapStyle } from '../selectors'
-import { getClosest } from '../utils'
 import { useMapStore, useMapViewport } from '../hooks'
 
 const isMapEvent = event => {
