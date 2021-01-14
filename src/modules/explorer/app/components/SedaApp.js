@@ -10,7 +10,10 @@ import { SedaRouting } from '../../routing'
 import SedaShortcuts from './SedaShortcuts'
 
 const useStyles = makeStyles(theme => ({
-  offset: theme.mixins.toolbar,
+  offset: {
+    ...theme.mixins.toolbar,
+    minHeight: window.screen.width > 375 ? 56 : window.screen.width > 320 ? 97 : 107
+  },
   root: {
     overflow: 'hidden'
   },

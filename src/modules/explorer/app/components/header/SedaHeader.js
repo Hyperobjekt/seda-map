@@ -26,13 +26,13 @@ import { useCondensedPanel } from '../../../panels'
 const useLogoStyles = makeStyles(theme => ({
   root: {
     display: 'block',
-    width: window.innerWidth > 375 ? theme.spacing(4) : theme.spacing(3),
-    height: window.innerWidth > 375 ? theme.spacing(4) : theme.spacing(3),
+    width: window.screen.width > 375 ? theme.spacing(4) : theme.spacing(3),
+    height: window.screen.width > 375 ? theme.spacing(4) : theme.spacing(3),
     overflow: 'hidden'
   },
   logo: {
     width: 'auto',
-    height: window.innerWidth > 375 ? theme.spacing(4) : theme.spacing(3)
+    height: window.screen.width > 375 ? theme.spacing(4) : theme.spacing(3)
   }
 }))
 
@@ -71,15 +71,15 @@ const HeaderOptionsToggle = () => {
 const useActionStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
-    alignItems:  window.innerWidth > 375 ? 'center' : 'unset',
-    flexDirection: window.innerWidth > 375 ? 'row' : 'row-reverse',
-    borderTop: window.innerWidth > 375 ? null : '1px solid #E5E5E5'
+    alignItems:  window.screen.width > 375 ? 'center' : 'unset',
+    flexDirection: window.screen.width > 375 ? 'row' : 'row-reverse',
+    borderTop: window.screen.width > 375 ? null : '1px solid #E5E5E5'
   },
   searchRoot: {
-    width: window.innerWidth > 375 ? 180 : 'auto',
-    marginRight: window.innerWidth > 375 ? theme.spacing(2) : 0,
+    width: window.screen.width > 375 ? 180 : 'auto',
+    marginRight: window.screen.width > 375 ? theme.spacing(2) : 0,
     '& fieldset': {
-      border: window.innerWidth > 375 ? null : 0,
+      border: window.screen.width > 375 ? null : 0,
     }
   },
   viewControls: {
@@ -103,7 +103,7 @@ const HeaderActions = ({ ...props }) => {
       />
       <SedaViewControls className={classes.viewControls} />
       {
-        window.innerWidth > 375 && (
+        window.screen.width > 375 && (
           <SedaHelpButton classes={{ root: classes.helpButton }} />
         )
       }
@@ -204,22 +204,22 @@ const useHeaderStyles = makeStyles(theme => ({
     color: theme.palette.text.primary
   },
   logo: {
-    marginRight: window.innerWidth > 375 ? theme.spacing(3) : theme.spacing(2)
+    marginRight: window.screen.width > 375 ? theme.spacing(3) : theme.spacing(2)
   },
   heading: {
-    fontSize: window.innerWidth > 375 ? theme.typography.pxToRem(14) : theme.typography.pxToRem(12),
+    fontSize: window.screen.width > 375 ? theme.typography.pxToRem(14) : theme.typography.pxToRem(12),
     textTransform: 'capitalize',
-    whiteSpace: window.innerWidth > 375 ? 'nowrap' : 'wrap',
+    whiteSpace: window.screen.width > 375 ? 'nowrap' : 'wrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis'
   },
   subheading: {
-    fontSize: window.innerWidth > 375 ? theme.typography.pxToRem(12) : theme.typography.pxToRem(11),
+    fontSize: window.screen.width > 375 ? theme.typography.pxToRem(12) : theme.typography.pxToRem(11),
     color: theme.palette.text.secondary
   },
   toolbar: {
-    paddingLeft: window.innerWidth > 375 ? theme.spacing(3) : theme.spacing(2),
-    paddingRight: window.innerWidth > 375 ? theme.spacing(3) : theme.spacing(6)
+    paddingLeft: window.screen.width > 375 ? theme.spacing(3) : theme.spacing(2),
+    paddingRight: window.screen.width > 375 ? theme.spacing(3) : theme.spacing(6)
   }
 }))
 
@@ -240,7 +240,7 @@ const SedaHeader = props => {
   return (
     <PageHeader
       classes={classes}
-      LogoComponent={window.innerWidth > 375 ? <HeaderLogo /> : <HeaderOptionsToggle />}
+      LogoComponent={window.screen.width > 375 ? <HeaderLogo /> : <HeaderOptionsToggle />}
       ActionsComponent={<HeaderActions />}
       {...props}>
       <Typography className={classes.heading} variant="h1">

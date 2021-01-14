@@ -7,8 +7,8 @@ const useStyles = makeStyles(theme => ({
   root: {
     borderColor: theme.palette.secondary.main,
     color: theme.palette.secondary.main,
-    position: window.innerWidth > 375 ? 'static' : 'absolute',
-    top: window.innerWidth > 320 ? 0 : -2,
+    position: window.screen.width > 375 ? 'static' : 'absolute',
+    top: window.screen.width > 320 ? 0 : -2,
     right: 0,
   }
 }))

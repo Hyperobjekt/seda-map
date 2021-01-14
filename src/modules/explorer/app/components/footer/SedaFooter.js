@@ -69,7 +69,7 @@ const FooterLinks = ({
     )}
     {...props}>
     {
-      window.innerWidth > 375 && (
+      window.screen.width > 375 && (
         <span className="footer__link-label">{label}</span>
       )
     }
@@ -107,8 +107,8 @@ const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: window.innerWidth > 375 ? 'stretch' : 'space-between',
-    padding: `0 ${theme.spacing(window.innerWidth > 375 ? 3 : 2)}px`,
+    justifyContent: window.screen.width > 375 ? 'stretch' : 'space-between',
+    padding: `0 ${theme.spacing(window.screen.width > 375 ? 3 : 2)}px`,
     position: 'relative',
     zIndex: 1000,
     borderTop: `1px solid`,
@@ -172,7 +172,7 @@ const SedaFooter = () => {
           <StanfordLogo style={{ height: 16, width: 76 }} />
         </div>
         {
-          window.innerWidth > 375 && (
+          window.screen.width > 375 && (
             <div
               className={clsx(
                 'footer__copyright',
@@ -185,12 +185,12 @@ const SedaFooter = () => {
         <div className={clsx('footer__links', classes.links)}>
           <FooterLinks
             label={links.label}
-            links={window.innerWidth > 375 ? links.items : links.items.slice(0, links.items.length - 1)}
+            links={window.screen.width > 375 ? links.items : links.items.slice(0, links.items.length - 1)}
             onClick={handleClick}
           />
         </div>
         {
-          window.innerWidth > 375
+          window.screen.width > 375
             ? <EmbedDialog />
             : <SedaHelpButton />
         }

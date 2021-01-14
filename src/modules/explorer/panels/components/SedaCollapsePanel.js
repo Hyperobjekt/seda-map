@@ -14,6 +14,7 @@ import {
 } from '../../../../shared'
 import clsx from 'clsx'
 import {
+  CloseIcon,
   SidebarCloseIcon,
   SidebarOpenIcon
 } from '../../../icons'
@@ -147,7 +148,7 @@ const SedaCollapsePanel = ({
       condensed && !hovered && !activePanel
         ? theme.app.condensedPanelWidth
         : theme.app.panelWidth,
-    delay: condensed ? 200 : 0
+    delay: condensed && window.innerWidth > 375 ? 200 : 0
   })
 
   const footerStyleProps = getFooterStyleProps({
@@ -179,7 +180,6 @@ const SedaCollapsePanel = ({
     !condensed && setHovered(false)
     toggleCondensed()
   }
-  
 
   return (
     <AnimatedSidePanel
@@ -192,19 +192,25 @@ const SedaCollapsePanel = ({
         <Typography className={classes.title}>
           Data Options
         </Typography>
-        <IconButton
-          ref={condenseButtonRef}
-          className={classes.toggleCondensed}
-          style={{
-            opacity: !condensed && !hovered ? 0 : 1
-          }}
-          onClick={handleToggleCondensed}>
-          {condensed ? (
-            <SidebarOpenIcon />
-          ) : (
-            <SidebarCloseIcon />
-          )}
-        </IconButton>
+        {
+          window.innerWidth > 375 
+          ? <IconButton
+              ref={condenseButtonRef}
+              className={classes.toggleCondensed}
+              style={{
+                opacity: !condensed && !hovered ? 0 : 1
+              }}
+              onClick={handleToggleCondensed}>
+              {condensed ? (
+                <SidebarOpenIcon />
+              ) : (
+                <SidebarCloseIcon />
+              )}
+            </IconButton>
+          : <IconButton ref={condenseButtonRef} onClick={handleToggleCondensed}>
+              <CloseIcon />
+            </IconButton>
+        }
       </SidePanelHeader>
       <SidePanelBody classes={{ root: classes.body }}>
         <List className={classes.list}>

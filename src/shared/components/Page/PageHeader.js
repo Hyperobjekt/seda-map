@@ -20,8 +20,8 @@ const useStyles = makeStyles(theme => ({
   actionsMobile: {},
   toolbar: {
     display: 'flex',
-    alignItems: window.innerWidth > 320 ? 'center' : 'flex-start',
-    paddingTop: window.innerWidth > 320 ? '0px' : theme.spacing(1),
+    alignItems: window.screen.width > 320 ? 'center' : 'flex-start',
+    paddingTop: window.screen.width > 320 ? '0px' : theme.spacing(1),
     width: '100%',
     maxWidth: props => props.contentWidth || '100%'
   }
@@ -80,7 +80,7 @@ export default function PageHeader({
             )}>
             {children}
           </div>
-          {ActionsComponent && window.innerWidth > 375 && (
+          {ActionsComponent && window.screen.width > 375 && (
             <div
               className={clsx(
                 'header__actions',
@@ -91,7 +91,7 @@ export default function PageHeader({
             </div>
           )}
         </Toolbar>
-        {ActionsComponent && window.innerWidth <= 375 && (
+        {ActionsComponent && window.screen.width <= 375 && (
           <div
             className={clsx(
               'header__actions-mobile',

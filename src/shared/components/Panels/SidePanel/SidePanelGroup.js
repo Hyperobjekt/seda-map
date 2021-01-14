@@ -5,8 +5,8 @@ import clsx from 'clsx'
 
 const styles = theme => ({
   root: {
-    position: window.innerWidth > 375 ? 'relative' : 'absolute',
-    height: window.innerWidth > 375 ? 'auto' : '100%',
+    position: window.screen.width > 375 ? 'relative' : 'absolute',
+    height: window.screen.width > 375 ? 'auto' : '100%',
     zIndex: 2,
     minWidth: theme.app.panelWidth
   },
