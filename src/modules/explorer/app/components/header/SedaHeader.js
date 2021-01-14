@@ -26,13 +26,20 @@ import { useCondensedPanel } from '../../../panels'
 const useLogoStyles = makeStyles(theme => ({
   root: {
     display: 'block',
-    width: window.screen.width > 375 ? theme.spacing(4) : theme.spacing(3),
-    height: window.screen.width > 375 ? theme.spacing(4) : theme.spacing(3),
-    overflow: 'hidden'
+    width: theme.spacing(4),
+    height: theme.spacing(4),
+    overflow: 'hidden',
+    [theme.breakpoints.down('sm')]: {
+      width: theme.spacing(3),
+      height: theme.spacing(3),
+    }
   },
   logo: {
     width: 'auto',
-    height: window.screen.width > 375 ? theme.spacing(4) : theme.spacing(3)
+    height: theme.spacing(4),
+    [theme.breakpoints.down('sm')]: {
+      height: theme.spacing(3),
+    }
   }
 }))
 
@@ -71,15 +78,25 @@ const HeaderOptionsToggle = () => {
 const useActionStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
-    alignItems:  window.screen.width > 375 ? 'center' : 'unset',
-    flexDirection: window.screen.width > 375 ? 'row' : 'row-reverse',
-    borderTop: window.screen.width > 375 ? null : '1px solid #E5E5E5'
+    alignItems:  'center',
+    flexDirection: 'row',
+    [theme.breakpoints.down('sm')]: {
+      alignItems: 'unset',
+      flexDirection: 'row-reverse',
+      borderTop: '1px solid #E5E5E5',
+    }
   },
   searchRoot: {
-    width: window.screen.width > 375 ? 180 : 'auto',
-    marginRight: window.screen.width > 375 ? theme.spacing(2) : 0,
+    width: 180,
+    marginRight: theme.spacing(2),
+    [theme.breakpoints.down('sm')]: {
+      width: 'auto',
+      marginRight: 0,
+    },
     '& fieldset': {
-      border: window.screen.width > 375 ? null : 0,
+      [theme.breakpoints.down('sm')]: {
+        border: 0,
+      },
     }
   },
   viewControls: {
@@ -90,7 +107,7 @@ const useActionStyles = makeStyles(theme => ({
   }
 }))
 
-const HeaderActions = ({ ...props }) => {
+const HeaderActions = ({ isMobile, ...props }) => {
   const classes = useActionStyles()
   const [, , isEmbed] = useActiveView()
   return (!isEmbed &&
@@ -103,7 +120,7 @@ const HeaderActions = ({ ...props }) => {
       />
       <SedaViewControls className={classes.viewControls} />
       {
-        window.screen.width > 375 && (
+        !isMobile && (
           <SedaHelpButton classes={{ root: classes.helpButton }} />
         )
       }
@@ -204,26 +221,40 @@ const useHeaderStyles = makeStyles(theme => ({
     color: theme.palette.text.primary
   },
   logo: {
-    marginRight: window.screen.width > 375 ? theme.spacing(3) : theme.spacing(2)
+    marginRight: theme.spacing(3),
+    [theme.breakpoints.down('sm')]: {
+      marginRight: theme.spacing(2),
+    }
   },
   heading: {
-    fontSize: window.screen.width > 375 ? theme.typography.pxToRem(14) : theme.typography.pxToRem(12),
+    fontSize: theme.typography.pxToRem(14),
     textTransform: 'capitalize',
-    whiteSpace: window.screen.width > 375 ? 'nowrap' : 'wrap',
+    whiteSpace: 'nowrap',
     overflow: 'hidden',
-    textOverflow: 'ellipsis'
+    textOverflow: 'ellipsis',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: theme.typography.pxToRem(12),
+      whiteSpace: 'normal',
+    }
   },
   subheading: {
-    fontSize: window.screen.width > 375 ? theme.typography.pxToRem(12) : theme.typography.pxToRem(11),
-    color: theme.palette.text.secondary
+    fontSize: theme.typography.pxToRem(12),
+    color: theme.palette.text.secondary,
+    [theme.breakpoints.down('sm')]: {
+      fontSize: theme.typography.pxToRem(11),
+    }
   },
   toolbar: {
-    paddingLeft: window.screen.width > 375 ? theme.spacing(3) : theme.spacing(2),
-    paddingRight: window.screen.width > 375 ? theme.spacing(3) : theme.spacing(6)
+    paddingLeft: theme.spacing(3),
+    paddingRight: theme.spacing(3),
+    [theme.breakpoints.down('sm')]: {
+      paddingLeft: theme.spacing(2),
+      paddingRight: theme.spacing(6),
+    }
   }
 }))
 
-const SedaHeader = props => {
+const SedaHeader = ({isMobile, ...props}) => {
   const [metricId, demId, regionId] = useActiveOptions()
   // const [filters] = useFilters()
   // const stateName = filters.prefix
@@ -240,8 +271,9 @@ const SedaHeader = props => {
   return (
     <PageHeader
       classes={classes}
-      LogoComponent={window.screen.width > 375 ? <HeaderLogo /> : <HeaderOptionsToggle />}
-      ActionsComponent={<HeaderActions />}
+      isMobile={isMobile}
+      LogoComponent={!isMobile ? <HeaderLogo /> : <HeaderOptionsToggle />}
+      ActionsComponent={<HeaderActions isMobile={isMobile} />}
       {...props}>
       <Typography className={classes.heading} variant="h1">
         {heading}

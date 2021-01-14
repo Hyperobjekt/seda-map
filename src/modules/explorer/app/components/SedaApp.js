@@ -1,7 +1,7 @@
 import React from 'react'
 import { Page } from '../../../../shared'
 import { SedaHeader } from './header'
-import { makeStyles } from '@material-ui/core'
+import { makeStyles, useMediaQuery, useTheme } from '@material-ui/core'
 import SedaFooter from './footer'
 import { SedaDataLoader } from '../../loader'
 import SedaExplorer from './SedaExplorer'
@@ -12,7 +12,13 @@ import SedaShortcuts from './SedaShortcuts'
 const useStyles = makeStyles(theme => ({
   offset: {
     ...theme.mixins.toolbar,
-    minHeight: window.screen.width > 375 ? 56 : window.screen.width > 320 ? 97 : 107
+    minHeight: 56,
+    [theme.breakpoints.down('sm')]: {
+      minHeight: 97
+    },
+    [theme.breakpoints.down(321)]: {
+      minHeight: 107
+    }
   },
   root: {
     overflow: 'hidden'
@@ -24,17 +30,19 @@ const useStyles = makeStyles(theme => ({
 
 const SedaApp = () => {
   const classes = useStyles()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
   return (
     <Page className={classes.root}>
       <SedaShortcuts />
       <SedaRouting />
-      <SedaHeader />
+      <SedaHeader isMobile={isMobile} />
       <div className={classes.offset} />
       <SedaMenu />
       <SedaDataLoader />
       <SedaExplorer className={classes.body} />
-      <SedaFooter />
+      <SedaFooter isMobile={isMobile} />
     </Page>
   )
 }

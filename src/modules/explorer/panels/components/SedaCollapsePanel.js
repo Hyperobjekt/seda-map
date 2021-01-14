@@ -4,7 +4,8 @@ import {
   makeStyles,
   IconButton,
   List,
-  useTheme
+  useTheme,
+  useMediaQuery
 } from '@material-ui/core'
 import {
   SidePanel,
@@ -137,6 +138,7 @@ const SedaCollapsePanel = ({
 }) => {
   const classes = useStyles()
   const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const condenseButtonRef = useRef(null)
   const [hovered, setHovered] = useState(false)
   const [view] = useActiveView()
@@ -148,7 +150,7 @@ const SedaCollapsePanel = ({
       condensed && !hovered && !activePanel
         ? theme.app.condensedPanelWidth
         : theme.app.panelWidth,
-    delay: condensed && window.innerWidth > 375 ? 200 : 0
+    delay: condensed && !isMobile ? 200 : 0
   })
 
   const footerStyleProps = getFooterStyleProps({
@@ -183,17 +185,17 @@ const SedaCollapsePanel = ({
 
   return (
     <AnimatedSidePanel
-      style={window.innerWidth > 375 ? { ...initialStyle, ...panelStyle } : { ...initialStyle }}
+      style={!isMobile ? { ...initialStyle, ...panelStyle } : { ...initialStyle }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      open={window.innerWidth > 375 ? isOpen : !condensed}
+      open={!isMobile ? isOpen : !condensed}
       {...props}>
       <SidePanelHeader className={classes.headerPanel} sticky>
         <Typography className={classes.title}>
           Data Options
         </Typography>
         {
-          window.innerWidth > 375 
+          !isMobile 
           ? <IconButton
               ref={condenseButtonRef}
               className={classes.toggleCondensed}
@@ -222,7 +224,7 @@ const SedaCollapsePanel = ({
         </List>
       </SidePanelBody>
       {
-        window.innerWidth > 375 && (
+        !isMobile && (
           <AnimatedSidePanelFooter
             sticky
             ref={footerRef}

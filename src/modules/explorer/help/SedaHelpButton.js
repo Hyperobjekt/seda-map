@@ -8,7 +8,9 @@ const useStyles = makeStyles(theme => ({
   root: {
     borderColor: theme.palette.secondary.main,
     color: theme.palette.secondary.main,
-    height: window.screen.width > 375 ? "auto" : "28px"
+    [theme.breakpoints.down('sm')]: {
+      height: "28px",
+    }
   }
 }))
 

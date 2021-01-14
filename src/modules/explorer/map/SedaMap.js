@@ -35,11 +35,16 @@ const selectedColors = getSelectedColors()
 const useStyles = makeStyles(theme => ({
   legend: {
     position: 'absolute',
-    bottom: window.screen.width > 375 ? 24 : null,
-    top: window.screen.width > 375 ? null : 0,
-    right: window.screen.width > 375 ? 16 : 0,
-    width: window.screen.width > 375 ? null : "100%",
-    alignItems: window.screen.width > 375 ? "center" : "flex-start"
+    bottom: 24,
+    right: 16,
+    alignItems: "center",
+    [theme.breakpoints.down('sm')]: {
+      bottom: 'auto',
+      top: 0,
+      right: 0,
+      width: "100%",
+      alignItems: "flex-start",
+    }
   }
 }))
 

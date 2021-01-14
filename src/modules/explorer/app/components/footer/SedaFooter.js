@@ -60,6 +60,7 @@ const FooterLinks = ({
   links,
   onClick,
   classes = {},
+  isMobile, 
   ...props
 }) => (
   <div
@@ -69,7 +70,7 @@ const FooterLinks = ({
     )}
     {...props}>
     {
-      window.screen.width > 375 && (
+      !isMobile && (
         <span className="footer__link-label">{label}</span>
       )
     }
@@ -107,8 +108,8 @@ const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: window.screen.width > 375 ? 'stretch' : 'space-between',
-    padding: `0 ${theme.spacing(window.screen.width > 375 ? 3 : 2)}px`,
+    justifyContent: 'stretch',
+    padding: `0 ${theme.spacing(3)}px`,
     position: 'relative',
     zIndex: 1000,
     borderTop: `1px solid`,
@@ -123,6 +124,10 @@ const useStyles = makeStyles(theme => ({
     },
     '& .MuiSvgIcon-root': {
       color: theme.palette.text.secondary
+    },
+    [theme.breakpoints.down('sm')]: {
+      justifyContent: 'space-between',
+      padding: `0 ${theme.spacing(2)}px`,
     }
   },
 
@@ -142,7 +147,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const SedaFooter = () => {
+const SedaFooter = ({ isMobile }) => {
   const shareUrl = window.location.href
 
   const [, toggleLinkDialog] = useLinkDialogVisibility()
@@ -172,7 +177,7 @@ const SedaFooter = () => {
           <StanfordLogo style={{ height: 16, width: 76 }} />
         </div>
         {
-          window.screen.width > 375 && (
+          !isMobile && (
             <div
               className={clsx(
                 'footer__copyright',
@@ -185,12 +190,13 @@ const SedaFooter = () => {
         <div className={clsx('footer__links', classes.links)}>
           <FooterLinks
             label={links.label}
-            links={window.screen.width > 375 ? links.items : links.items.slice(0, links.items.length - 1)}
+            isMobile={isMobile}
+            links={!isMobile ? links.items : links.items.slice(0, links.items.length - 1)}
             onClick={handleClick}
           />
         </div>
         {
-          window.screen.width > 375
+          !isMobile
             ? <EmbedDialog />
             : <SedaHelpButton />
         }

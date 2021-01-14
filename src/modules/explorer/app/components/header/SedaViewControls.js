@@ -14,11 +14,16 @@ const useStyles = makeStyles(theme => ({
   root: {},
   button: {
     whiteSpace: 'nowrap',
-    border:  window.screen.width > 375 ? null : 0
+    [theme.breakpoints.down('sm')]: {
+      border:  0,
+    }
   },
   active: {
     color: theme.palette.primary.main,
-    background: window.screen.width > 375 ? 'white' : theme.palette.primary.highlight,
+    background: 'white',
+    [theme.breakpoints.down('sm')]: {
+      background: theme.palette.primary.highlight,
+    },
     '& .icon .filled': {
       opacity: 1
     }

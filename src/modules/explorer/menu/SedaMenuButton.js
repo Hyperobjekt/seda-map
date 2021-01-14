@@ -7,9 +7,15 @@ const useStyles = makeStyles(theme => ({
   root: {
     borderColor: theme.palette.secondary.main,
     color: theme.palette.secondary.main,
-    position: window.screen.width > 375 ? 'static' : 'absolute',
-    top: window.screen.width > 320 ? 0 : -2,
+    position: 'static',
+    top: 0,
     right: 0,
+    [theme.breakpoints.down('sm')]: {
+      position: 'absolute',
+    },
+    [theme.breakpoints.down(321)]: {
+      top: -2,
+    }
   }
 }))
 
