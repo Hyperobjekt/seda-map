@@ -16,19 +16,20 @@ import { valueToLowMidHigh } from './metrics'
  * @param {*} params
  */
 const interpolate = (text, params = {}) => {
-  const arr = splitLang(text)
-  return arr
+  // split the text into chunks
+  const chunks = splitLang(text)
+  return chunks
     .map(a => {
-      if (a && a[0] !== '$') {
-        return a
-      } else {
-        a = a.replace('$[', '')
-        a = a.replace(']', '')
-        if (params[a]) {
-          return params[a]
-        }
-        return a
-      }
+      // if this chunk is not a replacement
+      if (a && a[0] !== '$') return a
+      // strip the templating portions so only the key remains
+      a = a.replace('$[', '')
+      a = a.replace(']', '')
+      // return the value from the params object if it has a corresponding key
+      if (params[a]) return params[a]
+      // return the key if there is no match
+      return a
+      
     })
     .join('')
 }
@@ -50,7 +51,7 @@ export const getLang = (key = '', props = {}) => {
 }
 
 /** Split a lang string at the vars formatted as $[var] */
-const splitLang = text => text.split(/(\$\[[a-zA-Z0-9_]*\])/)
+export const splitLang = text => text.split(/(\$\[[a-zA-Z0-9_]*\])/)
 
 /**
  * Gets the proper language key to use given the metric and value

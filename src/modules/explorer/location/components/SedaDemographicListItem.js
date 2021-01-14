@@ -57,7 +57,7 @@ const SedaDemographicListItem = ({
   const metricId = getMetricIdFromVarName(varName)
   const demId = getDemographicIdFromVarName(varName)
   const isGap = isGapVarName(varName)
-  const title = getPrefixLang(demId, 'LABEL_STUDENTS')
+  const title = getPrefixLang(demId, demId === 'all' ? 'LABEL_LOCATION_STUDENTS' : 'LABEL_STUDENTS')
 
   // learning rates must offset from 1 for non-gap value
   const barValue =

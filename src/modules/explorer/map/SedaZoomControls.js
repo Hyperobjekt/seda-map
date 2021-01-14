@@ -52,28 +52,28 @@ const SedaZoomControls = ({ classes, className, ...props }) => {
 
   return (
     <div className={clsx(classes.root, className)} {...props}>
-      <Tooltip placement="left" title="Zoom to contiguous U.S.">
+      <Tooltip placement="left" arrow title="Zoom to contiguous U.S.">
         <IconButton
           className={classes.button}
           onClick={handleZoomToUS}>
           <UnitedStatesIcon />
         </IconButton>
       </Tooltip>
-      <Tooltip placement="left" title="Zoom to Alaska">
+      <Tooltip placement="left" arrow title="Zoom to Alaska">
         <IconButton
           className={classes.button}
           onClick={handleZoomToAlaska}>
           <AlaskaIcon />
         </IconButton>
       </Tooltip>
-      <Tooltip placement="left" title="Zoom to Hawaii">
+      <Tooltip placement="left" arrow title="Zoom to Hawaii">
         <IconButton
           className={classes.button}
           onClick={handleZoomToHawaii}>
           <HawaiiIcon />
         </IconButton>
       </Tooltip>
-      <Tooltip placement="left" title="Zoom to Puerto Rico">
+      <Tooltip placement="left" arrow title="Zoom to Puerto Rico">
         <IconButton
           className={classes.button}
           onClick={handleZoomToPuertoRico}>
