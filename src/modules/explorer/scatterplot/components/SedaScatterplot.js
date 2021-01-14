@@ -165,7 +165,8 @@ const SedaScatterplot = () => {
                   style={{
                     position: 'relative',
                     zIndex: 1000,
-                    display: 'inline-block'
+                    display: 'inline-block',
+                    marginRight: 4
                   }}
                   value={secondary}
                   items={gapMetrics}

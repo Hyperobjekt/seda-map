@@ -16,11 +16,29 @@ import {
   getMetricIdFromVarName
 } from '../app/selectors'
 import { getScatterplotBaseOptions } from '../../scatterplot'
-import { getLangKeyForAxisLabel } from './lang'
 import { getLang } from '../app/selectors/lang'
 import { getDotSizeScale } from './selectors'
-
 import { max, tickStep, ticks } from 'd3-array'
+
+/**
+ *
+ * @param {*} value
+ * @param {*} metric metric to get key for (e.g. 'avg', 'avg_gap', 'grd', etc.)
+ */
+const getLangKeyForAxisLabel = (value, metric) => {
+  const midPoint = metric.toLowerCase() === 'grd' ? 1 : 0
+  const base = 'AXIS_' + metric.toUpperCase()
+  const position =
+    value === midPoint
+      ? '_MID'
+      : value > midPoint
+      ? '_HIGH'
+      : '_LOW'
+  const single = value === 1 ? '_SINGLE' : ''
+  return base + position + single
+}
+
+
 
 var STEPS = 6
 

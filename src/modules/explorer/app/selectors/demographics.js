@@ -73,7 +73,7 @@ export const getGapDemographics = demId => {
   if (demId === 'pn') {
     return ['np', 'p']
   }
-  if (demId.length === 2) {
+  if (isGapDemographic(demId)) {
     return [demId[0], demId[1]]
   }
   return [demId]
