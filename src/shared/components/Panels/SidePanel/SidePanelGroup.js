@@ -6,8 +6,14 @@ import clsx from 'clsx'
 const styles = theme => ({
   root: {
     position: 'relative',
+    height: 'auto',
     zIndex: 2,
-    minWidth: theme.app.panelWidth
+    minWidth: theme.app.panelWidth,
+    [theme.breakpoints.down('sm')]: {
+      position: 'absolute',
+      height: '100%',
+      minWidth: '100%'
+    }
   },
   condensed: {
     minWidth: theme.app.condensedPanelWidth

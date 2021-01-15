@@ -4,7 +4,8 @@ import {
   makeStyles,
   IconButton,
   List,
-  useTheme
+  useTheme,
+  useMediaQuery
 } from '@material-ui/core'
 import {
   SidePanel,
@@ -14,6 +15,7 @@ import {
 } from '../../../../shared'
 import clsx from 'clsx'
 import {
+  CloseIcon,
   SidebarCloseIcon,
   SidebarOpenIcon
 } from '../../../icons'
@@ -131,10 +133,12 @@ const getFooterStyleProps = ({
  */
 const SedaCollapsePanel = ({
   style: initialStyle,
+  open: isOpen,
   ...props
 }) => {
   const classes = useStyles()
   const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const condenseButtonRef = useRef(null)
   const [hovered, setHovered] = useState(false)
   const [view] = useActiveView()
@@ -146,7 +150,7 @@ const SedaCollapsePanel = ({
       condensed && !hovered && !activePanel
         ? theme.app.condensedPanelWidth
         : theme.app.panelWidth,
-    delay: condensed ? 200 : 0
+    delay: condensed && !isMobile ? 200 : 0
   })
 
   const footerStyleProps = getFooterStyleProps({
@@ -178,31 +182,37 @@ const SedaCollapsePanel = ({
     !condensed && setHovered(false)
     toggleCondensed()
   }
-  
 
   return (
     <AnimatedSidePanel
-      style={{ ...initialStyle, ...panelStyle }}
+      style={!isMobile ? { ...initialStyle, ...panelStyle } : { ...initialStyle }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      open={!isMobile ? isOpen : !condensed}
       {...props}>
       <SidePanelHeader className={classes.headerPanel} sticky>
         <Typography className={classes.title}>
           Data Options
         </Typography>
-        <IconButton
-          ref={condenseButtonRef}
-          className={classes.toggleCondensed}
-          style={{
-            opacity: !condensed && !hovered ? 0 : 1
-          }}
-          onClick={handleToggleCondensed}>
-          {condensed ? (
-            <SidebarOpenIcon />
-          ) : (
-            <SidebarCloseIcon />
-          )}
-        </IconButton>
+        {
+          !isMobile 
+          ? <IconButton
+              ref={condenseButtonRef}
+              className={classes.toggleCondensed}
+              style={{
+                opacity: !condensed && !hovered ? 0 : 1
+              }}
+              onClick={handleToggleCondensed}>
+              {condensed ? (
+                <SidebarOpenIcon />
+              ) : (
+                <SidebarCloseIcon />
+              )}
+            </IconButton>
+          : <IconButton ref={condenseButtonRef} onClick={handleToggleCondensed}>
+              <CloseIcon />
+            </IconButton>
+        }
       </SidePanelHeader>
       <SidePanelBody classes={{ root: classes.body }}>
         <List className={classes.list}>
@@ -213,17 +223,21 @@ const SedaCollapsePanel = ({
           <SedaLocationsPanelButton />
         </List>
       </SidePanelBody>
-      <AnimatedSidePanelFooter
-        sticky
-        ref={footerRef}
-        className={clsx(classes.footerPanel, {
-          [classes.footerCondensed]: condensed,
-          [classes.footerShowChart]: showChart,
-          [classes.footerNoChart]: view !== 'map'
-        })}
-        style={footerStyle}>
-        <SedaPreviewChartPanel />
-      </AnimatedSidePanelFooter>
+      {
+        !isMobile && (
+          <AnimatedSidePanelFooter
+            sticky
+            ref={footerRef}
+            className={clsx(classes.footerPanel, {
+              [classes.footerCondensed]: condensed,
+              [classes.footerShowChart]: showChart,
+              [classes.footerNoChart]: view !== 'map'
+            })}
+            style={footerStyle}>
+            <SedaPreviewChartPanel />
+          </AnimatedSidePanelFooter>
+        )
+      }
     </AnimatedSidePanel>
   )
 }

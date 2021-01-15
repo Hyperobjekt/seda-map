@@ -7,7 +7,10 @@ import useHelpVisibility from './useHelpVisibility'
 const useStyles = makeStyles(theme => ({
   root: {
     borderColor: theme.palette.secondary.main,
-    color: theme.palette.secondary.main
+    color: theme.palette.secondary.main,
+    [theme.breakpoints.down('sm')]: {
+      height: "28px",
+    }
   }
 }))
 

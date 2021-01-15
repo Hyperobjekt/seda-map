@@ -39,7 +39,15 @@ const useStyles = makeStyles(theme => ({
   legend: {
     position: 'absolute',
     bottom: 24,
-    right: 16
+    right: 16,
+    alignItems: "center",
+    [theme.breakpoints.down('sm')]: {
+      bottom: 'auto',
+      top: 0,
+      right: 0,
+      width: "100%",
+      alignItems: "flex-start",
+    }
   },
   zoomControls: {
     position: 'absolute',

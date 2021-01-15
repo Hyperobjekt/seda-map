@@ -24,6 +24,7 @@ import {
 import { useActiveView } from '../../hooks'
 import { EmbedDialog } from '../../../sharing/components/EmbedDialog'
 import { ShareLinkDialog } from '../../../sharing/components/ShareLinkDialog'
+import { SedaHelpButton } from '../../../help'
 
 const links = {
   id: 'share',
@@ -59,6 +60,7 @@ const FooterLinks = ({
   links,
   onClick,
   classes = {},
+  isMobile, 
   ...props
 }) => (
   <div
@@ -67,7 +69,11 @@ const FooterLinks = ({
       classes.linkCollection
     )}
     {...props}>
-    <span className="footer__link-label">{label}</span>
+    {
+      !isMobile && (
+        <span className="footer__link-label">{label}</span>
+      )
+    }
     {Boolean(links.length) &&
       links.map((item, i) => (
         <Tooltip
@@ -118,6 +124,10 @@ const useStyles = makeStyles(theme => ({
     },
     '& .MuiSvgIcon-root': {
       color: theme.palette.text.secondary
+    },
+    [theme.breakpoints.down('sm')]: {
+      justifyContent: 'space-between',
+      padding: `0 ${theme.spacing(2)}px`,
     }
   },
 
@@ -137,7 +147,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const SedaFooter = () => {
+const SedaFooter = ({ isMobile }) => {
   const shareUrl = window.location.href
 
   const [, toggleLinkDialog] = useLinkDialogVisibility()
@@ -166,21 +176,30 @@ const SedaFooter = () => {
           className={clsx('footer__branding', classes.branding)}>
           <StanfordLogo style={{ height: 16, width: 76 }} />
         </div>
-        <div
-          className={clsx(
-            'footer__copyright',
-            classes.copyright
-          )}>
-          {copyright}
-        </div>
+        {
+          !isMobile && (
+            <div
+              className={clsx(
+                'footer__copyright',
+                classes.copyright
+              )}>
+              {copyright}
+            </div>
+          )
+        }
         <div className={clsx('footer__links', classes.links)}>
           <FooterLinks
             label={links.label}
-            links={links.items}
+            isMobile={isMobile}
+            links={!isMobile ? links.items : links.items.slice(0, links.items.length - 1)}
             onClick={handleClick}
           />
         </div>
-        <EmbedDialog />
+        {
+          !isMobile
+            ? <EmbedDialog />
+            : <SedaHelpButton />
+        }
         <ShareLinkDialog />
       </PageFooter>
     )

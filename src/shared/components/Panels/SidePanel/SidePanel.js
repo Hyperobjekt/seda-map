@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
-import { Paper, makeStyles } from '@material-ui/core'
+import { Paper, makeStyles, useTheme, useMediaQuery } from '@material-ui/core'
 import clsx from 'clsx'
 import { useSpring, animated } from 'react-spring'
 
@@ -18,7 +18,10 @@ const useStyles = makeStyles(theme => ({
     top: 0,
     left: 0,
     bottom: 0,
-    height: '100%'
+    height: '100%',
+    [theme.breakpoints.down('sm')]: {
+      width: props => '100%'
+    }
   },
   panelOpen: {}
 }))
@@ -35,9 +38,13 @@ const SidePanel = ({
 }) => {
   const classes = useStyles({ condensed })
   const panelRef = useRef(null)
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const panelStyle = useSpring({
     transform: open ? 'translateX(0%)' : 'translateX(-100%)',
-    marginLeft: marginLeft ? marginLeft : 0,
+    marginLeft: !isMobile 
+    ? marginLeft ? marginLeft : 0 
+    : 0,
     onStart: () => {
       if (!panelRef.current) return
       if (open) panelRef.current.style.visibility = 'visible'
