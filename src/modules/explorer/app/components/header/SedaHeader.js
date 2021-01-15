@@ -2,26 +2,18 @@ import React from 'react'
 import SedaLogo from './SedaLogo'
 import {
   makeStyles,
-  Typography,
-  Tooltip
 } from '@material-ui/core'
 import SedaViewControls from './SedaViewControls'
+
 import {
-  getMetricLabel,
-  getDemographicLabel,
-  getRegionLabel,
-  getPrefixLang
-} from '../../selectors/lang'
-import { isGapDemographic } from '../../selectors'
-import {
-  DetailedTooltip,
   PageHeader
 } from '../../../../../shared'
-import { useActiveOptions, useActiveView } from '../../hooks'
+import { useActiveView } from '../../hooks'
 import { SedaHelpButton } from '../../../help'
 import { SedaMenuButton } from '../../../menu'
 import { SedaSearch } from '../../../search'
 import { useCondensedPanel } from '../../../panels'
+import SedaHeaderTitle from './SedaHeaderTitle'
 
 const useLogoStyles = makeStyles(theme => ({
   root: {
@@ -129,92 +121,6 @@ const HeaderActions = ({ isMobile, ...props }) => {
   )
 }
 
-const useSubtitleStyles = makeStyles(theme => ({
-  root: {
-    color: theme.palette.primary.main,
-    textDecoration: 'underline',
-    textDecorationColor: theme.palette.divider,
-    fontWeight: 'bold',
-    cursor: 'pointer'
-  }
-}))
-
-/**
- * Returns the page heading based on selections
- */
-const getTitleFromSelections = ({
-  metric,
-  demographic,
-  region,
-  parentLocation = 'U.S.'
-}) => {
-  const isGap = isGapDemographic(demographic)
-  const metricConcept = getPrefixLang(metric, `LABEL_CONCEPT`)
-  return isGap
-    ? `${metricConcept} Gaps in ${parentLocation} ${getRegionLabel(
-        region
-      )}`
-    : `${metricConcept} in ${parentLocation} ${getRegionLabel(
-        region
-      )}`
-}
-
-/**
- * Returns text to use in the header subtitle for filters
- * (e.g. in the largest 50 Counties in California)
- * @param {object} filters
- * @param {string} regionLabel
- * @param {function} idToName (function to transform id to name)
- */
-// const getFilterLabel = (filters, regionLabel) => {
-//   const labels = []
-//   if (filters.largest) {
-//     labels.push(
-//       getLang('HEADER_TITLE_LARGEST', {
-//         num: filters.largest,
-//         region: regionLabel
-//       })
-//     )
-//   }
-//   return labels.length > 0 ? labels.join(' ') : ''
-// }
-
-const Subtitle = ({ metric, demographic, region, filters }) => {
-  const metricLabel = getMetricLabel(metric)
-  // NOTE: removed for filter refactor
-  // const regionLabel = getRegionLabel(region)
-  // const filterLabel = getFilterLabel(filters, regionLabel)
-  const metricTooltip = getMetricLabel(metric, 'HINT')
-  const classes = useSubtitleStyles()
-  const MetricLabel = (
-    <Tooltip
-      title={
-        <DetailedTooltip
-          primary={metricTooltip}
-          hint={`click for more info about ${metricLabel}`}
-        />
-      }
-      placement="bottom"
-      arrow>
-      <span className={classes.root}>{metricLabel}</span>
-    </Tooltip>
-  )
-  const studentLabel = getDemographicLabel(
-    demographic,
-    'LABEL_STUDENTS'
-  )
-  const isGap = isGapDemographic(demographic)
-  return isGap ? (
-    <>
-      shown by {studentLabel}' {MetricLabel}
-    </>
-  ) : (
-    <>
-      shown by {MetricLabel} for {studentLabel}
-    </>
-  )
-}
-
 const useHeaderStyles = makeStyles(theme => ({
   root: {
     background: theme.palette.background.paper,
@@ -226,17 +132,7 @@ const useHeaderStyles = makeStyles(theme => ({
       marginRight: theme.spacing(2),
     }
   },
-  heading: {
-    fontSize: theme.typography.pxToRem(14),
-    textTransform: 'capitalize',
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    [theme.breakpoints.down('sm')]: {
-      fontSize: theme.typography.pxToRem(12),
-      whiteSpace: 'normal',
-    }
-  },
+  
   subheading: {
     fontSize: theme.typography.pxToRem(12),
     color: theme.palette.text.secondary,
@@ -255,18 +151,6 @@ const useHeaderStyles = makeStyles(theme => ({
 }))
 
 const SedaHeader = ({isMobile, ...props}) => {
-  const [metricId, demId, regionId] = useActiveOptions()
-  // const [filters] = useFilters()
-  // const stateName = filters.prefix
-  //   ? getStateName(filters.prefix)
-  //   : undefined
-  const heading = getTitleFromSelections({
-    metric: metricId,
-    demographic: demId,
-    region: regionId,
-    // TODO: parent location removed in filter refactor, need to re-add
-    parentLocation: undefined
-  })
   const classes = useHeaderStyles()
   return (
     <PageHeader
@@ -275,16 +159,7 @@ const SedaHeader = ({isMobile, ...props}) => {
       LogoComponent={!isMobile ? <HeaderLogo /> : <HeaderOptionsToggle />}
       ActionsComponent={<HeaderActions isMobile={isMobile} />}
       {...props}>
-      <Typography className={classes.heading} variant="h1">
-        {heading}
-      </Typography>
-      <Typography className={classes.subheading} variant="body2">
-        <Subtitle
-          metric={metricId}
-          demographic={demId}
-          region={regionId}
-        />
-      </Typography>
+        <SedaHeaderTitle />
     </PageHeader>
   )
 }

@@ -162,8 +162,8 @@ const getVersusVarNames = (metric, demographic) => {
     dem2 = 'p'
   }
   return [
-    dem2 + '_' + metric,
     dem1 + '_' + metric,
+    dem2 + '_' + metric,
     demographic + '_sz'
   ]
 }

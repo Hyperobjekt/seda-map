@@ -1,5 +1,9 @@
 import create from 'zustand'
-import { getRegionFromLocationId } from '../selectors'
+import {
+  getRegionFromLocationId,
+  getSecondaryForDemographic,
+  isGapDemographic
+} from '../selectors'
 // import { getStateFipsFromAbbr } from '../../../shared/utils/states'
 import logger from '../../../logger'
 
@@ -50,8 +54,34 @@ const [useDataOptions] = create((set, get) => ({
   error: null,
   showError: false,
   setMetric: metric => set({ metric }),
-  setDemographic: demographic => set({ demographic }),
-  setRegion: region => set({ region }),
+  setDemographic: demographic => {
+    const changes = {}
+    // if gap, check that the secondary metric is available
+    if (isGapDemographic(demographic)) {
+      const secondaryOptions = getSecondaryForDemographic(
+        demographic
+      )
+      // if secondary option is unavailable, switch to one that is
+      if (secondaryOptions.indexOf(get().secondary) === -1)
+        changes['secondary'] = secondaryOptions[0]
+    }
+    changes['demographic'] = demographic
+    set(changes)
+  },
+  setRegion: region => {
+    const changes = {}
+    // reset demographic to all for schools
+    if (region === 'schools' && get().demographic !== 'all')
+      changes['demographic'] = 'all'
+    // set secondary metric to free / reduced lunch for schools
+    if (region === 'schools' && get().secondary !== 'frl')
+      changes['secondary'] = 'frl'
+    // set secondary metric to `ses` if non-schools region, and it's set to `frl`
+    if (region !== 'schools' && get().secondary === 'frl')
+      changes['secondary'] = 'ses'
+    changes['region'] = region
+    set(changes)
+  },
   setSecondary: secondary => set({ secondary }),
   setLocations: locations => set({ locations }),
   setFilters: filters => set({ filters }),
@@ -106,7 +136,7 @@ const [useDataOptions] = create((set, get) => ({
     set({
       region: params['region'],
       metric: params['metric'],
-      secondary: params['secondary'].split("+")[0],
+      secondary: params['secondary'].split('+')[0],
       demographic: params['demographic']
     })
   }

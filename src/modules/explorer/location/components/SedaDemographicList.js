@@ -3,6 +3,7 @@ import { ListSubheader } from '@material-ui/core'
 import SedaDemographicListItem from './SedaDemographicListItem'
 import { useDemographic } from '../../app/hooks'
 import { max } from 'd3-array'
+import { isGapDemographic } from '../../app/selectors'
 
 const SedaDemographicList = ({
   title,
@@ -20,11 +21,16 @@ const SedaDemographicList = ({
   // do not render anything if there are no subgroups
   if (subgroups.length === 0) return null
 
-  const maxValue = max(
-    subgroups
-      .map(sg => Math.abs(location[sg + '_' + metric]))
-      .filter(v => !!v)
-  )
+  const values = subgroups
+    .filter(sg => !!location[sg + '_' + metric])
+    .map(sg => {
+      // learning rates (`grd`) need offset from 1
+      if (metric === 'grd' && !isGapDemographic(sg))
+        return Math.abs(location[sg + '_' + metric] - 1)
+      return Math.abs(location[sg + '_' + metric])
+    })
+
+  const maxValue = max(values)
 
   return (
     <>

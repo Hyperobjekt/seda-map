@@ -70,6 +70,7 @@ function CompareDialog({ classes, ...props }) {
 
   return (
     <Dialog
+    maxWidth={false}
       onClose={handleClose}
       aria-labelledby="compare-dialog-title"
       open={open}>

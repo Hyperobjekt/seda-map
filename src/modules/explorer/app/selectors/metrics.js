@@ -41,6 +41,17 @@ export const getSecondaryForDemographic = dem => {
 }
 
 /**
+ * Returns true if the provided demographic has a secondary chart
+ * @param {*} dem 
+ */
+export const hasSecondaryChart = (dem) => {
+  const isGap = isGapDemographic(dem)
+  if (!isGap) return false;
+  const secondaryCharts = getSecondaryForDemographic(dem)
+  return secondaryCharts.length > 0
+}
+
+/**
  * Returns the metric id portion of the variable name
  */
 export const getMetricIdFromVarName = varName =>

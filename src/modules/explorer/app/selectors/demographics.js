@@ -5,14 +5,22 @@ import { DEMOGRAPHICS, GAPS } from '../constants/demographics'
  */
 export const getDemographics = () => DEMOGRAPHICS
 
-export const getDemographicsForRegion = (region) => {
+/**
+ * Returns the available subgroups for the provided region
+ * @param {*} region
+ */
+export const getDemographicsForRegion = region => {
   if (!region) return []
-  return DEMOGRAPHICS.filter(d => d.regions.indexOf(region) > -1).map(d => d.id)
+  return DEMOGRAPHICS.filter(
+    d => d.regions.indexOf(region) > -1
+  ).map(d => d.id)
 }
 
-export const getGapsForRegion = (region) => {
+export const getGapsForRegion = region => {
   if (!region) return []
-  return GAPS.filter(d => d.regions.indexOf(region) > -1).map(d => d.id)
+  return GAPS.filter(d => d.regions.indexOf(region) > -1).map(
+    d => d.id
+  )
 }
 
 /**
@@ -65,7 +73,7 @@ export const getGapDemographics = demId => {
   if (demId === 'pn') {
     return ['np', 'p']
   }
-  if (demId.length === 2) {
+  if (isGapDemographic(demId)) {
     return [demId[0], demId[1]]
   }
   return [demId]

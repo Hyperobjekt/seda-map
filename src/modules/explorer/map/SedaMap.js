@@ -6,7 +6,7 @@ import React, {
 } from 'react'
 import { makeStyles } from '@material-ui/core'
 import { getLayers } from './selectors'
-import MapBase from '../../map'
+import MapBase, { useMapStore } from '../../map'
 import {
   getSelectedColors,
   getFeatureProperty
@@ -29,6 +29,9 @@ import {
 } from '../location'
 import useFlyToLocation from './hooks/useFlyToLocation'
 import { SEDA_SOURCES } from './constants'
+import { NavigationControl } from 'react-map-gl'
+import SedaZoomControls from './SedaZoomControls'
+import clsx from 'clsx'
 
 const selectedColors = getSelectedColors()
 
@@ -44,6 +47,22 @@ const useStyles = makeStyles(theme => ({
       right: 0,
       width: "100%",
       alignItems: "flex-start",
+    }
+  },
+  zoomControls: {
+    position: 'absolute',
+    top: '50%',
+    transform: `translateY(-50%)`,
+    height: 'auto',
+    right: '24px',
+    left: 'auto',
+    margin: 'auto',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    '& > * + *': {
+      marginTop: theme.spacing(1)
     }
   }
 }))
@@ -75,6 +94,8 @@ const SedaMap = props => {
   /** id map is used to map long school identifiers to feature ids on the map for hover */
   const [idMap, setIdMap] = useState({})
   const flyToLocation = useFlyToLocation()
+  const setViewport = useMapStore(state => state.setViewport)
+
   const isLoaded = useRef(false)
   /** memoized array of choropleth and dot layers */
   const layers = useMemo(() => {
@@ -123,7 +144,7 @@ const SedaMap = props => {
   /** handler for map load */
   const handleLoad = () => {
     // inform global listener that map has loaded
-    window.SEDA.trigger('map')
+    // window.SEDA.trigger('map')
     // zoom to US if needed once cover is shown
     // setTimeout(() => {
     //   flyToReset()
@@ -154,6 +175,13 @@ const SedaMap = props => {
       onHover={handleHover}
       onLoad={handleLoad}
       onClick={handleClick}>
+      <div className={clsx('map__zoom', classes.zoomControls)}>
+        <NavigationControl
+          showCompass={false}
+          onViewportChange={setViewport}
+        />
+        <SedaZoomControls />
+      </div>
       <SedaMapLegend className={classes.legend} />
     </MapBase>
   )

@@ -17,7 +17,11 @@ import SedaLocationMarkers from './SedaLocationMarkers'
 import useStaticData from '../../../data/useStaticData'
 import { useAppContext } from '../../app/hooks'
 import { getScatterplotOptions } from '../style'
-import { getDemographicIdFromVarName } from '../../app/selectors'
+import {
+  getDemographicIdFromVarName,
+  getMetricIdFromVarName
+} from '../../app/selectors'
+import HintIconButton from '../../../../shared/components/Buttons/HintIconButton'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -89,9 +93,16 @@ function SedaScatterplotBase({
     ? getDemographicIdFromVarName(xVar)
     : xVar
   const xLabelPrefix = gapChart ? 'LABEL_GAP' : 'LABEL'
+  const xMetric = getMetricIdFromVarName(xVar)
+  // hint metrics that do no have explanation elsewhere
+  const hasAxisHint = ['ses', 'seg', 'min'].indexOf(xMetric) > -1
 
   // memoize the scatterplot options
   const options = useMemo(() => {
+    // sort data by zVar, so large circles are rendered below small circles
+    // const sortedData = [...scatterplotData].sort((a, b) => {
+    //   return b[zVar] - a[zVar]
+    // })
     return getScatterplotOptions(variant, {
       data: scatterplotData,
       xVar,
@@ -155,6 +166,11 @@ function SedaScatterplotBase({
         showLabels={false}
         label={getPrefixLang(xLabel, xLabelPrefix)}>
         {axisChildren}
+        {hasAxisHint && (
+          <HintIconButton
+            title={getPrefixLang(xMetric, 'HINT')}
+          />
+        )}
       </ScatterplotAxis>
       <ScatterplotAxis
         className={clsx(

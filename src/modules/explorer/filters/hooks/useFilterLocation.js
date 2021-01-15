@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { getFilterValue } from '../../../filters/useFilterStore'
 import useActiveFilters from './useActiveFilters'
 
@@ -8,5 +9,5 @@ export default function useFilterLocation() {
     'startsWith',
     'id'
   ])
-  return locationId
+  return useMemo(() => locationId, [locationId])
 }
