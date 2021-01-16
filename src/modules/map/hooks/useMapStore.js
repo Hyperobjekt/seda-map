@@ -56,7 +56,8 @@ const [useMapStore] = create((set, get) => ({
   loaded: false,
   resetViewport: { ...DEFAULT_VIEWPORT },
   viewport: DEFAULT_VIEWPORT,
-  setViewport: viewport =>
+  setViewport: viewport => {
+    console.log('set vp', viewport)
     set(state => {
       const newViewport = {
         ...state.viewport,
@@ -65,7 +66,9 @@ const [useMapStore] = create((set, get) => ({
       return {
         viewport: newViewport
       }
-    }),
+    })
+  },
+
   setResetViewport: resetViewport => set({ resetViewport }),
   setLoaded: loaded => set({ loaded }),
   flyToFeature: feature => {
