@@ -162,7 +162,6 @@ const CompareTable = ({ classes, ...props }) => {
 
   const handleRowClick = React.useCallback(
     row => {
-      console.log('clicked row', row)
       setCompareLocation(row.original.id)
     },
     [setCompareLocation]

@@ -9,6 +9,10 @@ const styles = theme => ({
     height: 'auto',
     zIndex: 2,
     minWidth: theme.app.panelWidth,
+    pointerEvents: 'none',
+    '& > *': {
+      pointerEvents: 'all'
+    },
     [theme.breakpoints.down('sm')]: {
       position: 'absolute',
       height: '100%',

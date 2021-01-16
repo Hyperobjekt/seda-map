@@ -28,7 +28,14 @@ const styles = theme => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-start',
-    justifyContent: 'flex-start'
+    justifyContent: 'flex-start',
+    [theme.breakpoints.down('sm')]: {
+      marginTop: -56,
+      position: 'static',
+      width: `calc(100vw - 32px)`,
+      marginLeft: 8,
+      flexDirection: 'row'
+    }
   },
   title: {
     fontSize: theme.typography.pxToRem(12),

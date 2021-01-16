@@ -1,23 +1,27 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Paper, Typography, makeStyles } from '@material-ui/core'
+import { Paper, Typography, withStyles } from '@material-ui/core'
 import clsx from 'clsx'
 import { GradientLegend } from '../../../shared'
 
-const useStyles = makeStyles(theme => ({
+const styles = theme => ({
   root: {
     display: 'flex',
-    flexDirection: props =>
-      props.layout === 'vertical' ? 'column' : 'row',
+    flexDirection: 'column',
     alignItems: 'center',
     padding: theme.spacing(2),
     paddingTop: theme.spacing(1),
     paddingBottom: theme.spacing(1)
   },
+  horizontal: {
+    flexDirection: 'row',
+    '& $description': {
+      margin: `0 24px 0 0`
+    }
+  },
   description: {
     // minWidth: theme.spacing(30),
-    margin: props =>
-      props.layout === 'vertical' ? `0 0 4px 0` : `0 24px 0 0`
+    margin: `0 0 4px 0`
   },
   primary: {
     fontSize: theme.typography.pxToRem(12),
@@ -25,14 +29,15 @@ const useStyles = makeStyles(theme => ({
   },
   secondary: {
     fontSize: theme.typography.pxToRem(11),
-    color: theme.palette.text.secondary
-    // whiteSpace: 'initial'
+    color: theme.palette.text.secondary,
+    whiteSpace: 'normal'
   },
   gradient: {
     marginTop: theme.spacing(0.5),
-    minWidth: theme.spacing(18)
+    minWidth: theme.spacing(18),
+    maxWidth: theme.spacing(25)
   }
-}))
+})
 
 const MapLegend = ({
   layout,
@@ -46,31 +51,25 @@ const MapLegend = ({
   midPosition,
   markerPosition,
   className,
-  classes: overrides,
+  classes,
   footer
 }) => {
-  const classes = useStyles({ layout })
   return (
     <Paper
-      className={clsx(
-        'map-legend',
-        className,
-        classes.root,
-        overrides.root
-      )}
+      className={clsx('map-legend', className, classes.root, {
+        [classes.horizontal]: layout !== 'vertical'
+      })}
       elevation={1}>
       <div
         className={clsx(
           'map-legend__description',
-          classes.description,
-          overrides.description
+          classes.description
         )}>
         {primary && (
           <Typography
             className={clsx(
               'map-legend__primary',
-              classes.primary,
-              overrides.primary
+              classes.primary
             )}
             variant="body1">
             {primary}
@@ -80,8 +79,7 @@ const MapLegend = ({
           <Typography
             className={clsx(
               'map-legend__secondary',
-              classes.secondary,
-              overrides.secondary
+              classes.secondary
             )}
             variant="body2">
             {secondary}
@@ -92,8 +90,7 @@ const MapLegend = ({
       <GradientLegend
         className={clsx(
           'map-legend__gradient',
-          classes.gradient,
-          overrides.description
+          classes.gradient
         )}
         {...{
           labelRange,
@@ -107,11 +104,7 @@ const MapLegend = ({
       />
       {footer && (
         <div
-          className={clsx(
-            'map-legend__footer',
-            classes.footer,
-            overrides.footer
-          )}>
+          className={clsx('map-legend__footer', classes.footer)}>
           {footer}
         </div>
       )}
@@ -141,4 +134,4 @@ MapLegend.propTypes = {
   footer: PropTypes.node
 }
 
-export default MapLegend
+export default withStyles(styles)(MapLegend)

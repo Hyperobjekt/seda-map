@@ -19,6 +19,16 @@ import {
 import { getValuePositionInRange } from '../../../shared/utils'
 import { useMapSize } from '../../map'
 import { useLocationData } from '../location'
+import { withStyles } from '@material-ui/core'
+
+const styles = (theme) => ({
+  root: {
+    [theme.breakpoints.down('sm')]: {
+      borderRadius:0,
+      boxShadow: `0 1px 0 rgba(0,0,0,0.1)`
+    }
+  }
+})
 
 const SedaMapLegend = props => {
   /** id of the hovered location */
@@ -36,7 +46,8 @@ const SedaMapLegend = props => {
     colorExtent,
     mapVars: [, yVar],
     metric,
-    demographic
+    demographic,
+    region
   } = useAppContext()
   /** boolean determinng if the scale is inverted for the given var */
   const inverted = getInvertedFromVarName(yVar)
@@ -70,7 +81,7 @@ const SedaMapLegend = props => {
   /** prefix for the secondary map legend language */
   const secondaryPrefix = 'LEGEND_DESC' + (isGap ? '_GAP' : '')
   /** secondary label for the map legend */
-  const secondary = getPrefixLang(metric, secondaryPrefix, dems)
+  const secondary = getPrefixLang(metric, secondaryPrefix, [...dems, region])
   /** mid point label for the map legend */
   const midLabel = getPrefixLang(
     metric,
@@ -81,8 +92,8 @@ const SedaMapLegend = props => {
 
   return (
     <MapLegend
-      layout={width < 500 ? 'vertical' : 'horizontal'}
-      primary={primary}
+      layout={width < 600 ? 'vertical' : 'horizontal'}
+      primary={primary + ' by ' + getPrefixLang(region, 'LABEL_SINGULAR')}
       secondary={secondary}
       midLabel={midLabel}
       midPosition={midPosition}
@@ -96,4 +107,4 @@ const SedaMapLegend = props => {
   )
 }
 
-export default SedaMapLegend
+export default withStyles(styles)(SedaMapLegend)

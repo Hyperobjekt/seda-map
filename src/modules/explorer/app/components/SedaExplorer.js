@@ -6,6 +6,7 @@ import { SedaTooltip } from '../../tooltip'
 import { useActiveView } from '../hooks'
 import { SedaPanelGroup } from '../../panels'
 import { SedaError } from '../../errors'
+import useIsMobile from '../hooks/useIsMobile'
 /**
  * Body of the explorer, consisting of side panel, splitview, tooltip, and alert area
  * @param {*} props
@@ -16,6 +17,8 @@ const SedaExplorer = props => {
   // determines the active portion of the split view
   const splitView =
     view === 'chart' ? 'right' : view === 'map' ? 'left' : view
+
+  const isMobile = useIsMobile()
 
   const embedListener = useCallback(() => {
     if (!isEmbed) return
@@ -43,7 +46,7 @@ const SedaExplorer = props => {
           isEmbed && view === 'map' ? <></> : <SedaScatterplot />
         }
       />
-      <SedaTooltip />
+      {!isMobile && <SedaTooltip /> }
       <SedaError />
     </PageBody>
   )

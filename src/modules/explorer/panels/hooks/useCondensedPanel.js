@@ -1,5 +1,6 @@
 import shallow from 'zustand/shallow'
 import { useUiStore } from '../../app/hooks'
+import useIsMobile from '../../app/hooks/useIsMobile'
 
 /**
  * Provides the currently active selection panel value
@@ -8,8 +9,9 @@ import { useUiStore } from '../../app/hooks'
  * @returns [string, function]
  */
 export default () => {
+  const isMobile = useIsMobile()
   return useUiStore(
-    state => [state.condensed, state.toggleCondensed],
+    state => [isMobile ? false : state.condensed, state.toggleCondensed],
     shallow
   )
 }

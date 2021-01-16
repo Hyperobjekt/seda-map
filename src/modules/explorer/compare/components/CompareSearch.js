@@ -7,7 +7,6 @@ const CompareSearch = ({ ...props }) => {
   const addCompareLocations = useAddCompareLocations()
 
   const handleLocationSelect = (e, hit) => {
-    console.log('selected location', hit)
     addCompareLocations([hit.suggestion?.id])
   }
 

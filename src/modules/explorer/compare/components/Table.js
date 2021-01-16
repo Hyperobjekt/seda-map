@@ -92,17 +92,6 @@ const Table = ({
     useRowSelect
   )
 
-  // override sort direction from prop
-  // useEffect(() => {
-  //   if (sortColumn) {
-  //     const currentSortColumn = sortBy[0].id
-  //     if (currentSortColumn !== sortColumn) {
-  //       console.log("toggle sorting", sortColumn, sortBy)
-  //       toggleSortBy(sortColumn, )
-  //     }
-  //   }
-  // }, [sortColumn, toggleSortBy, sortBy])
-
   const handleChangePage = (event, newPage) => {
     gotoPage(newPage)
   }

@@ -63,8 +63,6 @@ const SedaDemographicListItem = ({
   const barValue =
     metricId === 'grd' && !isGap ? value - 1 : value
 
-  console.log('bar values', value, barValue, maxValue)
-
   return (
     <ListItem
       classes={{
