@@ -17,11 +17,6 @@ export default function useAddCompareLocations() {
       const newLocations = ids.filter(
         l => !!l && locations.indexOf(l) === -1
       )
-      console.log(
-        'adding locations to compare store',
-        ids,
-        newLocations
-      )
       addLocations(newLocations)
     },
     [addLocations, locations]

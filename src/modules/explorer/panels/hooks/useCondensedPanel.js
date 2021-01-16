@@ -10,7 +10,6 @@ import useIsMobile from '../../app/hooks/useIsMobile'
  */
 export default () => {
   const isMobile = useIsMobile()
-  console.log('is mobile?', isMobile)
   return useUiStore(
     state => [isMobile ? false : state.condensed, state.toggleCondensed],
     shallow

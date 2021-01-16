@@ -274,7 +274,6 @@ const createLabels = (
     const isNextMidpoint = next === midPoint
     const prev = i > 0 ? positions[i - 1] : null
     const isPrevMidpoint = prev === midPoint
-    console.log(axis, pos, midPoint, next, prev)
     // label if first, last, or midpoint
     // AND the next axis label is not the midpoint if mobile (prevent overlap)
     // AND the previous axis label is not the midpoint if mobile (prevent overlap)
