@@ -4,8 +4,7 @@ import {
   makeStyles,
   IconButton,
   List,
-  useTheme,
-  useMediaQuery
+  useTheme
 } from '@material-ui/core'
 import {
   SidePanel,
