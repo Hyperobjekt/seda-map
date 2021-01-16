@@ -16,9 +16,6 @@ const useStyles = makeStyles(theme => ({
     [theme.breakpoints.down('sm')]: {
       minHeight: 97
     },
-    [theme.breakpoints.down(321)]: {
-      minHeight: 107
-    }
   },
   root: {
     overflow: 'hidden'

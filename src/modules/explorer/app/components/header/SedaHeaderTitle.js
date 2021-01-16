@@ -55,7 +55,7 @@ const styles = theme => ({
     fontSize: theme.typography.pxToRem(12),
     color: theme.palette.text.secondary,
     // hide on mobile
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('xs')]: {
       display: 'none'
     }
   },

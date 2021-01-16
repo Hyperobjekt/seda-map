@@ -69,6 +69,7 @@ const useHeaderStyles = makeStyles(theme => ({
     [theme.breakpoints.down('sm')]: {
       paddingLeft: theme.spacing(1),
       paddingRight: theme.spacing(7),
+      minHeight: theme.spacing(7)
     }
   },
   actionsMobile: {
