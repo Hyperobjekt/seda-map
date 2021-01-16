@@ -34,20 +34,28 @@ const useStyles = makeStyles(theme => ({
     top: theme.spacing(9),
     left: theme.spacing(4),
     right: theme.spacing(8),
-    bottom: theme.spacing(6)
+    bottom: theme.spacing(6),
+    [theme.breakpoints.down('sm')]: {
+      left:theme.spacing(1),
+      right: theme.spacing(6)
+    }
   },
   // make space for toggle button
   headerOffset: {
+    [theme.breakpoints.up('sm')]: {
     right: 88
+    }
   },
   toggleButton: {
-    position: 'absolute',
-    top: -1,
-    right: -88,
     marginLeft: 0,
-    width: 80,
+    minWidth: 80,
     whiteSpace: 'normal',
-    fontSize: theme.typography.pxToRem(12)
+    fontSize: theme.typography.pxToRem(12),
+    [theme.breakpoints.up('sm')]: {
+      position: 'absolute',
+      top: -1,
+      right: -88,
+    }
   }
 }))
 

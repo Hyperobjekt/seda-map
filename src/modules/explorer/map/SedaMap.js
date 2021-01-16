@@ -63,6 +63,9 @@ const useStyles = makeStyles(theme => ({
     flexDirection: 'column',
     '& > * + *': {
       marginTop: theme.spacing(1)
+    },
+    [theme.breakpoints.down('sm')]: {
+      right: 0
     }
   }
 }))

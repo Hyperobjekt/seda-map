@@ -37,16 +37,20 @@ const useStyles = makeStyles(theme => ({
     position: 'absolute'
   },
   xAxis: {
-    bottom: `calc(-1 * var(--sp-bottom))`,
+    bottom: theme.spacing(-4),
     left: 0,
     right: 0,
     width: 'auto'
   },
   yAxis: {
-    right: `calc(-0.5 * var(--sp-right))`,
+    right: theme.spacing(-4),
     top: 0,
     bottom: 0,
-    width: 0
+    width: 0,
+    // reposition y axis for smaller margins on mobile
+    [theme.breakpoints.down('sm')]: {
+      right: theme.spacing(-3),
+    }
   },
   centerLabelX: {
     marginLeft: 'calc(0.5 * var(--sp-right))'

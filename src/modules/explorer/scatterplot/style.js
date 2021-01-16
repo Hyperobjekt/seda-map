@@ -38,8 +38,6 @@ const getLangKeyForAxisLabel = (value, metric) => {
   return base + position + single
 }
 
-
-
 var STEPS = 6
 
 const CUSTOM_AXIS_VARS = [
@@ -263,30 +261,45 @@ const createLabels = (
   axis = 'y',
   formatter = formatNumber,
   midPoint = 0
-) =>
-  positions.map((pos, i) => {
+) => {
+  const isMobile = window.innerWidth < 600
+  return positions.map((pos, i) => {
     const isFirst = i === 0
     const isLast = i === positions.length - 1
     const isMidpoint = pos === midPoint
     const labelKey = getLangKeyForAxisLabel(pos, langPrefix)
     const value = '' + formatter(pos)
-    const label =
-      isFirst || isLast || isMidpoint
-        ? getLang(labelKey, {
-            value: value[0] === '-' ? value.substring(1) : value
-          })
-        : value > midPoint
-        ? '+' + value
-        : value
+    const next =
+      i + 1 < positions.length ? positions[i + 1] : null
+    const isNextMidpoint = next === midPoint
+    const prev = i > 0 ? positions[i - 1] : null
+    const isPrevMidpoint = prev === midPoint
+    console.log(axis, pos, midPoint, next, prev)
+    // label if first, last, or midpoint
+    // AND the next axis label is not the midpoint if mobile (prevent overlap)
+    // AND the previous axis label is not the midpoint if mobile (prevent overlap)
+    const shouldLabel =
+      (isFirst || isLast || isMidpoint) &&
+      !(isMobile && !isNextMidpoint) &&
+      !(isMobile && !isPrevMidpoint)
+
+    const label = shouldLabel
+      ? getLang(labelKey, {
+          value: value[0] === '-' ? value.substring(1) : value
+        })
+      : value > midPoint
+      ? '+' + value
+      : value
     return {
       value: axis === 'y' ? [0, pos] : [pos, 0],
       axis: axis,
-      y: '98%',
+      y: window.innerHeight > 700 ? '98%' : '97%',
       name: label,
       visualMap: false,
       midPoint: pos === midPoint
     }
   })
+}
 
 /**
  * Returns and array of eCharts line objects for provided positions

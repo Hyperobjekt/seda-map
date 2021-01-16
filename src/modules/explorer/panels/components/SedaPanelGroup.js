@@ -13,7 +13,7 @@ import {
 import useCondensedPanel from '../hooks/useCondensedPanel'
 import useActivePanel from '../hooks/useActivePanel'
 import SedaCollapsePanel from './SedaCollapsePanel'
-import { useMediaQuery, useTheme } from '@material-ui/core'
+import useIsMobile from '../../app/hooks/useIsMobile'
 
 /**
  * A group containing all panels within the tool
@@ -23,8 +23,7 @@ const SedaPanelGroup = props => {
   const [activeLocation] = useActiveLocation()
   const [condensed] = useCondensedPanel()
   const [selection, setSelection] = useActivePanel()
-  const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+  const isMobile = useIsMobile()
 
   // boolean that determines if condensed panel is shown
   const isCondensedPanel =
@@ -32,6 +31,7 @@ const SedaPanelGroup = props => {
 
   const handlePanelClose = () => setSelection(null)
 
+  console.log('us cnd?', isCondensedPanel, condensed)
   return (
     <SidePanelGroup
       condensed={condensed}
@@ -48,9 +48,9 @@ const SedaPanelGroup = props => {
         style={{
           zIndex: condensed || showHelp ? 998 : 999
         }}
-        condensed={!isMobile ? isCondensedPanel : false}
+        condensed={isCondensedPanel}
         offset={0}
-        open={true}
+        open={isMobile ? selection === 'options' : true}
       />
       <SedaMetricPanel
         className="panel--selection panel--metric"

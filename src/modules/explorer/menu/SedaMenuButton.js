@@ -5,13 +5,12 @@ import useMenuVisibility from './useMenuVisibility'
 
 const useStyles = makeStyles(theme => ({
   root: {
-    borderColor: theme.palette.secondary.main,
-    color: theme.palette.secondary.main,
-    position: 'static',
     top: 0,
     right: 0,
+    borderRadius:0,
     [theme.breakpoints.down('sm')]: {
       position: 'absolute',
+      borderLeft: '1px solid #E5E5E5'
     },
     [theme.breakpoints.down(321)]: {
       top: -2,

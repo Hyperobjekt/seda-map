@@ -32,6 +32,7 @@ import {
 } from './buttons'
 import { useSpring, animated } from 'react-spring'
 import useActivePanel from '../hooks/useActivePanel'
+import useIsMobile from '../../app/hooks/useIsMobile'
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -133,16 +134,14 @@ const getFooterStyleProps = ({
  */
 const SedaCollapsePanel = ({
   style: initialStyle,
-  open: isOpen,
   ...props
 }) => {
   const classes = useStyles()
   const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const condenseButtonRef = useRef(null)
+  const isMobile = useIsMobile()
   const [hovered, setHovered] = useState(false)
   const [view] = useActiveView()
-  const [activePanel] = useActivePanel()
+  const [activePanel, setActivePanel] = useActivePanel()
   const [condensed, toggleCondensed] = useCondensedPanel()
   const [showChart] = usePanelChartVisible()
   const panelStyle = useSpring({
@@ -150,7 +149,7 @@ const SedaCollapsePanel = ({
       condensed && !hovered && !activePanel
         ? theme.app.condensedPanelWidth
         : theme.app.panelWidth,
-    delay: condensed && !isMobile ? 200 : 0
+    delay: condensed ? 200 : 0
   })
 
   const footerStyleProps = getFooterStyleProps({
@@ -177,6 +176,11 @@ const SedaCollapsePanel = ({
   const handleMouseLeave = e => {
     setHovered(false)
   }
+
+  const handleClose = () => {
+    setActivePanel(null)
+  }
+
   // toggle between condensed / expanded mode
   const handleToggleCondensed = e => {
     !condensed && setHovered(false)
@@ -185,10 +189,9 @@ const SedaCollapsePanel = ({
 
   return (
     <AnimatedSidePanel
-      style={!isMobile ? { ...initialStyle, ...panelStyle } : { ...initialStyle }}
+      style={{ ...initialStyle, ...panelStyle }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      open={!isMobile ? isOpen : !condensed}
       {...props}>
       <SidePanelHeader className={classes.headerPanel} sticky>
         <Typography className={classes.title}>
@@ -197,7 +200,7 @@ const SedaCollapsePanel = ({
         {
           !isMobile 
           ? <IconButton
-              ref={condenseButtonRef}
+              
               className={classes.toggleCondensed}
               style={{
                 opacity: !condensed && !hovered ? 0 : 1
@@ -209,7 +212,7 @@ const SedaCollapsePanel = ({
                 <SidebarCloseIcon />
               )}
             </IconButton>
-          : <IconButton ref={condenseButtonRef} onClick={handleToggleCondensed}>
+          : <IconButton onClick={handleClose}>
               <CloseIcon />
             </IconButton>
         }
