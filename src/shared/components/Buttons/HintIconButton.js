@@ -33,6 +33,8 @@ const HintIconButton = ({
       arrow
       title={title}
       placement={placement}
+      enterTouchDelay={1}
+      leaveTouchDelay={0}
       {...TooltipProps}>
       <IconButton
         className={clsx(classes.button, className)}

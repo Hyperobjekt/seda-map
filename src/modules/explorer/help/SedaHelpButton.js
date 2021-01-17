@@ -1,29 +1,22 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { makeStyles, Button } from '@material-ui/core'
+import { withStyles, Button } from '@material-ui/core'
 import clsx from 'clsx'
 import useHelpVisibility from './useHelpVisibility'
 
-const useStyles = makeStyles(theme => ({
+const styles = theme => ({
   root: {
     borderColor: theme.palette.secondary.main,
-    color: theme.palette.secondary.main,
-    [theme.breakpoints.down('sm')]: {
-      height: "28px",
-    }
+    color: theme.palette.secondary.main
   }
-}))
+})
 
-const SedaHelpButton = ({
-  classes: overrides = {},
-  ...props
-}) => {
-  const classes = useStyles()
+const SedaHelpButton = ({ classes, className, ...props }) => {
   const [, toggleHelp] = useHelpVisibility()
   return (
     <Button
       variant="outlined"
-      className={clsx(classes.root, overrides.root)}
+      className={clsx('button--help', classes.root, className)}
       onClick={toggleHelp}
       {...props}>
       Help
@@ -35,4 +28,4 @@ SedaHelpButton.propTypes = {
   classes: PropTypes.object
 }
 
-export default SedaHelpButton
+export default withStyles(styles)(SedaHelpButton)

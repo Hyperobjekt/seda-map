@@ -1,7 +1,11 @@
 import React from 'react'
 import { Page } from '../../../../shared'
 import { SedaHeader } from './header'
-import { makeStyles, useMediaQuery, useTheme } from '@material-ui/core'
+import {
+  makeStyles,
+  useMediaQuery,
+  useTheme
+} from '@material-ui/core'
 import SedaFooter from './footer'
 import { SedaDataLoader } from '../../loader'
 import SedaExplorer from './SedaExplorer'
@@ -15,7 +19,7 @@ const useStyles = makeStyles(theme => ({
     minHeight: 56,
     [theme.breakpoints.down('sm')]: {
       minHeight: 97
-    },
+    }
   },
   root: {
     overflow: 'hidden'
@@ -39,7 +43,7 @@ const SedaApp = () => {
       <SedaMenu />
       <SedaDataLoader />
       <SedaExplorer className={classes.body} />
-      <SedaFooter isMobile={isMobile} />
+      <SedaFooter />
     </Page>
   )
 }

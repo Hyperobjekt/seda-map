@@ -10,37 +10,23 @@ import AutoSuggest from 'react-autosuggest'
 import { SearchInput } from '../../../shared'
 import { Popper } from '@material-ui/core'
 
-var switchToModal = function(data) {
-  console.log('CALLING', data)
+// calculate the position for the popper
+var calculatePosition = function(data) {
+  const x = data.offsets.reference.left
+  const y =
+    data.offsets.reference.top + data.offsets.reference.height
+  data.styles = {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    'z-index': 9999,
+    transform: `translate3d(${x}px, ${y}px, 0)`,
+    width: data.offsets.reference.width,
+    'max-width': `${window.innerWidth - x}px`,
+    'max-height': `${window.innerHeight - y}px`
+  }
   return data
 }
-
-// const renderSuggestionsContainer = ({
-//   children,
-//   query,
-//   containerProps,
-//   inputRef,
-//   ...props
-// }) => {
-//   const popperRef = useRef(null)
-//   console.log(
-//     children,
-//     containerProps,
-//     inputRef?.current,
-//     popperRef?.current
-//   )
-//   popperRef?.current?.scheduleUpdate()
-//   return (
-//     <Popper
-//       open={query}
-//       ref={popperRef}
-//       placement="bottom"
-//       anchorEl={inputRef?.current?.input}
-//       {...containerProps}>
-//       <div {...props}>{children}</div>
-//     </Popper>
-//   )
-// }
 
 /** Renders the input component for search */
 const renderInputComponent = (
@@ -160,31 +146,21 @@ const AutoComplete = ({
       renderSectionTitle={renderSectionTitle}
       renderSuggestion={renderSuggestion}
       renderSuggestionsContainer={options => {
-        console.log(popperRef.current, anchorEl)
-        // if (popperRef.current) popperRef.current.scheduleUpdate()
         return (
           <Popper
             popperRef={popperRef}
             anchorEl={anchorEl}
             open={Boolean(options.children)}
             popperOptions={{
-              onUpdate: switchToModal,
               modifiers: {
-                applyStyle: {
+                computeStyle: {
                   enabled: true,
-                  fn: switchToModal
+                  fn: calculatePosition
                 }
               }
             }}
             {...options.containerProps}>
-            <div
-              style={{
-                width: anchorEl
-                  ? anchorEl.clientWidth
-                  : undefined
-              }}>
-              {options.children}
-            </div>
+            <div>{options.children}</div>
           </Popper>
         )
       }}

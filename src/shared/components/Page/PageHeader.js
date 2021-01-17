@@ -10,7 +10,8 @@ const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    boxShadow: `0px 2px 4px -1px rgba(0,0,0,0.05), 0px 4px 5px 0px rgba(0,0,0,0.04), 0px 1px 5px 0px rgba(0,0,0,0.06)`
   },
   logo: {},
   title: {
@@ -24,7 +25,7 @@ const useStyles = makeStyles(theme => ({
     paddingTop: '0px',
     [theme.breakpoints.down(321)]: {
       alignItems: 'flex-start',
-      paddingTop: theme.spacing(1),
+      paddingTop: theme.spacing(1)
     },
     width: '100%',
     maxWidth: props => props.contentWidth || '100%'

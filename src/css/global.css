@@ -171,7 +171,7 @@ button span.mapboxgl-ctrl-icon {
   font-weight: 300;
   font-size: var(--mini-font-size);
   border: none;
-  height: 40px;
+  height: 36px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

@@ -25,6 +25,7 @@ import { useActiveView } from '../../hooks'
 import { EmbedDialog } from '../../../sharing/components/EmbedDialog'
 import { ShareLinkDialog } from '../../../sharing/components/ShareLinkDialog'
 import { SedaHelpButton } from '../../../help'
+import useMobileFooter from '../../hooks/useMobileFooter'
 
 const links = {
   id: 'share',
@@ -60,7 +61,7 @@ const FooterLinks = ({
   links,
   onClick,
   classes = {},
-  isMobile, 
+  isMobile,
   ...props
 }) => (
   <div
@@ -69,11 +70,9 @@ const FooterLinks = ({
       classes.linkCollection
     )}
     {...props}>
-    {
-      !isMobile && (
-        <span className="footer__link-label">{label}</span>
-      )
-    }
+    {!isMobile && (
+      <span className="footer__link-label">{label}</span>
+    )}
     {Boolean(links.length) &&
       links.map((item, i) => (
         <Tooltip
@@ -109,7 +108,7 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'stretch',
-    padding: `0 ${theme.spacing(3)}px`,
+    padding: theme.spacing(0, 3),
     position: 'relative',
     zIndex: 1000,
     borderTop: `1px solid`,
@@ -125,9 +124,19 @@ const useStyles = makeStyles(theme => ({
     '& .MuiSvgIcon-root': {
       color: theme.palette.text.secondary
     },
+    '& .button--help': {
+      marginLeft: theme.spacing(2),
+      height: theme.spacing(3.5)
+    },
     [theme.breakpoints.down('sm')]: {
       justifyContent: 'space-between',
-      padding: `0 ${theme.spacing(2)}px`,
+      padding: theme.spacing(0, 2)
+    },
+    // help removed from footer and moved to header at larger resolutions
+    [theme.breakpoints.up('lg')]: {
+      '& .button--help': {
+        display: 'none'
+      }
     }
   },
 
@@ -139,7 +148,8 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     alignItems: 'center',
     marginRight: 'auto',
-    marginLeft: theme.spacing(2)
+    marginLeft: theme.spacing(2),
+    [theme.breakpoints.down('xs')]: { display: 'none' }
   },
   links: {
     display: 'flex',
@@ -147,13 +157,14 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const SedaFooter = ({ isMobile }) => {
+const SedaFooter = props => {
   const shareUrl = window.location.href
 
   const [, toggleLinkDialog] = useLinkDialogVisibility()
   const [, toggleEmbedDialog] = useEmbedDialogVisibility()
   const [, , isEmbed] = useActiveView()
   const classes = useStyles()
+  const isMobile = useMobileFooter()
 
   const handleClick = item => {
     switch (item.id) {
@@ -176,30 +187,27 @@ const SedaFooter = ({ isMobile }) => {
           className={clsx('footer__branding', classes.branding)}>
           <StanfordLogo style={{ height: 16, width: 76 }} />
         </div>
-        {
-          !isMobile && (
-            <div
-              className={clsx(
-                'footer__copyright',
-                classes.copyright
-              )}>
-              {copyright}
-            </div>
-          )
-        }
+        <div
+          className={clsx(
+            'footer__copyright',
+            classes.copyright
+          )}>
+          {copyright}
+        </div>
         <div className={clsx('footer__links', classes.links)}>
           <FooterLinks
             label={links.label}
             isMobile={isMobile}
-            links={!isMobile ? links.items : links.items.slice(0, links.items.length - 1)}
+            links={
+              !isMobile
+                ? links.items
+                : links.items.slice(0, links.items.length - 1)
+            }
             onClick={handleClick}
           />
         </div>
-        {
-          !isMobile
-            ? <EmbedDialog />
-            : <SedaHelpButton />
-        }
+        <SedaHelpButton />
+        {!isMobile && <EmbedDialog />}
         <ShareLinkDialog />
       </PageFooter>
     )
