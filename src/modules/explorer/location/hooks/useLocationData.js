@@ -11,7 +11,9 @@ import { getLocationNameParts } from '../selectors'
  */
 export default id => {
   const loadSedaData = useLoadSedaData()
+
   const data = useStaticData(state => state.data)
+
   return useMemo(() => {
     const region = getRegionFromLocationId(id)
     const regionData = data[region]
@@ -20,6 +22,7 @@ export default id => {
     // null if data is not available
     if (!id || !regionData || !regionData.length) return null
     const location = regionData.find(d => d.id === id)
+    console.log('location data', id, location)
     // null if location is not found in the data
     if (!location) return null
     const [name, parentLocation] = getLocationNameParts(location)

@@ -1,6 +1,6 @@
 import useStaticData from '../../../data/useStaticData'
 import logger from '../../../logger'
-import { useMemo } from 'react'
+import { useMemo, useRef } from 'react'
 import useDebounce from '../../../../shared/hooks/useDebounce'
 import shallow from 'zustand/shallow'
 import useDataOptions from '../../app/hooks/useDataOptions'
@@ -13,26 +13,28 @@ import useActiveFilters from './useActiveFilters'
  */
 export default function useFilteredData() {
   const data = useStaticData(state => state.data)
+  const filteredRef = useRef([])
+  const isLoading = useStaticData(state => state.isLoading)
   const filters = useActiveFilters()
   const [demographic, region] = useDataOptions(
     state => [state.demographic, state.region],
     shallow
   )
-  return useDebounce(
-    useMemo(() => {
-      // update filters to apply to current demographic
-      const dataFilters = getFiltersForDemographic(
-        filters,
-        demographic
-      )
-      // get the filtered dataset
-      const filteredData = applyFilters(
-        data[region] || [],
-        dataFilters
-      )
-      logger.debug(`applied filters`, dataFilters, filteredData)
-      return filteredData
-    }, [data, region, filters, demographic]),
-    500
-  )
+  return useMemo(() => {
+    // return reference to currently filtered data, if loading
+    if (isLoading) return filteredRef.current
+    // update filters to apply to current demographic
+    const dataFilters = getFiltersForDemographic(
+      filters,
+      demographic
+    )
+    // get the filtered dataset
+    const filteredData = applyFilters(
+      data[region] || [],
+      dataFilters
+    )
+    filteredRef.current = filteredData
+    logger.debug(`applied filters`, dataFilters, filteredData)
+    return filteredData
+  }, [isLoading, data, region, filters, demographic])
 }

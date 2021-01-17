@@ -40,13 +40,13 @@ const useStyles = makeStyles(theme => ({
     position: 'absolute',
     bottom: 24,
     right: 16,
-    alignItems: "center",
+    alignItems: 'center',
     [theme.breakpoints.down('sm')]: {
       bottom: 'auto',
       top: 0,
       right: 0,
-      width: "100%",
-      alignItems: "flex-start",
+      width: '100%',
+      alignItems: 'flex-start'
     }
   },
   zoomControls: {
@@ -130,6 +130,7 @@ const SedaMap = props => {
   /** handler for map hover */
   const handleHover = (feature, coords) => {
     const id = getFeatureProperty(feature, 'id')
+    console.log(id, feature, hoveredId)
     if (id && id !== hoveredId) {
       // add schools to the ID map
       id.length === REGION_TO_ID_LENGTH['schools'] &&

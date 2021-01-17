@@ -114,6 +114,7 @@ const SedaTooltip = props => {
   const [xVar, yVar] = useScatterplotVars()
   const [region] = useRegion()
   const data = useLocationData(hoveredId)
+
   const featureRegion = getRegionFromLocationId(hoveredId)
   // force free lunch secondary metric for schools
   const secondaryVar =

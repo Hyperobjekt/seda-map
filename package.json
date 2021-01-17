@@ -51,6 +51,7 @@
     "react-dom": "^16.12.0",
     "react-instantsearch-dom": "^6.8.2",
     "react-map-gl": "^5.2.3",
+    "react-papaparse": "^3.11.1",
     "react-resize-aware": "^3.0.0",
     "react-spring": "^8.0.27",
     "react-table": "^7.6.2",
