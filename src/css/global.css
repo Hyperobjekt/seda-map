@@ -86,6 +86,16 @@ button span.mapboxgl-ctrl-icon {
   display: block;
 }
 
+/** 
+  HACK: fix map size, overrides the px value set.  
+  keeps the mobile keyboard from shrinking the map
+*/
+@media (max-width: 420px) {
+  .map > div {
+    height: 100% !important;
+  }
+}
+
 /** attribution positioning */
 .map .mapboxgl-ctrl-bottom-right {
   right: 108px;
@@ -161,7 +171,7 @@ button span.mapboxgl-ctrl-icon {
   font-weight: 300;
   font-size: var(--mini-font-size);
   border: none;
-  height: 40px;
+  height: 36px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

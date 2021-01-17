@@ -68,6 +68,7 @@ const SedaFilterLocation = props => {
         activateSelection={false}
         onSelect={handleLocationSelect}
         onClear={handleLocationClear}
+        clearOnSelected={false}
       />
     </PanelListItem>
   )

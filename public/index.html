@@ -259,6 +259,8 @@
         -moz-osx-font-smoothing: grayscale;
         width: 100%;
         height: 100%;
+        overflow: hidden;
+        min-height: -webkit-fill-available;
       }
       *,
       *::before,
@@ -274,6 +276,8 @@
         font-size: var(--font-size);
         width: 100%;
         height: 100%;
+        overflow: hidden;
+        min-height: -webkit-fill-available;
       }
 
       a {
@@ -353,7 +357,6 @@
         text-align: center;
         /* transition: transform 0.6s ease-in-out 1s; */
         transform: translate3d(0, 0, 0);
-        overflow: auto;
         background-image: linear-gradient(
           -180deg,
           #061d56 3%,
@@ -707,6 +710,7 @@
         position: relative;
         width: 100%;
         height: 100%;
+        overflow: hidden;
       }
 
       .hidden {

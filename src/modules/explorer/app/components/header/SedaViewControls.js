@@ -15,14 +15,14 @@ const useStyles = makeStyles(theme => ({
   button: {
     whiteSpace: 'nowrap',
     [theme.breakpoints.down('sm')]: {
-      border:  0,
+      border: 0
     }
   },
   active: {
     color: theme.palette.primary.main,
     background: 'white',
     [theme.breakpoints.down('sm')]: {
-      background: theme.palette.primary.highlight,
+      background: theme.palette.primary.highlight
     },
     '& .icon .filled': {
       opacity: 1
@@ -41,7 +41,7 @@ const SedaViewControls = ({ classes: overrides, ...props }) => {
   const [view, setView] = useActiveView()
   const theme = useTheme()
   const isLargeViewport = useMediaQuery(
-    theme.breakpoints.up('md')
+    theme.breakpoints.up('lg')
   )
   /** no split view button on small viewports */
   const viewButtons = isLargeViewport

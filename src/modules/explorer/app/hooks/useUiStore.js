@@ -58,12 +58,18 @@ const [useUiStore] = create(set => ({
 
   // string determining which selection is currently active
   selection: null,
-  setSelection: selection => set({ selection }),
+  setSelection: selection => {
+    set({ selection })
+  },
   // string to determine which filter selection is active
   filterPanel: null,
   setFilterPanel: filterPanel => set({ filterPanel }),
   setViewFromRoute: params => {
-    set({ view: params.view, isEmbed: !!params.embed, embedSecondary: params.secondary.split("+").length > 1 })
+    set({
+      view: params.view,
+      isEmbed: !!params.embed,
+      embedSecondary: params.secondary.split('+').length > 1
+    })
   }
 }))
 

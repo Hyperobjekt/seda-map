@@ -21,11 +21,23 @@ import { useMapSize } from '../../map'
 import { useLocationData } from '../location'
 import { withStyles } from '@material-ui/core'
 
-const styles = (theme) => ({
+const styles = theme => ({
   root: {
-    [theme.breakpoints.down('sm')]: {
-      borderRadius:0,
-      boxShadow: `0 1px 0 rgba(0,0,0,0.1)`
+    maxWidth: theme.spacing(60),
+    boxShadow: `0 0 2px rgba(0,0,0,0.3), 0 1px 4px rgba(0,0,0,0.06)`,
+    [theme.breakpoints.down('xs')]: {
+      borderRadius: 0
+    },
+    [theme.breakpoints.up('sm')]: {
+      borderRadius: `0 0 0 3px`
+    },
+    [theme.breakpoints.up('md')]: {
+      borderRadius: theme.shape.borderRadius
+    }
+  },
+  gradient: {
+    [theme.breakpoints.down('xs')]: {
+      maxWidth: 'none'
     }
   }
 })
@@ -81,7 +93,10 @@ const SedaMapLegend = props => {
   /** prefix for the secondary map legend language */
   const secondaryPrefix = 'LEGEND_DESC' + (isGap ? '_GAP' : '')
   /** secondary label for the map legend */
-  const secondary = getPrefixLang(metric, secondaryPrefix, [...dems, region])
+  const secondary = getPrefixLang(metric, secondaryPrefix, [
+    ...dems,
+    region
+  ])
   /** mid point label for the map legend */
   const midLabel = getPrefixLang(
     metric,
@@ -93,7 +108,11 @@ const SedaMapLegend = props => {
   return (
     <MapLegend
       layout={width < 600 ? 'vertical' : 'horizontal'}
-      primary={primary + ' by ' + getPrefixLang(region, 'LABEL_SINGULAR')}
+      primary={
+        primary +
+        ' by ' +
+        getPrefixLang(region, 'LABEL_SINGULAR')
+      }
       secondary={secondary}
       midLabel={midLabel}
       midPosition={midPosition}

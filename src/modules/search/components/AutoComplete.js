@@ -1,8 +1,32 @@
-import React, { useState, useEffect } from 'react'
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useLayoutEffect
+} from 'react'
 import PropTypes from 'prop-types'
 import { Highlight } from 'react-instantsearch-dom'
 import AutoSuggest from 'react-autosuggest'
 import { SearchInput } from '../../../shared'
+import { Popper } from '@material-ui/core'
+
+// calculate the position for the popper
+var calculatePosition = function(data) {
+  const x = data.offsets.reference.left
+  const y =
+    data.offsets.reference.top + data.offsets.reference.height
+  data.styles = {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    'z-index': 9999,
+    transform: `translate3d(${x}px, ${y}px, 0)`,
+    width: data.offsets.reference.width,
+    'max-width': `${window.innerWidth - x}px`,
+    'max-height': `${window.innerHeight - y}px`
+  }
+  return data
+}
 
 /** Renders the input component for search */
 const renderInputComponent = (
@@ -50,9 +74,14 @@ const AutoComplete = ({
   onSuggestionSelected: onSelected,
   onSelectedClear: onClear,
   value: overrideValue,
+  clearOnSelected = true,
   ...props
 }) => {
   const [value, setValue] = useState(currentRefinement)
+  const [anchorEl, setAnchorEl] = useState(null)
+
+  const inputRef = useRef(null)
+  const popperRef = useRef(null)
 
   const handleChange = event => {
     setValue(event.target.value)
@@ -65,6 +94,7 @@ const AutoComplete = ({
 
   const handleSelected = (event, hit) => {
     onSelected && onSelected(event, hit)
+    if (clearOnSelected) return setValue('')
     const value = [hit.suggestion.name]
     if (hit.suggestion.state_name)
       value.push(hit.suggestion.state_name)
@@ -91,8 +121,13 @@ const AutoComplete = ({
       setValue(overrideValue)
   }, [overrideValue])
 
+  useLayoutEffect(() => {
+    setAnchorEl(inputRef?.current?.input)
+  }, [])
+
   return (
     <AutoSuggest
+      ref={inputRef}
       suggestions={hideSuggestions ? [] : hits}
       multiSection={multiSection}
       inputProps={combinedInputProps}
@@ -110,6 +145,25 @@ const AutoComplete = ({
       }
       renderSectionTitle={renderSectionTitle}
       renderSuggestion={renderSuggestion}
+      renderSuggestionsContainer={options => {
+        return (
+          <Popper
+            popperRef={popperRef}
+            anchorEl={anchorEl}
+            open={Boolean(options.children)}
+            popperOptions={{
+              modifiers: {
+                computeStyle: {
+                  enabled: true,
+                  fn: calculatePosition
+                }
+              }
+            }}
+            {...options.containerProps}>
+            <div>{options.children}</div>
+          </Popper>
+        )
+      }}
       {...props}
     />
   )

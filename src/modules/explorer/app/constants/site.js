@@ -1,5 +1,8 @@
 import LANG from './en'
 
+/** breakpoint where help switches from footer to header */
+export const HELP_BREAKPOINT = 1280
+
 export const FOOTER = {
   branding: {
     url: '#',
