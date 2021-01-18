@@ -58,7 +58,6 @@ export default function useAppContext() {
   return useMemo(() => {
     // if loading, return the old app context
     if (isLoading && appContext.current) {
-      console.log('saved a recalc!')
       return appContext.current
     }
 
