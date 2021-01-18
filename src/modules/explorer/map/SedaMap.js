@@ -40,13 +40,13 @@ const useStyles = makeStyles(theme => ({
     position: 'absolute',
     bottom: 24,
     right: 16,
-    alignItems: "center",
+    alignItems: 'center',
     [theme.breakpoints.down('sm')]: {
       bottom: 'auto',
       top: 0,
       right: 0,
-      width: "100%",
-      alignItems: "flex-start",
+      width: '100%',
+      alignItems: 'flex-start'
     }
   },
   zoomControls: {

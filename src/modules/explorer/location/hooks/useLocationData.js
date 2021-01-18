@@ -11,7 +11,9 @@ import { getLocationNameParts } from '../selectors'
  */
 export default id => {
   const loadSedaData = useLoadSedaData()
+
   const data = useStaticData(state => state.data)
+
   return useMemo(() => {
     const region = getRegionFromLocationId(id)
     const regionData = data[region]

@@ -57,7 +57,6 @@ const [useMapStore] = create((set, get) => ({
   resetViewport: { ...DEFAULT_VIEWPORT },
   viewport: DEFAULT_VIEWPORT,
   setViewport: viewport => {
-    console.log('set vp', viewport)
     set(state => {
       const newViewport = {
         ...state.viewport,
