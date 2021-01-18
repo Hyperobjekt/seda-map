@@ -1,4 +1,5 @@
 import { scaleLinear } from 'd3-scale'
+import { format } from 'd3-format'
 
 /**
  * Gets a value between 0 and 1 depending on where the provided
@@ -85,6 +86,8 @@ export const formatPercent = (v, options) => {
   }
   return formatNumber(v * 100, options) + '%'
 }
+
+export const formatInteger = format(',d')
 
 /**
  * Returns a percent string of how far the provided value

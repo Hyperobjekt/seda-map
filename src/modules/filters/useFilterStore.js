@@ -196,6 +196,8 @@ export const DEFAULT_FILTERS = [['sort', 'sz', 'asc']]
 
 const [useFilterStore] = create((set, get) => ({
   filters: [...DEFAULT_FILTERS],
+  getFilterValue: ruleParams =>
+    getFilterValue(get().filters, ruleParams),
   addFilter: addFilter(set),
   setFilters: setFilters(set),
   setFilter: setFilter(set),

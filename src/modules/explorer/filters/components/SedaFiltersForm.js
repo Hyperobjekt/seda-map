@@ -1,19 +1,21 @@
 import React from 'react'
-import { List } from '@material-ui/core'
-import { useRegion } from '../../app/hooks'
+import { List, Typography } from '@material-ui/core'
+import { useAppContext } from '../../app/hooks'
 import { PanelListItem } from '../../../../shared/components/Panels/PanelList'
 import SedaFilterFlags from './SedaFilterFlags'
 import SedaMetricSlider from './SedaMetricSlider'
 import SedaClearFilterButton from './SedaClearFilterButton'
 import SedaFilterLocation from './SedaFilterLocation'
-import SedaLimitSlider from './SedaLimitSlider'
+// import SedaLimitSlider from './SedaLimitSlider'
+import SedaLimitButtons from './SedaLimitButtons'
+import { formatInteger } from '../../../../shared/utils'
 
 /**
  * Contains all controls for modifying filters
  */
 const SedaFiltersForm = props => {
-  // get active demographic
-  const [region] = useRegion()
+  const { filterResults, totalResults, region } = useAppContext()
+
   // TODO: only show metric sliders that are added
   // const [filterMetrics, setFilterMetrics] = useState([])
 
@@ -25,13 +27,27 @@ const SedaFiltersForm = props => {
     region === 'schools' ? 'frl' : 'ses'
   ]
 
+  const isFiltered = filterResults !== totalResults
+
   return (
     <List {...props}>
+      <PanelListItem>
+        {isFiltered ? (
+          <Typography variant="body1">
+            Showing {formatInteger(filterResults)} of{' '}
+            {formatInteger(totalResults)} {region}
+          </Typography>
+        ) : (
+          <Typography variant="body1">
+            Showing all {formatInteger(totalResults)} {region}
+          </Typography>
+        )}
+      </PanelListItem>
       <PanelListItem>
         <SedaClearFilterButton />
       </PanelListItem>
       {region !== 'states' && <SedaFilterLocation />}
-      <SedaLimitSlider />
+      <SedaLimitButtons />
       {availableMetrics.map(metric => (
         <SedaMetricSlider key={metric} metricId={metric} />
       ))}

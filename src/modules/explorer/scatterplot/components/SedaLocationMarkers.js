@@ -6,7 +6,6 @@ import {
   getValuePercentInRange
 } from '../utils'
 import {
-  useAppContext,
   useHovered,
   useMarkersVisibility
 } from '../../app/hooks'
@@ -41,24 +40,20 @@ export const getXyzTransformers = (region, extents) => {
   return [xValToPosition, yValToPosition, zValToSize]
 }
 
-const SedaLocationMarkers = ({ gapChart = false, ...props }) => {
+const SedaLocationMarkers = ({
+  gapChart = false,
+  vars,
+  extents,
+  region,
+  ...props
+}) => {
   const [showHovered] = useMarkersVisibility()
   const [hoveredId, setHovered] = useHovered()
   const hoveredData = useLocationData(hoveredId)
   const locations = useCurrentRegionLocationsData()
   const theme = useTheme()
 
-  // scatterplot data store
-  const {
-    scatterplotVars,
-    gapVars,
-    gapExtents,
-    scatterplotExtents,
-    region
-  } = useAppContext()
-
-  const [xVar, yVar, zVar] = gapChart ? gapVars : scatterplotVars
-  const extents = gapChart ? gapExtents : scatterplotExtents
+  const [xVar, yVar, zVar] = vars
 
   const canRender = xVar && yVar && zVar && region
 

@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import useStaticData from './useStaticData'
-import { autoType } from 'd3-dsv'
 
 const DataLoader = () => {
   const loadDataForRegion = useStaticData(
@@ -12,7 +11,7 @@ const DataLoader = () => {
   const regions = ['states', 'counties', 'districts', 'schools']
 
   useEffect(() => {
-    regions.forEach(r => loadDataForRegion(r, autoType))
+    regions.forEach(r => loadDataForRegion(r))
   }, [loadDataForRegion, regions])
 
   return (

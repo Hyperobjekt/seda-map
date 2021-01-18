@@ -13,8 +13,7 @@ import {
 import {
   useHovered,
   useMarkersVisibility,
-  useDemographicType,
-  useAppContext
+  useDemographicType
 } from '../app/hooks'
 import { getValuePositionInRange } from '../../../shared/utils'
 import { useMapSize } from '../../map'
@@ -42,7 +41,14 @@ const styles = theme => ({
   }
 })
 
-const SedaMapLegend = props => {
+const SedaMapLegend = ({
+  colorExtent,
+  metric,
+  demographic,
+  region,
+  ...props
+}) => {
+  const varName = [demographic, metric].join('_')
   /** id of the hovered location */
   const [hovered] = useHovered()
   /** boolean determining if hovered location should show */
@@ -53,16 +59,9 @@ const SedaMapLegend = props => {
   const isGap = useDemographicType() === 'gap'
   /** width of the map viewport */
   const [width] = useMapSize()
-  /** pull color extent and map y var from app context */
-  const {
-    colorExtent,
-    mapVars: [, yVar],
-    metric,
-    demographic,
-    region
-  } = useAppContext()
+
   /** boolean determinng if the scale is inverted for the given var */
-  const inverted = getInvertedFromVarName(yVar)
+  const inverted = getInvertedFromVarName(varName)
   /** choroppleth colors for gradient (reversed if gap) */
   const colors = isGap
     ? [...getChoroplethColors()].reverse()
@@ -78,7 +77,7 @@ const SedaMapLegend = props => {
   const markerPosition =
     showHovered && hoveredData
       ? getValuePositionInRange(
-          hoveredData[yVar],
+          hoveredData[varName],
           labelRange,
           inverted
         )
@@ -103,7 +102,7 @@ const SedaMapLegend = props => {
     'LEGEND_MID' + (isGap ? '_GAP' : '')
   )
   /** function to format min / max labels on the legend */
-  const labelFormatter = getFormatterForVarName(yVar)
+  const labelFormatter = getFormatterForVarName(varName)
 
   return (
     <MapLegend

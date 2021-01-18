@@ -1,9 +1,8 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import { isVersusFromVarNames } from '../../app/selectors'
 import ScatterplotBase from './SedaScatterplotBase'
 import clsx from 'clsx'
-import useScatterplotVars from '../hooks/useScatterplotVars'
+import { useAppContext } from '../../app/hooks'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -54,9 +53,18 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const SedaScatterplotPreview = props => {
-  const [xVar, yVar] = useScatterplotVars()
-  const isVersus = isVersusFromVarNames(xVar, yVar)
+  const {
+    region,
+    isVersus,
+    scatterplotData,
+    scatterplotVars,
+    scatterplotExtents,
+    colorExtent
+  } = useAppContext()
+  // const [xVar, yVar] = useScatterplotVars()
+  // const isVersus = isVersusFromVarNames(xVar, yVar)
   const classes = useStyles()
+
   return (
     <ScatterplotBase
       className={clsx(classes.root, {
@@ -64,6 +72,11 @@ const SedaScatterplotPreview = props => {
       })}
       classes={classes}
       variant="preview"
+      data={scatterplotData}
+      vars={scatterplotVars}
+      extents={scatterplotExtents}
+      colorExtent={colorExtent}
+      region={region}
       {...props}
     />
   )

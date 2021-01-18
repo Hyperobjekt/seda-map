@@ -15,7 +15,6 @@ import {
 } from '../../app/selectors/lang'
 import SedaLocationMarkers from './SedaLocationMarkers'
 import useStaticData from '../../../data/useStaticData'
-import { useAppContext } from '../../app/hooks'
 import { getScatterplotOptions } from '../style'
 import {
   getDemographicIdFromVarName,
@@ -49,7 +48,7 @@ const useStyles = makeStyles(theme => ({
     width: 0,
     // reposition y axis for smaller margins on mobile
     [theme.breakpoints.down('sm')]: {
-      right: theme.spacing(-3),
+      right: theme.spacing(-3)
     }
   },
   centerLabelX: {
@@ -71,6 +70,11 @@ function SedaScatterplotBase({
   onHover,
   onClick,
   onReady,
+  data,
+  vars,
+  extents,
+  colorExtent,
+  region,
   ...props
 }) {
   // classnames for markers and axis
@@ -79,19 +83,7 @@ function SedaScatterplotBase({
   // boolean indicating if data is loading
   const loading = useStaticData(state => state.isLoading)
 
-  // scatterplot data store
-  const {
-    scatterplotData,
-    scatterplotVars,
-    gapVars,
-    gapExtents,
-    scatterplotExtents,
-    colorExtent,
-    region
-  } = useAppContext()
-
-  const [xVar, yVar, zVar] = gapChart ? gapVars : scatterplotVars
-  const extents = gapChart ? gapExtents : scatterplotExtents
+  const [xVar, yVar, zVar] = vars
 
   const xLabel = gapChart
     ? getDemographicIdFromVarName(xVar)
@@ -108,7 +100,7 @@ function SedaScatterplotBase({
     //   return b[zVar] - a[zVar]
     // })
     return getScatterplotOptions(variant, {
-      data: scatterplotData,
+      data,
       xVar,
       yVar,
       zVar,
@@ -118,7 +110,7 @@ function SedaScatterplotBase({
     })
   }, [
     variant,
-    scatterplotData,
+    data,
     xVar,
     yVar,
     zVar,
@@ -153,6 +145,9 @@ function SedaScatterplotBase({
           classes.markers,
           overrides.markers
         )}
+        vars={vars}
+        extents={extents}
+        region={region}
         gapChart={gapChart}
       />
       <ScatterplotAxis
@@ -199,6 +194,9 @@ function SedaScatterplotBase({
 
 SedaScatterplotBase.defaultProps = {
   classes: {},
+  data: [],
+  vars: [],
+  extents: [],
   onHover: () => {},
   onClick: () => {},
   onReady: () => {}

@@ -12,14 +12,16 @@ import { InputAdornment, IconButton } from '@material-ui/core'
 import CopyIcon from '@material-ui/icons/FileCopy'
 import copy from 'copy-to-clipboard'
 import { onShare } from '../actions'
-import {
-  useEmbedDialogVisibility,
-} from '..'
-import { useAppContext, useDataOptions } from '../../app/hooks'
+import { useEmbedDialogVisibility } from '..'
+import { useDataOptions } from '../../app/hooks'
 import { useMapViewport } from '../../../map'
 import shallow from 'zustand/shallow'
 import { filterArrayToString } from '../../routing/selectors'
 import { useFilters } from '../../filters'
+import {
+  getSecondaryForDemographic,
+  isGapDemographic
+} from '../../app/selectors'
 
 const BASE_URL = `${window.location.origin}${
   window.location.pathname
@@ -49,9 +51,13 @@ const getMapEmbedLink = ({
   locations,
   filters
 }) => {
-  return (locations && locations.length > 0)
-    ? `${BASE_URL}#/embed/map/${filterArrayToString(filters)}/${region}/${metric}/${secondary}/${demographic}/${zoom}/${latitude}/${longitude}/${locations}`
-    : `${BASE_URL}#/embed/map/${filterArrayToString(filters)}/${region}/${metric}/${secondary}/${demographic}/${zoom}/${latitude}/${longitude}`
+  return locations && locations.length > 0
+    ? `${BASE_URL}#/embed/map/${filterArrayToString(
+        filters
+      )}/${region}/${metric}/${secondary}/${demographic}/${zoom}/${latitude}/${longitude}/${locations}`
+    : `${BASE_URL}#/embed/map/${filterArrayToString(
+        filters
+      )}/${region}/${metric}/${secondary}/${demographic}/${zoom}/${latitude}/${longitude}`
 }
 
 const getChartEmbedLink = ({
@@ -63,11 +69,15 @@ const getChartEmbedLink = ({
   filters,
   zoom,
   latitude,
-  longitude,
+  longitude
 }) => {
-  return (locations && locations.length > 0)
-    ? `${BASE_URL}#/embed/chart/${filterArrayToString(filters)}/${region}/${metric}/${secondary}/${demographic}/${zoom}/${latitude}/${longitude}/${locations}`
-    : `${BASE_URL}#/embed/chart/${filterArrayToString(filters)}/${region}/${metric}/${secondary}/${demographic}/${zoom}/${latitude}/${longitude}`
+  return locations && locations.length > 0
+    ? `${BASE_URL}#/embed/chart/${filterArrayToString(
+        filters
+      )}/${region}/${metric}/${secondary}/${demographic}/${zoom}/${latitude}/${longitude}/${locations}`
+    : `${BASE_URL}#/embed/chart/${filterArrayToString(
+        filters
+      )}/${region}/${metric}/${secondary}/${demographic}/${zoom}/${latitude}/${longitude}`
 }
 
 const getSecondaryChartEmbedLink = ({
@@ -79,7 +89,7 @@ const getSecondaryChartEmbedLink = ({
   filters,
   zoom,
   latitude,
-  longitude,
+  longitude
 }) => {
   // let { xVar, yVar, zVar } = getMapVars(
   //   region,
@@ -92,9 +102,13 @@ const getSecondaryChartEmbedLink = ({
   // } else {
   //   xVar = xVar.split('_')[0] + '_' + secondary
   // }
-  return (locations && locations.length > 0)
-    ? `${BASE_URL}#/embed/chart/${filterArrayToString(filters)}/${region}/${metric}/${secondary}+secondary/${demographic}/${zoom}/${latitude}/${longitude}/${locations}`
-    : `${BASE_URL}#/embed/chart/${filterArrayToString(filters)}/${region}/${metric}/${secondary}+secondary/${demographic}/${zoom}/${latitude}/${longitude}`
+  return locations && locations.length > 0
+    ? `${BASE_URL}#/embed/chart/${filterArrayToString(
+        filters
+      )}/${region}/${metric}/${secondary}+secondary/${demographic}/${zoom}/${latitude}/${longitude}/${locations}`
+    : `${BASE_URL}#/embed/chart/${filterArrayToString(
+        filters
+      )}/${region}/${metric}/${secondary}+secondary/${demographic}/${zoom}/${latitude}/${longitude}`
 }
 
 const getEmbedCode = link => {
@@ -104,22 +118,27 @@ const getEmbedCode = link => {
 export const EmbedDialog = () => {
   const [copied, setCopied] = React.useState('')
   const [open, toggleEmbedDialog] = useEmbedDialogVisibility()
-  
-  const {
-    hasGapChart: secondaryChart,
-  } = useAppContext()
   const [viewport] = useMapViewport()
   const filters = useFilters()
-  const rest = useDataOptions(({ region, metric, secondary, demographic, locations }) => ({
-    region,
-    metric,
-    secondary,
-    demographic,
-    locations,
-    ...viewport,
-    filters: filters,
-  }), shallow)
-  
+  const rest = useDataOptions(
+    ({ region, metric, secondary, demographic, locations }) => ({
+      region,
+      metric,
+      secondary,
+      demographic,
+      locations,
+      ...viewport,
+      filters: filters
+    }),
+    shallow
+  )
+
+  const isGap = isGapDemographic(rest.demographic)
+  // secondary metrics for the gap chart (x axis)
+  const gapMetrics = getSecondaryForDemographic(rest.demographic)
+  // true if there is a secondary chart for the current gap
+  const secondaryChart = isGap && gapMetrics.length > 0
+
   const mapLink = getMapEmbedLink(rest)
   const chartLink = getChartEmbedLink(rest)
   const mapEmbedCode = getEmbedCode(mapLink)
