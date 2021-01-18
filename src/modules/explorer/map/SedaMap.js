@@ -130,7 +130,6 @@ const SedaMap = props => {
   /** handler for map hover */
   const handleHover = (feature, coords) => {
     const id = getFeatureProperty(feature, 'id')
-    console.log(id, feature, hoveredId)
     if (id && id !== hoveredId) {
       // add schools to the ID map
       id.length === REGION_TO_ID_LENGTH['schools'] &&

@@ -155,7 +155,6 @@ const AUTO_PARSE_COLS = {
  */
 const loadDataSet = (dataSetId, insertData, options = {}) => {
   const url = DATA_ENDPOINT + '/' + dataSetId + '.csv'
-  console.log('load dataset', url, dataSetId)
   // const result = []
   return new Promise((resolve, reject) => {
     readRemoteFile(url, {

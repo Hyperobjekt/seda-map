@@ -1,6 +1,6 @@
-import { useMemo } from 'react'
+import { useMemo, useRef } from 'react'
 import { useDataOptions } from '.'
-import { useFilteredData } from '../../filters'
+import { useActiveFilters } from '../../filters'
 
 import shallow from 'zustand/shallow'
 import {
@@ -16,11 +16,31 @@ import {
   isVersusFromVarNames
 } from '../selectors'
 import { hasVal } from '../../scatterplot/utils'
+import { useStaticData } from '../../../data'
+import { applyFilters } from '../../../filters'
+import { getFiltersForDemographic } from '../../filters/selectors'
 
-const MAX_DOTS = 2000
+const MAX_DOTS = 10000
+
+const getFilteredData = (filters, demographic, regionData) => {
+  // update filters to apply to current demographic
+  const dataFilters = getFiltersForDemographic(
+    filters,
+    demographic
+  )
+  // get the filtered dataset
+  const filteredData = applyFilters(
+    regionData || [],
+    dataFilters
+  )
+  return filteredData
+}
 
 export default function useAppContext() {
-  const data = useFilteredData()
+  const appContext = useRef(null)
+  const data = useStaticData(state => state.data)
+  const filters = useActiveFilters()
+  const isLoading = useStaticData(state => state.isLoading)
   const [
     region,
     metric,
@@ -35,8 +55,19 @@ export default function useAppContext() {
     ],
     shallow
   )
-
   return useMemo(() => {
+    // if loading, return the old app context
+    if (isLoading && appContext.current) {
+      console.log('saved a recalc!')
+      return appContext.current
+    }
+
+    const regionData = data[region]
+    const filteredData = getFilteredData(
+      filters,
+      demographic,
+      regionData
+    )
     // variable names for the scatterplot
     const [scatterplotVars, gapVars, mapVars] = [
       'chart',
@@ -47,7 +78,7 @@ export default function useAppContext() {
     )
 
     // get circles with valid values only, limit to 20,000 dots
-    const scatterplotData = data
+    const scatterplotData = filteredData
       .filter(d => scatterplotVars.every(v => hasVal(d[v])))
       // limit number of dots
       .slice(0, MAX_DOTS)
@@ -101,8 +132,8 @@ export default function useAppContext() {
     // true if there is a secondary chart for the current gap
     const hasGapChart = isVersus && gapMetrics.length > 0
 
-    return {
-      data,
+    appContext.current = {
+      data: filteredData,
       dataExtents,
       allVars,
       scatterplotData,
@@ -129,5 +160,14 @@ export default function useAppContext() {
         'map'
       )
     }
-  }, [data, metric, region, demographic, secondary])
+    return appContext.current
+  }, [
+    isLoading,
+    data,
+    metric,
+    region,
+    demographic,
+    secondary,
+    filters
+  ])
 }

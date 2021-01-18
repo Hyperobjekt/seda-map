@@ -31,7 +31,6 @@ const SedaPanelGroup = props => {
 
   const handlePanelClose = () => setSelection(null)
 
-  console.log('us cnd?', isCondensedPanel, condensed)
   return (
     <SidePanelGroup
       condensed={condensed}

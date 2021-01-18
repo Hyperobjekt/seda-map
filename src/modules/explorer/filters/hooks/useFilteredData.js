@@ -1,7 +1,6 @@
 import useStaticData from '../../../data/useStaticData'
 import logger from '../../../logger'
 import { useMemo, useRef } from 'react'
-import useDebounce from '../../../../shared/hooks/useDebounce'
 import shallow from 'zustand/shallow'
 import useDataOptions from '../../app/hooks/useDataOptions'
 import { applyFilters } from '../../../filters'
@@ -20,6 +19,7 @@ export default function useFilteredData() {
     state => [state.demographic, state.region],
     shallow
   )
+  const regionData = data[region]
   return useMemo(() => {
     // return reference to currently filtered data, if loading
     if (isLoading) return filteredRef.current
@@ -30,11 +30,11 @@ export default function useFilteredData() {
     )
     // get the filtered dataset
     const filteredData = applyFilters(
-      data[region] || [],
+      regionData || [],
       dataFilters
     )
     filteredRef.current = filteredData
     logger.debug(`applied filters`, dataFilters, filteredData)
     return filteredData
-  }, [isLoading, data, region, filters, demographic])
+  }, [isLoading, regionData, demographic, filters])
 }
