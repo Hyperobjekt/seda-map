@@ -293,8 +293,8 @@ export const getCircles = ({ data, ...props }) => {
   if (!data) return {}
   // add circles for selected items
   return data
+    .filter(f => !!f)
     .map((d, i) => getCircle({ data: d, index: i, ...props }))
-    .filter(f => f !== null)
 }
 
 /**
