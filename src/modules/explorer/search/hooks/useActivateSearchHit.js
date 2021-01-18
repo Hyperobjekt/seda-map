@@ -21,6 +21,6 @@ export default function useActivateSearchHit() {
         console.warn('unable to activate location: ' + id)
       }
     },
-    [setActiveLocation]
+    [setActiveLocation, addLocation]
   )
 }
