@@ -4,7 +4,10 @@ import {
   getRegionFromLocationId,
   getRegionFromFeature
 } from '../app/selectors'
-import { allStateAbbrs, getStateFipsFromAbbr } from '../../../shared/utils/states'
+import {
+  allStateAbbrs,
+  getStateFipsFromAbbr
+} from '../../../shared/utils/states'
 import { formatNumber } from '../../../shared/utils'
 import { DEFAULT_VIEWPORT } from '../../map'
 
@@ -75,7 +78,7 @@ export const ruleParamToArray = rule => {
     case 'c':
     case 'ch':
     case 'mg':
-      return ['eq', type, 1]
+      return ['eq', type, 0]
     case 'limit':
       return ['limit', rest[0]]
     default:
@@ -167,7 +170,8 @@ const isValidMetric = metric =>
   ['avg', 'grd', 'coh'].indexOf(metric) > -1
 
 const isValidSecondary = secondary =>
-  ['ses', 'frl', 'seg', 'min'].indexOf(secondary.split("+")[0]) > -1
+  ['ses', 'frl', 'seg', 'min'].indexOf(secondary.split('+')[0]) >
+  -1
 
 const isValidViewport = (zoom, lat, lon) =>
   !isNaN(zoom) && !isNaN(lat) && !isNaN(lon)
@@ -359,52 +363,60 @@ export const transformLegacyPath = (path, routeVars) => {
   // console.log("legacyParams", legacyParams)
 
   const validParams = []
-  if(legacyParams.embed) validParams.push("embed")
+  if (legacyParams.embed) validParams.push('embed')
   validParams.push(legacyParams.view)
-  if(legacyParams.highlightedState) {
-    validParams.push(legacyParams.highlightedState === "us" ? "none" : "id," + getStateFipsFromAbbr(legacyParams.highlightedState))
-  }else {
-    validParams.push("none")
+  if (legacyParams.highlightedState) {
+    validParams.push(
+      legacyParams.highlightedState === 'us'
+        ? 'none'
+        : 'id,' +
+            getStateFipsFromAbbr(legacyParams.highlightedState)
+    )
+  } else {
+    validParams.push('none')
   }
   validParams.push(legacyParams.region)
-  if(legacyParams.metric) {
+  if (legacyParams.metric) {
     validParams.push(legacyParams.metric)
-  }else {
-    validParams.push(legacyParams.yVar.split("_")[1])
-  }
-  if(legacyParams.xVar) {
-    validParams.push(computeSecondary(legacyParams.xVar, legacyParams.yVar))
   } else {
-    validParams.push("ses")
+    validParams.push(legacyParams.yVar.split('_')[1])
   }
-  if(legacyParams.demographic) {
+  if (legacyParams.xVar) {
+    validParams.push(
+      computeSecondary(legacyParams.xVar, legacyParams.yVar)
+    )
+  } else {
+    validParams.push('ses')
+  }
+  if (legacyParams.demographic) {
     validParams.push(legacyParams.demographic)
-  }else {
-    validParams.push(legacyParams.zVar.split("_")[0])
+  } else {
+    validParams.push(legacyParams.zVar.split('_')[0])
   }
-  if(legacyParams.zoom) {
+  if (legacyParams.zoom) {
     validParams.push(legacyParams.zoom)
     validParams.push(legacyParams.lat)
     validParams.push(legacyParams.lon)
-  }else {
+  } else {
     validParams.push(DEFAULT_VIEWPORT.zoom.toString())
     validParams.push(DEFAULT_VIEWPORT.latitude.toString())
     validParams.push(DEFAULT_VIEWPORT.longitude.toString())
   }
-  if(legacyParams.locations) validParams.push(getLocationsRoute(legacyParams.locations))
+  if (legacyParams.locations)
+    validParams.push(getLocationsRoute(legacyParams.locations))
 
   // console.log("#/" + validParams.join('/'))
 
   // return "#/map/none/counties/avg/ses/all/3.15/37.39/-97.57/"
-  return "#/" + validParams.join('/')
+  return '#/' + validParams.join('/')
 }
 
 const computeSecondary = (xVar, yVar) => {
   // check for post-underscore parts of xVar and yVar – if they don't match, take xVar's and add +secondary
-  const xAxis = xVar.split("_")[1]
-  const yAxis = yVar.split("_")[1]
+  const xAxis = xVar.split('_')[1]
+  const yAxis = yVar.split('_')[1]
 
-  return xAxis === yAxis ? "ses" : xAxis + "+secondary"
+  return xAxis === yAxis ? 'ses' : xAxis + '+secondary'
 }
 
 /**
@@ -422,21 +434,35 @@ export const getParamsFromPathname = (
 
   // check for embed
   const isEmbedRoute = routeSplit[0] === 'embed'
-  if(isEmbedRoute) {
+  if (isEmbedRoute) {
     routeVars = ['embed', ...DEFAULT_ROUTEVARS]
   }
 
   // checking for legacy routes
   // if a legacy route is found, rerun with the transformed route
-  if(routeSplit[isEmbedRoute ? 1 : 0] === 'map' && isValidRegion(routeSplit[isEmbedRoute ? 2 : 1])) {
+  if (
+    routeSplit[isEmbedRoute ? 1 : 0] === 'map' &&
+    isValidRegion(routeSplit[isEmbedRoute ? 2 : 1])
+  ) {
     // legacy map link – transform to new hash structure
-    routeVars = isEmbedRoute ? ['embed', ...LEGACY_MAP_ROUTEVARS] : LEGACY_MAP_ROUTEVARS
-    return getParamsFromPathname(transformLegacyPath(path, routeVars))
+    routeVars = isEmbedRoute
+      ? ['embed', ...LEGACY_MAP_ROUTEVARS]
+      : LEGACY_MAP_ROUTEVARS
+    return getParamsFromPathname(
+      transformLegacyPath(path, routeVars)
+    )
   }
-  if(routeSplit[isEmbedRoute ? 1 : 0] === 'chart' && allStateAbbrs.indexOf(routeSplit[isEmbedRoute ? 2 : 1]) > -1) {
+  if (
+    routeSplit[isEmbedRoute ? 1 : 0] === 'chart' &&
+    allStateAbbrs.indexOf(routeSplit[isEmbedRoute ? 2 : 1]) > -1
+  ) {
     // legacy chart link, transform
-    routeVars = isEmbedRoute ? ['embed', ...LEGACY_CHART_ROUTEVARS] : LEGACY_CHART_ROUTEVARS
-    return getParamsFromPathname(transformLegacyPath(path, routeVars))
+    routeVars = isEmbedRoute
+      ? ['embed', ...LEGACY_CHART_ROUTEVARS]
+      : LEGACY_CHART_ROUTEVARS
+    return getParamsFromPathname(
+      transformLegacyPath(path, routeVars)
+    )
   }
 
   return routeSplit.reduce(
@@ -467,7 +493,9 @@ export const getPathnameFromParams = (
   // check for embed
   const isEmbedRoute = !!params.embed
   // console.log("params isEmbedRoute:", isEmbedRoute)
-  routeVars = isEmbedRoute ? ['embed', ...DEFAULT_ROUTEVARS] : DEFAULT_ROUTEVARS
+  routeVars = isEmbedRoute
+    ? ['embed', ...DEFAULT_ROUTEVARS]
+    : DEFAULT_ROUTEVARS
 
   return (
     '/' +

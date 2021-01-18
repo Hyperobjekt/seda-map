@@ -148,6 +148,9 @@ export default function useAppContext() {
       region,
       metric,
       demographic,
+      filters,
+      filterResults: filteredData && filteredData.length,
+      totalResults: regionData && regionData.length,
       // pad x and y extents for scatterplot
       extents: scatterplotExtents,
       // midpoints for x / y

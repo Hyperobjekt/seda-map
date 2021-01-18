@@ -14,13 +14,12 @@ import {
 import { getLang } from '../app/selectors/lang'
 import SedaMapLegend from './SedaMapLegend'
 import {
-  useActiveOptions,
   useAppContext,
   useHovered,
   useMarkersVisibility
 } from '../app/hooks'
 import { REGION_TO_ID_LENGTH } from '../app/constants/regions'
-import { useFilters, getActiveFilterCount } from '../filters'
+import { getActiveFilterCount } from '../filters'
 import {
   useLocations,
   useAddLocation,
@@ -75,12 +74,12 @@ const useStyles = makeStyles(theme => ({
  */
 const SedaMap = props => {
   /** current options for the map */
-  const [metric, demographic] = useActiveOptions()
-  // currently active data filters
-  const filters = useFilters()
   const {
     data,
     region,
+    metric,
+    demographic,
+    filters,
     mapVars: [, yVar],
     colorExtent
   } = useAppContext()
@@ -185,7 +184,13 @@ const SedaMap = props => {
         />
         <SedaZoomControls />
       </div>
-      <SedaMapLegend className={classes.legend} />
+      <SedaMapLegend
+        className={classes.legend}
+        colorExtent={colorExtent}
+        region={region}
+        metric={metric}
+        demographic={demographic}
+      />
     </MapBase>
   )
 }

@@ -98,3 +98,10 @@ export const ID_LENGTH_TO_REGION = {
   7: 'districts',
   12: 'schools'
 }
+
+export const REGION_SIZE_FILTERS = {
+  states: [5, 10, 25, 50],
+  counties: [10, 100, 500, 1000],
+  districts: [10, 100, 1000, 5000],
+  schools: [100, 1000, 5000, 10000]
+}

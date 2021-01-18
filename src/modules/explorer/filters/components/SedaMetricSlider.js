@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 import useFilterStore, {
   getFilterValue
 } from '../../../filters/useFilterStore'
-import { useAppContext } from '../../app/hooks'
+import { useActiveOptions } from '../../app/hooks'
 import { DEFAULT_RANGES } from '../../app/constants/metrics'
 import shallow from 'zustand/shallow'
 import { PanelListItem } from '../../../../shared/components/Panels/PanelList'
@@ -10,6 +10,12 @@ import { DebouncedSlider as Slider } from '../../../../shared'
 import { getPrefixLang } from '../../app/selectors/lang'
 import { getFormatterForVarName } from '../../app/selectors'
 import useActiveFilters from '../hooks/useActiveFilters'
+
+const getDefaultValue = (region, metric) => {
+  const vals = DEFAULT_RANGES[region]
+  if (!vals || !vals[metric]) return [-1, 1]
+  return vals[metric]
+}
 
 const SedaMetricSlider = ({ metricId, ...props }) => {
   // grab filters array
@@ -20,12 +26,12 @@ const SedaMetricSlider = ({ metricId, ...props }) => {
   )
   // function to set (add or update) single filter
   const setFilter = useFilterStore(state => state.setFilter)
-  const { region, demographic } = useAppContext()
+  const [, demographic, region] = useActiveOptions()
   const varName = [demographic, metricId].join('_')
   const value = getFilterValue(filters, ['range', metricId])
-  const defaultValue = DEFAULT_RANGES[region][metricId]
-  const min = DEFAULT_RANGES[region][metricId][0]
-  const max = DEFAULT_RANGES[region][metricId][1]
+  const defaultValue = getDefaultValue(region, metricId)
+  const min = defaultValue[0]
+  const max = defaultValue[1]
   const step = (max - min) / 20
   const formatter = getFormatterForVarName(varName)
   const handleSliderChange = useCallback(

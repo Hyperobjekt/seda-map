@@ -70,12 +70,18 @@ const SedaScatterplot = () => {
   // pull required items from the app context
   const {
     region,
-    scatterplotVars: [xVar, yVar],
-    gapVars: [xGapVar, yGapVar],
     isVersus,
     gapMetrics,
-    hasGapChart
+    hasGapChart,
+    scatterplotData,
+    scatterplotVars,
+    gapVars,
+    gapExtents,
+    scatterplotExtents,
+    colorExtent
   } = useAppContext()
+  const [xVar, yVar] = scatterplotVars
+  const [xGapVar, yGapVar] = gapVars
   const [secondary, setSecondary] = useSecondary()
   const [setHovered, isEmbed, embedSecondary] = useUiStore(
     state => [
@@ -143,6 +149,11 @@ const SedaScatterplot = () => {
                 'scatterplot--versus': isVersus
               })}
               variant="map"
+              data={scatterplotData}
+              vars={scatterplotVars}
+              extents={scatterplotExtents}
+              colorExtent={colorExtent}
+              region={region}
               onHover={handleHover}
               onClick={handleClick}>
               <SedaScatterplotHeader
@@ -169,6 +180,11 @@ const SedaScatterplot = () => {
               className={clsx('scatterplot--gap', classes.chart)}
               gapChart
               variant="map"
+              vars={gapVars}
+              extents={gapExtents}
+              data={scatterplotData}
+              colorExtent={colorExtent}
+              region={region}
               axisChildren={
                 <SelectMenu
                   style={{
