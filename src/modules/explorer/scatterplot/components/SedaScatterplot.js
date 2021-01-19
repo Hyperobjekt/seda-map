@@ -38,6 +38,9 @@ const useStyles = makeStyles(theme => ({
     [theme.breakpoints.down('sm')]: {
       left: theme.spacing(1),
       right: theme.spacing(6)
+    },
+    '& .scatterplot-axis .MuiTypography-root.MuiTypography-body2': {
+      fontSize: theme.typography.pxToRem(14)
     }
   },
   // make space for toggle button
