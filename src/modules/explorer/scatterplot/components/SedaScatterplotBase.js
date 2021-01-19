@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
-import { makeStyles } from '@material-ui/core'
+import { withStyles } from '@material-ui/core'
 
 import ScatterplotBase, {
   ScatterplotAxis
@@ -22,7 +22,7 @@ import {
 } from '../../app/selectors'
 import HintIconButton from '../../../../shared/components/Buttons/HintIconButton'
 
-const useStyles = makeStyles(theme => ({
+const styles = theme => ({
   root: {
     position: 'relative'
   },
@@ -58,11 +58,11 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.grey[600],
     fontSize: theme.typography.pxToRem(12)
   }
-}))
+})
 
 function SedaScatterplotBase({
   className,
-  classes: overrides,
+  classes,
   variant,
   gapChart = false,
   axisChildren,
@@ -77,9 +77,6 @@ function SedaScatterplotBase({
   region,
   ...props
 }) {
-  // classnames for markers and axis
-  const classes = useStyles()
-
   // boolean indicating if data is loading
   const loading = useStaticData(state => state.isLoading)
 
@@ -91,14 +88,11 @@ function SedaScatterplotBase({
   const xLabelPrefix = gapChart ? 'LABEL_GAP' : 'LABEL'
   const xMetric = getMetricIdFromVarName(xVar)
   // hint metrics that do no have explanation elsewhere
-  const hasAxisHint = ['ses', 'seg', 'min'].indexOf(xMetric) > -1
+  const hasAxisHint =
+    ['ses', 'seg', 'min', 'frl'].indexOf(xMetric) > -1
 
   // memoize the scatterplot options
   const options = useMemo(() => {
-    // sort data by zVar, so large circles are rendered below small circles
-    // const sortedData = [...scatterplotData].sort((a, b) => {
-    //   return b[zVar] - a[zVar]
-    // })
     return getScatterplotOptions(variant, {
       data,
       xVar,
@@ -140,11 +134,7 @@ function SedaScatterplotBase({
       />
       {children}
       <SedaLocationMarkers
-        className={clsx(
-          'scatterplot__markers',
-          classes.markers,
-          overrides.markers
-        )}
+        className={clsx('scatterplot__markers', classes.markers)}
         vars={vars}
         extents={extents}
         region={region}
@@ -154,9 +144,7 @@ function SedaScatterplotBase({
         className={clsx(
           'scatterplot__axis--x',
           classes.axis,
-          classes.xAxis,
-          overrides.axis,
-          overrides.xAxis
+          classes.xAxis
         )}
         classes={{
           labelContainer: classes.endLabels,
@@ -175,9 +163,7 @@ function SedaScatterplotBase({
         className={clsx(
           'scatterplot__axis--y',
           classes.axis,
-          classes.yAxis,
-          overrides.axis,
-          overrides.yAxis
+          classes.yAxis
         )}
         classes={{
           labelContainer: classes.endLabels
@@ -193,7 +179,6 @@ function SedaScatterplotBase({
 }
 
 SedaScatterplotBase.defaultProps = {
-  classes: {},
   data: [],
   vars: [],
   extents: [],
@@ -219,4 +204,4 @@ SedaScatterplotBase.propTypes = {
   error: PropTypes.string
 }
 
-export default SedaScatterplotBase
+export default withStyles(styles)(SedaScatterplotBase)
