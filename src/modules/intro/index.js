@@ -1,10 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useMetric } from '../explorer/app/hooks'
+import { supportsLocalStorage } from '../explorer/routing/hooks/useRouting'
 import { animated, useSpring } from 'react-spring'
 import shallow from 'zustand/shallow'
 import { useStaticData } from '../data'
 
-const hideIntro = window.location.hash.length > 2
+const hideIntro = window.location.hash.length > 2 || (supportsLocalStorage && localStorage.getItem('demographic'))
+
 
 export const IntroScreen = () => {
     const [, setMetric] = useMetric()
