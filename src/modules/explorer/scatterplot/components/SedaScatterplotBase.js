@@ -22,6 +22,20 @@ import {
 } from '../../app/selectors'
 import HintIconButton from '../../../../shared/components/Buttons/HintIconButton'
 
+/** These define the minimum / maximum extents, so that the midpoint is always kept in view */
+const MIN_EXTENTS = {
+  avg: [-0.5, 0.5],
+  grd: [0.5, 1.5],
+  coh: [-0.1, 0.1],
+  ses: [-0.5, 0.5],
+  avg_gap: [-0.5, 0.5],
+  grd_gap: [0.5, 1.5],
+  coh_gap: [-0.1, 0.1],
+  ses_gap: [-0.5, 0.5],
+  seg_gap: [-0.5, 0.5],
+  min_gap: [-0.1, 0.1]
+}
+
 const useStyles = makeStyles(theme => ({
   root: {
     position: 'relative'
@@ -92,6 +106,8 @@ function SedaScatterplotBase({
   const xMetric = getMetricIdFromVarName(xVar)
   // hint metrics that do no have explanation elsewhere
   const hasAxisHint = ['ses', 'seg', 'min'].indexOf(xMetric) > -1
+
+  console.log('extents', extents)
 
   // memoize the scatterplot options
   const options = useMemo(() => {
