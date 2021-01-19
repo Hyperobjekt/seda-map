@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => ({
       textOverflow: 'ellipsis',
       textAlign: 'center',
       fontSize: 12,
-      color: theme.palette.grey[500]
+      color: theme.palette.text.secondary
     }
   },
   xAxis: {
