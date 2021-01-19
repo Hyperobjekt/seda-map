@@ -42,7 +42,10 @@ export const styles = theme => ({
   },
   textPrimary: {
     fontWeight: 'bold',
-    fontSize: theme.typography.pxToRem(12)
+    fontSize: theme.typography.pxToRem(12),
+    [theme.breakpoints.up('lg')]: {
+      fontSize: theme.typography.pxToRem(14)
+    }
   }
 })
 

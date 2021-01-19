@@ -15,7 +15,10 @@ import clsx from 'clsx'
 
 const styles = theme => ({
   root: {
-    padding: theme.spacing(0.5, 2)
+    padding: theme.spacing(0.5, 2),
+    [theme.breakpoints.up('lg')]: {
+      padding: theme.spacing(1, 2)
+    }
   },
   high: {
     '& $icon': {
@@ -43,7 +46,10 @@ const styles = theme => ({
     marginRight: 6 // align icon with section below
   },
   text: {
-    fontSize: theme.typography.pxToRem(12)
+    fontSize: theme.typography.pxToRem(12),
+    [theme.breakpoints.up('lg')]: {
+      fontSize: theme.typography.pxToRem(14)
+    }
   }
 })
 

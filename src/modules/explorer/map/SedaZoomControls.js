@@ -22,7 +22,7 @@ const styles = theme => ({
     display: 'flex',
     flexDirection: 'column',
     background: '#fff',
-    boxShadow: `var(--shadow10)`
+    boxShadow: `var(--shadow1)`
   },
   button: {
     color: theme.palette.text.primary,
@@ -52,7 +52,10 @@ const SedaZoomControls = ({ classes, className, ...props }) => {
 
   return (
     <div className={clsx(classes.root, className)} {...props}>
-      <Tooltip placement="left" arrow title="Zoom to contiguous U.S.">
+      <Tooltip
+        placement="left"
+        arrow
+        title="Zoom to contiguous U.S.">
         <IconButton
           className={classes.button}
           onClick={handleZoomToUS}>
@@ -73,7 +76,10 @@ const SedaZoomControls = ({ classes, className, ...props }) => {
           <HawaiiIcon />
         </IconButton>
       </Tooltip>
-      <Tooltip placement="left" arrow title="Zoom to Puerto Rico">
+      <Tooltip
+        placement="left"
+        arrow
+        title="Zoom to Puerto Rico">
         <IconButton
           className={classes.button}
           onClick={handleZoomToPuertoRico}>

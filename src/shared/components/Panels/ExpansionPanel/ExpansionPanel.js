@@ -1,17 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { makeStyles } from '@material-ui/core/styles'
+import { withStyles } from '@material-ui/core/styles'
 import { default as MuiExpansionPanel } from '@material-ui/core/ExpansionPanel'
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
 import Typography from '@material-ui/core/Typography'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import clsx from 'clsx'
 import { genId } from '../../../../shared/utils'
 
-const useStyles = makeStyles(theme => ({
+const styles = theme => ({
   heading: {
-    fontSize: theme.typography.pxToRem(15),
+    fontSize: theme.typography.pxToRem(14),
     fontWeight: theme.typography.fontWeightRegular,
     lineHeight: 1
   },
@@ -90,48 +89,46 @@ const useStyles = makeStyles(theme => ({
       zIndex: 0
     }
   }
-}))
+})
 
 /**
  * Panel with expand / collapse functionality.
  * Props passed to React Material ExpansionPanel.
  */
-export default function ExpansionPanel({
+const ExpansionPanel = ({
   id,
   children,
   title,
   startIcon,
   expandIcon,
   defaultExpanded,
-  classes: overrides,
+  classes,
   ...props
-}) {
-  const classes = useStyles()
+}) => {
   return (
     <MuiExpansionPanel
       square
       classes={{
-        root: clsx(classes.root, overrides.root),
-        expanded: clsx(classes.expanded, overrides.expanded)
+        root: classes.root,
+        expanded: classes.expanded
       }}
       {...props}>
       <ExpansionPanelSummary
         classes={{
-          root: clsx(classes.summary, overrides.summary),
-          content: clsx(classes.content, overrides.content)
+          root: classes.summary,
+          content: classes.content
         }}
         expandIcon={expandIcon}
         aria-controls={`${id}-content`}
         id={`${id}-header`}>
         {startIcon}
-        <Typography
-          className={clsx(classes.heading, overrides.heading)}>
+        <Typography className={classes.heading}>
           {title}
         </Typography>
       </ExpansionPanelSummary>
       <ExpansionPanelDetails
         classes={{
-          root: clsx(classes.details, overrides.details)
+          root: classes.details
         }}>
         {children}
       </ExpansionPanelDetails>
@@ -149,3 +146,5 @@ ExpansionPanel.defaultProps = {
   expandIcon: <ExpandMoreIcon />,
   classes: {}
 }
+
+export default withStyles(styles)(ExpansionPanel)
