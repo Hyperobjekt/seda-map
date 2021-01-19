@@ -115,7 +115,7 @@ function SedaScatterplotBase({
   const adjustedExtents = useMemo(
     () =>
       extents.map((extent, i) => adjustExtent(vars[i], extent)),
-    [extents]
+    [extents, vars]
   )
   console.log('extents', extents, adjustedExtents)
 
