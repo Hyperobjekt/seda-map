@@ -1,18 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
-import { makeStyles } from '@material-ui/core'
+import { withStyles } from '@material-ui/core'
 
-const useStyles = makeStyles(theme => ({
+const styles = theme => ({
   root: {
     position: 'relative',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    flexDirection: props =>
-      props.vertical ? 'column-reverse' : 'row',
-    width: props => (props.vertical ? 0 : '100%'),
-    height: props => (props.vertical ? '100%' : 'auto')
+    flexDirection: 'row',
+    width: '100%',
+    height: 'auto'
   },
   labelContainer: {
     display: 'flex',
@@ -23,20 +22,23 @@ const useStyles = makeStyles(theme => ({
   start: {},
   end: {},
   vertical: {
+    width: 0,
+    height: '100%',
     alignItems: 'flex-start',
-    '& .book-end__contentContainer': {
+    flexDirection: 'column-reverse',
+    '& $contentContainer': {
       transform: 'translateX(-50%) rotate(-90deg)'
     },
-    '& .book-end__start': {
+    '& $start': {
       transformOrigin: 'center left',
       transform: 'rotate(-90deg)'
     },
-    '& .book-end__end': {
+    '& $end': {
       transformOrigin: 'center right',
       transform: 'translateX(-100%) rotate(-90deg)'
     }
   }
-}))
+})
 
 /**
  * Shows a primary label at the given and optional start / end labels
@@ -47,36 +49,28 @@ const BookEnds = ({
   vertical,
   children,
   className,
-  classes: overrides = {},
+  classes,
   ...props
 }) => {
-  const classes = useStyles({ vertical })
   return (
     <div
-      className={clsx(
-        'book-ends',
-        className,
-        classes.root,
-        overrides.root,
-        { [classes.vertical]: vertical }
-      )}
+      className={clsx('book-ends', className, classes.root, {
+        [classes.vertical]: vertical
+      })}
       {...props}>
       <div
         className={clsx(
           'book-end__labelContainer',
           'book-end__start',
           classes.labelContainer,
-          classes.start,
-          overrides.labelContainer,
-          overrides.start
+          classes.start
         )}>
         {startLabel}
       </div>
       <div
         className={clsx(
           'book-end__contentContainer',
-          classes.contentContainer,
-          overrides.contentContainer
+          classes.contentContainer
         )}>
         {children}
       </div>
@@ -85,9 +79,7 @@ const BookEnds = ({
           'book-end__labelContainer',
           'book-end__end',
           classes.labelContainer,
-          classes.end,
-          overrides.labelContainer,
-          overrides.end
+          classes.end
         )}>
         {endLabel}
       </div>
@@ -103,4 +95,4 @@ BookEnds.propTypes = {
   classes: PropTypes.object
 }
 
-export default BookEnds
+export default withStyles(styles)(BookEnds)

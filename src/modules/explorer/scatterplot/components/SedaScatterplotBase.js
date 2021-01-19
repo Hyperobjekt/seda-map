@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
-import { makeStyles } from '@material-ui/core'
+import { withStyles } from '@material-ui/core'
 
 import ScatterplotBase, {
   ScatterplotAxis
@@ -18,25 +18,32 @@ import useStaticData from '../../../data/useStaticData'
 import { getScatterplotOptions } from '../style'
 import {
   getDemographicIdFromVarName,
-  getMetricIdFromVarName
+  getMetricIdFromVarName,
+  isGapVarName
 } from '../../app/selectors'
 import HintIconButton from '../../../../shared/components/Buttons/HintIconButton'
 
 /** These define the minimum / maximum extents, so that the midpoint is always kept in view */
 const MIN_EXTENTS = {
-  avg: [-0.5, 0.5],
   grd: [0.5, 1.5],
-  coh: [-0.1, 0.1],
-  ses: [-0.5, 0.5],
-  avg_gap: [-0.5, 0.5],
+  coh: [-0.05, 0.05],
   grd_gap: [0.5, 1.5],
-  coh_gap: [-0.1, 0.1],
-  ses_gap: [-0.5, 0.5],
-  seg_gap: [-0.5, 0.5],
+  coh_gap: [-0.05, 0.05],
   min_gap: [-0.1, 0.1]
 }
 
-const useStyles = makeStyles(theme => ({
+const adjustExtent = (varName, extent) => {
+  const isGap = isGapVarName(varName)
+  const metric = getMetricIdFromVarName(varName)
+  const key = isGap ? metric + '_gap' : metric
+  const minExtent = MIN_EXTENTS[key] || [-0.5, 0.5]
+  return [
+    Math.min(minExtent[0], extent[0]),
+    Math.max(minExtent[1], extent[1])
+  ]
+}
+
+const styles = theme => ({
   root: {
     position: 'relative'
   },
@@ -72,11 +79,11 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.grey[600],
     fontSize: theme.typography.pxToRem(12)
   }
-}))
+})
 
 function SedaScatterplotBase({
   className,
-  classes: overrides,
+  classes,
   variant,
   gapChart = false,
   axisChildren,
@@ -91,9 +98,6 @@ function SedaScatterplotBase({
   region,
   ...props
 }) {
-  // classnames for markers and axis
-  const classes = useStyles()
-
   // boolean indicating if data is loading
   const loading = useStaticData(state => state.isLoading)
 
@@ -105,22 +109,24 @@ function SedaScatterplotBase({
   const xLabelPrefix = gapChart ? 'LABEL_GAP' : 'LABEL'
   const xMetric = getMetricIdFromVarName(xVar)
   // hint metrics that do no have explanation elsewhere
-  const hasAxisHint = ['ses', 'seg', 'min'].indexOf(xMetric) > -1
+  const hasAxisHint =
+    ['ses', 'seg', 'min', 'frl'].indexOf(xMetric) > -1
 
-  console.log('extents', extents)
+  const adjustedExtents = useMemo(
+    () =>
+      extents.map((extent, i) => adjustExtent(vars[i], extent)),
+    [extents]
+  )
+  console.log('extents', extents, adjustedExtents)
 
   // memoize the scatterplot options
   const options = useMemo(() => {
-    // sort data by zVar, so large circles are rendered below small circles
-    // const sortedData = [...scatterplotData].sort((a, b) => {
-    //   return b[zVar] - a[zVar]
-    // })
     return getScatterplotOptions(variant, {
       data,
       xVar,
       yVar,
       zVar,
-      extents,
+      extents: adjustedExtents,
       colorExtent,
       region
     })
@@ -130,7 +136,7 @@ function SedaScatterplotBase({
     xVar,
     yVar,
     zVar,
-    extents,
+    adjustedExtents,
     colorExtent,
     region
   ])
@@ -156,13 +162,9 @@ function SedaScatterplotBase({
       />
       {children}
       <SedaLocationMarkers
-        className={clsx(
-          'scatterplot__markers',
-          classes.markers,
-          overrides.markers
-        )}
+        className={clsx('scatterplot__markers', classes.markers)}
         vars={vars}
-        extents={extents}
+        extents={adjustedExtents}
         region={region}
         gapChart={gapChart}
       />
@@ -170,9 +172,7 @@ function SedaScatterplotBase({
         className={clsx(
           'scatterplot__axis--x',
           classes.axis,
-          classes.xAxis,
-          overrides.axis,
-          overrides.xAxis
+          classes.xAxis
         )}
         classes={{
           labelContainer: classes.endLabels,
@@ -191,9 +191,7 @@ function SedaScatterplotBase({
         className={clsx(
           'scatterplot__axis--y',
           classes.axis,
-          classes.yAxis,
-          overrides.axis,
-          overrides.yAxis
+          classes.yAxis
         )}
         classes={{
           labelContainer: classes.endLabels
@@ -209,7 +207,6 @@ function SedaScatterplotBase({
 }
 
 SedaScatterplotBase.defaultProps = {
-  classes: {},
   data: [],
   vars: [],
   extents: [],
@@ -223,7 +220,7 @@ SedaScatterplotBase.propTypes = {
   yVar: PropTypes.string,
   zVar: PropTypes.string,
   region: PropTypes.string,
-  data: PropTypes.object,
+  data: PropTypes.array,
   selected: PropTypes.array,
   hovered: PropTypes.object,
   variant: PropTypes.string,
@@ -235,4 +232,4 @@ SedaScatterplotBase.propTypes = {
   error: PropTypes.string
 }
 
-export default SedaScatterplotBase
+export default withStyles(styles)(SedaScatterplotBase)
