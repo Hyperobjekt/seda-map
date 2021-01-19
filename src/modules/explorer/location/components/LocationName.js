@@ -27,7 +27,9 @@ const useStyles = makeStyles(theme => ({
   },
   markerInline: {
     marginLeft: theme.spacing(1),
-    marginTop: 2
+    marginTop: 0,
+    minWidth: 16,
+    '& .marker__label': { fontSize: 10 }
   },
   markerLeft: {
     marginRight: 10

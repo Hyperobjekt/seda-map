@@ -23,7 +23,10 @@ const styles = theme => ({
     paddingBottom: theme.spacing(1)
   },
   primary: {
-    fontSize: theme.typography.pxToRem(12)
+    fontSize: theme.typography.pxToRem(12),
+    [theme.breakpoints.up('lg')]: {
+      fontSize: theme.typography.pxToRem(14)
+    }
   },
   bar: {
     position: 'absolute',
@@ -57,7 +60,12 @@ const SedaDemographicListItem = ({
   const metricId = getMetricIdFromVarName(varName)
   const demId = getDemographicIdFromVarName(varName)
   const isGap = isGapVarName(varName)
-  const title = getPrefixLang(demId, demId === 'all' ? 'LABEL_LOCATION_STUDENTS' : 'LABEL_STUDENTS')
+  const title = getPrefixLang(
+    demId,
+    demId === 'all'
+      ? 'LABEL_LOCATION_STUDENTS'
+      : 'LABEL_STUDENTS'
+  )
 
   // learning rates must offset from 1 for non-gap value
   const barValue =

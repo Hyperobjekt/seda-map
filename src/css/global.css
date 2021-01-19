@@ -50,7 +50,7 @@ hr {
 
 .mapboxgl-ctrl.mapboxgl-ctrl-group:not(:empty) {
   border-radius: 0;
-  box-shadow: var(--shadow10);
+  box-shadow: var(--shadow1);
 }
 
 .mapboxgl-ctrl-group button:focus {

@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
       overflow: 'hidden',
       textOverflow: 'ellipsis',
       textAlign: 'center',
-      fontSize: 12,
+      fontSize: theme.typography.pxToRem(12),
       color: theme.palette.text.secondary
     }
   },
