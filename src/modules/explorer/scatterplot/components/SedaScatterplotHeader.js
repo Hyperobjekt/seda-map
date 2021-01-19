@@ -22,13 +22,14 @@ const styles = theme => ({
   root: {
     position: 'absolute',
     left: theme.spacing(0),
-    top: theme.spacing(-6),
+    top: theme.spacing(-8),
+    minHeight: theme.spacing(9),
     right: 0,
     textAlign: 'left',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-start',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     [theme.breakpoints.down('sm')]: {
       marginTop: -56,
       position: 'static',
@@ -40,12 +41,19 @@ const styles = theme => ({
   title: {
     fontSize: theme.typography.pxToRem(12),
     lineHeight: 1.25,
-    whiteSpace: 'normal'
+    whiteSpace: 'normal',
+    [theme.breakpoints.up('lg')]: {
+      fontSize: theme.typography.pxToRem(13)
+    }
   },
   footnote: {
-    marginTop: theme.spacing(0.5),
+    fontSize: theme.typography.pxToRem(12),
+    marginTop: 2,
     whiteSpace: 'normal',
-    maxWidth: '62em'
+    maxWidth: '62em',
+    [theme.breakpoints.up('lg')]: {
+      fontSize: theme.typography.pxToRem(13)
+    }
   }
 })
 
@@ -58,7 +66,10 @@ const getScatterplotContext = (xVar, yVar, region, type) => {
   const dems = getGapDemographics(demographic)
   return {
     opportunityType: getPrefixLang(metric, 'LABEL_CONCEPT'),
-    demographic: getPrefixLang(demographic, 'LABEL_STUDENTS'),
+    demographic:
+      demographic === 'all'
+        ? ' '
+        : getPrefixLang(demographic, 'LABEL'),
     dem1: (isGap || isVs) && getPrefixLang(dems[0], 'LABEL'),
     dem2: (isGap || isVs) && getPrefixLang(dems[1], 'LABEL'),
     metric: getPrefixLang(metric, 'LABEL'),
@@ -95,7 +106,12 @@ const SedaScatterplotHeader = ({
 }) => {
   const theme = useTheme()
   const isSplit = useSplitViewActive()
-  const compact = useMediaQuery(theme.breakpoints.down('sm')) || (isSplit && theme.breakpoints.down('lg'))
+  const isBelowLarge = useMediaQuery(
+    theme.breakpoints.down('lg')
+  )
+  const compact =
+    useMediaQuery(theme.breakpoints.down('sm')) ||
+    (isSplit && isBelowLarge)
   const type = getScatterplotType(xVar, yVar)
   const context = getScatterplotContext(xVar, yVar, region, type)
   const title = getScatterplotLang(
