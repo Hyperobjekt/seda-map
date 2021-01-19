@@ -117,7 +117,6 @@ function SedaScatterplotBase({
       extents.map((extent, i) => adjustExtent(vars[i], extent)),
     [extents, vars]
   )
-  console.log('extents', extents, adjustedExtents)
 
   // memoize the scatterplot options
   const options = useMemo(() => {
