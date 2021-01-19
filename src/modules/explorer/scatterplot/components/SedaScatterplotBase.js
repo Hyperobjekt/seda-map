@@ -18,9 +18,30 @@ import useStaticData from '../../../data/useStaticData'
 import { getScatterplotOptions } from '../style'
 import {
   getDemographicIdFromVarName,
-  getMetricIdFromVarName
+  getMetricIdFromVarName,
+  isGapVarName
 } from '../../app/selectors'
 import HintIconButton from '../../../../shared/components/Buttons/HintIconButton'
+
+/** These define the minimum / maximum extents, so that the midpoint is always kept in view */
+const MIN_EXTENTS = {
+  grd: [0.5, 1.5],
+  coh: [-0.05, 0.05],
+  grd_gap: [0.5, 1.5],
+  coh_gap: [-0.05, 0.05],
+  min_gap: [-0.1, 0.1]
+}
+
+const adjustExtent = (varName, extent) => {
+  const isGap = isGapVarName(varName)
+  const metric = getMetricIdFromVarName(varName)
+  const key = isGap ? metric + '_gap' : metric
+  const minExtent = MIN_EXTENTS[key] || [-0.5, 0.5]
+  return [
+    Math.min(minExtent[0], extent[0]),
+    Math.max(minExtent[1], extent[1])
+  ]
+}
 
 const styles = theme => ({
   root: {
@@ -91,6 +112,12 @@ function SedaScatterplotBase({
   const hasAxisHint =
     ['ses', 'seg', 'min', 'frl'].indexOf(xMetric) > -1
 
+  const adjustedExtents = useMemo(
+    () =>
+      extents.map((extent, i) => adjustExtent(vars[i], extent)),
+    [extents, vars]
+  )
+
   // memoize the scatterplot options
   const options = useMemo(() => {
     return getScatterplotOptions(variant, {
@@ -98,7 +125,7 @@ function SedaScatterplotBase({
       xVar,
       yVar,
       zVar,
-      extents,
+      extents: adjustedExtents,
       colorExtent,
       region
     })
@@ -108,7 +135,7 @@ function SedaScatterplotBase({
     xVar,
     yVar,
     zVar,
-    extents,
+    adjustedExtents,
     colorExtent,
     region
   ])
@@ -136,7 +163,7 @@ function SedaScatterplotBase({
       <SedaLocationMarkers
         className={clsx('scatterplot__markers', classes.markers)}
         vars={vars}
-        extents={extents}
+        extents={adjustedExtents}
         region={region}
         gapChart={gapChart}
       />
@@ -192,7 +219,7 @@ SedaScatterplotBase.propTypes = {
   yVar: PropTypes.string,
   zVar: PropTypes.string,
   region: PropTypes.string,
-  data: PropTypes.object,
+  data: PropTypes.array,
   selected: PropTypes.array,
   hovered: PropTypes.object,
   variant: PropTypes.string,
