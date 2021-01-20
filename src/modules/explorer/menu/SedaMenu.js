@@ -102,7 +102,7 @@ const MenuLinks = ({ links, classes = {}, ...props }) => (
       links.map((item, i) => (
         <Link
           key={i}
-          className={classes.item} 
+          className={classes.item}
           aria-label={item.label}
           href={item.url}>
           {item.label}
@@ -122,7 +122,7 @@ const MenuFooter = ({
       socials.map((item, i) => (
         <Button
           key={i}
-          className={classes.item} 
+          className={classes.item}
           aria-label={item.label}
           target="_blank"
           href={item.url}>
