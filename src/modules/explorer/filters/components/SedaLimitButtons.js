@@ -55,7 +55,6 @@ const SedaLimitButtons = ({ classes, ...props }) => {
   return (
     <PanelListItem
       title={getPrefixLang('size', 'FILTER_LABEL')}
-      desc={getPrefixLang('size_desc', 'FILTER_LABEL')}
       titleProps={{ id: 'limit-slider' }}
       {...props}>
       <ButtonGroup

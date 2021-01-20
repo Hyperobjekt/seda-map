@@ -498,6 +498,7 @@ const LANG = {
   "LOCATIONS_SEARCH": "Find a place",
   "LOCATIONS_SELECTED": "Selected Places",
   "LOGO_ALT_TEXT": "Educational Opportunity Project",
+  "MENU_ABOUT": "About",
   "MENU_DATA": "Get The data",
   "MENU_DISCOVERIES": "Discoveries",
   "MENU_FACEBOOK": "Educational Opportunity Project on Facebook",
