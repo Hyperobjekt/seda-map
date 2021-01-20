@@ -27,6 +27,7 @@ import HintIconButton from '../../../../shared/components/Buttons/HintIconButton
 const MIN_EXTENTS = {
   grd: [0.9, 1.1],
   coh: [-0.05, 0.05],
+  frl: [0, 1],
   grd_gap: [-0.1, 0.1],
   coh_gap: [-0.05, 0.05],
   min_gap: [-0.1, 0.1]
