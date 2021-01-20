@@ -95,7 +95,7 @@ export const MENU = {
     },
     {
       id: 'whatsnew',
-      url: '/whats-new-in-4',
+      url: '/whats-new',
       label: LANG['MENU_WHATS_NEW']
     }
   ],
