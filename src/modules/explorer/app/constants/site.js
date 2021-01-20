@@ -92,11 +92,6 @@ export const MENU = {
       id: 'data',
       url: '/get-the-data',
       label: LANG['MENU_DATA']
-    },
-    {
-      id: 'whatsnew',
-      url: '/whats-new',
-      label: LANG['MENU_WHATS_NEW']
     }
   ],
   socialItems: [

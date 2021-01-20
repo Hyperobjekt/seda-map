@@ -61,7 +61,7 @@ const useStyles = makeStyles(theme => ({
   linkBox: {
     padding: theme.spacing(15.5, 3, 3, 6)
   },
-  linkItem:{
+  linkItem: {
     display: 'block',
     marginBottom: theme.spacing(4),
     fontFamily: theme.typography.button.fontFamily,
@@ -72,9 +72,6 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.text.primary,
     '&:hover': {
       color: theme.palette.text.primary
-    },
-    '&.whatsnew':{
-      color: theme.palette.primary.main
     }
   },
   footer: {
@@ -105,7 +102,7 @@ const MenuLinks = ({ links, classes = {}, ...props }) => (
       links.map((item, i) => (
         <Link
           key={i}
-          className={`${classes.item} ${item.id}`} 
+          className={classes.item} 
           aria-label={item.label}
           href={item.url}>
           {item.label}
