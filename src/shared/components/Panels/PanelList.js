@@ -21,7 +21,6 @@ const listItemStyles = theme => ({
 export const PanelListItem = withStyles(listItemStyles)(
   ({
     title,
-    desc,
     titleProps,
     classes,
     className,
@@ -42,7 +41,6 @@ export const PanelListItem = withStyles(listItemStyles)(
               )
             }}
             primary={title}
-            secondary={desc}
           />
         )}
         {children}
