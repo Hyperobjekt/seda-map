@@ -160,7 +160,10 @@ DivergingStatValue.propTypes = {
   /** boolean indicating if it should render dark background variant */
   dark: PropTypes.bool,
   /** margin of error for the value */
-  marginOfError: PropTypes.number,
+  marginOfError: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string
+  ]),
   /** mid point for this stat */
   mid: PropTypes.number,
   /** boolean indicating if the color should be inverted */

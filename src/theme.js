@@ -67,13 +67,13 @@ const theme = createMuiTheme({
       letterSpacing: '0.066em'
     },
     body1: {
-      fontSize: '1em'
+      fontSize: '0.875rem'
     },
     body2: {
-      fontSize: '0.875em'
+      fontSize: '0.75rem'
     },
     caption: {
-      fontSize: 12
+      fontSize: '0.75rem'
     }
   },
   shape: {
@@ -141,16 +141,17 @@ const theme = createMuiTheme({
     },
     MuiListSubheader: {
       root: {
-        backgroundColor: "#fff",
-        background: "#fff",
-        textTransform: "uppercase",
+        backgroundColor: '#fff',
+        background: '#fff',
+        textTransform: 'uppercase',
         letterSpacing: 1,
-        fontSize: "0.8rem",
-        fontWeight: 500
+        fontSize: '0.875rem',
+        fontWeight: 500,
+        fontFamily: condensedFontFamily
       },
       sticky: {
-        background: "#fff",
-        backgroundColor: "#fff",
+        background: '#fff',
+        backgroundColor: '#fff'
       }
     }
   },

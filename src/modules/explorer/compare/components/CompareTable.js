@@ -37,7 +37,7 @@ const styles = theme => ({
 
 const TableHeaderMetric = withStyles(theme => ({
   root: {
-    minWidth: 124,
+    minWidth: theme.spacing(18),
     textAlign: 'right'
   },
   sorted: {},
@@ -47,9 +47,11 @@ const TableHeaderMetric = withStyles(theme => ({
     fontWeight: 'bold'
   },
   subtitle: {
-    fontSize: theme.typography.pxToRem(10),
+    fontSize: theme.typography.pxToRem(12),
     color: theme.palette.text.secondary,
-    lineHeight: 1
+    display: 'block',
+    marginTop: 2,
+    lineHeight: 1.43
   }
 }))(({ column, classes, children }) => {
   return (

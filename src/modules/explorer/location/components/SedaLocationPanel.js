@@ -27,7 +27,11 @@ import {
 import SedaLocationFlags from './SedaLocationFlags'
 
 const styles = theme => ({
-  root: {},
+  list: {
+    '& .MuiListSubheader-root': {
+      paddingLeft: theme.spacing(3)
+    }
+  },
   header: {
     minHeight: theme.spacing(8)
   },
@@ -80,7 +84,7 @@ const SedaLocationPanel = ({ classes, ...props }) => {
       </SidePanelHeader>
       <SidePanelBody style={{ overflowY: 'scroll' }}>
         {data && (
-          <List disablePadding>
+          <List className={classes.list} disablePadding>
             {region === 'schools' && (
               <SedaLocationFlags locationId={data.id} />
             )}

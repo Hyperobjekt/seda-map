@@ -6,13 +6,17 @@ import { useCurrentVars } from '../../app/hooks'
 import { SedaScatterplotPreview } from '../../scatterplot'
 import useCondensedPanel from '../hooks/useCondensedPanel'
 import usePanelChartVisible from '../hooks/usePanelChartVisible'
-import { getDemographicLabel, getMetricLabel, isVersusFromVarNames } from '../../app/selectors'
+import {
+  getDemographicLabel,
+  getMetricLabel,
+  isVersusFromVarNames
+} from '../../app/selectors'
 import { getLang } from '../../app/selectors/lang'
 
 const useStyles = makeStyles(theme => ({
   root: {
     boxShadow: props =>
-      props.detached ? theme.shadows[1] : 'none',
+      props.detached ? `var(--shadow1)` : 'none',
     overflow: 'hidden',
     borderRadius: props =>
       props.detached ? theme.shape.borderRadius : 0,
@@ -30,7 +34,7 @@ const useStyles = makeStyles(theme => ({
   },
   details: { padding: 0 },
   heading: {
-    fontSize: theme.typography.pxToRem(12),
+    fontSize: theme.typography.pxToRem(14),
     textTransform: 'capitalize'
   },
   summary: {
@@ -47,7 +51,9 @@ const useStyles = makeStyles(theme => ({
  */
 const getPreviewChartTitle = (xVar, yVar) => {
   const isVersus = isVersusFromVarNames(xVar, yVar)
-  const langKey = isVersus ? 'LABEL_PREVIEW_CHART_GAP' : 'LABEL_PREVIEW_CHART'
+  const langKey = isVersus
+    ? 'LABEL_PREVIEW_CHART_GAP'
+    : 'LABEL_PREVIEW_CHART'
   const langContext = {
     opportunityType: getMetricLabel(yVar, 'LABEL_CONCEPT'),
     secondary: getMetricLabel(xVar),

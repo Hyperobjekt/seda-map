@@ -25,9 +25,10 @@ import HintIconButton from '../../../../shared/components/Buttons/HintIconButton
 
 /** These define the minimum / maximum extents, so that the midpoint is always kept in view */
 const MIN_EXTENTS = {
-  grd: [0.5, 1.5],
+  grd: [0.9, 1.1],
   coh: [-0.05, 0.05],
-  grd_gap: [0.5, 1.5],
+  frl: [0, 1],
+  grd_gap: [-0.1, 0.1],
   coh_gap: [-0.05, 0.05],
   min_gap: [-0.1, 0.1]
 }
