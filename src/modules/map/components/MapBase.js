@@ -20,6 +20,9 @@ const isMapEvent = event => {
     event?.path &&
     event.path.length > 0 &&
     event.path[0].classList.contains('overlays')
+  ) || (
+    event?.target && 
+    event.target.classList.contains('overlays')
   )
 }
 
