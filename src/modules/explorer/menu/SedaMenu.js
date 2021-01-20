@@ -122,7 +122,7 @@ const MenuFooter = ({
       socials.map((item, i) => (
         <Button
           key={i}
-          className={classes.item}
+          className={classes.item} 
           aria-label={item.label}
           target="_blank"
           href={item.url}>
