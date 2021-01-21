@@ -63,7 +63,7 @@ const getUncheckedFlags = filters => {
   )
   const uncheckedNonExclusive = filters
     .filter(
-      f => f[0] === 'eq' && f[2] === 0 && !isExclusive(f[1])
+      f => f[0] === 'neq' && f[2] === 1 && !isExclusive(f[1])
     )
     .map(f => f[1])
   return [...uncheckedNonExclusive, ...uncheckedExclusive]
@@ -109,8 +109,8 @@ const SedaFilterFlags = ({ classes, className, ...props }) => {
         : setFilter(['eq', key, 1])
     // non-excluse filters are removed when checked, or set to 0 when checked
     return isOn
-      ? setFilter(['eq', key, 0])
-      : removeFilter(['eq', key], true)
+      ? setFilter(['neq', key, 1])
+      : removeFilter(['neq', key], true)
   }
 
   return (

@@ -47,6 +47,7 @@ const SedaMetricSlider = ({ metricId, ...props }) => {
   return (
     <PanelListItem
       title={getPrefixLang(metricId, 'FILTER_LABEL')}
+      desc={getPrefixLang(`${metricId}_desc`, 'FILTER_LABEL')}
       titleProps={{ id: metricId + '-slider' }}
       {...props}>
       <Slider

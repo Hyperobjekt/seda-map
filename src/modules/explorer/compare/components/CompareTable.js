@@ -3,6 +3,8 @@ import Table from './Table'
 import {
   TableSortLabel,
   Typography,
+  useMediaQuery,
+  useTheme,
   withStyles
 } from '@material-ui/core'
 import { SedaLocationName } from '../../location'
@@ -110,6 +112,8 @@ const CompareTable = ({ classes, ...props }) => {
     ],
     shallow
   )
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const locations = useCompareLocationsData()
   // current region in the explorer
   const [region] = useRegion()
@@ -178,6 +182,7 @@ const CompareTable = ({ classes, ...props }) => {
       selected={selectedLocation}
       onSort={handleSortChange}
       onRowClick={handleRowClick}
+      stickyHeader={isMobile}
     />
   ) : null
 }

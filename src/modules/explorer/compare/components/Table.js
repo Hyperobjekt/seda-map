@@ -32,6 +32,10 @@ const styles = theme => ({
       lineHeight: 1.2,
       overflow: 'hidden',
       verticalAlign: 'bottom',
+      [theme.breakpoints.down('sm')]: {
+        position: 'sticky',
+        left: 'auto',
+      },
       '&.tableCell--active': {
         boxShadow: `0 1px 0px ${theme.palette.primary.outline}`,
         background: theme.palette.primary.highlight
@@ -70,6 +74,7 @@ const Table = ({
   classes,
   className,
   selected,
+  stickyHeader,
   ...props
 }) => {
   const {
@@ -101,7 +106,7 @@ const Table = ({
       <TableContainer
         className={clsx(classes.table, className)}
         {...props}>
-        <MaUTable {...getTableProps()}>
+        <MaUTable {...getTableProps()} stickyHeader={!!stickyHeader}>
           <TableHead>
             {headerGroups.map((headerGroup, i) => {
               return (

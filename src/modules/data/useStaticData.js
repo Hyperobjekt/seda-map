@@ -218,26 +218,41 @@ const [useStaticData] = create((set, get) => ({
       isLoading: true
     }))
     const data = await loadDataSet(dataSetId, get().insertData)
+    const filterBIE =
+      dataSetId === 'schools' && !process.env.REACT_APP_EMBARGOED
+    let filteredData = []
+    // TEMPORARY: filter out BIE schools on non-embargoed link
+    if (filterBIE) {
+      const total = data.length
+      filteredData = data.filter(d => !d.bie)
+      const filteredTotal = filteredData.length
+      console.debug(
+        `filtered ${total -
+          filteredTotal} schools out of dataset`
+      )
+    }
+    const dataStore = filterBIE ? filteredData : data
     // sort data by number of students (`all_sz`)
-    data.sort((a, b) => b['all_sz'] - a['all_sz'])
+    dataStore.sort((a, b) => b['all_sz'] - a['all_sz'])
     // HACK: rename `np_seg` to `pn_seg`, as it is a gap variable (not non-poor)
     // this can be removed when this issue is closed: https://github.com/Hyperobjekt/seda-etl/issues/35
     // mutates original to reduce performance impact
-    HACK_FIX_NP_SEG(data)
+    HACK_FIX_NP_SEG(dataStore)
+
     const loadTime = performance.now() - t0
     set(state => ({
       loading: state.loading.filter(v => v !== dataSetId),
       isLoading:
         state.loading.filter(v => v !== dataSetId).length > 0,
       loaded: [...state.loaded, dataSetId],
-      data: { ...state.data, [dataSetId]: data },
+      data: { ...state.data, [dataSetId]: dataStore },
       timing: {
         ...state.timing,
         [dataSetId]: loadTime
       }
     }))
-    logger.debug('loaded data:', dataSetId, data, loadTime)
-    return data
+    logger.debug('loaded data:', dataSetId, dataStore, loadTime)
+    return dataStore
   }
 }))
 
