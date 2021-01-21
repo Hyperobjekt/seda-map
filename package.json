@@ -4,7 +4,7 @@
   "scripts": {
     "write-lang": "node scripts/generate-lang.js",
     "start": "npm run write-lang && react-scripts start",
-    "build": "node write-lang && react-scripts build",
+    "build": "npm run write-lang && react-scripts build",
     "build:staging": "env-cmd .env.staging npm run build",
     "build:production": "env-cmd .env.prod npm run build",
     "deploy": "npm run build && mv build/index.html build/200.html && surge build seda-dev.surge.sh",
