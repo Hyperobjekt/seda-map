@@ -79,6 +79,8 @@ export const ruleParamToArray = rule => {
     case 'ch':
     case 'mg':
       return ['neq', type, 1]
+    case 'bie':
+      return ['eq', type, 1]
     case 'limit':
       return ['limit', rest[0]]
     default:

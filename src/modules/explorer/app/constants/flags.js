@@ -12,3 +12,8 @@ export const FILTER_FLAGS = {
 // not currently in use, but was used for BIE filter, and left in incase
 // the functionality is required in the future
 export const EXCLUSIVE_FLAGS = []
+
+if (process.env.REACT_APP_EMBARGOED) {
+  FILTER_FLAGS['schools'].push(['bie'])
+  EXCLUSIVE_FLAGS.push('bie')
+}
