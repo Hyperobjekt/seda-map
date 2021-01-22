@@ -92,6 +92,7 @@ function SedaScatterplotBase({
   onHover,
   onClick,
   onReady,
+  allData,
   data,
   vars,
   extents,
@@ -122,7 +123,8 @@ function SedaScatterplotBase({
   // memoize the scatterplot options
   const options = useMemo(() => {
     return getScatterplotOptions(variant, {
-      data,
+      allData, // entire region dataset, unfiltered
+      data, // filtered data
       xVar,
       yVar,
       zVar,
@@ -132,6 +134,7 @@ function SedaScatterplotBase({
     })
   }, [
     variant,
+    allData,
     data,
     xVar,
     yVar,

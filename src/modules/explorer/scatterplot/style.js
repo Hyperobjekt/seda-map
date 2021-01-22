@@ -86,51 +86,41 @@ const getSeries = (seriesId, type, options) => ({
  * Get the style overrides for the base series
  * @param {boolean} highlightedOn
  */
-const getBaseSeries = ({
-  highlightIds,
-  sizer,
-  variant,
-  xVar,
-  yVar
-}) => {
-  const hl = highlightIds.length > 0
+const getBaseSeries = ({ sizer, variant, xVar, yVar }) => {
   const isVs = isVersusFromVarNames(xVar, yVar)
   return getSeries('base', 'scatter', {
-    silent: hl || variant === 'preview',
+    silent: variant === 'preview',
     z: 100,
     itemStyle: {
-      color: hl ? '#e6e6e6' : '#ff0000',
-      borderColor: hl
-        ? 'transparent'
-        : isVs
+      borderColor: isVs
         ? 'rgba(0,0,0,0.4)'
         : 'rgba(7,55,148,0.4)',
-      borderWidth: hl ? 0 : 0.75
+      borderWidth: 0.75
     },
-    symbolSize: hl ? 6 : value => sizer(value[2])
+    symbolSize: value => sizer(value[2])
   })
 }
 
 /**
  * Get the style overrides for the highlight series
  */
-const getHighlightedSeries = ({ highlightIds, sizer }) =>
-  getSeries('highlighted', 'scatter', {
-    show: highlightIds.length > 0,
-    z: 101,
-    itemStyle: {
-      borderColor: 'rgba(7,55,148,0.666)',
-      borderWidth: 1
-    },
-    symbolSize: value => sizer(value[2])
-  })
+// const getHighlightedSeries = ({ highlightIds, sizer }) =>
+//   getSeries('highlighted', 'scatter', {
+//     show: highlightIds.length > 0,
+//     z: 101,
+//     itemStyle: {
+//       borderColor: 'rgba(7,55,148,0.666)',
+//       borderWidth: 1
+//     },
+//     symbolSize: value => sizer(value[2])
+//   })
 
 export const series = (seriesId, variant, options = {}) => {
   switch (seriesId) {
     case 'base':
       return getBaseSeries({ ...options, variant })
-    case 'highlighted':
-      return getHighlightedSeries(options)
+    // case 'highlighted':
+    //   return getHighlightedSeries(options)
     default:
       return getSeries(seriesId, variant, options)
   }
@@ -558,12 +548,7 @@ const getChartColorsFromVarNames = (xVar, yVar) => {
     : COLORS
 }
 
-const getMapVisualMap = ({
-  xVar,
-  yVar,
-  highlightIds,
-  colorExtent
-}) => {
+const getMapVisualMap = ({ xVar, yVar, colorExtent }) => {
   const range = colorExtent
   const colors = getChartColorsFromVarNames(xVar, yVar)
 
@@ -575,7 +560,7 @@ const getMapVisualMap = ({
       color: colors.map(c => fade(c, 0.9))
     },
     show: false,
-    seriesIndex: highlightIds.length > 0 ? 2 : 0,
+    seriesIndex: 0,
     calculable: true,
     right: 0,
     bottom: 'auto',
@@ -714,12 +699,12 @@ export const getScatterplotOptions = (
   variant,
   {
     data = [],
+    allData = [],
     xVar,
     yVar,
     zVar,
     extents,
     colorExtent,
-    highlightIds = [],
     region
   }
 ) => {
@@ -732,7 +717,6 @@ export const getScatterplotOptions = (
     visualMap: visualMap(variant, {
       xVar,
       yVar,
-      highlightIds,
       region,
       colorExtent
     }),
@@ -749,27 +733,27 @@ export const getScatterplotOptions = (
       extent: extents[1]
     }),
     series: [
+      // series('underlay', variant, {
+      //   symbolSize: 6,
+      //   xVar,
+      //   yVar
+      // }),
       series('base', variant, {
-        highlightIds,
         sizer,
         xVar,
         yVar
-      }),
-      series('highlighted', variant, {
-        highlightIds,
-        sizer
       }),
       ...overlays(variant, { xVar, yVar, region, extents })
     ]
   }
 
   return getScatterplotBaseOptions({
+    allData,
     data,
     xVar,
     yVar,
     zVar,
     selected: [],
-    highlighted: highlightIds,
     options
   })
 }
