@@ -86,6 +86,13 @@ export default function useAppContext() {
         return b[scatterplotVars[2]] - a[scatterplotVars[2]]
       })
 
+    const allData = regionData
+      ? regionData
+          .filter(d => scatterplotVars.every(v => hasVal(d[v])))
+          // limit number of dots
+          .slice(0, MAX_DOTS)
+      : []
+
     // all variables used in the scatterplot / map
     const allVars = [
       ...scatterplotVars,
@@ -132,6 +139,7 @@ export default function useAppContext() {
     const hasGapChart = isVersus && gapMetrics.length > 0
 
     appContext.current = {
+      allData: allData,
       data: filteredData,
       dataExtents,
       allVars,

@@ -93,66 +93,25 @@ const extendScatterplotStyle = (overrides = {}) => ({
 })
 
 /**
- * Gets an echart series for all of the data corresponding to IDs
- * in `props.highlighted`
- * @param {array} scatterData data from the base series
- * @param {function} sizeScale a function that returns circle size based on zVar
- */
-const getHighlightedSeries = ({
-  scatterData,
-  scale,
-  highlighted = [],
-  options,
-  zVar
-}) => {
-  // data index for the id property
-  const idDim = zVar ? 3 : 2
-  const baseSeries = {
-    id: 'highlighted',
-    type: 'scatter',
-    symbolSize: zVar ? value => scale(value[2]) : 10,
-    zLevel: 3
-  }
-  const overrides = options
-    ? getDataSeries('highlighted', options.series)
-    : {}
-  const data = highlighted
-    .map((id, i) => scatterData.find(d => d[idDim] === id))
-    .filter(d => Boolean(d))
-  return merge(
-    { ...baseSeries, data },
-    overrides ? overrides : {}
-  )
-}
-
-/**
  * Gets a data series with selected items
  */
-const getSelectedSeries = ({
-  scatterData,
-  scale,
-  selected = [],
-  options,
-  zVar
-}) => {
+const getUnderlaySeries = ({ scatterData, options }) => {
   // data index for the id property
-  const idDim = zVar ? 3 : 2
   const baseSeries = {
-    id: 'selected',
+    id: 'underlay',
     type: 'scatter',
-    symbolSize: value => scale(value[2]),
-    zLevel: 4
+    symbolSize: 10,
+    progressive: 0, // setting to 0 makes performance worse, but fixes issues with lots of re-rendering
+    zLevel: 1,
+    visualMap: false,
+    // large: true, // commented out, causes performance issues
+    silent: true,
+    itemStyle: {
+      borderColor: 'transparent',
+      color: '#ddd'
+    }
   }
-  const overrides = options
-    ? getDataSeries('selected', options.series)
-    : {}
-  const data = selected
-    .map((id, i) => scatterData.find(d => d[idDim] === id))
-    .filter(d => Boolean(d))
-  return merge(
-    { ...baseSeries, data: data },
-    overrides ? overrides : {}
-  )
+  return { ...baseSeries, data: scatterData }
 }
 
 /**
@@ -168,7 +127,7 @@ const getBaseSeries = ({ scatterData, scale, options }) => {
       type: 'scatter',
       data: scatterData,
       symbolSize: value => scale(value[2]),
-      zLevel: 2
+      zLevel: 1
     },
     overrides ? overrides : {}
   )
@@ -185,13 +144,11 @@ const isDataReady = ({ data }) => data && data.length !== 0
  * data is not ready yet
  */
 const getScatterplotSeries = props => {
-  const { data, xVar, yVar, zVar, options } = props
+  const { allData, data, xVar, yVar, zVar, options } = props
   const otherSeries =
     options && options.series
       ? options.series.filter(
-          s =>
-            ['base', 'selected', 'highlighted'].indexOf(s.id) ===
-            -1
+          s => ['base', 'underlay'].indexOf(s.id) === -1
         )
       : []
   if (!props.scale) {
@@ -200,14 +157,23 @@ const getScatterplotSeries = props => {
       ? getDataScale(zData, { range: [6, 48] })
       : () => 10
   }
-  const scatterData = zVar
-    ? getDataSubset(data, [xVar, yVar, zVar])
-    : getDataSubset(data, [xVar, yVar])
-  const params = { scatterData, ...props }
+  const isFiltered = allData.length !== data.length
+  const allScatterData = zVar
+    ? getDataSubset(allData, [xVar, yVar, zVar])
+    : getDataSubset(allData, [xVar, yVar])
+
+  const filteredIds = isFiltered ? data.map(d => d.id) : []
+  const filteredScatterData = isFiltered
+    ? allScatterData.filter(d => filteredIds.indexOf(d[3]) > -1)
+    : allScatterData
+
+  const params = { scatterData: filteredScatterData, ...props }
   const series = [
     getBaseSeries(params),
-    getSelectedSeries(params),
-    getHighlightedSeries(params),
+    getUnderlaySeries({
+      scatterData: isFiltered ? allScatterData : [],
+      options
+    }),
     ...otherSeries
   ]
   return series

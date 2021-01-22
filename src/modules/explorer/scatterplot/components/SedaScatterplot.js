@@ -76,6 +76,7 @@ const SedaScatterplot = () => {
     isVersus,
     gapMetrics,
     hasGapChart,
+    allData,
     scatterplotData,
     scatterplotVars,
     gapVars,
@@ -153,6 +154,7 @@ const SedaScatterplot = () => {
               })}
               variant="map"
               data={scatterplotData}
+              allData={allData}
               vars={scatterplotVars}
               extents={scatterplotExtents}
               colorExtent={colorExtent}
@@ -186,6 +188,7 @@ const SedaScatterplot = () => {
               vars={gapVars}
               extents={gapExtents}
               data={scatterplotData}
+              allData={allData}
               colorExtent={colorExtent}
               region={region}
               axisChildren={
