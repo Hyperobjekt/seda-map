@@ -157,7 +157,7 @@ const getScatterplotSeries = props => {
       ? getDataScale(zData, { range: [6, 48] })
       : () => 10
   }
-  const isFiltered = allData.length !== data.length
+  const isFiltered = data.length < 10000
   const allScatterData = zVar
     ? getDataSubset(allData, [xVar, yVar, zVar])
     : getDataSubset(allData, [xVar, yVar])
@@ -165,13 +165,18 @@ const getScatterplotSeries = props => {
   const filteredIds = isFiltered ? data.map(d => d.id) : []
   const filteredScatterData = isFiltered
     ? allScatterData.filter(d => filteredIds.indexOf(d[3]) > -1)
-    : allScatterData
+    : allScatterData.slice(0, 10000)
 
-  const params = { scatterData: filteredScatterData, ...props }
+  const params = {
+    scatterData: filteredScatterData,
+    ...props
+  }
   const series = [
     getBaseSeries(params),
     getUnderlaySeries({
-      scatterData: isFiltered ? allScatterData : [],
+      scatterData: isFiltered
+        ? allScatterData.slice(0, 10000)
+        : [],
       options
     }),
     ...otherSeries

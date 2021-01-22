@@ -56,6 +56,7 @@ const SedaScatterplotPreview = props => {
   const {
     region,
     isVersus,
+    allData,
     scatterplotData,
     scatterplotVars,
     scatterplotExtents,
@@ -72,6 +73,7 @@ const SedaScatterplotPreview = props => {
       })}
       classes={classes}
       variant="preview"
+      allData={allData}
       data={scatterplotData}
       vars={scatterplotVars}
       extents={scatterplotExtents}

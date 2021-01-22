@@ -20,7 +20,7 @@ import { useStaticData } from '../../../data'
 import { applyFilters } from '../../../filters'
 import { getFiltersForDemographic } from '../../filters/selectors'
 
-const MAX_DOTS = 10000
+export const MAX_DOTS = 10000
 
 const getFilteredData = (filters, demographic, regionData) => {
   // update filters to apply to current demographic
@@ -87,10 +87,9 @@ export default function useAppContext() {
       })
 
     const allData = regionData
-      ? regionData
-          .filter(d => scatterplotVars.every(v => hasVal(d[v])))
-          // limit number of dots
-          .slice(0, MAX_DOTS)
+      ? regionData.filter(d =>
+          scatterplotVars.every(v => hasVal(d[v]))
+        )
       : []
 
     // all variables used in the scatterplot / map
