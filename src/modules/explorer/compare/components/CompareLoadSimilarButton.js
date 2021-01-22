@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { Button, Tooltip } from '@material-ui/core'
+import React, { useEffect, useState, useCallback } from 'react'
+import { Button, Tooltip, useMediaQuery, useTheme } from '@material-ui/core'
 import { getLang } from '../../app/selectors/lang'
 import axios from 'axios'
 import useAddCompareLocations from '../hooks/useAddCompareLocations'
@@ -20,13 +20,15 @@ const fetchSimilarLocations = locationId => {
         .match(matcher)[0]
         .slice(0, -1)
         .split(',')
-        .filter(id => id !== locationId)
+        .filter(id => id !== locationId && !!getRegionFromLocationId(id))
       return otherIds
     }
   )
 }
 
-const CompareLoadSimilarButton = ({ ...props }) => {
+const CompareLoadSimilarButton = ({ hideForStates, ...props }) => {
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const [state, setState] = useState({
     loading: false,
     loaded: false
@@ -46,28 +48,33 @@ const CompareLoadSimilarButton = ({ ...props }) => {
     })
   }, [selectedLocation])
 
-  const handleLoadSimilar = () => {
+  // console.log("info:", selectedLocation, locationData)
+
+  const handleLoadSimilar = useCallback(() => {
     setState({ loading: true, loaded: false })
     fetchSimilarLocations(locationData.id).then(ids => {
       addCompareLocations(ids)
       setState({ loading: false, loaded: true })
     })
-  }
+  }, [setState, addCompareLocations, locationData])
 
   return locationData ? (
     <Tooltip
-      title={getLang('LOAD_SIMILAR_HINT', {
+      title={hideForStates ? 'Loading similar regions is optimized for districts, counties, and schools.' : getLang('LOAD_SIMILAR_HINT', {
         location: locationData.name
       })}>
-      <Button
-        variant="outlined"
-        disabled={state.loaded}
-        onClick={handleLoadSimilar}
-        {...props}>
-        {state.loading
-          ? getLang('LABEL_LOADING')
-          : getLang('LOAD_SIMILAR_BUTTON')}
-      </Button>
+      <span>
+        <Button
+          variant="outlined"
+          disabled={state.loaded || hideForStates}
+          onClick={handleLoadSimilar}
+          style={isMobile ? {width: "100%"} : null}
+          {...props}>
+          {state.loading
+            ? getLang('LABEL_LOADING')
+            : getLang('LOAD_SIMILAR_BUTTON')}
+        </Button>
+      </span>
     </Tooltip>
   ) : null
 }

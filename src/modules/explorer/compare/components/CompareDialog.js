@@ -50,7 +50,7 @@ function CompareDialog({ classes, ...props }) {
   const [open, setOpen] = useCompareDialog()
   const [activeLocation] = useActiveLocation()
   const [locations] = useLocations()
-  const [metric, demographic] = useActiveOptions()
+  const [metric, demographic, region] = useActiveOptions()
   const setCompareStore = useCompareStore(
     state => state.setCompareStore
   )
@@ -97,7 +97,7 @@ function CompareDialog({ classes, ...props }) {
         <div className={classes.toolbar}>
           <CompareDemographicSelect />
           <CompareSearch />
-          <CompareLoadSimilarButton />
+          <CompareLoadSimilarButton hideForStates={region === 'states'} />
           <CompareExportButton />
         </div>
         <CompareTable />
