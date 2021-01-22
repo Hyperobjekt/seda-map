@@ -8,6 +8,7 @@ import UnitedStatesIcon from '../../icons/components/UnitedStatesIcon'
 import AlaskaIcon from '../../icons/components/AlaskaIcon'
 import HawaiiIcon from '../../icons/components/HawaiiIcon'
 import PuertoRicoIcon from '../../icons/components/PuertoRicoIcon'
+import GeolocateIcon from '../../icons/components/GeolocateIcon'
 import { useMapStore } from '../../map'
 import {
   ALASKA_VIEWPORT,
@@ -50,6 +51,24 @@ const SedaZoomControls = ({ classes, className, ...props }) => {
   const handleZoomToPuertoRico = () =>
     flyToViewport(PUERTO_RICO_VIEWPORT)
 
+  const geolocateSuccess = (res) => {
+    flyToViewport({
+      latitude: res.coords.latitude,
+      longitude: res.coords.longitude,
+      zoom: 14,
+    })
+  }
+
+  const geolocateError = (e) => {
+    console.log("unable to geolocate:", e)
+  }
+
+  const requestGeolocate = () => {
+    navigator.geolocation.getCurrentPosition(geolocateSuccess, geolocateError, {
+      enableHighAccuracy: true
+    })
+  }
+
   return (
     <div className={clsx(classes.root, className)} {...props}>
       <Tooltip
@@ -84,6 +103,16 @@ const SedaZoomControls = ({ classes, className, ...props }) => {
           className={classes.button}
           onClick={handleZoomToPuertoRico}>
           <PuertoRicoIcon />
+        </IconButton>
+      </Tooltip>
+      <Tooltip
+        placement="left"
+        arrow
+        title="Zoom to current location">
+        <IconButton
+          className={classes.button}
+          onClick={requestGeolocate}>
+          <GeolocateIcon />
         </IconButton>
       </Tooltip>
     </div>
