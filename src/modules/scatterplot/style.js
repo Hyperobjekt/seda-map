@@ -93,39 +93,6 @@ const extendScatterplotStyle = (overrides = {}) => ({
 })
 
 /**
- * Gets an echart series for all of the data corresponding to IDs
- * in `props.highlighted`
- * @param {array} scatterData data from the base series
- * @param {function} sizeScale a function that returns circle size based on zVar
- */
-const getHighlightedSeries = ({
-  scatterData,
-  scale,
-  highlighted = [],
-  options,
-  zVar
-}) => {
-  // data index for the id property
-  const idDim = zVar ? 3 : 2
-  const baseSeries = {
-    id: 'highlighted',
-    type: 'scatter',
-    symbolSize: zVar ? value => scale(value[2]) : 10,
-    zLevel: 3
-  }
-  const overrides = options
-    ? getDataSeries('highlighted', options.series)
-    : {}
-  const data = highlighted
-    .map((id, i) => scatterData.find(d => d[idDim] === id))
-    .filter(d => Boolean(d))
-  return merge(
-    { ...baseSeries, data },
-    overrides ? overrides : {}
-  )
-}
-
-/**
  * Gets a data series with selected items
  */
 const getUnderlaySeries = ({ scatterData, options }) => {

@@ -101,20 +101,6 @@ const getBaseSeries = ({ sizer, variant, xVar, yVar }) => {
   })
 }
 
-/**
- * Get the style overrides for the highlight series
- */
-// const getHighlightedSeries = ({ highlightIds, sizer }) =>
-//   getSeries('highlighted', 'scatter', {
-//     show: highlightIds.length > 0,
-//     z: 101,
-//     itemStyle: {
-//       borderColor: 'rgba(7,55,148,0.666)',
-//       borderWidth: 1
-//     },
-//     symbolSize: value => sizer(value[2])
-//   })
-
 export const series = (seriesId, variant, options = {}) => {
   switch (seriesId) {
     case 'base':
@@ -335,15 +321,6 @@ const getOverlay = (points, lines) => {
   }
 }
 
-// const getTickArray = (center, extent) => {
-//   const distance = extent.map(v => Math.abs(center - v))
-//   const maxDistance = max(distance)
-//   const balancedExtent = [
-//     center - maxDistance,
-//     center + maxDistance
-//   ]
-// }
-
 export const getBalancedExtent = (center, extent) => {
   const distance = extent.map(v => Math.abs(center - v))
   const maxDistance = max(distance)
@@ -353,36 +330,6 @@ export const getBalancedExtent = (center, extent) => {
 const getIncrementForExtent = extent => {
   return tickStep(extent[0], extent[1], STEPS)
 }
-
-/** Returns an amount for how much to increment each step for the axis overlay */
-// const getIncrementForVarName = (varName, region) => {
-//   const metricId = getMetricIdFromVarName(varName)
-//   const isGap = isGapVarName(varName)
-//   const key = metricId + (isGap ? '_gap' : '')
-//   switch (key) {
-//     case 'avg':
-//       return region === 'schools' ? 2 : 1
-//     case 'grd':
-//       return region === 'schools' ? 0.4 : 0.2
-//     case 'coh':
-//       return region === 'schools' ? 0.25 : 0.2
-//     case 'frl':
-//       return 0.25
-//     case 'coh_gap':
-//     case 'grd_gap':
-//       return 0.1
-//     case 'ses_gap':
-//       return 1
-//     case 'seg':
-//     case 'seg_gap':
-//       return 0.25
-//     case 'min':
-//     case 'min_gap':
-//       return 0.2
-//     default:
-//       return 1
-//   }
-// }
 
 /**
  * Get the line and label overlays based on the variable name
@@ -475,23 +422,6 @@ const getOverlaysForContext = (
 const overlays = (variant, context) => {
   return getOverlaysForContext(variant, context)
 }
-
-// /**
-//  * Returns where to place the diagonal line label
-//  * for the provided metric
-//  */
-// const getLabelCoordsForMetric = metricId => {
-//   switch (metricId) {
-//     case 'avg':
-//       return [[-3, -3], [-2, -2]]
-//     case 'grd':
-//       return [[0.5, 0.5], [0.7, 0.7]]
-//     case 'coh':
-//       return [[-0.3, -0.3], [-0.4, -0.4]]
-//     default:
-//       return [[-0.1, -0.1], [0.1, 0.1]]
-//   }
-// }
 
 /** Return a series with a diagonal line */
 const getVersusOverlay = (xVar, yVar) => {
