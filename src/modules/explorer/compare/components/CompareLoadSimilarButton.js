@@ -56,7 +56,7 @@ const CompareLoadSimilarButton = (props) => {
     })
   }, [setState, addCompareLocations, locationData])
 
-  const isStateLevel = useMemo(() => locationData && getRegionFromLocationId(locationData.id) === 'states', [locationData])
+  const isStateLevel = locationData && getRegionFromLocationId(locationData.id) === 'states'
 
   return locationData ? (
     <Tooltip
