@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useMemo } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { Button, Tooltip, useMediaQuery, useTheme } from '@material-ui/core'
 import { getLang } from '../../app/selectors/lang'
 import axios from 'axios'
@@ -68,7 +68,7 @@ const CompareLoadSimilarButton = (props) => {
           variant="outlined"
           disabled={state.loaded || isStateLevel}
           onClick={handleLoadSimilar}
-          style={isMobile ? {width: "100%"} : null}
+          style={isMobile ? { width: "100%" } : null}
           {...props}>
           {state.loading
             ? getLang('LABEL_LOADING')

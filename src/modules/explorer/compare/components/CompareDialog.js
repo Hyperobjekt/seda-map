@@ -50,7 +50,7 @@ function CompareDialog({ classes, ...props }) {
   const [open, setOpen] = useCompareDialog()
   const [activeLocation] = useActiveLocation()
   const [locations] = useLocations()
-  const [metric, demographic, region] = useActiveOptions()
+  const [metric, demographic] = useActiveOptions()
   const setCompareStore = useCompareStore(
     state => state.setCompareStore
   )
@@ -84,7 +84,7 @@ function CompareDialog({ classes, ...props }) {
 
   return (
     <Dialog
-    maxWidth={false}
+      maxWidth={false}
       onClose={handleClose}
       aria-labelledby="compare-dialog-title"
       open={open}

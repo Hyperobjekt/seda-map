@@ -84,10 +84,10 @@ const insertFilter = (filters, filter, atIndex) => {
   const insertIndex = atIndex
     ? atIndex
     : sortIndex > -1
-    ? sortIndex
-    : limitIndex > -1
-    ? limitIndex
-    : filters.length
+      ? sortIndex
+      : limitIndex > -1
+        ? limitIndex
+        : filters.length
   const startValues = filters.slice(0, insertIndex)
   const endValues = filters.slice(insertIndex)
   const result = [...startValues, filter, ...endValues]
@@ -192,7 +192,7 @@ export const setFilters = set => (rules, extend) => {
   })
 }
 
-export const DEFAULT_FILTERS = [['sort', 'sz', 'asc']]
+export const DEFAULT_FILTERS = []
 
 const [useFilterStore] = create((set, get) => ({
   filters: [...DEFAULT_FILTERS],

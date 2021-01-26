@@ -1,4 +1,5 @@
 import * as merge from 'deepmerge'
+import { MAX_DOTS, PROGRESSIVE_THRESHOLD, UNDERLAY_THRESHOLD } from '../explorer/scatterplot/constants'
 import { getDataScale, getDataSubset } from './utils'
 
 /** Default options for scatterplot container */
@@ -101,7 +102,8 @@ const getUnderlaySeries = ({ scatterData, options }) => {
     id: 'underlay',
     type: 'scatter',
     symbolSize: 10,
-    progressive: 0, // setting to 0 makes performance worse, but fixes issues with lots of re-rendering
+    // progressive: 5000, // setting to 0 makes performance worse, but fixes issues with lots of re-rendering
+    progressiveThreshold: PROGRESSIVE_THRESHOLD,
     zLevel: 1,
     visualMap: false,
     // large: true, // commented out, causes performance issues
@@ -126,6 +128,7 @@ const getBaseSeries = ({ scatterData, scale, options }) => {
       id: 'base',
       type: 'scatter',
       data: scatterData,
+      progressiveThreshold: PROGRESSIVE_THRESHOLD,
       symbolSize: value => scale(value[2]),
       zLevel: 1
     },
@@ -148,8 +151,8 @@ const getScatterplotSeries = props => {
   const otherSeries =
     options && options.series
       ? options.series.filter(
-          s => ['base', 'underlay'].indexOf(s.id) === -1
-        )
+        s => ['base', 'underlay'].indexOf(s.id) === -1
+      )
       : []
   if (!props.scale) {
     const zData = data.map(d => d[zVar])
@@ -157,7 +160,7 @@ const getScatterplotSeries = props => {
       ? getDataScale(zData, { range: [6, 48] })
       : () => 10
   }
-  const isFiltered = data.length < 10000
+  const isFiltered = data.length < UNDERLAY_THRESHOLD && allData.length !== data.length
   const allScatterData = zVar
     ? getDataSubset(allData, [xVar, yVar, zVar])
     : getDataSubset(allData, [xVar, yVar])
@@ -165,7 +168,7 @@ const getScatterplotSeries = props => {
   const filteredIds = isFiltered ? data.map(d => d.id) : []
   const filteredScatterData = isFiltered
     ? allScatterData.filter(d => filteredIds.indexOf(d[3]) > -1)
-    : allScatterData.slice(0, 10000)
+    : allScatterData.slice(0, MAX_DOTS)
 
   const params = {
     scatterData: filteredScatterData,
@@ -175,7 +178,7 @@ const getScatterplotSeries = props => {
     getBaseSeries(params),
     getUnderlaySeries({
       scatterData: isFiltered
-        ? allScatterData.slice(0, 10000)
+        ? allScatterData.slice(0, MAX_DOTS)
         : [],
       options
     }),

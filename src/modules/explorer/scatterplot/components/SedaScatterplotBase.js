@@ -34,6 +34,8 @@ const MIN_EXTENTS = {
 }
 
 const adjustExtent = (varName, extent) => {
+  // do not adjust size extents
+  if (varName.indexOf('_sz')) return extent
   const isGap = isGapVarName(varName)
   const metric = getMetricIdFromVarName(varName)
   const key = isGap ? metric + '_gap' : metric
@@ -114,11 +116,13 @@ function SedaScatterplotBase({
   const hasAxisHint =
     ['ses', 'seg', 'min', 'frl'].indexOf(xMetric) > -1
 
+  // adjust extents so midpoint is always in view
   const adjustedExtents = useMemo(
     () =>
       extents.map((extent, i) => adjustExtent(vars[i], extent)),
     [extents, vars]
   )
+
 
   // memoize the scatterplot options
   const options = useMemo(() => {
@@ -213,9 +217,9 @@ SedaScatterplotBase.defaultProps = {
   data: [],
   vars: [],
   extents: [],
-  onHover: () => {},
-  onClick: () => {},
-  onReady: () => {}
+  onHover: () => { },
+  onClick: () => { },
+  onReady: () => { }
 }
 
 SedaScatterplotBase.propTypes = {
