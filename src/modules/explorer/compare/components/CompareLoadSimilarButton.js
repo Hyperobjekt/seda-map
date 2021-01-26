@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback, useMemo } from 'react'
 import { Button, Tooltip, useMediaQuery, useTheme } from '@material-ui/core'
 import { getLang } from '../../app/selectors/lang'
 import axios from 'axios'
@@ -26,7 +26,7 @@ const fetchSimilarLocations = locationId => {
   )
 }
 
-const CompareLoadSimilarButton = ({ hideForStates, ...props }) => {
+const CompareLoadSimilarButton = (props) => {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const [state, setState] = useState({
@@ -48,8 +48,6 @@ const CompareLoadSimilarButton = ({ hideForStates, ...props }) => {
     })
   }, [selectedLocation])
 
-  // console.log("info:", selectedLocation, locationData)
-
   const handleLoadSimilar = useCallback(() => {
     setState({ loading: true, loaded: false })
     fetchSimilarLocations(locationData.id).then(ids => {
@@ -58,15 +56,17 @@ const CompareLoadSimilarButton = ({ hideForStates, ...props }) => {
     })
   }, [setState, addCompareLocations, locationData])
 
+  const isStateLevel = useMemo(() => locationData && getRegionFromLocationId(locationData.id) === 'states', [locationData])
+
   return locationData ? (
     <Tooltip
-      title={hideForStates ? 'Loading similar regions is optimized for districts, counties, and schools.' : getLang('LOAD_SIMILAR_HINT', {
+      title={isStateLevel ? getLang('LOAD_SIMILAR_DISABLED') : getLang('LOAD_SIMILAR_HINT', {
         location: locationData.name
       })}>
       <span>
         <Button
           variant="outlined"
-          disabled={state.loaded || hideForStates}
+          disabled={state.loaded || isStateLevel}
           onClick={handleLoadSimilar}
           style={isMobile ? {width: "100%"} : null}
           {...props}>

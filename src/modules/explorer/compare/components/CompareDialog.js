@@ -97,7 +97,7 @@ function CompareDialog({ classes, ...props }) {
         <div className={classes.toolbar}>
           <CompareDemographicSelect />
           <CompareSearch />
-          <CompareLoadSimilarButton hideForStates={region === 'states'} />
+          <CompareLoadSimilarButton />
           <CompareExportButton />
         </div>
         <CompareTable />
