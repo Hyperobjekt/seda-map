@@ -18,7 +18,9 @@ const makeCsv = data => {
     'sz'
   ]
   const dropColumns = [
-    'wa'
+    'wa',
+    'wi',
+    'i'
   ]
   const header = Object.keys(data[0])
     // filter out sizes

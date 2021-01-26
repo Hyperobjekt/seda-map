@@ -53,7 +53,8 @@ export const getRegionFromLocationId = id => {
   }
   if (!ID_LENGTH_TO_REGION[id.length]) {
     logger.debug('error getting region for id', id)
-    throw new Error('No region corresponding to provided ID')
+    return null
+    // throw new Error('No region corresponding to provided ID')
   }
   return ID_LENGTH_TO_REGION[id.length]
 }
