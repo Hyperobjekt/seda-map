@@ -10,10 +10,10 @@ export default function useDataLoading() {
     state => [state.loaded, state.loading, state.isLoading],
     shallow
   )
-  const region = useDataOptions(state => state.region)
+  const [region, dataOptionsLoading] = useDataOptions(state => [state.region, state.loading])
   useEffect(() => {
-    loadDataForRegion(region)
-  }, [loadDataForRegion, region])
+    !dataOptionsLoading && loadDataForRegion(region)
+  }, [loadDataForRegion, region, dataOptionsLoading])
   return useMemo(() => {
     return [loading, loaded, isLoading]
   }, [loading, loaded, isLoading])
