@@ -33,7 +33,22 @@ const SedaMetricSlider = ({ metricId, ...props }) => {
   const min = defaultValue[0]
   const max = defaultValue[1]
   const step = (max - min) / 20
+  const average = min + (max - min) / 2
   const formatter = getFormatterForVarName(varName)
+  const marks = [
+    {
+      value: min,
+      label: formatter(min)
+    },
+    {
+      value: average,
+      label: "average"
+    },
+    {
+      value: max,
+      label: formatter(max)
+    }
+  ]
   const handleSliderChange = useCallback(
     (event, value) => {
       value = value.map(v => parseFloat(v))
@@ -51,13 +66,15 @@ const SedaMetricSlider = ({ metricId, ...props }) => {
       titleProps={{ id: metricId + '-slider' }}
       {...props}>
       <Slider
+        metric={metricId}
+        marks={marks}
+        valueLabelDisplay="auto"
         value={value}
         defaultValue={defaultValue}
         min={min}
         max={max}
         step={step}
         onChange={handleSliderChange}
-        valueLabelDisplay="on"
         aria-labelledby={metricId + '-slider'}
         getAriaValueText={formatter}
         valueLabelFormat={formatter}
