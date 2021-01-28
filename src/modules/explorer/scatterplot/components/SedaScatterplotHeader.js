@@ -87,6 +87,9 @@ const getScatterplotType = (xVar, yVar) => {
 const getScatterplotLang = (key, chartType, context) => {
   // title case metrics if this is a title
   if (key.indexOf('TITLE') > -1) {
+    if (context['metric'] === 'average test scores') {
+      context['metric'] = 'test scores'
+    }
     context['metric'] = titleCase(context['metric'])
     context['secondary'] = titleCase(context['secondary'])
   }
