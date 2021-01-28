@@ -81,6 +81,7 @@ const getScatterplotContext = (xVar, yVar, region, type) => {
 const getScatterplotType = (xVar, yVar) => {
   if (isVersusFromVarNames(xVar, yVar)) return 'VS'
   if (isGapVarName(yVar)) return 'GAP'
+  if (getMetricIdFromVarName(yVar) === 'avg') return 'AVG'
   return 'DEFAULT'
 }
 
@@ -92,6 +93,7 @@ const getScatterplotLang = (key, chartType, context) => {
   }
   if (chartType === 'VS') return getLang(key + '_VS', context)
   if (chartType === 'GAP') return getLang(key + '_GAP', context)
+  if (chartType === 'AVG') return getLang(key + '_AVG', context)
   return getLang(key, context)
 }
 
