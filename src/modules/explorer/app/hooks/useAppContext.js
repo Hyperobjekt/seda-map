@@ -61,7 +61,7 @@ export default function useAppContext() {
       return appContext.current
     }
 
-    const regionData = data[region]
+    const regionData = data[region] || []
     const filteredData = getFilteredData(
       filters,
       demographic,
@@ -108,7 +108,10 @@ export default function useAppContext() {
     // add extents for all vars
     const dataExtents = {}
     allVars.forEach(v => {
-      dataExtents[v] = getDataExtent(scatterplotData, v)
+      // #516: do not adjust size extent based on filtered data
+      dataExtents[v] = v.indexOf('_sz') > -1 ? 
+        getDataExtent(regionData.slice(0,MAX_DOTS), v) : 
+        getDataExtent(scatterplotData, v)
     })
 
     // create padded extents for the scatterplot
