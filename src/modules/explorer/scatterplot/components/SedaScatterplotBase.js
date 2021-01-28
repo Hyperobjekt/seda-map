@@ -28,12 +28,15 @@ const MIN_EXTENTS = {
   grd: [0.9, 1.1],
   coh: [-0.05, 0.05],
   frl: [0, 1],
+  seg_gap: [-0.05, 0.05],
   grd_gap: [-0.1, 0.1],
   coh_gap: [-0.05, 0.05],
-  min_gap: [-0.1, 0.1]
+  min_gap: [-0.05, 0.05]
 }
 
 const adjustExtent = (varName, extent) => {
+  // do not adjust size extents
+  if (varName.indexOf('_sz')) return extent
   const isGap = isGapVarName(varName)
   const metric = getMetricIdFromVarName(varName)
   const key = isGap ? metric + '_gap' : metric
@@ -92,6 +95,7 @@ function SedaScatterplotBase({
   onHover,
   onClick,
   onReady,
+  allData,
   data,
   vars,
   extents,
@@ -113,16 +117,19 @@ function SedaScatterplotBase({
   const hasAxisHint =
     ['ses', 'seg', 'min', 'frl'].indexOf(xMetric) > -1
 
+  // adjust extents so midpoint is always in view
   const adjustedExtents = useMemo(
     () =>
       extents.map((extent, i) => adjustExtent(vars[i], extent)),
     [extents, vars]
   )
 
+
   // memoize the scatterplot options
   const options = useMemo(() => {
     return getScatterplotOptions(variant, {
-      data,
+      allData, // entire region dataset, unfiltered
+      data, // filtered data
       xVar,
       yVar,
       zVar,
@@ -132,6 +139,7 @@ function SedaScatterplotBase({
     })
   }, [
     variant,
+    allData,
     data,
     xVar,
     yVar,
@@ -210,9 +218,9 @@ SedaScatterplotBase.defaultProps = {
   data: [],
   vars: [],
   extents: [],
-  onHover: () => {},
-  onClick: () => {},
-  onReady: () => {}
+  onHover: () => { },
+  onClick: () => { },
+  onReady: () => { }
 }
 
 SedaScatterplotBase.propTypes = {

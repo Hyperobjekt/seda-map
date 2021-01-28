@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { withStyles } from '@material-ui/core/styles'
+import { useTheme, withStyles } from '@material-ui/core/styles'
 import Dialog from '@material-ui/core/Dialog'
 import MuiDialogContent from '@material-ui/core/DialogContent'
 import useCompareDialog from '../hooks/useCompareDialog'
@@ -12,24 +12,36 @@ import { useActiveLocation, useLocations } from '../../location'
 import { useActiveOptions } from '../../app/hooks'
 import useCompareStore from '../hooks/useCompareStore'
 import CompareDialogTitle from './CompareDialogTitle'
+import { useMediaQuery } from '@material-ui/core'
 
 const styles = theme => ({
   root: {
     margin: 0,
-    padding: theme.spacing(2)
+    padding: theme.spacing(2),
   },
   toolbar: {
     display: 'flex',
     marginBottom: theme.spacing(2),
     '& > * + *': {
-      marginLeft: theme.spacing(1)
+      marginLeft: theme.spacing(1),
+      [theme.breakpoints.down('sm')]: {
+        marginLeft: 0,
+        marginTop: theme.spacing(2)
+      }
+    },
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column',
     }
   }
 })
 
 const DialogContent = withStyles(theme => ({
   root: {
-    padding: theme.spacing(2)
+    padding: theme.spacing(2),
+    [theme.breakpoints.down('sm')]: {
+      display: 'flex',
+      flexDirection: 'column',
+    }
   }
 }))(MuiDialogContent)
 
@@ -42,6 +54,8 @@ function CompareDialog({ classes, ...props }) {
   const setCompareStore = useCompareStore(
     state => state.setCompareStore
   )
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
   // pull required info from the app store into
   // the compare store when the dialog is open
@@ -70,10 +84,11 @@ function CompareDialog({ classes, ...props }) {
 
   return (
     <Dialog
-    maxWidth={false}
+      maxWidth={false}
       onClose={handleClose}
       aria-labelledby="compare-dialog-title"
-      open={open}>
+      open={open}
+      fullScreen={isMobile}>
       <CompareDialogTitle
         id="compare-dialog-title"
         onClose={handleClose}

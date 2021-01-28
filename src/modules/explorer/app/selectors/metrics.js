@@ -42,11 +42,11 @@ export const getSecondaryForDemographic = dem => {
 
 /**
  * Returns true if the provided demographic has a secondary chart
- * @param {*} dem 
+ * @param {*} dem
  */
-export const hasSecondaryChart = (dem) => {
+export const hasSecondaryChart = dem => {
   const isGap = isGapDemographic(dem)
-  if (!isGap) return false;
+  if (!isGap) return false
   const secondaryCharts = getSecondaryForDemographic(dem)
   return secondaryCharts.length > 0
 }
@@ -116,7 +116,7 @@ export const getSesQuantifier = value => {
     : value > -1.5
     ? `LOW`
     : value > -2.5
-    ? `LOW`
+    ? `VERY_LOW`
     : `ULTRA_LOW`
 }
 

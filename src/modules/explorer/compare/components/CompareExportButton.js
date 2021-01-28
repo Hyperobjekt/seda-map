@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { Button } from '@material-ui/core'
 import { getLang, getPrefixLang } from '../../app/selectors/lang'
 import useCompareLocationsData from '../hooks/useCompareLocationsData'
+import { getFormatterForVarName } from '../../app/selectors'
 
 const makeCsv = data => {
   const dontExport = [
@@ -16,12 +17,18 @@ const makeCsv = data => {
     'min',
     'sz'
   ]
+  const dropColumns = [
+    'wa',
+    'wi',
+    'i'
+  ]
   const header = Object.keys(data[0])
     // filter out sizes
     .filter(k => dontExport.indexOf(k.split('_').pop()) === -1)
+    .filter(k => dropColumns.indexOf(k.split('_')[0]) === -1)
     // filter out margin of error data
     .filter(k => k.slice(-2) !== '_e')
-  const rows = data.map(d => header.map(col => d[col]).join(','))
+  const rows = data.map(d => header.map(col => col === 'name' ? d[col] : getFormatterForVarName(col)(d[col])).join(','))
   // map header to label if it exists
   const headerRow = header
     .map(h =>

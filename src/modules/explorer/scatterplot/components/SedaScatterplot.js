@@ -76,6 +76,7 @@ const SedaScatterplot = () => {
     isVersus,
     gapMetrics,
     hasGapChart,
+    allData,
     scatterplotData,
     scatterplotVars,
     gapVars,
@@ -147,35 +148,36 @@ const SedaScatterplot = () => {
           isEmbed && embedSecondary ? (
             <></>
           ) : (
-            <SedaScatterplotBase
-              className={clsx(classes.chart, {
-                'scatterplot--versus': isVersus
-              })}
-              variant="map"
-              data={scatterplotData}
-              vars={scatterplotVars}
-              extents={scatterplotExtents}
-              colorExtent={colorExtent}
-              region={region}
-              onHover={handleHover}
-              onClick={handleClick}>
-              <SedaScatterplotHeader
-                className={clsx({
-                  [classes.headerOffset]: !isSplit && hasGapChart
+              <SedaScatterplotBase
+                className={clsx(classes.chart, {
+                  'scatterplot--versus': isVersus
                 })}
-                xVar={xVar}
-                yVar={yVar}
-                region={region}>
-                {!isSplit && hasGapChart && !isEmbed && (
-                  <LinkButton
-                    className={classes.toggleButton}
-                    onClick={() => setShowGapChart(true)}>
-                    Show gap vs. other metrics
-                  </LinkButton>
-                )}
-              </SedaScatterplotHeader>
-            </SedaScatterplotBase>
-          )
+                variant="map"
+                data={scatterplotData}
+                allData={allData}
+                vars={scatterplotVars}
+                extents={scatterplotExtents}
+                colorExtent={colorExtent}
+                region={region}
+                onHover={handleHover}
+                onClick={handleClick}>
+                <SedaScatterplotHeader
+                  className={clsx({
+                    [classes.headerOffset]: !isSplit && hasGapChart
+                  })}
+                  xVar={xVar}
+                  yVar={yVar}
+                  region={region}>
+                  {!isSplit && hasGapChart && !isEmbed && (
+                    <LinkButton
+                      className={classes.toggleButton}
+                      onClick={() => setShowGapChart(true)}>
+                      Show gap vs. other metrics
+                    </LinkButton>
+                  )}
+                </SedaScatterplotHeader>
+              </SedaScatterplotBase>
+            )
         }
         RightComponent={
           hasGapChart ? (
@@ -186,6 +188,7 @@ const SedaScatterplot = () => {
               vars={gapVars}
               extents={gapExtents}
               data={scatterplotData}
+              allData={allData}
               colorExtent={colorExtent}
               region={region}
               axisChildren={
@@ -220,15 +223,15 @@ const SedaScatterplot = () => {
               </SedaScatterplotHeader>
             </SedaScatterplotBase>
           ) : (
-            <></>
-          )
+              <></>
+            )
         }
         view={
           isSplit && hasGapChart
             ? 'split'
             : (showGapChart || embedSecondary) && hasGapChart
-            ? 'right'
-            : 'left'
+              ? 'right'
+              : 'left'
         }
         style={{
           width: '100%',

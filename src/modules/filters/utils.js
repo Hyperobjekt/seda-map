@@ -170,6 +170,7 @@ export const applyFilterRule = (data, rule) => {
  * @param {*} filters
  */
 export const applyFilters = (data, filters) => {
+  if (!filters || filters.length === 0) return data
   return filters.reduce(
     (subset, rule) => applyFilterRule(subset, rule),
     data

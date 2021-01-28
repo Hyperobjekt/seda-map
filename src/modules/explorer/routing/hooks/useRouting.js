@@ -34,8 +34,8 @@ export default () => {
   // get the route params based on current view
   const route = useCurrentRoute()
   // function to set options based on a route string
-  const setDataOptions = useDataOptions(
-    state => state.setOptionsFromRoute
+  const [setDataOptions, setDataOptionsLoading] = useDataOptions(
+    state => [state.setOptionsFromRoute, state.setLoading]
   )
   const addLocationsFromRoute = useAddLocationsByRoute()
 
@@ -108,6 +108,7 @@ export default () => {
           })
         }
       }
+      setDataOptionsLoading(false)
     }
     loadRoute()
     // eslint-disable-next-line react-hooks/exhaustive-deps
