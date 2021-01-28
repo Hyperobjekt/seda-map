@@ -4,7 +4,8 @@ import { CheckboxGroup } from '../../../../shared/components/Inputs/Checkboxes'
 import { useRegion } from '../../app/hooks'
 import {
   EXCLUSIVE_FLAGS,
-  FILTER_FLAGS
+  FILTER_FLAGS,
+  FILTER_RADIOS
 } from '../../app/constants/flags'
 import { PanelListItem } from '../../../../shared/components/Panels/PanelList'
 import { getLang, getPrefixLang } from '../../app/selectors/lang'
@@ -12,7 +13,10 @@ import useActiveFilters from '../hooks/useActiveFilters'
 import useFilterStore from '../../../filters'
 import {
   FormControl,
+  FormControlLabel,
   FormLabel,
+  Radio,
+  RadioGroup,
   withStyles
 } from '@material-ui/core'
 import { hasFilterRule } from '../../../filters/useFilterStore'
@@ -37,11 +41,17 @@ const makeCheckboxes = (flags, checked) => {
   }))
 }
 
+const makeRadioButtons = (flags) => {
+  return flags.map((flag, i) => ({
+    id: flag,
+    label: getPrefixLang(flag !== 'bie' ? flag : flag + '_group', 'FLAG_LABEL'),
+  }))
+}
+
 const GROUP_TITLES = [
   getLang('FLAG_LABEL_AREA'),
-  getLang('FLAG_LABEL_SCHOOL'),
   getLang('FLAG_LABEL_AGE'),
-  getLang('FLAG_LABEL_BIE_GROUP')
+  getLang('FLAG_LABEL_SCHOOL')
 ]
 
 /**
@@ -73,6 +83,8 @@ const SedaFilterFlags = ({ classes, className, ...props }) => {
   const [region] = useRegion()
 
   const regionFlags = FILTER_FLAGS[region]
+  const regionRadios = FILTER_RADIOS[region]
+
   // grab filters array
   const filters = useActiveFilters()
   // function to remove a single filter
@@ -85,6 +97,14 @@ const SedaFilterFlags = ({ classes, className, ...props }) => {
   const checkedFlags = regionFlags
     .flat()
     .filter(f => uncheckedFlags.indexOf(f) === -1)
+  // get active exclusive radio selection
+  const checkedRadio = regionRadios
+    .flat()
+    .filter(flag => hasFilterRule(filters, ['eq', flag, 1])).length > 0 
+    ? regionRadios
+    .flat()
+    .filter(flag => hasFilterRule(filters, ['eq', flag, 1]))[0] 
+    : 'all'
   // function to set (add or update) single filter
   const setFilter = useFilterStore(state => state.setFilter)
   // get checkbox group from flags and active filters
@@ -113,6 +133,16 @@ const SedaFilterFlags = ({ classes, className, ...props }) => {
       : removeFilter(['neq', key], true)
   }
 
+  const radioGroups = useMemo(() => {
+    return regionRadios.map(flagGroup => makeRadioButtons(['all', ...flagGroup]))
+  }, [regionRadios])
+
+  const handleRadioChange = (event, radio) => {
+    console.log("radio:", radio, event)
+    checkedRadio !== 'all' && removeFilter(['eq', checkedRadio], true)
+    radio !== 'all' && setFilter(['eq', radio, 1])
+  }
+
   return (
     <PanelListItem
       className={clsx(classes.root, className)}
@@ -131,6 +161,23 @@ const SedaFilterFlags = ({ classes, className, ...props }) => {
             checkboxes={group}
             onChange={handleCheckboxChange}
           />
+        </FormControl>
+      ))}
+      {regionRadios.length > 0 && radioGroups.map((group, i) => (
+        <FormControl
+        className={classes.group}
+        key={checkboxGroups.length + i}
+        component="fieldset">
+          <FormLabel
+            className={classes.label}
+            component="legend">
+            {GROUP_TITLES[checkboxGroups.length + i]}
+          </FormLabel>
+          <RadioGroup aria-label="school type" value={checkedRadio} onChange={handleRadioChange}>
+            {group.map(({id, label}, i) => (
+              <FormControlLabel value={id} key={i} control={<Radio color='primary' />} label={label} />
+            ))}
+          </RadioGroup>
         </FormControl>
       ))}
     </PanelListItem>
