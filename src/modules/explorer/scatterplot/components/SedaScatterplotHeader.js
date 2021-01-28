@@ -81,20 +81,19 @@ const getScatterplotContext = (xVar, yVar, region, type) => {
 const getScatterplotType = (xVar, yVar) => {
   if (isVersusFromVarNames(xVar, yVar)) return 'VS'
   if (isGapVarName(yVar)) return 'GAP'
+  if (getMetricIdFromVarName(yVar) === 'avg') return 'AVG'
   return 'DEFAULT'
 }
 
 const getScatterplotLang = (key, chartType, context) => {
   // title case metrics if this is a title
   if (key.indexOf('TITLE') > -1) {
-    if (context['metric'] === 'average test scores') {
-      context['metric'] = 'test scores'
-    }
     context['metric'] = titleCase(context['metric'])
     context['secondary'] = titleCase(context['secondary'])
   }
   if (chartType === 'VS') return getLang(key + '_VS', context)
   if (chartType === 'GAP') return getLang(key + '_GAP', context)
+  if (chartType === 'AVG') return getLang(key + '_AVG', context)
   return getLang(key, context)
 }
 
