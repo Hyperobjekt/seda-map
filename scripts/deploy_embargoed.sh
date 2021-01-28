@@ -3,7 +3,8 @@
 # Deploys private version of the explorer
 # NOTE: should update "homepage" in package.json to "./" before deploying
 
-REACT_APP_EMBARGOED=true
+REACT_APP_EMBARGOED=1
+REACT_APP_SHOW_PR=1
 S3_BUCKET=private.edopportunity.org
 CLOUDFRONT_ID=E8AMX240UHX5F
 

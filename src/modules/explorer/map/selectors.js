@@ -2,7 +2,9 @@ import { fromJS } from 'immutable'
 import {
   getRegionFromLocationId,
   getChoroplethColors,
-  isGapVarName
+  isGapVarName,
+  SHOW_PUERTO_RICO,
+  SHOW_NATIVE_AMERICAN
 } from '../app/selectors'
 import { getFilterIndex } from '../../filters/useFilterStore'
 
@@ -143,6 +145,19 @@ export const getCircleLayer = ({
   colors,
   colorExtent
 }) => {
+  const filters = ['all']
+  if (!SHOW_NATIVE_AMERICAN) {
+    const NATIVE_AMERICAN_FILTER = ["!=", ['get', 'bie'], 1]
+    filters.push(NATIVE_AMERICAN_FILTER)
+  }
+  if (!SHOW_PUERTO_RICO) {
+    const PUERTO_RICO_FILTER = ["!=", ['index-of', "72", ['get', 'id']], 0]
+    filters.push(PUERTO_RICO_FILTER)
+  }
+  if (ids && ids.length > 0) {
+    const MATCH_IDS_FILTER = ['in', ['get', 'id'], ['literal', ids]]
+    filters.push(MATCH_IDS_FILTER)
+  }
   return fromJS({
     id: layerId || 'schools-circle',
     source: 'seda',
@@ -151,8 +166,8 @@ export const getCircleLayer = ({
     minzoom: getCircleMinZoom(region),
     // interactive: region === 'schools',
     interactive: true,
-    ...(ids && ids.length > 0
-      ? { filter: ['in', ['get', 'id'], ['literal', ids]] }
+    ...(filters.length > 1
+      ? { filter: filters }
       : {}),
     // layout: {
     //   visibility: demographic === 'all' ? 'visible' : 'none'
@@ -335,6 +350,11 @@ const isCircleId = id => {
  * Returns a filter definition for a chorpleth layer based on the provided params
  */
 const getChoroplethFilter = ({ region, filters, ids }) => {
+  const filterArray = ['all']
+  if (!SHOW_PUERTO_RICO) {
+    const PUERTO_RICO_FILTER = ["!=", ['index-of', "72", ['get', 'id']], 0]
+    filterArray.push(PUERTO_RICO_FILTER)
+  }
   const prefixIndex = getFilterIndex(filters, [
     'startsWith',
     'id'
@@ -342,16 +362,15 @@ const getChoroplethFilter = ({ region, filters, ids }) => {
   // if schools and filtering within a region, only show district choropleths for that region
   if (region === 'schools' && prefixIndex > -1) {
     const prefix = filters[prefixIndex][2]
-    return {
-      filter: ['in', prefix, ['get', 'id']]
-    }
+    const WITHIN_REGION_FILTER = ['in', prefix, ['get', 'id']]
+    filterArray.push(WITHIN_REGION_FILTER)
   }
   // if not schools and filtering a set of id's, only show choropleths with those ids
   if (region !== 'schools' && ids && ids.length > 0) {
-    return { filter: ['in', ['get', 'id'], ['literal', ids]] }
+    const MATCH_IDS_FILTER = ['in', ['get', 'id'], ['literal', ids]]
+    filterArray.push(MATCH_IDS_FILTER)
   }
-  // no filter needed
-  return {}
+  return filterArray.length > 1 ? { filter: filterArray } : {}
 }
 
 /**
