@@ -1,3 +1,5 @@
+import { SHOW_NATIVE_AMERICAN } from "../selectors"
+
 /**
  * Filter flags available for location types
  */
@@ -20,8 +22,7 @@ export const FILTER_RADIOS = {
 // the functionality is required in the future
 export const EXCLUSIVE_FLAGS = ['ch', 'mg']
 
-if (process.env.REACT_APP_EMBARGOED) {
-  // FILTER_FLAGS['schools'].push(['bie'])
+if (SHOW_NATIVE_AMERICAN) {
   FILTER_RADIOS['schools'][0].push('bie')
   EXCLUSIVE_FLAGS.push('bie')
 }
