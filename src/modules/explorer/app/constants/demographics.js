@@ -1,3 +1,4 @@
+import { SHOW_NATIVE_AMERICAN } from '../selectors'
 import LANG from './en'
 
 /**
@@ -87,7 +88,7 @@ export const GAPS = [
   }
 ]
 
-if (process.env.REACT_APP_EMBARGOED) {
+if (SHOW_NATIVE_AMERICAN) {
   const dem = {
     id: 'i',
     label: LANG['LABEL_I'],

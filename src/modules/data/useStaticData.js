@@ -2,6 +2,7 @@ import create from 'zustand'
 import performance from '../performance'
 import logger from '../logger'
 import { readRemoteFile } from 'react-papaparse'
+import { SHOW_NATIVE_AMERICAN, SHOW_PUERTO_RICO } from '../explorer/app/selectors'
 
 const ENDPOINT = process.env.REACT_APP_DATA_ENDPOINT
 const DATA_ENDPOINT = ENDPOINT + 'data'
@@ -149,6 +150,26 @@ const AUTO_PARSE_COLS = {
   bie: true,
   fid: true
 }
+
+const shapeData = (data, dataSetId) => {
+  let filteredData = data
+  // TEMPORARY: filter out BIE schools on non-embargoed link
+  if (!SHOW_NATIVE_AMERICAN) {
+    filteredData = filteredData.filter(d => !d.bie)
+  }
+  // TEMPORARY: filter out Puerto Rico data on non-embargoed link
+  if (!SHOW_PUERTO_RICO) {
+    filteredData = filteredData.filter(d => d.id.substr(0,2) !== '72')
+  }
+  // sort data by number of students (`all_sz`)
+  filteredData.sort((a, b) => b['all_sz'] - a['all_sz'])
+  // HACK: rename `np_seg` to `pn_seg`, as it is a gap variable (not non-poor)
+  // this can be removed when this issue is closed: https://github.com/Hyperobjekt/seda-etl/issues/35
+  // mutates original to reduce performance impact
+  HACK_FIX_NP_SEG(filteredData)
+  return filteredData
+}
+
 /**
  *
  * @param {*} region
@@ -218,26 +239,8 @@ const [useStaticData] = create((set, get) => ({
       isLoading: true
     }))
     const data = await loadDataSet(dataSetId, get().insertData)
-    const filterBIE =
-      dataSetId === 'schools' && !process.env.REACT_APP_EMBARGOED
-    let filteredData = []
-    // TEMPORARY: filter out BIE schools on non-embargoed link
-    if (filterBIE) {
-      const total = data.length
-      filteredData = data.filter(d => !d.bie)
-      const filteredTotal = filteredData.length
-      console.debug(
-        `filtered ${total -
-          filteredTotal} schools out of dataset`
-      )
-    }
-    const dataStore = filterBIE ? filteredData : data
-    // sort data by number of students (`all_sz`)
-    dataStore.sort((a, b) => b['all_sz'] - a['all_sz'])
-    // HACK: rename `np_seg` to `pn_seg`, as it is a gap variable (not non-poor)
-    // this can be removed when this issue is closed: https://github.com/Hyperobjekt/seda-etl/issues/35
-    // mutates original to reduce performance impact
-    HACK_FIX_NP_SEG(dataStore)
+
+    const dataStore = shapeData(data, dataSetId)
 
     const loadTime = performance.now() - t0
     set(state => ({
