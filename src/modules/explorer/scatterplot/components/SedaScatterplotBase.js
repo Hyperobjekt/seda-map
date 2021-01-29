@@ -36,15 +36,16 @@ const MIN_EXTENTS = {
 
 const adjustExtent = (varName, extent) => {
   // do not adjust size extents
-  if (varName.indexOf('_sz')) return extent
+  if (varName.indexOf('_sz') > -1) return extent
   const isGap = isGapVarName(varName)
   const metric = getMetricIdFromVarName(varName)
   const key = isGap ? metric + '_gap' : metric
   const minExtent = MIN_EXTENTS[key] || [-0.5, 0.5]
-  return [
+  const result = [
     Math.min(minExtent[0], extent[0]),
     Math.max(minExtent[1], extent[1])
   ]
+  return result
 }
 
 const styles = theme => ({

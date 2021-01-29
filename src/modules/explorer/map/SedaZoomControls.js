@@ -17,6 +17,7 @@ import {
   US_VIEWPORT
 } from './constants'
 import clsx from 'clsx'
+import { SHOW_PUERTO_RICO } from '../app/selectors'
 
 const styles = theme => ({
   root: {
@@ -95,7 +96,7 @@ const SedaZoomControls = ({ classes, className, ...props }) => {
           <HawaiiIcon />
         </IconButton>
       </Tooltip>
-      <Tooltip
+      { SHOW_PUERTO_RICO && <Tooltip
         placement="left"
         arrow
         title="Zoom to Puerto Rico">
@@ -104,7 +105,7 @@ const SedaZoomControls = ({ classes, className, ...props }) => {
           onClick={handleZoomToPuertoRico}>
           <PuertoRicoIcon />
         </IconButton>
-      </Tooltip>
+      </Tooltip> }
       <Tooltip
         placement="left"
         arrow
