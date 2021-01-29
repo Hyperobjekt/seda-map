@@ -86,14 +86,16 @@ const getScatterplotType = (xVar, yVar) => {
 }
 
 const getScatterplotLang = (key, chartType, context) => {
+  const isTitle = key.indexOf('TITLE') > -1
   // title case metrics if this is a title
-  if (key.indexOf('TITLE') > -1) {
+  if (isTitle) {
     context['metric'] = titleCase(context['metric'])
     context['secondary'] = titleCase(context['secondary'])
   }
   if (chartType === 'VS') return getLang(key + '_VS', context)
   if (chartType === 'GAP') return getLang(key + '_GAP', context)
-  if (chartType === 'AVG') return getLang(key + '_AVG', context)
+  // AVG chart needs metric re-wording
+  if (chartType === 'AVG' && isTitle) return getLang(key + '_AVG', context)
   return getLang(key, context)
 }
 
