@@ -8,7 +8,7 @@ import {
   withStyles
 } from '@material-ui/core'
 import { SedaLocationName } from '../../location'
-import { getLang, getPrefixLang } from '../../app/selectors/lang'
+import { getPrefixLang } from '../../app/selectors/lang'
 import { useRegion } from '../../app/hooks'
 import SedaStat from '../../stats/SedaStat'
 import useCompareStore from '../hooks/useCompareStore'
@@ -73,7 +73,7 @@ const TableHeaderMetric = withStyles(theme => ({
     marginTop: 2,
     lineHeight: 1.43
   }
-}))(({ column, classes, children, ...rest }) => {
+}))(({ column, classes, children }) => {
   const demographic = useCompareStore(state => state.demographic, shallow)
   const demographicProps = isGapDemographic(demographic) ? {
     gap: getPrefixLang(demographic, 'LABEL')
