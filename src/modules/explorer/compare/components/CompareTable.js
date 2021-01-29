@@ -8,7 +8,7 @@ import {
   withStyles
 } from '@material-ui/core'
 import { SedaLocationName } from '../../location'
-import { getPrefixLang } from '../../app/selectors/lang'
+import { getLang, getPrefixLang } from '../../app/selectors/lang'
 import { useRegion } from '../../app/hooks'
 import SedaStat from '../../stats/SedaStat'
 import useCompareStore from '../hooks/useCompareStore'
@@ -17,9 +17,27 @@ import { getMetricIdsForRegion } from '../../app/selectors/metrics'
 import useSetCompareLocation from '../hooks/useSetCompareLocation'
 import clsx from 'clsx'
 import useCompareLocationsData from '../hooks/useCompareLocationsData'
-import { isUnavailable } from '../../app/selectors'
+import { isGapDemographic, isUnavailable } from '../../app/selectors'
 
 const TABLE_METRICS = ['avg', 'grd', 'coh', 'ses', 'frl']
+
+const getSesHintFromDemographic = (demographic) => {
+  if(isGapDemographic(demographic)) {
+    return ['pn', 'mf'].indexOf(demographic) > -1  ? 'ses_gap_na' : 'ses_gap'
+  }else {
+    return ['p', 'np'].indexOf(demographic) > -1 
+    ? 'ses_na' 
+    : ['w', 'b', 'h', 'a', 'i'].indexOf(demographic) > -1 
+    ? 'ses_subgroup'
+    : 'ses_all'
+  }
+}
+
+const getAccessor = (demographic, m) => {
+  if(m !== 'ses') return [demographic, m].join('_')
+  
+  return ['m', 'f'].indexOf(demographic) > -1 ? ['all', m].join('_') : [demographic, m].join('_')
+}
 
 const numberSorter = (a, b, columnId) => {
   const aVal = a.values[columnId]
@@ -55,7 +73,13 @@ const TableHeaderMetric = withStyles(theme => ({
     marginTop: 2,
     lineHeight: 1.43
   }
-}))(({ column, classes, children }) => {
+}))(({ column, classes, children, ...rest }) => {
+  const demographic = useCompareStore(state => state.demographic, shallow)
+  const demographicProps = isGapDemographic(demographic) ? {
+    gap: getPrefixLang(demographic, 'LABEL')
+  } : ['w', 'b', 'h', 'a', 'i', 'np', 'p'] ? {
+    subgroup: getPrefixLang(demographic, 'LABEL')
+  } : {}
   return (
     <div
       className={clsx(classes.root, {
@@ -70,7 +94,10 @@ const TableHeaderMetric = withStyles(theme => ({
         {getPrefixLang(column.id, 'LABEL')}
       </Typography>
       <Typography className={classes.subtitle} variant="caption">
-        {getPrefixLang(column.id, 'COMPARE_HINT')}
+        {column.id === 'ses' 
+          ? getPrefixLang(getSesHintFromDemographic(demographic), 'COMPARE_HINT', demographicProps)
+          : getPrefixLang(column.id, 'COMPARE_HINT')
+        }
       </Typography>
       {children}
     </div>
@@ -128,7 +155,7 @@ const CompareTable = ({ classes, ...props }) => {
     const metricCols = metrics.map(m => ({
       id: m,
       Header: TableHeaderMetric,
-      accessor: [demographic, m].join('_'),
+      accessor: getAccessor(demographic, m),
       sortType: numberSorter,
       Cell: renderMetricCell([demographic, m].join('_'))
     }))
