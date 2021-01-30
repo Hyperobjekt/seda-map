@@ -14,7 +14,7 @@ import { formatInteger } from '../../../../shared/utils'
  * Contains all controls for modifying filters
  */
 const SedaFiltersForm = props => {
-  const { filterResults, totalResults, region } = useAppContext()
+  const { filterResults, totalResults, region, metric: activeMetric } = useAppContext()
 
   // TODO: only show metric sliders that are added
   // const [filterMetrics, setFilterMetrics] = useState([])
@@ -49,7 +49,7 @@ const SedaFiltersForm = props => {
       {region !== 'states' && <SedaFilterLocation />}
       <SedaLimitButtons />
       {availableMetrics.map(metric => (
-        <SedaMetricSlider key={metric} metricId={metric} />
+        <SedaMetricSlider key={metric} metricId={metric} isActive={metric === activeMetric} />
       ))}
       {(region === 'schools' || region === 'districts') && (
         <SedaFilterFlags />
