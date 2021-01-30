@@ -52,7 +52,7 @@ export const getDotSizeScale = ({
 
 export const getDataExtent = (data, accessor) => {
   if (typeof accessor === 'string')
-    return d3array.extent(data, d => d[accessor])
+    return d3array.extent(data, d => parseFloat(d[accessor]))
   if (typeof accessor === 'function')
     return d3array.extent(data, accessor)
   throw new Error('invalid accessor to retrieve extent')
@@ -62,11 +62,11 @@ export const getDataExtent = (data, accessor) => {
  * Pads a provided extent
  */
 export const getPaddedExtent = (extent, amount = 0.1) => {
-  const padding = (parseFloat(extent[1]) - parseFloat(extent[0])) * amount
+  const padding = (extent[1] - extent[0]) * amount
   // const interval = getIntervalForExtent(extent)
   const extendedExtent = [
-    parseFloat(extent[0]) - padding,
-    parseFloat(extent[1]) + padding
+    extent[0] - padding,
+    extent[1] + padding
   ]
   return extendedExtent
 }
