@@ -6,6 +6,7 @@ import {
 } from '../app/selectors'
 import { DivergingStatValue } from '../../../shared'
 import { format } from 'd3-format'
+import { withStyles } from '@material-ui/core'
 
 const formatMoe = format('.1r')
 const formatMoeGrd = format('.1%')
@@ -35,4 +36,8 @@ const SedaStat = ({
 
 SedaStat.propTypes = DivergingStatValue.propTypes
 
-export default SedaStat
+export default withStyles({
+  indicator: {
+    visibility: props => props.varName.indexOf("frl") > -1 ? 'hidden' : 'visible'
+  }
+})(SedaStat)
