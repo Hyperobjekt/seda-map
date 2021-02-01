@@ -1,5 +1,3 @@
-import { SHOW_NATIVE_AMERICAN } from '../selectors'
-
 /**
  * Filter flags available for location types
  */
