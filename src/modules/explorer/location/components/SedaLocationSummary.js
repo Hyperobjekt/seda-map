@@ -12,7 +12,7 @@ import {
   getKeyMetrics,
   getMetricIdsForRegion
 } from '../../app/selectors/metrics'
-import { ListSubheader } from '@material-ui/core'
+import { ListSubheader, withStyles } from '@material-ui/core'
 import { formatNumber } from '../../../../shared/utils'
 
 const getSesComparisonItem = (
@@ -95,17 +95,30 @@ const getSummaryItems = location => {
     )
     .filter(v => !!v)
   // retun the combined summary and comparison items
-  return [...metricItems, ...comparisonItems]
+  return [metricItems, comparisonItems]
 }
 
-const SedaLocationSummary = ({ location }) => {
-  const summaryItems = getSummaryItems(location)
+const SedaLocationSummary = ({ location, classes }) => {
+  const [metricItems, comparisonItems] = getSummaryItems(location)
   return (
     <>
       <ListSubheader>
         {getLang('LOCATION_SUBHEADING_SUMMARY')}
       </ListSubheader>
-      {summaryItems.map(summary => (
+      <p className={classes.category}>
+        {getLang('LOCATION_SUBHEADING_SUMMARY_OVERALL')}
+      </p>
+      {metricItems.map(summary => (
+        <LocationSummaryListItem
+          key={summary.metricId}
+          indicator={summary.indicator}
+          description={summary.description}
+        />
+      ))}
+      <p className={classes.category}>
+        {getLang('LOCATION_SUBHEADING_SUMMARY_COMPARED')}
+      </p>
+      {comparisonItems.map(summary => (
         <LocationSummaryListItem
           key={summary.metricId}
           indicator={summary.indicator}
@@ -118,4 +131,10 @@ const SedaLocationSummary = ({ location }) => {
 
 SedaLocationSummary.propTypes = {}
 
-export default SedaLocationSummary
+export default withStyles({
+  category: {
+    fontSize: "0.875rem",
+    padding: "0px 24px",
+    margin: "12px 0"
+  }
+})(SedaLocationSummary)
