@@ -1,5 +1,3 @@
-import { SHOW_NATIVE_AMERICAN } from "../selectors"
-
 /**
  * Filter flags available for location types
  */
@@ -22,7 +20,8 @@ export const FILTER_RADIOS = {
 // the functionality is required in the future
 export const EXCLUSIVE_FLAGS = ['ch', 'mg']
 
-if (SHOW_NATIVE_AMERICAN) {
+// add BIE filter to embargoed
+if (process.env.REACT_APP_EMBARGOED === '1') {
   FILTER_RADIOS['schools'][0].push('bie')
   EXCLUSIVE_FLAGS.push('bie')
 }

@@ -87,8 +87,9 @@ export const GAPS = [
     regions: ['states', 'counties', 'districts']
   }
 ]
+console.log('SHOW NAM', SHOW_NATIVE_AMERICAN)
 
-if (SHOW_NATIVE_AMERICAN) {
+if (process.env.REACT_APP_EMBARGOED === '1') {
   const dem = {
     id: 'i',
     label: LANG['LABEL_I'],
