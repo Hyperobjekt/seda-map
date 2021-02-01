@@ -60,9 +60,13 @@ const renderSectionTitle = section => section.index
 const getSuggestionValue = hit => hit.name
 
 const getSectionSuggestions = section => {
-  return SHOW_PUERTO_RICO ? 
-    section.hits : 
-    section.hits.filter(hit => hit.id?.substr(0,2) !== '72')
+  return SHOW_PUERTO_RICO
+    ? section.hits
+    : section.hits.filter(
+        hit =>
+          hit.id?.substr(0, 2) !== '72' &&
+          hit.state_name !== 'Puerto Rico'
+      )
 }
 
 /**
