@@ -161,6 +161,10 @@ const shapeData = (data, dataSetId) => {
   if (!SHOW_PUERTO_RICO) {
     filteredData = filteredData.filter(d => d.id.substr(0,2) !== '72')
   }
+  // add a flag for "regular" schools: non-magnet, non-charter, non-bie
+  if(dataSetId === "schools") {
+    filteredData = filteredData.map(d => ({...d, rg: !!d.bie || !!d.ch || !!d.mg ? null : 1}))
+  }
   // sort data by number of students (`all_sz`)
   filteredData.sort((a, b) => b['all_sz'] - a['all_sz'])
   // HACK: rename `np_seg` to `pn_seg`, as it is a gap variable (not non-poor)
