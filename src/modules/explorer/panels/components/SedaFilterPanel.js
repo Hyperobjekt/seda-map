@@ -7,13 +7,14 @@ import { BasicSidePanel } from '../../../../shared'
 /**
  * Side panel for demographic selection
  */
-const SedaFilterPanel = ({ onClose, ...props }) => {
+const SedaFilterPanel = ({ open, onClose, ...props }) => {
   return (
     <BasicSidePanel
       title={getPrefixLang('filter', 'PANEL_TITLE')}
       onClose={onClose}
+      open={open}
       {...props}>
-      <SedaFiltersForm />
+      <SedaFiltersForm open={open} />
     </BasicSidePanel>
   )
 }

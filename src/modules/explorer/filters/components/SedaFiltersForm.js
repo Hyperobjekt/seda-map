@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useLayoutEffect, useState } from 'react'
 import { List, Typography } from '@material-ui/core'
 import { useAppContext } from '../../app/hooks'
 import { PanelListItem } from '../../../../shared/components/Panels/PanelList'
@@ -13,21 +13,34 @@ import { formatInteger } from '../../../../shared/utils'
 /**
  * Contains all controls for modifying filters
  */
-const SedaFiltersForm = props => {
-  const { filterResults, totalResults, region, metric: activeMetric } = useAppContext()
+const SedaFiltersForm = ({ open, ...props }) => {
+  const {
+    filterResults,
+    totalResults,
+    region,
+    metric: activeMetric
+  } = useAppContext()
 
   // TODO: only show metric sliders that are added
   // const [filterMetrics, setFilterMetrics] = useState([])
 
-  // get ranges from filter array
-  const availableMetrics = [
+  const isFiltered = filterResults !== totalResults
+
+  const metrics = [
     'avg',
     'grd',
     'coh',
     region === 'schools' ? 'frl' : 'ses'
   ]
 
-  const isFiltered = filterResults !== totalResults
+  // HACK: using a delayedOpen property to trigger a re-render on SedaMetricSlider for the active metric
+  //  without this, the gradient will not be positioned correctly on the active metric slider
+  const [delayedOpen, setDelayedOpen] = useState(open)
+  useLayoutEffect(() => {
+    setTimeout(() => {
+      setDelayedOpen(open)
+    }, 500)
+  }, [open])
 
   return (
     <List {...props}>
@@ -48,8 +61,12 @@ const SedaFiltersForm = props => {
       </PanelListItem>
       {region !== 'states' && <SedaFilterLocation />}
       <SedaLimitButtons />
-      {availableMetrics.map(metric => (
-        <SedaMetricSlider key={metric} metricId={metric} isActive={metric === activeMetric} />
+      {metrics.map(metric => (
+        <SedaMetricSlider
+          key={metric}
+          metricId={metric}
+          isActive={metric === activeMetric && delayedOpen}
+        />
       ))}
       {(region === 'schools' || region === 'districts') && (
         <SedaFilterFlags />
