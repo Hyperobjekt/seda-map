@@ -15,6 +15,5 @@ export const EXCLUSIVE_FLAGS = []
 
 // add BIE filter to embargoed
 if (process.env.REACT_APP_EMBARGOED === '1') {
-  FILTER_FLAGS['schools'].push(['bie'])
-  EXCLUSIVE_FLAGS.push('bie')
+  FILTER_FLAGS['schools'][1].push(['bie'])
 }

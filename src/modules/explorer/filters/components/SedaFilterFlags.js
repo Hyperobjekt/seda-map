@@ -40,8 +40,7 @@ const makeCheckboxes = (flags, checked) => {
 const GROUP_TITLES = [
   getLang('FLAG_LABEL_AREA'),
   getLang('FLAG_LABEL_SCHOOL'),
-  getLang('FLAG_LABEL_AGE'),
-  getLang('FLAG_LABEL_BIE_GROUP')
+  getLang('FLAG_LABEL_AGE')
 ]
 
 /**
