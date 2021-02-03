@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useState } from 'react'
 import { ExpansionPanel } from '../../../../shared'
 import { makeStyles, Typography } from '@material-ui/core'
 import { ExpandIcon } from '../../../icons'
@@ -72,12 +72,18 @@ const useChartOverlayStyles = makeStyles(theme => ({
     left: theme.spacing(3),
     width: `calc(100% - ${theme.spacing(6)}px)`,
     height: `calc(100% - ${theme.spacing(3)}px)`,
+    overflow: 'hidden'
+  },
+  inner: {
     padding: theme.spacing(3),
+    width: '100%',
+    height: '100%',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'flex-end',
     alignItems: 'center',
-    backgroundImage: 'linear-gradient(0deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0))',
+    backgroundImage:
+      'linear-gradient(0deg, rgba(255, 255, 255, 0.8) 60%, rgba(255, 255, 255, 0))',
     '& button': {
       background: 'white'
     },
@@ -89,39 +95,40 @@ const useChartOverlayStyles = makeStyles(theme => ({
     },
     '& button:nth-child(2)': {
       borderTopLeftRadius: 3,
-      borderBottomLeftRadius: 3,
-    },
+      borderBottomLeftRadius: 3
+    }
   },
   text: {
     ...theme.mixins.boldType,
-    textAlign: "center",
+    textAlign: 'center',
     maxWidth: 160
-  },
+  }
 }))
 
 const ChartCalloutOverlay = () => {
   const classes = useChartOverlayStyles()
-  const [overlaySpring, setOverlaySpring] = useSpring(() => ({
-    opacity: 0
-  }))
-
-  const onMouseEnter = useCallback(() => {
-    setOverlaySpring({
-      opacity: 1
-    })
-  }, [setOverlaySpring])
-
-  const onMouseLeave = useCallback(() => {
-    setOverlaySpring({
-      opacity: 0
-    })
-  }, [setOverlaySpring])
+  const [visible, setVisible] = useState(false)
+  const styles = useSpring({
+    opacity: visible ? 1 : 0,
+    transform: visible
+      ? `translate3d(0, 0, 0)`
+      : `translate3d(0, 100%, 0)`
+  })
+  const onMouseEnter = () => setVisible(true)
+  const onMouseLeave = () => setVisible(false)
 
   return (
-    <animated.div className={classes.root} style={overlaySpring} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
-      <p className={classes.text}>{getLang('LABEL_PREVIEW_CHANGE_VIEW')}</p>
-      <SedaViewControls />
-    </animated.div>
+    <div
+      className={classes.root}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}>
+      <animated.div className={classes.inner} style={styles}>
+        <p className={classes.text}>
+          {getLang('LABEL_PREVIEW_CHANGE_VIEW')}
+        </p>
+        <SedaViewControls />
+      </animated.div>
+    </div>
   )
 }
 
