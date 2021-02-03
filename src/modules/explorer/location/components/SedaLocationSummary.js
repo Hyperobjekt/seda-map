@@ -83,17 +83,20 @@ const getSummaryItems = location => {
     .map(m => getSummaryItem(location, m))
     .filter(v => !!v)
   const secondaryMetric = region === 'schools' ? 'frl' : 'ses'
-  // get the SES comparison for key metrics for this location
-  const comparisonItems = getKeyMetrics()
-    .map(v =>
-      getSesComparisonItem(
-        location,
-        v.id,
-        secondaryMetric,
-        region
-      )
-    )
-    .filter(v => !!v)
+  // get the SES comparison for key metrics for this location (if it is a county, district, or school)
+  const comparisonItems =
+    ['counties', 'districts', 'schools'].indexOf(region) > -1
+      ? getKeyMetrics()
+          .map(v =>
+            getSesComparisonItem(
+              location,
+              v.id,
+              secondaryMetric,
+              region
+            )
+          )
+          .filter(v => !!v)
+      : []
   // retun the combined summary and comparison items
   return [...metricItems, ...comparisonItems]
 }
