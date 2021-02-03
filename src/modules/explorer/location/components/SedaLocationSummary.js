@@ -131,10 +131,16 @@ const SedaLocationSummary = ({ location, classes }) => {
 
 SedaLocationSummary.propTypes = {}
 
-export default withStyles({
+export default withStyles(theme => ({
   category: {
-    fontSize: "0.875rem",
-    padding: "0px 24px",
-    margin: "12px 0"
+    // fontSize: "0.875rem",
+    // padding: "0px 24px",
+    // margin: "12px 0",
+    fontSize: theme.typography.pxToRem(12),
+    padding: theme.spacing(0, 3),
+    margin: theme.spacing(1, 0),
+    [theme.breakpoints.up('lg')]: {
+      fontSize: theme.typography.pxToRem(14)
+    }
   }
-})(SedaLocationSummary)
+}))(SedaLocationSummary)
