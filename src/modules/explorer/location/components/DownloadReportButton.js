@@ -1,16 +1,19 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { Button } from '@material-ui/core';
-import { getLang } from '../../app/selectors/lang';
-import { getPredictedValue, getRegionFromLocationId } from '../../app/selectors';
-import { formatNumber } from '../../../../shared/utils';
-import { hasVal } from '../../app/selectors/data';
-import { getStateName } from '../../../../shared/utils/states';
-import axios from 'axios';
+import { Button } from '@material-ui/core'
+import { getLang } from '../../app/selectors/lang'
+import {
+  getPredictedValue,
+  getRegionFromLocationId
+} from '../../app/selectors'
+import { formatNumber } from '../../../../shared/utils'
+import { hasVal } from '../../app/selectors/data'
+import { getStateName } from '../../../../shared/utils/states'
+import axios from 'axios'
 
 /**
  * Returns a singular region name for the PDF export
- * @param {*} region 
+ * @param {*} region
  */
 const getPdfRegion = region => {
   return region === 'counties'
@@ -22,9 +25,9 @@ const getPdfRegion = region => {
 
 /**
  * Gets the difference from "average" values for key metrics
- * @param {*} locationData 
+ * @param {*} locationData
  */
-const getDiffValues = (locationData) => {
+const getDiffValues = locationData => {
   const id = locationData['id']
   const region = getRegionFromLocationId(id)
   const metrics = ['avg', 'grd', 'coh']
@@ -33,9 +36,11 @@ const getDiffValues = (locationData) => {
     region === 'schools'
       ? locationData['all_frl']
       : locationData['all_ses']
-  const diffs = values.map(
-    (val, i) => hasVal(val) && hasVal(ses) 
-      ? formatNumber(val - getPredictedValue(ses, metrics[i], region))
+  const diffs = values.map((val, i) =>
+    hasVal(val) && hasVal(ses)
+      ? formatNumber(
+          val - getPredictedValue(ses, metrics[i], region)
+        )
       : null
   )
   return diffs
@@ -43,9 +48,9 @@ const getDiffValues = (locationData) => {
 
 /**
  * Sends a request to the report endpoint to generate a PDF report
- * @param {*} locationData 
+ * @param {*} locationData
  */
-const fetchReport = (locationData) => {
+const fetchReport = locationData => {
   const id = locationData['id']
   const region = getRegionFromLocationId(id)
   const diffs = getDiffValues(locationData)
@@ -71,7 +76,7 @@ const fetchReport = (locationData) => {
 
 /**
  * Handle the PDF response from the server and trigger the download
- * @param {*} locationData 
+ * @param {*} locationData
  */
 const handleResponse = locationData => response => {
   const url = window.URL.createObjectURL(
@@ -79,10 +84,7 @@ const handleResponse = locationData => response => {
   )
   const link = document.createElement('a')
   link.href = url
-  link.setAttribute(
-    'download',
-    locationData.name + '.pdf'
-  )
+  link.setAttribute('download', locationData.name + '.pdf')
   document.body.appendChild(link)
   link.click()
 }
@@ -90,30 +92,34 @@ const handleResponse = locationData => response => {
 /**
  * Button that downloads a report for the active location when pressed
  */
-const DownloadReportButton = ({location, ...props}) => {
-  
-  const [ loading, setLoading ] = useState(false) 
+const DownloadReportButton = ({ location, ...props }) => {
+  const [loading, setLoading] = useState(false)
 
   const handleDownloadReport = () => {
     setLoading(true)
     fetchReport(location)
       .then(handleResponse(location))
       .then(() => setLoading(false))
-      .catch((error) => {
+      .catch(error => {
         setLoading(false)
         console.error(error)
       })
   }
   return (
-    <Button disabled={loading} onClick={handleDownloadReport} {...props}>
-      {loading ? "Generating..." : getLang('LOCATION_REPORT_BUTTON') }
-    </Button>    
+    <Button
+      disabled={loading}
+      onClick={handleDownloadReport}
+      {...props}>
+      {loading
+        ? 'Generating...'
+        : getLang('LOCATION_REPORT_BUTTON')}
+    </Button>
   )
 }
 
 DownloadReportButton.propTypes = {
   /** Location data object */
-  location: PropTypes.object,
+  location: PropTypes.object
 }
 
 export default DownloadReportButton
