@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { ExpansionPanel } from '../../../../shared'
 import { makeStyles, Typography } from '@material-ui/core'
 import { ExpandIcon } from '../../../icons'
@@ -12,6 +12,8 @@ import {
   isVersusFromVarNames
 } from '../../app/selectors'
 import { getLang } from '../../app/selectors/lang'
+import SedaViewControls from '../../app/components/header/SedaViewControls'
+import { animated, useSpring } from 'react-spring'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -63,6 +65,66 @@ const getPreviewChartTitle = (xVar, yVar) => {
   return getLang(langKey, langContext)
 }
 
+const useChartOverlayStyles = makeStyles(theme => ({
+  root: {
+    position: 'absolute',
+    top: 0,
+    left: theme.spacing(3),
+    width: `calc(100% - ${theme.spacing(6)}px)`,
+    height: `calc(100% - ${theme.spacing(3)}px)`,
+    padding: theme.spacing(3),
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    backgroundImage: 'linear-gradient(0deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0))',
+    '& button': {
+      background: 'white'
+    },
+    '& button:hover': {
+      background: 'white'
+    },
+    '& button:first-child': {
+      display: 'none'
+    },
+    '& button:nth-child(2)': {
+      borderTopLeftRadius: 3,
+      borderBottomLeftRadius: 3,
+    },
+  },
+  text: {
+    ...theme.mixins.boldType,
+    textAlign: "center",
+    maxWidth: 160
+  },
+}))
+
+const ChartCalloutOverlay = () => {
+  const classes = useChartOverlayStyles()
+  const [overlaySpring, setOverlaySpring] = useSpring(() => ({
+    opacity: 0
+  }))
+
+  const onMouseEnter = useCallback(() => {
+    setOverlaySpring({
+      opacity: 1
+    })
+  }, [setOverlaySpring])
+
+  const onMouseLeave = useCallback(() => {
+    setOverlaySpring({
+      opacity: 0
+    })
+  }, [setOverlaySpring])
+
+  return (
+    <animated.div className={classes.root} style={overlaySpring} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+      <p className={classes.text}>{getLang('LABEL_PREVIEW_CHANGE_VIEW')}</p>
+      <SedaViewControls />
+    </animated.div>
+  )
+}
+
 const SedaPreviewChartPanel = ({ ...props }) => {
   /** panel is detached if in condensed mode */
   const [detached] = useCondensedPanel()
@@ -72,6 +134,7 @@ const SedaPreviewChartPanel = ({ ...props }) => {
   const [xVar, yVar] = useCurrentVars('chart')
   /** object containing class names */
   const classes = useStyles({ detached })
+
   return (
     <ExpansionPanel
       defaultExpanded
@@ -114,6 +177,7 @@ const SedaPreviewChartPanel = ({ ...props }) => {
             national average
           </Typography>
         </div>
+        <ChartCalloutOverlay />
       </div>
     </ExpansionPanel>
   )
