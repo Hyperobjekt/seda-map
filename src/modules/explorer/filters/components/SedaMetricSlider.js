@@ -12,14 +12,19 @@ import { getFormatterForVarName } from '../../app/selectors'
 import useActiveFilters from '../hooks/useActiveFilters'
 import { Tooltip, withStyles } from '@material-ui/core'
 
-const ValueLabelComponent = (props) => {
-  const { children, open, value } = props;
+const ValueLabelComponent = props => {
+  const { children, open, value } = props
 
   return (
-    <Tooltip open={open} enterTouchDelay={0} placement="top" arrow title={value}>
+    <Tooltip
+      open={open}
+      enterTouchDelay={0}
+      placement="top"
+      arrow
+      title={value}>
       {children}
     </Tooltip>
-  );
+  )
 }
 
 const getDefaultValue = (region, metric) => {
@@ -28,7 +33,12 @@ const getDefaultValue = (region, metric) => {
   return vals[metric]
 }
 
-const SedaMetricSlider = ({ metricId, classes, isActive, ...props }) => {
+const SedaMetricSlider = ({
+  metricId,
+  classes,
+  isActive,
+  ...props
+}) => {
   // grab filters array
   const filters = useActiveFilters()
   // function to remove a single filter
@@ -53,7 +63,7 @@ const SedaMetricSlider = ({ metricId, classes, isActive, ...props }) => {
     },
     {
       value: average,
-      label: "average"
+      label: 'average'
     },
     {
       value: max,
@@ -115,13 +125,20 @@ export default withStyles(theme => ({
       marginTop: -3,
       borderColor: 'currentColor',
       boxShadow: 'inherit'
-    },
+    }
   },
   track: {
     height: 8,
-    background: props => !props.isActive ? 'currentColor' : 'fixed linear-gradient(90deg, #1C4E81 100px, #3A7BBB 139px, #7CB4DC 178px, #C0E1EC 217px, #F5F6F7 256px, #D6EECA 295px, #9FDCA3 334px, #32A877 373px, #1B704D 412px)',
+    backgroundColor: 'currentColor',
+    backgroundImage: props =>
+      props.isActive
+        ? 'linear-gradient(90deg, #1C4E81 0%, #3A7BBB 20%, #7CB4DC 30%, #C0E1EC 40%, #F5F6F7 50%, #D6EECA 60%, #9FDCA3 70%, #32A877 80%, #1B704D 100%)'
+        : 'none',
+    backgroundSize: theme.spacing(37, 2),
+    backgroundAttachment: 'fixed',
+    backgroundPosition: theme.spacing(13), // HACK: offset to the X position on the page, this could be handled better but works for now (tablet + desktop offset = 104)
     [theme.breakpoints.down('sm')]: {
-      background: props => !props.isActive ? 'currentColor' : 'fixed linear-gradient(90deg, #1C4E81 20px, #3A7BBB 59px, #7CB4DC 98px, #C0E1EC 137px, #F5F6F7 176px, #D6EECA 215px, #9FDCA3 254px, #32A877 293px, #1B704D 332px)',
+      backgroundPosition: theme.spacing(3) // mobile left offset = 24
     }
   },
   rail: {
@@ -141,5 +158,5 @@ export default withStyles(theme => ({
     [theme.breakpoints.down('sm')]: {
       top: 26
     }
-  },
+  }
 }))(SedaMetricSlider)
