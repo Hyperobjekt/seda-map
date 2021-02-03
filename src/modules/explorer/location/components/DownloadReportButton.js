@@ -55,7 +55,7 @@ const fetchReport = locationData => {
   const region = getRegionFromLocationId(id)
   const diffs = getDiffValues(locationData)
   return axios({
-    url: 'http://exportv4.edopportunity.org/',
+    url: 'https://export.edopportunity.org/',
     method: 'POST',
     data: {
       // need singular region name for PDF
