@@ -82,24 +82,30 @@ const getSummaryItems = location => {
   const metricItems = metrics
     .map(m => getSummaryItem(location, m))
     .filter(v => !!v)
+    .filter(v => !!v.description)
   const secondaryMetric = region === 'schools' ? 'frl' : 'ses'
-  // get the SES comparison for key metrics for this location
-  const comparisonItems = getKeyMetrics()
-    .map(v =>
-      getSesComparisonItem(
-        location,
-        v.id,
-        secondaryMetric,
-        region
-      )
-    )
-    .filter(v => !!v)
+  // get the SES comparison for key metrics for this location (if it is a county, district, or school)
+  const comparisonItems =
+    ['counties', 'districts', 'schools'].indexOf(region) > -1
+      ? getKeyMetrics()
+          .map(v =>
+            getSesComparisonItem(
+              location,
+              v.id,
+              secondaryMetric,
+              region
+            )
+          )
+          .filter(v => !!v)
+      : []
   // retun the combined summary and comparison items
   return [metricItems, comparisonItems]
 }
 
 const SedaLocationSummary = ({ location, classes }) => {
-  const [metricItems, comparisonItems] = getSummaryItems(location)
+  const [metricItems, comparisonItems] = getSummaryItems(
+    location
+  )
   return (
     <>
       <ListSubheader>
@@ -115,9 +121,11 @@ const SedaLocationSummary = ({ location, classes }) => {
           description={summary.description}
         />
       ))}
-      <p className={classes.category}>
-        {getLang('LOCATION_SUBHEADING_SUMMARY_COMPARED')}
-      </p>
+      {comparisonItems.length > 0 && (
+        <p className={classes.category}>
+          {getLang('LOCATION_SUBHEADING_SUMMARY_COMPARED')}
+        </p>
+      )}
       {comparisonItems.map(summary => (
         <LocationSummaryListItem
           key={summary.metricId}

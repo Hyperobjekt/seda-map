@@ -17,24 +17,24 @@ import { getRegionFromLocationId } from './regions'
 // values provided by SEDA team for calulation distance from regression
 const FUNC_VARS = {
   states: {
-    avg: [-0.051, 0.795, 0.033, 0.023],
-    grd: [0.99, 0.046, 0.001, 0.001],
-    coh: [0.018, -0.003, 0.008, 0.006]
+    avg: null,
+    grd: null,
+    coh: null
   },
   counties: {
-    avg: [-0.051, 0.795, 0.033, 0.023],
-    grd: [0.99, 0.046, 0.001, 0.001],
-    coh: [0.018, -0.003, 0.008, 0.006]
+    avg: [0.061, 0.834, -0.085, 0.011],
+    grd: [0.996, 0.05, 0.002, -0.002],
+    coh: [0.004, 0.006, 0.006, 0]
   },
   districts: {
-    avg: [-0.185, 0.812, 0.126, 0.03],
-    grd: [0.989, 0.045, 0.011, 0.002],
-    coh: [0.015, 0.01, 0.004, 0.001]
+    avg: [-0.144, 0.892, 0.161, 0.04],
+    grd: [0.997, 0.052, 0.013, 0.002],
+    coh: [0.004, 0.013, 0.005, 0.001]
   },
   schools: {
-    avg: [2.567, -8.308, 9.249, -5.765],
-    grd: [1.183, -0.468, 0.406, -0.134],
-    coh: [0.069, -0.139, 0.109, -0.041]
+    avg: [-2.739, 9.46, -11.653, 7.671],
+    grd: [0.995, 0.029, 0.068, 0.103],
+    coh: [-0.011, -0.006, 0.09, -0.019]
   }
 }
 
@@ -45,6 +45,11 @@ const FUNC_VARS = {
  * @param {*} regionId
  */
 export const getPredictedValue = (value, metricId, regionId) => {
+  // only have predicted values for counties, districts and schools
+  if (
+    ['counties', 'districts', 'schools'].indexOf(regionId) === -1
+  )
+    return null
   const b = FUNC_VARS[regionId][metricId]
   return (
     b[0] +

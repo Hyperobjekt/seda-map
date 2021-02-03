@@ -2,7 +2,10 @@ import create from 'zustand'
 import performance from '../performance'
 import logger from '../logger'
 import { readRemoteFile } from 'react-papaparse'
-import { SHOW_NATIVE_AMERICAN, SHOW_PUERTO_RICO } from '../explorer/app/selectors'
+import {
+  SHOW_NATIVE_AMERICAN,
+  SHOW_PUERTO_RICO
+} from '../explorer/app/selectors'
 
 const ENDPOINT = process.env.REACT_APP_DATA_ENDPOINT
 const DATA_ENDPOINT = ENDPOINT + 'data'
@@ -159,11 +162,16 @@ const shapeData = (data, dataSetId) => {
   }
   // TEMPORARY: filter out Puerto Rico data on non-embargoed link
   if (!SHOW_PUERTO_RICO) {
-    filteredData = filteredData.filter(d => d.id.substr(0,2) !== '72')
+    filteredData = filteredData.filter(
+      d => d.id.substr(0, 2) !== '72'
+    )
   }
   // add a flag for "regular" schools: non-magnet, non-charter, non-bie
-  if(dataSetId === "schools") {
-    filteredData = filteredData.map(d => ({...d, rg: !!d.bie || !!d.ch || !!d.mg ? null : 1}))
+  if (dataSetId === 'schools') {
+    filteredData = filteredData.map(d => ({
+      ...d,
+      rg: !!d.bie || !!d.ch || !!d.mg ? null : 1
+    }))
   }
   // sort data by number of students (`all_sz`)
   filteredData.sort((a, b) => b['all_sz'] - a['all_sz'])
