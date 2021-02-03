@@ -1,6 +1,6 @@
 import useFilters from './useFilters'
 import { useRegion } from '../../app/hooks'
-import { FILTER_FLAGS, FILTER_RADIOS } from '../../app/constants/flags'
+import { FILTER_FLAGS } from '../../app/constants/flags'
 import { useMemo } from 'react'
 import { getFilterValue } from '../../../filters/useFilterStore'
 
@@ -11,7 +11,7 @@ export default () => {
   const filters = useFilters()
   const [region] = useRegion()
   return useMemo(() => {
-    const flags = [...FILTER_FLAGS[region].flat(), ...FILTER_RADIOS[region].flat()]
+    const flags = FILTER_FLAGS[region].flat()
     const locationId = getFilterValue(filters, [
       'startsWith',
       'id'

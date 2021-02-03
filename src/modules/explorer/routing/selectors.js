@@ -76,9 +76,10 @@ export const ruleParamToArray = rule => {
     case 'm':
     case 'e':
     case 'c':
-      return ['neq', type, 1]
     case 'ch':
     case 'mg':
+    case 'rg':
+      return ['neq', type, 1]
     case 'bie':
       return ['eq', type, 1]
     case 'limit':
@@ -124,7 +125,7 @@ export const paramsToFilterArray = params => {
   if (
     params.filter &&
     params.filter.length === 2 && 
-    ['mg', 'ch', 'us'].indexOf(params.filter) === -1
+    ['mg', 'ch', 'us', 'rg'].indexOf(params.filter) === -1
   ) {
     const id = getStateFipsFromAbbr(params.filter)
     return [['startsWith', 'id', id]]
