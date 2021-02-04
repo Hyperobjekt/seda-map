@@ -13,6 +13,7 @@ import {
 import { getLang } from '../app/selectors/lang'
 import { CloseIcon } from '../../icons'
 import useHelpVisibility from './useHelpVisibility'
+import { useRegion } from '../app/hooks'
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -23,9 +24,58 @@ const topics = new Array(12)
   .fill()
   .map((n, i) => `HELP_HOW_Q${i + 1}`)
 
+const additionalTopics = [
+  {
+    question: 'HELP_AVG',
+    answer: 'HELP_AVG_A'
+  },
+  {
+    question: 'HELP_CHART',
+    answer: 'HELP_CHART_DOTS'
+  },
+  {
+    question: 'HELP_COH',
+    answer: 'HELP_COH_A'
+  },
+  {
+    question: 'HELP_COH_CONCEPT',
+    answer: 'HELP_COH_CONCEPT_A'
+  },
+  {
+    question: 'HELP_FRL',
+    answer: 'HELP_FRL_A'
+  },
+  {
+    question: 'HELP_GRD',
+    answer: 'HELP_GRD_A'
+  },
+  {
+    question: 'HELP_GRD_CONCEPT',
+    answer: 'HELP_GRD_CONCEPT_A'
+  },
+  {
+    question: 'HELP_MAP',
+    answer: 'HELP_MAP_AVG_OVERVIEW'
+  },
+  {
+    question: 'HELP_MIN',
+    answer: 'HELP_MIN_A'
+  },
+  {
+    question: 'HELP_SEG',
+    answer: 'HELP_SEG_A'
+  },
+  {
+    question: 'HELP_SES',
+    answer: 'HELP_SES_A'
+  },
+]
+
 const SedaHelpPanel = props => {
   const classes = useStyles()
   const [, toggleHelp] = useHelpVisibility()
+  const [region] = useRegion()
+
   return (
     <SidePanel {...props}>
       <SidePanelHeader sticky>
@@ -42,6 +92,15 @@ const SedaHelpPanel = props => {
             <div
               dangerouslySetInnerHTML={{
                 __html: getLang(`${t}_A`)
+              }}
+            />
+          </ExpansionPanel>
+        ))}
+        {additionalTopics.map(q => (
+          <ExpansionPanel key={q.title} title={getLang(q.question)}>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: getLang(q.answer, {region: region})
               }}
             />
           </ExpansionPanel>
