@@ -2,7 +2,8 @@ import React from 'react'
 import {
   Typography,
   makeStyles,
-  IconButton
+  IconButton,
+  withStyles
 } from '@material-ui/core'
 import {
   SidePanel,
@@ -19,6 +20,35 @@ const useStyles = makeStyles(theme => ({
   root: {},
   title: theme.typography.panelHeading
 }))
+
+const StyledExpansionPanel = withStyles(theme => ({
+  root: {
+    '&.MuiExpansionPanel-root.MuiPaper-root::before': {
+      backgroundColor: '#ECEFF1',
+      opacity: 1,
+      zIndex: 101
+    },
+    '&.Mui-expanded .MuiExpansionPanelSummary-content': {
+      margin: 0
+    }
+  },
+  summary: {
+    padding: `${theme.spacing(1)}px ${theme.spacing(3)}px`,
+    '&:after': {
+      display: 'none'
+    },
+    '& .MuiExpansionPanelSummary-expandIcon': {
+      padding: `0 ${theme.spacing(2)}px`
+    },
+  },
+  details: {
+    padding: `0 ${theme.spacing(3)}px ${theme.spacing(2)}px`,
+  },
+  content: {},
+  heading: {
+    ...theme.mixins.boldType
+  }
+}))(ExpansionPanel)
 
 const topics = new Array(12)
   .fill()
@@ -88,22 +118,22 @@ const SedaHelpPanel = props => {
       </SidePanelHeader>
       <SidePanelBody>
         {topics.map((t, i) => (
-          <ExpansionPanel key={t} title={getLang(t)}>
+          <StyledExpansionPanel key={t} title={getLang(t)}>
             <div
               dangerouslySetInnerHTML={{
                 __html: getLang(`${t}_A`)
               }}
             />
-          </ExpansionPanel>
+          </StyledExpansionPanel>
         ))}
         {additionalTopics.map(q => (
-          <ExpansionPanel key={q.title} title={getLang(q.question)}>
+          <StyledExpansionPanel key={q.question} title={getLang(q.question)}>
             <div
               dangerouslySetInnerHTML={{
                 __html: getLang(q.answer, {region: region})
               }}
             />
-          </ExpansionPanel>
+          </StyledExpansionPanel>
         ))}
       </SidePanelBody>
     </SidePanel>
