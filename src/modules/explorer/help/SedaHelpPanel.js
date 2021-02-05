@@ -112,7 +112,7 @@ const SedaHelpPanel = props => {
         <Typography className={classes.title}>
           Help Panel
         </Typography>
-        <IconButton onClick={toggleHelp}>
+        <IconButton onClick={toggleHelp} aria-label="close">
           <CloseIcon />
         </IconButton>
       </SidePanelHeader>
