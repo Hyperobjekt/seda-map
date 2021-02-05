@@ -38,7 +38,7 @@ const SedaSearch = ({
       onSuggestionSelected={handleSelected}
       onSelectedClear={handleCleared}
       indices={indices.filter(i => i !== 'cities')}
-      inputProps={{ ...inputProps, placeholder }}
+      inputProps={{ ...inputProps, placeholder, "aria-label": "search" }}
       TextFieldProps={TextFieldProps}
       {...props}
     />
