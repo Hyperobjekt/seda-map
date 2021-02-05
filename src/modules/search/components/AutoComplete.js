@@ -9,6 +9,7 @@ import { Highlight } from 'react-instantsearch-dom'
 import AutoSuggest from 'react-autosuggest'
 import { SearchInput } from '../../../shared'
 import { Popper } from '@material-ui/core'
+import { SHOW_PUERTO_RICO } from '../../explorer/app/selectors'
 
 // calculate the position for the popper
 var calculatePosition = function(data) {
@@ -58,7 +59,15 @@ const renderSectionTitle = section => section.index
 
 const getSuggestionValue = hit => hit.name
 
-const getSectionSuggestions = section => section.hits
+const getSectionSuggestions = section => {
+  return SHOW_PUERTO_RICO
+    ? section.hits
+    : section.hits.filter(
+        hit =>
+          hit.id?.substr(0, 2) !== '72' &&
+          hit.state_name !== 'Puerto Rico'
+      )
+}
 
 /**
  * Autocomplete field used for search

@@ -12,7 +12,7 @@ import {
   getKeyMetrics,
   getMetricIdsForRegion
 } from '../../app/selectors/metrics'
-import { ListSubheader } from '@material-ui/core'
+import { ListSubheader, withStyles } from '@material-ui/core'
 import { formatNumber } from '../../../../shared/utils'
 
 const getSesComparisonItem = (
@@ -82,30 +82,51 @@ const getSummaryItems = location => {
   const metricItems = metrics
     .map(m => getSummaryItem(location, m))
     .filter(v => !!v)
+    .filter(v => !!v.description)
   const secondaryMetric = region === 'schools' ? 'frl' : 'ses'
-  // get the SES comparison for key metrics for this location
-  const comparisonItems = getKeyMetrics()
-    .map(v =>
-      getSesComparisonItem(
-        location,
-        v.id,
-        secondaryMetric,
-        region
-      )
-    )
-    .filter(v => !!v)
+  // get the SES comparison for key metrics for this location (if it is a county, district, or school)
+  const comparisonItems =
+    ['counties', 'districts', 'schools'].indexOf(region) > -1
+      ? getKeyMetrics()
+          .map(v =>
+            getSesComparisonItem(
+              location,
+              v.id,
+              secondaryMetric,
+              region
+            )
+          )
+          .filter(v => !!v)
+      : []
   // retun the combined summary and comparison items
-  return [...metricItems, ...comparisonItems]
+  return [metricItems, comparisonItems]
 }
 
-const SedaLocationSummary = ({ location }) => {
-  const summaryItems = getSummaryItems(location)
+const SedaLocationSummary = ({ location, classes }) => {
+  const [metricItems, comparisonItems] = getSummaryItems(
+    location
+  )
   return (
     <>
       <ListSubheader>
         {getLang('LOCATION_SUBHEADING_SUMMARY')}
       </ListSubheader>
-      {summaryItems.map(summary => (
+      <p className={classes.category}>
+        {getLang('LOCATION_SUBHEADING_SUMMARY_OVERALL')}
+      </p>
+      {metricItems.map(summary => (
+        <LocationSummaryListItem
+          key={summary.metricId}
+          indicator={summary.indicator}
+          description={summary.description}
+        />
+      ))}
+      {comparisonItems.length > 0 && (
+        <p className={classes.category}>
+          {getLang('LOCATION_SUBHEADING_SUMMARY_COMPARED')}
+        </p>
+      )}
+      {comparisonItems.map(summary => (
         <LocationSummaryListItem
           key={summary.metricId}
           indicator={summary.indicator}
@@ -118,4 +139,16 @@ const SedaLocationSummary = ({ location }) => {
 
 SedaLocationSummary.propTypes = {}
 
-export default SedaLocationSummary
+export default withStyles(theme => ({
+  category: {
+    // fontSize: "0.875rem",
+    // padding: "0px 24px",
+    // margin: "12px 0",
+    fontSize: theme.typography.pxToRem(12),
+    padding: theme.spacing(0, 3),
+    margin: theme.spacing(1, 0),
+    [theme.breakpoints.up('lg')]: {
+      fontSize: theme.typography.pxToRem(14)
+    }
+  }
+}))(SedaLocationSummary)

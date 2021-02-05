@@ -61,12 +61,21 @@ const styles = theme => ({
     // hide on mobile
     [theme.breakpoints.down('xs')]: {
       display: 'none'
+    },
+    // custom breakpoint for title (where space is available)
+    [theme.breakpoints.up(1350)]: {
+      fontSize: theme.typography.pxToRem(14)
     }
   },
   button: {
     fontSize: theme.typography.pxToRem(12),
     fontWeight: 'bold',
-    color: theme.palette.primary.main
+    color: theme.palette.primary.main,
+    display: 'inline',
+    verticalAlign: 'inherit',
+    [theme.breakpoints.up(1350)]: {
+      fontSize: theme.typography.pxToRem(14)
+    }
   }
 })
 

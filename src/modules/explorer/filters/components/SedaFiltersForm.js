@@ -13,21 +13,25 @@ import { formatInteger } from '../../../../shared/utils'
 /**
  * Contains all controls for modifying filters
  */
-const SedaFiltersForm = props => {
-  const { filterResults, totalResults, region } = useAppContext()
+const SedaFiltersForm = (props) => {
+  const {
+    filterResults,
+    totalResults,
+    region,
+    metric: activeMetric
+  } = useAppContext()
 
   // TODO: only show metric sliders that are added
   // const [filterMetrics, setFilterMetrics] = useState([])
 
-  // get ranges from filter array
-  const availableMetrics = [
+  const isFiltered = filterResults !== totalResults
+
+  const metrics = [
     'avg',
     'grd',
     'coh',
     region === 'schools' ? 'frl' : 'ses'
   ]
-
-  const isFiltered = filterResults !== totalResults
 
   return (
     <List {...props}>
@@ -48,8 +52,12 @@ const SedaFiltersForm = props => {
       </PanelListItem>
       {region !== 'states' && <SedaFilterLocation />}
       <SedaLimitButtons />
-      {availableMetrics.map(metric => (
-        <SedaMetricSlider key={metric} metricId={metric} />
+      {metrics.map(metric => (
+        <SedaMetricSlider
+          key={metric}
+          metricId={metric}
+          isActive={metric === activeMetric}
+        />
       ))}
       {(region === 'schools' || region === 'districts') && (
         <SedaFilterFlags />

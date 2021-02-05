@@ -22,8 +22,7 @@ import { withStyles } from '@material-ui/core'
 
 const styles = theme => ({
   root: {
-    maxWidth: theme.spacing(60),
-    boxShadow: `0 0 2px rgba(0,0,0,0.3), 0 1px 4px rgba(0,0,0,0.06)`,
+    boxShadow: `var(--shadow1)`,
     [theme.breakpoints.down('xs')]: {
       borderRadius: 0
     },

@@ -22,6 +22,7 @@ export default function useLocationIdsData(locations) {
       locations
         .map(id => {
           const region = getRegionFromLocationId(id)
+          if(!region) return null
           const regionData = data[region]
           return regionData
             ? regionData.find(d => d.id === id)

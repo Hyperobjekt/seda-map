@@ -45,9 +45,12 @@ const SidePanel = ({
   const panelRef = useRef(null)
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+  const adjustTransform =
+    isMobile || !marginLeft ? '0px' : `${marginLeft}px`
   const panelStyle = useSpring({
-    transform: open ? 'translateX(0%)' : 'translateX(-100%)',
-    marginLeft: !isMobile ? (marginLeft ? marginLeft : 0) : 0,
+    transform: open 
+      ? `translate3d(calc(0% + ${adjustTransform}), 0, 0)`
+      : `translate3d(calc(-100% + ${adjustTransform}), 0, 0)`,
     onStart: () => {
       if (!panelRef.current) return
       if (open) panelRef.current.style.visibility = 'visible'

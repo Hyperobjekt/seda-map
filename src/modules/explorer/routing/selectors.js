@@ -78,7 +78,10 @@ export const ruleParamToArray = rule => {
     case 'c':
     case 'ch':
     case 'mg':
-      return ['eq', type, 0]
+    case 'rg':
+      return ['neq', type, 1]
+    case 'bie':
+      return ['eq', type, 1]
     case 'limit':
       return ['limit', rest[0]]
     default:
@@ -102,6 +105,8 @@ export const filterRuleToString = ruleArray => {
       return [rest[0], rest[1].join(';')].join(',')
     case 'eq':
       return rest[0]
+    case 'neq':
+      return rest[0]
     case 'limit':
       return ['limit', rest[0]].join(',')
     case 'sort':
@@ -119,8 +124,8 @@ export const paramsToFilterArray = params => {
   // handle legacy filter value (2 letter state)
   if (
     params.filter &&
-    params.filter.length === 2 &&
-    params.filter !== 'us'
+    params.filter.length === 2 && 
+    ['mg', 'ch', 'us', 'rg'].indexOf(params.filter) === -1
   ) {
     const id = getStateFipsFromAbbr(params.filter)
     return [['startsWith', 'id', id]]

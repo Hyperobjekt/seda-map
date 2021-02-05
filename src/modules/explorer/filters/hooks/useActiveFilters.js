@@ -20,8 +20,11 @@ export default () => {
       filters
         // remove flags that don't apply to the current region
         .filter(f =>
-          f[0] !== 'eq' ? true : flags.indexOf(f[1]) > -1
+          f[0] !== 'neq' && f[0] !== 'eq'
+            ? true
+            : flags.indexOf(f[1]) > -1
         )
+
         // remove frl range if not viewing schools
         .filter(f => {
           if (f[0] !== 'range') return true

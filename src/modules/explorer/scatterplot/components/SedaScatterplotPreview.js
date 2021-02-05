@@ -30,8 +30,8 @@ const useStyles = makeStyles(theme => ({
       overflow: 'hidden',
       textOverflow: 'ellipsis',
       textAlign: 'center',
-      fontSize: 12,
-      color: theme.palette.grey[500]
+      fontSize: theme.typography.pxToRem(12),
+      color: theme.palette.text.secondary
     }
   },
   xAxis: {
@@ -56,6 +56,7 @@ const SedaScatterplotPreview = props => {
   const {
     region,
     isVersus,
+    allData,
     scatterplotData,
     scatterplotVars,
     scatterplotExtents,
@@ -72,6 +73,7 @@ const SedaScatterplotPreview = props => {
       })}
       classes={classes}
       variant="preview"
+      allData={allData}
       data={scatterplotData}
       vars={scatterplotVars}
       extents={scatterplotExtents}

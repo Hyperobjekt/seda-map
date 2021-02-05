@@ -6,7 +6,6 @@ import React, {
   useCallback
 } from 'react'
 import useResizeAware from 'react-resize-aware'
-import mapboxgl from 'mapbox-gl/dist/mapbox-gl'
 import ReactMapGL from 'react-map-gl'
 import { fromJS } from 'immutable'
 import PropTypes from 'prop-types'
@@ -20,6 +19,9 @@ const isMapEvent = event => {
     event?.path &&
     event.path.length > 0 &&
     event.path[0].classList.contains('overlays')
+  ) || (
+    event?.target && 
+    event.target.classList.contains('overlays')
   )
 }
 
@@ -87,9 +89,6 @@ const MapBase = ({
   // reference to map container DOM element
   const mapEl = useRef(null)
 
-  // geolocation control ref
-  const geoRef = useRef(null)
-
   // refernce to the ReactMapGL instance
   const mapRef = useRef(null)
 
@@ -147,21 +146,6 @@ const MapBase = ({
         tabindexEl.children[0].removeAttribute('tabindex')
       }
 
-      // add geolocation
-      geoRef.current = new mapboxgl.GeolocateControl({
-        positionOptions: {
-          enableHighAccuracy: true
-        },
-        trackUserLocation: true
-      })
-      const controlContainer = document.querySelector(
-        '.map__zoom:first-child'
-      )
-      if (controlContainer) {
-        controlContainer.appendChild(
-          geoRef.current.onAdd(mapRef.current)
-        )
-      }
       setLoaded(true)
       // trigger load callback
       if (typeof onLoad === 'function') {
@@ -248,24 +232,6 @@ const MapBase = ({
     )
     // eslint-disable-next-line
   }, [selectedIds, loaded]) // update only when selected ids change
-
-  // update map viewport when location is triggered
-  useEffect(() => {
-    if (!loaded) return
-    const geolocateHandler = function() {
-      // wait until the map is done moving, update viewport
-      mapRef.current.once('moveend', function({ target }) {
-        var { lng, lat } = target.getCenter()
-        var zoom = target.getZoom()
-        setViewport({
-          latitude: lat,
-          longitude: lng,
-          zoom
-        })
-      })
-    }
-    geoRef.current.on('trackuserlocationstart', geolocateHandler)
-  }, [loaded, setViewport])
 
   return (
     <div

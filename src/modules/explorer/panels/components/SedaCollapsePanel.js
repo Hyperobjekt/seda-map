@@ -80,21 +80,19 @@ const useStyles = makeStyles(theme => ({
     width: theme.app.panelWidth,
     height: 264,
     minWidth: theme.app.panelWidth,
-    transformOrigin: 'left bottom',
-
+    transformOrigin: 'left bottom'
   },
   footerCondensed: {
     position: 'absolute',
     left: theme.app.condensedPanelWidth + theme.spacing(3),
     bottom: 0,
+    borderTop: 'none'
   },
-  footerShowChart: {
-
-  },
+  footerShowChart: {},
   footerNoChart: {
     position: 'absolute',
-    bottom:0
-  },
+    bottom: 0
+  }
 }))
 
 const AnimatedSidePanel = animated(SidePanel)
@@ -124,7 +122,7 @@ const getFooterStyleProps = ({
       : 0
   return {
     transform: `translate(0px, ${verticalOffset}px)`,
-    height: !condensed && !showChart ? 48 : 264,
+    height: !condensed && !showChart ? 48 : 264
   }
 }
 
@@ -196,25 +194,24 @@ const SedaCollapsePanel = ({
         <Typography className={classes.title}>
           Data Options
         </Typography>
-        {
-          !isMobile 
-          ? <IconButton
-              
-              className={classes.toggleCondensed}
-              style={{
-                opacity: !condensed && !hovered ? 0 : 1
-              }}
-              onClick={handleToggleCondensed}>
-              {condensed ? (
-                <SidebarOpenIcon />
-              ) : (
-                <SidebarCloseIcon />
-              )}
-            </IconButton>
-          : <IconButton onClick={handleClose}>
-              <CloseIcon />
-            </IconButton>
-        }
+        {!isMobile ? (
+          <IconButton
+            className={classes.toggleCondensed}
+            style={{
+              opacity: !condensed && !hovered ? 0 : 1
+            }}
+            onClick={handleToggleCondensed}>
+            {condensed ? (
+              <SidebarOpenIcon />
+            ) : (
+              <SidebarCloseIcon />
+            )}
+          </IconButton>
+        ) : (
+          <IconButton onClick={handleClose}>
+            <CloseIcon />
+          </IconButton>
+        )}
       </SidePanelHeader>
       <SidePanelBody classes={{ root: classes.body }}>
         <List className={classes.list}>
@@ -225,21 +222,19 @@ const SedaCollapsePanel = ({
           <SedaLocationsPanelButton />
         </List>
       </SidePanelBody>
-      {
-        !isMobile && (
-          <AnimatedSidePanelFooter
-            sticky
-            ref={footerRef}
-            className={clsx(classes.footerPanel, {
-              [classes.footerCondensed]: condensed,
-              [classes.footerShowChart]: showChart,
-              [classes.footerNoChart]: view !== 'map'
-            })}
-            style={footerStyle}>
-            <SedaPreviewChartPanel />
-          </AnimatedSidePanelFooter>
-        )
-      }
+      {!isMobile && (
+        <AnimatedSidePanelFooter
+          sticky
+          ref={footerRef}
+          className={clsx(classes.footerPanel, {
+            [classes.footerCondensed]: condensed,
+            [classes.footerShowChart]: showChart,
+            [classes.footerNoChart]: view !== 'map'
+          })}
+          style={footerStyle}>
+          <SedaPreviewChartPanel />
+        </AnimatedSidePanelFooter>
+      )}
     </AnimatedSidePanel>
   )
 }

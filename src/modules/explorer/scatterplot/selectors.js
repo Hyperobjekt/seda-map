@@ -52,7 +52,7 @@ export const getDotSizeScale = ({
 
 export const getDataExtent = (data, accessor) => {
   if (typeof accessor === 'string')
-    return d3array.extent(data, d => d[accessor])
+    return d3array.extent(data, d => parseFloat(d[accessor]))
   if (typeof accessor === 'function')
     return d3array.extent(data, accessor)
   throw new Error('invalid accessor to retrieve extent')

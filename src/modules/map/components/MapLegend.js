@@ -25,12 +25,18 @@ const styles = theme => ({
   },
   primary: {
     fontSize: theme.typography.pxToRem(12),
-    textTransform: 'capitalize'
+    textTransform: 'capitalize',
+    [theme.breakpoints.up('lg')]: {
+      fontSize: theme.typography.pxToRem(14)
+    }
   },
   secondary: {
     fontSize: theme.typography.pxToRem(11),
     color: theme.palette.text.secondary,
-    whiteSpace: 'normal'
+    whiteSpace: 'normal',
+    [theme.breakpoints.up('lg')]: {
+      fontSize: theme.typography.pxToRem(12)
+    }
   },
   gradient: {
     marginTop: theme.spacing(0.5),

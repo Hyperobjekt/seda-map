@@ -19,8 +19,8 @@ import { hasVal } from '../../scatterplot/utils'
 import { useStaticData } from '../../../data'
 import { applyFilters } from '../../../filters'
 import { getFiltersForDemographic } from '../../filters/selectors'
+import { MAX_DOTS } from '../../scatterplot/constants'
 
-const MAX_DOTS = 10000
 
 const getFilteredData = (filters, demographic, regionData) => {
   // update filters to apply to current demographic
@@ -61,7 +61,7 @@ export default function useAppContext() {
       return appContext.current
     }
 
-    const regionData = data[region]
+    const regionData = data[region] || []
     const filteredData = getFilteredData(
       filters,
       demographic,
@@ -76,15 +76,25 @@ export default function useAppContext() {
       getVarNames(region, metric, secondary, demographic, type)
     )
 
-    // get circles with valid values only, limit to 20,000 dots
-    const scatterplotData = filteredData
-      .filter(d => scatterplotVars.every(v => hasVal(d[v])))
-      // limit number of dots
-      .slice(0, MAX_DOTS)
+    // get circles with valid values only, limit to MAX_DOTS
+    const _scatterplotData = regionData && regionData.filter(d => scatterplotVars.every(v => hasVal(d[v])))
+    const scatterplotData = getFilteredData(
+      filters,
+      demographic,
+      _scatterplotData
+    )
       // sort by size
       .sort((a, b) => {
         return b[scatterplotVars[2]] - a[scatterplotVars[2]]
       })
+      // limit number of dots
+      .slice(0, MAX_DOTS)
+
+    const allData = regionData
+      ? regionData.filter(d =>
+        scatterplotVars.every(v => hasVal(d[v]))
+      )
+      : []
 
     // all variables used in the scatterplot / map
     const allVars = [
@@ -98,7 +108,10 @@ export default function useAppContext() {
     // add extents for all vars
     const dataExtents = {}
     allVars.forEach(v => {
-      dataExtents[v] = getDataExtent(scatterplotData, v)
+      // #516: do not adjust size extent based on filtered data
+      dataExtents[v] = v.indexOf('_sz') > -1 ? 
+        getDataExtent(regionData.slice(0,MAX_DOTS), v) : 
+        getDataExtent(scatterplotData, v)
     })
 
     // create padded extents for the scatterplot
@@ -132,6 +145,7 @@ export default function useAppContext() {
     const hasGapChart = isVersus && gapMetrics.length > 0
 
     appContext.current = {
+      allData: allData,
       data: filteredData,
       dataExtents,
       allVars,

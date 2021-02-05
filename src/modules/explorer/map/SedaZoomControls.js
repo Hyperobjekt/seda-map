@@ -8,6 +8,7 @@ import UnitedStatesIcon from '../../icons/components/UnitedStatesIcon'
 import AlaskaIcon from '../../icons/components/AlaskaIcon'
 import HawaiiIcon from '../../icons/components/HawaiiIcon'
 import PuertoRicoIcon from '../../icons/components/PuertoRicoIcon'
+import GeolocateIcon from '../../icons/components/GeolocateIcon'
 import { useMapStore } from '../../map'
 import {
   ALASKA_VIEWPORT,
@@ -16,13 +17,14 @@ import {
   US_VIEWPORT
 } from './constants'
 import clsx from 'clsx'
+import { SHOW_PUERTO_RICO } from '../app/selectors'
 
 const styles = theme => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
     background: '#fff',
-    boxShadow: `var(--shadow10)`
+    boxShadow: `var(--shadow1)`
   },
   button: {
     color: theme.palette.text.primary,
@@ -50,9 +52,30 @@ const SedaZoomControls = ({ classes, className, ...props }) => {
   const handleZoomToPuertoRico = () =>
     flyToViewport(PUERTO_RICO_VIEWPORT)
 
+  const geolocateSuccess = (res) => {
+    flyToViewport({
+      latitude: res.coords.latitude,
+      longitude: res.coords.longitude,
+      zoom: 14,
+    })
+  }
+
+  const geolocateError = (e) => {
+    console.log("unable to geolocate:", e)
+  }
+
+  const requestGeolocate = () => {
+    navigator.geolocation.getCurrentPosition(geolocateSuccess, geolocateError, {
+      enableHighAccuracy: true
+    })
+  }
+
   return (
     <div className={clsx(classes.root, className)} {...props}>
-      <Tooltip placement="left" arrow title="Zoom to contiguous U.S.">
+      <Tooltip
+        placement="left"
+        arrow
+        title="Zoom to contiguous U.S.">
         <IconButton
           className={classes.button}
           onClick={handleZoomToUS}>
@@ -73,11 +96,24 @@ const SedaZoomControls = ({ classes, className, ...props }) => {
           <HawaiiIcon />
         </IconButton>
       </Tooltip>
-      <Tooltip placement="left" arrow title="Zoom to Puerto Rico">
+      { SHOW_PUERTO_RICO && <Tooltip
+        placement="left"
+        arrow
+        title="Zoom to Puerto Rico">
         <IconButton
           className={classes.button}
           onClick={handleZoomToPuertoRico}>
           <PuertoRicoIcon />
+        </IconButton>
+      </Tooltip> }
+      <Tooltip
+        placement="left"
+        arrow
+        title="Zoom to current location">
+        <IconButton
+          className={classes.button}
+          onClick={requestGeolocate}>
+          <GeolocateIcon />
         </IconButton>
       </Tooltip>
     </div>

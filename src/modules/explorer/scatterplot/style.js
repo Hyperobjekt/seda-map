@@ -86,51 +86,27 @@ const getSeries = (seriesId, type, options) => ({
  * Get the style overrides for the base series
  * @param {boolean} highlightedOn
  */
-const getBaseSeries = ({
-  highlightIds,
-  sizer,
-  variant,
-  xVar,
-  yVar
-}) => {
-  const hl = highlightIds.length > 0
+const getBaseSeries = ({ sizer, variant, xVar, yVar }) => {
   const isVs = isVersusFromVarNames(xVar, yVar)
   return getSeries('base', 'scatter', {
-    silent: hl || variant === 'preview',
+    silent: variant === 'preview',
     z: 100,
     itemStyle: {
-      color: hl ? '#e6e6e6' : '#ff0000',
-      borderColor: hl
-        ? 'transparent'
-        : isVs
+      borderColor: isVs
         ? 'rgba(0,0,0,0.4)'
         : 'rgba(7,55,148,0.4)',
-      borderWidth: hl ? 0 : 0.75
-    },
-    symbolSize: hl ? 6 : value => sizer(value[2])
-  })
-}
-
-/**
- * Get the style overrides for the highlight series
- */
-const getHighlightedSeries = ({ highlightIds, sizer }) =>
-  getSeries('highlighted', 'scatter', {
-    show: highlightIds.length > 0,
-    z: 101,
-    itemStyle: {
-      borderColor: 'rgba(7,55,148,0.666)',
-      borderWidth: 1
+      borderWidth: 0.75
     },
     symbolSize: value => sizer(value[2])
   })
+}
 
 export const series = (seriesId, variant, options = {}) => {
   switch (seriesId) {
     case 'base':
       return getBaseSeries({ ...options, variant })
-    case 'highlighted':
-      return getHighlightedSeries(options)
+    // case 'highlighted':
+    //   return getHighlightedSeries(options)
     default:
       return getSeries(seriesId, variant, options)
   }
@@ -345,15 +321,6 @@ const getOverlay = (points, lines) => {
   }
 }
 
-// const getTickArray = (center, extent) => {
-//   const distance = extent.map(v => Math.abs(center - v))
-//   const maxDistance = max(distance)
-//   const balancedExtent = [
-//     center - maxDistance,
-//     center + maxDistance
-//   ]
-// }
-
 export const getBalancedExtent = (center, extent) => {
   const distance = extent.map(v => Math.abs(center - v))
   const maxDistance = max(distance)
@@ -363,36 +330,6 @@ export const getBalancedExtent = (center, extent) => {
 const getIncrementForExtent = extent => {
   return tickStep(extent[0], extent[1], STEPS)
 }
-
-/** Returns an amount for how much to increment each step for the axis overlay */
-// const getIncrementForVarName = (varName, region) => {
-//   const metricId = getMetricIdFromVarName(varName)
-//   const isGap = isGapVarName(varName)
-//   const key = metricId + (isGap ? '_gap' : '')
-//   switch (key) {
-//     case 'avg':
-//       return region === 'schools' ? 2 : 1
-//     case 'grd':
-//       return region === 'schools' ? 0.4 : 0.2
-//     case 'coh':
-//       return region === 'schools' ? 0.25 : 0.2
-//     case 'frl':
-//       return 0.25
-//     case 'coh_gap':
-//     case 'grd_gap':
-//       return 0.1
-//     case 'ses_gap':
-//       return 1
-//     case 'seg':
-//     case 'seg_gap':
-//       return 0.25
-//     case 'min':
-//     case 'min_gap':
-//       return 0.2
-//     default:
-//       return 1
-//   }
-// }
 
 /**
  * Get the line and label overlays based on the variable name
@@ -486,23 +423,6 @@ const overlays = (variant, context) => {
   return getOverlaysForContext(variant, context)
 }
 
-// /**
-//  * Returns where to place the diagonal line label
-//  * for the provided metric
-//  */
-// const getLabelCoordsForMetric = metricId => {
-//   switch (metricId) {
-//     case 'avg':
-//       return [[-3, -3], [-2, -2]]
-//     case 'grd':
-//       return [[0.5, 0.5], [0.7, 0.7]]
-//     case 'coh':
-//       return [[-0.3, -0.3], [-0.4, -0.4]]
-//     default:
-//       return [[-0.1, -0.1], [0.1, 0.1]]
-//   }
-// }
-
 /** Return a series with a diagonal line */
 const getVersusOverlay = (xVar, yVar) => {
   const isVs = isVersusFromVarNames(xVar, yVar)
@@ -558,12 +478,7 @@ const getChartColorsFromVarNames = (xVar, yVar) => {
     : COLORS
 }
 
-const getMapVisualMap = ({
-  xVar,
-  yVar,
-  highlightIds,
-  colorExtent
-}) => {
+const getMapVisualMap = ({ xVar, yVar, colorExtent }) => {
   const range = colorExtent
   const colors = getChartColorsFromVarNames(xVar, yVar)
 
@@ -575,7 +490,7 @@ const getMapVisualMap = ({
       color: colors.map(c => fade(c, 0.9))
     },
     show: false,
-    seriesIndex: highlightIds.length > 0 ? 2 : 0,
+    seriesIndex: 0,
     calculable: true,
     right: 0,
     bottom: 'auto',
@@ -714,12 +629,12 @@ export const getScatterplotOptions = (
   variant,
   {
     data = [],
+    allData = [],
     xVar,
     yVar,
     zVar,
     extents,
     colorExtent,
-    highlightIds = [],
     region
   }
 ) => {
@@ -732,7 +647,6 @@ export const getScatterplotOptions = (
     visualMap: visualMap(variant, {
       xVar,
       yVar,
-      highlightIds,
       region,
       colorExtent
     }),
@@ -749,27 +663,27 @@ export const getScatterplotOptions = (
       extent: extents[1]
     }),
     series: [
+      // series('underlay', variant, {
+      //   symbolSize: 6,
+      //   xVar,
+      //   yVar
+      // }),
       series('base', variant, {
-        highlightIds,
         sizer,
         xVar,
         yVar
-      }),
-      series('highlighted', variant, {
-        highlightIds,
-        sizer
       }),
       ...overlays(variant, { xVar, yVar, region, extents })
     ]
   }
 
   return getScatterplotBaseOptions({
+    allData,
     data,
     xVar,
     yVar,
     zVar,
     selected: [],
-    highlighted: highlightIds,
     options
   })
 }

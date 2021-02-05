@@ -13,6 +13,17 @@ import useFilterStore from '../../../filters'
 import useAddLocationsByRoute from './useAddLocationsByRoute'
 import useCurrentRoute from './useCurrentRoute'
 
+export const supportsLocalStorage = () => {
+  var mod = 'test'
+  try {
+    localStorage.setItem(mod, mod)
+    localStorage.removeItem(mod)
+    return true
+  } catch (e) {
+    return false
+  }
+}
+
 /**
  * Hook that enables routing for the explorer.  Routes are in the following format:
  * /#/{view}/{filters}/{region}/{metric}/{secondary}/{demographic}/{zoom}/{lat}/{lon}
@@ -23,8 +34,8 @@ export default () => {
   // get the route params based on current view
   const route = useCurrentRoute()
   // function to set options based on a route string
-  const setDataOptions = useDataOptions(
-    state => state.setOptionsFromRoute
+  const [setDataOptions, setDataOptionsLoading] = useDataOptions(
+    state => [state.setOptionsFromRoute, state.setLoading]
   )
   const addLocationsFromRoute = useAddLocationsByRoute()
 
@@ -57,6 +68,15 @@ export default () => {
     // only change the hash if the initial route has loaded
     if (isLoaded.current) {
       window.location.hash = '#/' + debouncedRoute
+
+      const params = debouncedRoute.split("/")
+
+      if(params[0] !== 'embed' && supportsLocalStorage) {
+        localStorage.setItem('view', params[0])
+        localStorage.setItem('region', params[2])
+        localStorage.setItem('metric', params[3])
+        localStorage.setItem('demographic', params[5])
+      }
     }
   }, [debouncedRoute])
 
@@ -74,7 +94,21 @@ export default () => {
         setFilterOptions(params)
         if (params.locations)
           await addLocationsFromRoute(params.locations, false)
+      }else {
+        if(supportsLocalStorage && localStorage.getItem('demographic')) {
+          setDataOptions({
+            region: localStorage.getItem('region') ? localStorage.getItem('region') : 'counties',
+            metric: localStorage.getItem('metric') ? localStorage.getItem('metric') : 'avg',
+            demographic: localStorage.getItem('demographic'),
+            secondary: 'ses'
+          })
+          setViewOptions({
+            view: localStorage.getItem('view') ? localStorage.getItem('view') : 'map',
+            secondary: 'ses'
+          })
+        }
       }
+      setDataOptionsLoading(false)
     }
     loadRoute()
     // eslint-disable-next-line react-hooks/exhaustive-deps

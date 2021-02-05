@@ -1,3 +1,4 @@
+import { SHOW_NATIVE_AMERICAN } from '../selectors'
 import LANG from './en'
 
 /**
@@ -24,11 +25,11 @@ export const DEMOGRAPHICS = [
     label: LANG['LABEL_H'],
     regions: ['states', 'counties', 'districts']
   },
-  {
-    id: 'i',
-    label: LANG['LABEL_I'],
-    regions: ['states', 'counties', 'districts']
-  },
+  // {
+  //   id: 'i',
+  //   label: LANG['LABEL_I'],
+  //   regions: ['states', 'counties', 'districts']
+  // },
   {
     id: 'a',
     label: LANG['LABEL_A'],
@@ -70,11 +71,11 @@ export const GAPS = [
     label: LANG['LABEL_WH'],
     regions: ['states', 'counties', 'districts']
   },
-  {
-    id: 'wi',
-    label: LANG['LABEL_WI'],
-    regions: ['states', 'counties', 'districts']
-  },
+  // {
+  //   id: 'wi',
+  //   label: LANG['LABEL_WI'],
+  //   regions: ['states', 'counties', 'districts']
+  // },
   {
     id: 'pn',
     label: LANG['LABEL_PN'],
@@ -86,3 +87,19 @@ export const GAPS = [
     regions: ['states', 'counties', 'districts']
   }
 ]
+console.log('SHOW NAM', SHOW_NATIVE_AMERICAN)
+
+if (process.env.REACT_APP_EMBARGOED === '1') {
+  const dem = {
+    id: 'i',
+    label: LANG['LABEL_I'],
+    regions: ['states', 'counties', 'districts']
+  }
+  const gap = {
+    id: 'wi',
+    label: LANG['LABEL_WI'],
+    regions: ['states', 'counties', 'districts']
+  }
+  DEMOGRAPHICS.splice(4, 0, dem)
+  GAPS.splice(2, 0, gap)
+}
