@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from 'react'
+import React from 'react'
 import { List, Typography } from '@material-ui/core'
 import { useAppContext } from '../../app/hooks'
 import { PanelListItem } from '../../../../shared/components/Panels/PanelList'
@@ -13,7 +13,7 @@ import { formatInteger } from '../../../../shared/utils'
 /**
  * Contains all controls for modifying filters
  */
-const SedaFiltersForm = ({ open, ...props }) => {
+const SedaFiltersForm = (props) => {
   const {
     filterResults,
     totalResults,
@@ -32,15 +32,6 @@ const SedaFiltersForm = ({ open, ...props }) => {
     'coh',
     region === 'schools' ? 'frl' : 'ses'
   ]
-
-  // HACK: using a delayedOpen property to trigger a re-render on SedaMetricSlider for the active metric
-  //  without this, the gradient will not be positioned correctly on the active metric slider
-  const [delayedOpen, setDelayedOpen] = useState(open)
-  useLayoutEffect(() => {
-    setTimeout(() => {
-      setDelayedOpen(open)
-    }, 500)
-  }, [open])
 
   return (
     <List {...props}>
@@ -65,7 +56,7 @@ const SedaFiltersForm = ({ open, ...props }) => {
         <SedaMetricSlider
           key={metric}
           metricId={metric}
-          isActive={metric === activeMetric && delayedOpen}
+          isActive={metric === activeMetric}
         />
       ))}
       {(region === 'schools' || region === 'districts') && (

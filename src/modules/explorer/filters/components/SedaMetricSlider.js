@@ -128,21 +128,18 @@ export default withStyles(theme => ({
     }
   },
   track: {
-    height: 8,
+    height: theme.spacing(1),
     backgroundColor: 'currentColor',
     backgroundImage: props =>
       props.isActive
         ? 'linear-gradient(90deg, #1C4E81 0%, #3A7BBB 20%, #7CB4DC 30%, #C0E1EC 40%, #F5F6F7 50%, #D6EECA 60%, #9FDCA3 70%, #32A877 80%, #1B704D 100%)'
         : 'none',
-    backgroundSize: theme.spacing(37, 2),
+    backgroundSize: theme.spacing(39, 2),
     backgroundAttachment: 'fixed',
-    backgroundPosition: theme.spacing(13), // HACK: offset to the X position on the page, this could be handled better but works for now (tablet + desktop offset = 104)
-    [theme.breakpoints.down('sm')]: {
-      backgroundPosition: theme.spacing(3) // mobile left offset = 24
-    }
+    backgroundPosition: theme.spacing(3)
   },
   rail: {
-    height: 8,
+    height: theme.spacing(1),
     background: '#E0E0E0',
     opacity: 1
   },
