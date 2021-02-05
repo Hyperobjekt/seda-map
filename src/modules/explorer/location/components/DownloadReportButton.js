@@ -20,7 +20,9 @@ const getPdfRegion = region => {
     ? 'county'
     : region === 'districts'
     ? 'district'
-    : 'school'
+    : region === 'schools'
+    ? 'school' 
+    : 'state'
 }
 
 /**
