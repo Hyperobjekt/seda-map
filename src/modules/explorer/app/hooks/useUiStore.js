@@ -1,6 +1,6 @@
 import create from 'zustand'
 
-const [useUiStore] = create(set => ({
+const useUiStore = create(set => ({
   // current view of the data
   view: 'map',
   isEmbed: false,
