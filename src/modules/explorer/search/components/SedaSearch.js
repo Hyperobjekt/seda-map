@@ -37,8 +37,8 @@ const SedaSearch = ({
       algoliaKey={process.env.REACT_APP_ALGOLIA_KEY}
       onSuggestionSelected={handleSelected}
       onSelectedClear={handleCleared}
-      indices={indices}
-      inputProps={{ ...inputProps, placeholder }}
+      indices={indices.filter(i => i !== 'cities')}
+      inputProps={{ ...inputProps, placeholder, "aria-label": "search" }}
       TextFieldProps={TextFieldProps}
       {...props}
     />
