@@ -1,4 +1,5 @@
 import create from 'zustand'
+import analyticsMiddleware from '../explorer/app/middleware/analyticsMiddleware'
 import logger from '../logger'
 
 /**
@@ -194,15 +195,16 @@ export const setFilters = set => (rules, extend) => {
 
 export const DEFAULT_FILTERS = []
 
-const useFilterStore = create((set, get) => ({
-  filters: [...DEFAULT_FILTERS],
-  getFilterValue: ruleParams =>
-    getFilterValue(get().filters, ruleParams),
-  addFilter: addFilter(set),
-  setFilters: setFilters(set),
-  setFilter: setFilter(set),
-  removeFilter: removeFilter(set, get),
-  clearFilters: () => set({ filters: DEFAULT_FILTERS })
-}))
+const useFilterStore = create(
+  analyticsMiddleware((set, get) => ({
+    filters: [...DEFAULT_FILTERS],
+    getFilterValue: ruleParams => getFilterValue(get().filters, ruleParams),
+    addFilter: addFilter(set),
+    setFilters: setFilters(set),
+    setFilter: setFilter(set),
+    removeFilter: removeFilter(set, get),
+    clearFilters: () => set({ filters: DEFAULT_FILTERS })
+  }))
+)
 
 export default useFilterStore

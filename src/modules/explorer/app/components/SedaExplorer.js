@@ -7,14 +7,12 @@ import { useActiveView } from '../hooks'
 import { SedaPanelGroup } from '../../panels'
 import { SedaError } from '../../errors'
 import useIsMobile from '../hooks/useIsMobile'
-import useAnalytics from '../hooks/useAnalytics'
 /**
  * Body of the explorer, consisting of side panel, splitview, tooltip, and alert area
  * @param {*} props
  */
 const SedaExplorer = props => {
   const [view, , isEmbed] = useActiveView()
-  useAnalytics()
 
   // determines the active portion of the split view
   const splitView =

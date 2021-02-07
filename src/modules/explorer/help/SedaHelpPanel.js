@@ -101,6 +101,11 @@ const additionalTopics = [
   },
 ]
 
+const handleClick =(t, e) => {
+  // analytics help item expansion
+  window.dataLayer.push({event: 'helpTopicExpanded', helpTopicSelection: t })
+}
+
 const SedaHelpPanel = props => {
   const classes = useStyles()
   const [, toggleHelp] = useHelpVisibility()
@@ -118,7 +123,7 @@ const SedaHelpPanel = props => {
       </SidePanelHeader>
       <SidePanelBody>
         {topics.map((t, i) => (
-          <StyledExpansionPanel key={t} title={getLang(t)}>
+          <StyledExpansionPanel key={t} title={getLang(t)} onClick={(e) => handleClick(t, e)}>
             <div
               dangerouslySetInnerHTML={{
                 __html: getLang(`${t}_A`)

@@ -6,6 +6,7 @@ import {
 } from '../selectors'
 // import { getStateFipsFromAbbr } from '../../../shared/utils/states'
 import logger from '../../../logger'
+import analyticsMiddleware from '../middleware/analyticsMiddleware'
 
 /**
  * Adds any missing IDs to the locations array
@@ -43,70 +44,73 @@ const getChangesForActiveLocation = (
   return changes
 }
 
-let lastUpdate = null
+// let lastUpdate = null
 
-/**
- * Returns values in the `next` object that have changed from the `previous` object
- * @param {*} next
- * @param {*} previous
- */
-const getPropertyChanges = (next, previous) => {
-  return Object.keys(next).reduce((obj, current) => {
-    if (
-      !previous ||
-      !previous.hasOwnProperty(current) ||
-      (previous.hasOwnProperty(current) &&
-        previous[current] !== next[current])
-    ) {
-      // if there was no last update, then all changes are new
-      if (!obj) obj = {}
-      obj[current] = next[current]
-    }
-    return obj
-  }, false)
-}
+// /**
+//  * Returns values in the `next` object that have changed from the `previous` object
+//  * @param {*} next
+//  * @param {*} previous
+//  */
+// const getPropertyChanges = (next, previous) => {
+//   return Object.keys(next).reduce((obj, current) => {
+//     if (
+//       !previous ||
+//       !previous.hasOwnProperty(current) ||
+//       (previous.hasOwnProperty(current) &&
+//         previous[current] !== next[current])
+//     ) {
+//       // if there was no last update, then all changes are new
+//       if (!obj) obj = {}
+//       obj[current] = next[current]
+//     }
+//     return obj
+//   }, false)
+// }
 
-/**
- * Returns values in the `next` object that are the same as the `previous` object
- * @param {*} next
- * @param {*} previous
- */
-const getSameProperties = (next, previous) => {
-  return Object.keys(next).reduce((obj, current) => {
-    if (
-      previous &&
-      previous.hasOwnProperty(current) &&
-      previous[current] === next[current]
-    ) {
-      if (!obj) obj = {}
-      obj[current] = next[current]
-    }
-    return obj
-  }, false)
-}
+// /**
+//  * Returns values in the `next` object that are the same as the `previous` object
+//  * @param {*} next
+//  * @param {*} previous
+//  */
+// const getSameProperties = (next, previous) => {
+//   return Object.keys(next).reduce((obj, current) => {
+//     if (
+//       previous &&
+//       previous.hasOwnProperty(current) &&
+//       previous[current] === next[current]
+//     ) {
+//       if (!obj) obj = {}
+//       obj[current] = next[current]
+//     }
+//     return obj
+//   }, false)
+// }
 
-const analyticsMiddleware = config => (set, get, api) =>
-  config(
-    args => {
-      const newValues =
-        typeof args === 'function' ? args(get()) : args
-      // gets the values that have changed since the last update
-      const changes = getPropertyChanges(newValues, lastUpdate)
-      // checks if any values are the same as the last update (indicating side-effect)
-      const same = getSameProperties(newValues, lastUpdate)
-      // if there are changes that are not a side effect of another action, track them
-      if (changes && !same) {
-        console.log('track these changes:', changes)
-      }
-      if (changes) {
-        console.log('state change:', changes)
-        set(args)
-        lastUpdate = changes
-      }
-    },
-    get,
-    api
-  )
+// const analyticsMiddleware = config => (set, get, api) =>
+//   config(
+//     args => {
+//       const newValues =
+//         typeof args === 'function' ? args(get()) : args
+//         //console.log(args)
+//       // gets the values that have changed since the last update
+//       const changes = getPropertyChanges(newValues, lastUpdate)
+//       //console.log(changes)
+//       // checks if any values are the same as the last update (indicating side-effect)
+//       const same = getSameProperties(newValues, lastUpdate)
+//       //console.log(same)
+//       // if there are changes that are not a side effect of another action, track them
+//       if (changes && !same) {
+//         console.log('track these changes:', changes)
+//       }
+//       if (changes) {
+//         //console.log('state change:', changes)
+//         set(args)
+//         lastUpdate = changes
+//       }
+//     },
+//     get,
+//     api
+//   )
 
 const useDataOptions = create(
   analyticsMiddleware((set, get) => ({

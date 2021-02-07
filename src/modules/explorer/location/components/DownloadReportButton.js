@@ -6,6 +6,10 @@ import {
   getPredictedValue,
   getRegionFromLocationId
 } from '../../app/selectors'
+import {
+  useLocationData,
+  getLocationNameString,
+} from '..'
 import { formatNumber } from '../../../../shared/utils'
 import { hasVal } from '../../app/selectors/data'
 import { getStateName } from '../../../../shared/utils/states'
@@ -52,10 +56,12 @@ const getDiffValues = locationData => {
  * Sends a request to the report endpoint to generate a PDF report
  * @param {*} locationData
  */
-const fetchReport = locationData => {
+export const fetchReport = locationData => {
   const id = locationData['id']
   const region = getRegionFromLocationId(id)
   const diffs = getDiffValues(locationData)
+  //fire analytics events
+  window.dataLayer.push({event: 'reportDownloaded', geoTypeSelection: region, locationId: id, locationName: getLocationNameString(id)})
   return axios({
     url: 'https://export.edopportunity.org/',
     method: 'POST',
@@ -96,7 +102,6 @@ const handleResponse = locationData => response => {
  */
 const DownloadReportButton = ({ location, ...props }) => {
   const [loading, setLoading] = useState(false)
-
   const handleDownloadReport = () => {
     setLoading(true)
     fetchReport(location)

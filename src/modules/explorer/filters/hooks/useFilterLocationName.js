@@ -1,8 +1,10 @@
 import { useMemo } from 'react'
 import { useLocationName } from '../../location'
 import useFilterLocation from './useFilterLocation'
+import analyticsMiddleware from '../../app/middleware/analyticsMiddleware'
 
 export default function useFilterLocationName() {
+
   const locationId = useFilterLocation()
   const locationName = useLocationName(locationId)
   return useMemo(() => {

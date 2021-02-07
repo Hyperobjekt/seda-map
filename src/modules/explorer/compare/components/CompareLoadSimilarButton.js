@@ -5,7 +5,7 @@ import axios from 'axios'
 import useAddCompareLocations from '../hooks/useAddCompareLocations'
 import { getRegionFromLocationId } from '../../app/selectors'
 import useCompareStore from '../hooks/useCompareStore'
-import { useLocationData } from '../../location'
+import { useLocationData, getLocationNameString } from '../../location'
 
 const endpoint = process.env.REACT_APP_DATA_ENDPOINT + 'similar/'
 
@@ -49,6 +49,8 @@ const CompareLoadSimilarButton = (props) => {
   }, [selectedLocation])
 
   const handleLoadSimilar = useCallback(() => {
+    //fire analytics event
+    window.dataLayer.push({event: 'similarPlacesComparison', geoTypeSelection: getRegionFromLocationId(locationData.id), locationId: locationData.id, locationName: getLocationNameString(locationData)})
     setState({ loading: true, loaded: false })
     fetchSimilarLocations(locationData.id).then(ids => {
       addCompareLocations(ids)

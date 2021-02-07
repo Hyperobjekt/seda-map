@@ -1,7 +1,9 @@
 import create from 'zustand'
+import analyticsMiddleware from '../middleware/analyticsMiddleware'
 
-const useUiStore = create(set => ({
-  // current view of the data
+const useUiStore = create(
+  analyticsMiddleware((set) => ({
+    // current view of the data
   view: 'map',
   isEmbed: false,
   embedSecondary: false,
@@ -71,6 +73,6 @@ const useUiStore = create(set => ({
       embedSecondary: params.secondary.split('+').length > 1
     })
   }
-}))
+})))
 
 export default useUiStore
