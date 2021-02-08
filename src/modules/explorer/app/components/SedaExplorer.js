@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import SedaMap from '../../map'
 import { PageBody, SplitView } from '../../../../shared'
 import { SedaScatterplot } from '../../scatterplot'
@@ -20,25 +20,11 @@ const SedaExplorer = props => {
 
   const isMobile = useIsMobile()
 
-  const embedListener = useCallback(() => {
-    if (!isEmbed) return
-
-    // open new tab with same settings, without 'embed' mode or '+secondary' flag
-    window.open(
-      window.location.href
-        .split('+secondary')
-        .join('')
-        .split('/embed')
-        .join('')
-    )
-  }, [isEmbed])
-
   return (
     <PageBody {...props}>
       {!isEmbed && <SedaPanelGroup />}
       <SplitView
         view={splitView}
-        onClick={embedListener}
         LeftComponent={
           isEmbed && view === 'chart' ? <></> : <SedaMap />
         }
@@ -46,7 +32,7 @@ const SedaExplorer = props => {
           isEmbed && view === 'map' ? <></> : <SedaScatterplot />
         }
       />
-      {!isMobile && <SedaTooltip /> }
+      {!isMobile && <SedaTooltip />}
       <SedaError />
     </PageBody>
   )
