@@ -25,7 +25,6 @@ import {
   useAddLocation,
   useActiveLocationData,
   getLocationIdsForRegion,
-  getLocationNameString
 } from '../location'
 import useFlyToLocation from './hooks/useFlyToLocation'
 import { SEDA_SOURCES } from './constants'

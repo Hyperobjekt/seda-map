@@ -7,7 +7,6 @@ import {
   getRegionFromLocationId
 } from '../../app/selectors'
 import {
-  useLocationData,
   getLocationNameString,
 } from '..'
 import { formatNumber } from '../../../../shared/utils'
