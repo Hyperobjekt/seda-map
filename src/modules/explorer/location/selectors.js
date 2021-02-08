@@ -13,8 +13,9 @@ import { getLang } from '../app/selectors/lang'
  * @param {object} location object of location data
  */
 export const getLocationNameParts = location => {
-  if (!location || !location.id)
+  if (!location || !location.id) {
     return [getLang('LABEL_NO_NAME'), '']
+  }
   const id = location.id
   const isState = id.length === 2
   const name = isState ? getStateName(id) : location['name']

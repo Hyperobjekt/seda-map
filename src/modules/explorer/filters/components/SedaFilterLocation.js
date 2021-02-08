@@ -38,6 +38,8 @@ const SedaFilterLocation = props => {
   const handleLocationClear = useCallback(() => {
     const index = getFilterIndex(filters, ['startsWith', 'id'])
     index > -1 && removeFilter(filters[index])
+    //fire analytics event
+    window.dataLayer.push({event: 'geoSelected', geoSelection: 'the us' })
   }, [filters, removeFilter])
 
   /**
@@ -49,7 +51,9 @@ const SedaFilterLocation = props => {
   const handleLocationSelect = (e, hit) => {
     const id = getPropFromHit(hit, 'id')
     setFilter(['startsWith', 'id', id])
-  }
+    //fire analytics event
+    window.dataLayer.push({event: 'geoSelected', geoSelection: hit.suggestionValue })
+}
 
   return (
     <PanelListItem

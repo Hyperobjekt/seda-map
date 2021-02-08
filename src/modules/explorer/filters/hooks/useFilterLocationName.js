@@ -3,6 +3,7 @@ import { useLocationName } from '../../location'
 import useFilterLocation from './useFilterLocation'
 
 export default function useFilterLocationName() {
+
   const locationId = useFilterLocation()
   const locationName = useLocationName(locationId)
   return useMemo(() => {

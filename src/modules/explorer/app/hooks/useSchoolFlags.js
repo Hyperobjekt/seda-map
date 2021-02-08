@@ -22,7 +22,7 @@ export const loadFlaggedSchools = () =>
     })
   )
 
-const [useFlagStore] = create((set, get) => ({
+const useFlagStore = create((set, get) => ({
   loaded: false,
   sped: [],
   lep: [],
