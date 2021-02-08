@@ -6,7 +6,7 @@ import create from 'zustand'
  * the map and chart are not re-rendered while making changes in
  * compare view
  */
-const [useCompareStore] = create((set, get) => ({
+const useCompareStore = create((set, get) => ({
   // dialog visibility state
   dialogOpen: false,
   setDialogOpen: dialogOpen => set({ dialogOpen }),
