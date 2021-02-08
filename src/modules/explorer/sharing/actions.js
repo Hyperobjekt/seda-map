@@ -23,9 +23,7 @@ export const onFacebookShare = (shareUrl, options = {}) => {
     objectToUrlParams(Object.assign(defaultOptions, options));
   window.open(url,'sharer', popupOptions);
   //fire analytics event
-  console.log('twittershare');
-  window.dataLayer.push({event: 'shareType', shareType: 'twitter', shareURL: shareUrl})
-
+  window.dataLayer.push({event: 'shareType', shareType: 'facebook', shareURL: shareUrl})
 }
 /**
  * Opens a popup window to share a tweet + url on twitter
@@ -39,7 +37,6 @@ export const onTwitterShare = (shareUrl, text, options = {}) => {
     objectToUrlParams(Object.assign(defaultOptions, options));
   window.open(url, 'sharer', popupOptions);
   //fire analytics event
-  console.log('twittershare');
   window.dataLayer.push({event: 'shareType', shareType: 'twitter', shareURL: shareUrl})
 }
 

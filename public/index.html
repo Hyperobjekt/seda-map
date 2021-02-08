@@ -48,7 +48,7 @@
     <script>
       if (
         window.location.hash.indexOf('/embed/') === -1 &&
-        window.location.hostname === 'localhost'
+        window.location.hostname !== 'localhost'
       ) {
         ;(function(w, d, s, l, i) {
           w[l] = w[l] || []
