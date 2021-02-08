@@ -14,7 +14,13 @@ import shallow from 'zustand/shallow'
  * @returns {string}
  */
 export default () => {
-  const [view, embedSecondary] = useUiStore(state => [state.isEmbed ? 'embed/' + state.view : state.view, state.embedSecondary], shallow)
+  const [view, embedSecondary] = useUiStore(
+    state => [
+      state.isEmbed ? 'embed/' + state.view : state.view,
+      state.embedSecondary
+    ],
+    shallow
+  )
   const viewportRoute = useMapStore(state =>
     getViewportRoute(state.viewport)
   )
@@ -26,7 +32,9 @@ export default () => {
       filterArrayToString(filters),
       state.region,
       state.metric,
-      embedSecondary ? state.secondary + "+secondary" : state.secondary,
+      embedSecondary
+        ? state.secondary + '+secondary'
+        : state.secondary,
       state.demographic,
       viewportRoute,
       getLocationsRoute(locationsData)
