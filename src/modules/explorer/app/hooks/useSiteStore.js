@@ -1,7 +1,7 @@
 import create from 'zustand'
 import { getLang } from '../selectors/lang'
 
-const [useSiteStore] = create(set => ({
+const useSiteStore = create(set => ({
   title: getLang('LOGO_ALT_TEXT'),
   menu: [
     {

@@ -24,7 +24,7 @@ import {
   useLocations,
   useAddLocation,
   useActiveLocationData,
-  getLocationIdsForRegion
+  getLocationIdsForRegion,
 } from '../location'
 import useFlyToLocation from './hooks/useFlyToLocation'
 import { SEDA_SOURCES } from './constants'
@@ -141,6 +141,8 @@ const SedaMap = props => {
   const handleClick = feature => {
     const id = getFeatureProperty(feature, 'id')
     addLocation(id)
+    //fire analytics event
+    window.dataLayer.push({event: 'locationSelect', selectionSource:'map', locationId: feature.id, locationName: feature.properties.name})
   }
 
   /** handler for map load */
