@@ -1,16 +1,14 @@
 import React from 'react'
 import SedaLogo from './SedaLogo'
-import {
-  makeStyles,
-} from '@material-ui/core'
+import { makeStyles } from '@material-ui/core'
 
-import {
-  PageHeader
-} from '../../../../../shared'
+import { PageHeader } from '../../../../../shared'
 
 import SedaHeaderTitle from './SedaHeaderTitle'
 import SedaHeaderDataButton from './SedaHeaderDataButton'
 import SedaHeaderActions from './SedaHeaderActions'
+import { useUiStore } from '../../hooks'
+import { getBreakawayLink } from '../../../sharing/selectors'
 
 const useLogoStyles = makeStyles(theme => ({
   root: {
@@ -20,14 +18,14 @@ const useLogoStyles = makeStyles(theme => ({
     overflow: 'hidden',
     [theme.breakpoints.down('sm')]: {
       width: theme.spacing(3),
-      height: theme.spacing(3),
+      height: theme.spacing(3)
     }
   },
   logo: {
     width: 'auto',
     height: theme.spacing(4),
     [theme.breakpoints.down('sm')]: {
-      height: theme.spacing(3),
+      height: theme.spacing(3)
     }
   }
 }))
@@ -36,12 +34,11 @@ const HeaderLogo = props => {
   const classes = useLogoStyles()
 
   return (
-    <a className={classes.root} href="/">
+    <a className={classes.root} {...props}>
       <SedaLogo className={classes.logo} />
     </a>
   )
 }
-
 
 const useHeaderStyles = makeStyles(theme => ({
   root: {
@@ -51,15 +48,15 @@ const useHeaderStyles = makeStyles(theme => ({
   logo: {
     marginRight: theme.spacing(3),
     [theme.breakpoints.down('sm')]: {
-      marginRight: theme.spacing(1),
+      marginRight: theme.spacing(1)
     }
   },
-  
+
   subheading: {
     fontSize: theme.typography.pxToRem(12),
     color: theme.palette.text.secondary,
     [theme.breakpoints.down('sm')]: {
-      fontSize: theme.typography.pxToRem(11),
+      fontSize: theme.typography.pxToRem(11)
     }
   },
   toolbar: {
@@ -74,20 +71,31 @@ const useHeaderStyles = makeStyles(theme => ({
   },
   actionsMobile: {
     minWidth: '100%',
-    borderTop: '1px solid #E5E5E5',
+    borderTop: '1px solid #E5E5E5'
   }
 }))
 
-const SedaHeader = ({isMobile, ...props}) => {
+const SedaHeader = ({ isMobile, ...props }) => {
   const classes = useHeaderStyles()
+  const isEmbed = useUiStore(state => state.isEmbed)
   return (
     <PageHeader
       classes={classes}
       isMobile={isMobile}
-      LogoComponent={!isMobile ? <HeaderLogo /> : <SedaHeaderDataButton />}
+      LogoComponent={
+        !isMobile || isEmbed ? (
+          <HeaderLogo
+            href={isEmbed ? getBreakawayLink() : '/'}
+            target={isEmbed ? '_blank' : undefined}
+            rel={isEmbed ? 'noopener' : undefined}
+          />
+        ) : (
+          <SedaHeaderDataButton />
+        )
+      }
       ActionsComponent={<SedaHeaderActions />}
       {...props}>
-        <SedaHeaderTitle />
+      <SedaHeaderTitle />
     </PageHeader>
   )
 }
