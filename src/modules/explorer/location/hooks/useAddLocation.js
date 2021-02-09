@@ -1,6 +1,7 @@
 import { useCallback } from 'react'
 import { useUiStore } from '../../app/hooks'
 import useDataOptions from '../../app/hooks/useDataOptions'
+import { getBreakawayLink } from '../../sharing/selectors'
 
 /**
  * Provides a function for adding location (GeoJSON features) to
@@ -14,13 +15,7 @@ export default () => {
     (locationId, ...args) => {
       if (isEmbed) {
         // open new tab with same settings, without 'embed' mode or '+secondary' flag
-        window.open(
-          window.location.href
-            .split('+secondary')
-            .join('')
-            .split('/embed')
-            .join('')
-        )
+        window.open(getBreakawayLink())
       }
       addLocation(locationId, ...args)
     },
