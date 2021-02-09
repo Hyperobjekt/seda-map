@@ -11,7 +11,7 @@ import {
   Typography,
   withStyles
 } from '@material-ui/core'
-import { useActiveOptions } from '../../hooks'
+import { useActiveOptions, useUiStore } from '../../hooks'
 import {
   getGapDemographics,
   isGapDemographic
@@ -177,6 +177,7 @@ const SedaHeaderTitle = ({ classes, className, ...props }) => {
   const isGap = isGapDemographic(demId)
   const filters = useActiveFilters()
   const filterCount = filters.filter(f => f[0] !== 'sort').length
+  const isEmbed = useUiStore(state => state.isEmbed)
 
   // context strings to inject in title
   const titleContext = {
@@ -219,7 +220,7 @@ const SedaHeaderTitle = ({ classes, className, ...props }) => {
     <div className={clsx(classes.root, className)} {...props}>
       <Typography className={classes.title} variant="h1">
         {title}{' '}
-        {Boolean(filterCount) && (
+        {Boolean(filterCount) && !isEmbed && (
           <SedaClearFilterButton count={filterCount} />
         )}
       </Typography>
