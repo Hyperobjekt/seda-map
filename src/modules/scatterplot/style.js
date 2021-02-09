@@ -1,5 +1,9 @@
 import * as merge from 'deepmerge'
-import { MAX_DOTS, PROGRESSIVE_THRESHOLD, UNDERLAY_THRESHOLD } from '../explorer/scatterplot/constants'
+import {
+  MAX_DOTS,
+  PROGRESSIVE_THRESHOLD,
+  UNDERLAY_THRESHOLD
+} from '../explorer/scatterplot/constants'
 import { getDataScale, getDataSubset } from './utils'
 
 /** Default options for scatterplot container */
@@ -142,42 +146,61 @@ const getDataSeries = (id, series = []) =>
 
 const isDataReady = ({ data }) => data && data.length !== 0
 
+const getSeriesSubset = (series, ids) => {
+  return series
+    .filter(d => ids.indexOf(d[3]) > -1)
+    .slice(0, MAX_DOTS)
+}
+
 /**
  * Gets scatterplot data series, or return empty array if
  * data is not ready yet
  */
 const getScatterplotSeries = props => {
   const { allData, data, xVar, yVar, zVar, options } = props
+
+  // pull out series that are not 'base' or 'underlay'
   const otherSeries =
     options && options.series
       ? options.series.filter(
-        s => ['base', 'underlay'].indexOf(s.id) === -1
-      )
+          s => ['base', 'underlay'].indexOf(s.id) === -1
+        )
       : []
+
+  // if there is no scale, create one based on zVar (for sizing)
   if (!props.scale) {
     const zData = data.map(d => d[zVar])
     props.scale = zVar
       ? getDataScale(zData, { range: [6, 48] })
       : () => 10
   }
-  const isFiltered = data.length < UNDERLAY_THRESHOLD && allData.length !== data.length
+
+  // if the number of data points is below the underlay threshold
+  const hasUnderlay =
+    data.length < UNDERLAY_THRESHOLD &&
+    allData.length !== data.length
+
+  // get the scatterplot data series, depending on if there is an underlay or not
   const allScatterData = zVar
-    ? getDataSubset(allData, [xVar, yVar, zVar])
-    : getDataSubset(allData, [xVar, yVar])
+    ? getDataSubset(hasUnderlay ? allData : data, [
+        xVar,
+        yVar,
+        zVar
+      ])
+    : getDataSubset(hasUnderlay ? allData : data, [xVar, yVar])
+  const selectIds = hasUnderlay ? data.map(d => d.id) : []
+  const mainDataSeries = hasUnderlay
+    ? getSeriesSubset(allScatterData, selectIds)
+    : allScatterData
 
-  const filteredIds = isFiltered ? data.map(d => d.id) : []
-  const filteredScatterData = isFiltered
-    ? allScatterData.filter(d => filteredIds.indexOf(d[3]) > -1)
-    : allScatterData.slice(0, MAX_DOTS)
-
-  const params = {
-    scatterData: filteredScatterData,
-    ...props
-  }
+  // return an array of series with appropriate data sources
   const series = [
-    getBaseSeries(params),
+    getBaseSeries({
+      scatterData: mainDataSeries.slice(0, MAX_DOTS),
+      ...props
+    }),
     getUnderlaySeries({
-      scatterData: isFiltered
+      scatterData: hasUnderlay
         ? allScatterData.slice(0, MAX_DOTS)
         : [],
       options
