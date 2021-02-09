@@ -150,6 +150,7 @@ const SedaOptionButton = ({ type, value, ...props }) => {
   const label = getPrefixLang(value, labelPrefix)
   const tooltipText = getTooltipLang(type, value)
   const typeLabel = getPrefixLang(type, 'LABEL')
+  const isEmbed = useUiStore(state => state.isEmbed)
 
   const handleClick = () => {
     setSelection(type)
@@ -160,7 +161,7 @@ const SedaOptionButton = ({ type, value, ...props }) => {
       title={
         <DetailedTooltip
           primary={tooltipText}
-          hint={`click to change ${typeLabel}`}
+          hint={!isEmbed && `click to change ${typeLabel}`}
         />
       }
       placement="bottom"
