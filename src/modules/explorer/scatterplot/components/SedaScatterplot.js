@@ -1,5 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
+import { Button } from '@material-ui/core'
 import SedaScatterplotBase from './SedaScatterplotBase'
 import clsx from 'clsx'
 import useResizeAware from 'react-resize-aware'
@@ -8,7 +9,7 @@ import {
   useSecondary,
   useUiStore
 } from '../../app/hooks'
-import { LinkButton, SplitView } from '../../../../shared'
+import { SplitView } from '../../../../shared'
 import SelectMenu from '../../../../shared/components/Inputs/SelectMenu'
 import {
   getLocatonIdFromEvent,
@@ -54,7 +55,8 @@ const useStyles = makeStyles(theme => ({
     minWidth: 80,
     maxWidth: 88,
     whiteSpace: 'normal',
-    fontSize: theme.typography.pxToRem(12),
+    fontSize: theme.typography.pxToRem(10),
+    padding: '5px 10px',
     [theme.breakpoints.up('sm')]: {
       position: 'absolute',
       top: -1,
@@ -169,11 +171,12 @@ const SedaScatterplot = () => {
                 yVar={yVar}
                 region={region}>
                 {!isSplit && hasGapChart && !isEmbed && (
-                  <LinkButton
-                    className={classes.toggleButton}
+                  <Button
+                    classes={{outlined: classes.toggleButton}}
+                    variant="outlined"
                     onClick={() => setShowGapChart(true)}>
                     Show gap vs. other metrics
-                  </LinkButton>
+                  </Button>
                 )}
               </SedaScatterplotHeader>
             </SedaScatterplotBase>
@@ -214,11 +217,12 @@ const SedaScatterplot = () => {
                 yVar={yGapVar}
                 region={region}>
                 {!isSplit && isVersus && !isEmbed && (
-                  <LinkButton
-                    className={classes.toggleButton}
+                  <Button
+                    classes={{outlined: classes.toggleButton}}
+                    variant={'outlined'}
                     onClick={() => setShowGapChart(false)}>
-                    Show Versus
-                  </LinkButton>
+                    Show Main Chart
+                  </Button>
                 )}
               </SedaScatterplotHeader>
             </SedaScatterplotBase>
