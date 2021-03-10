@@ -650,7 +650,10 @@ export const getScatterplotOptions = (
   const sizer = getDotSizeScale({
     extent: extents[2]
   })
-  function generateData() {
+  // creates a trend line for SES relative to Y metric
+  // NOTE: not used now, uncomment the line series below to add
+  // eslint-disable-next-line
+  function generateSesLine() {
     const stepCount = 400
     const metricId = getMetricIdFromVarName(yVar)
     const xExtent = extents[0]
@@ -663,12 +666,6 @@ export const getScatterplotOptions = (
       let x = xScale(i)
       data.push([x, getPredictedValue(x, metricId, region)])
     }
-    console.log(
-      'generateData',
-      xScale.domain(),
-      xScale.range(),
-      data
-    )
     return data
   }
 
@@ -703,24 +700,31 @@ export const getScatterplotOptions = (
         xVar,
         yVar
       }),
-      ...overlays(variant, { xVar, yVar, region, extents }),
-      // NOTE: trend line is development only feature for now, for testing
-      ...(process.env.NODE_ENV === 'development'
-        ? [
-            {
-              type: 'line',
-              showSymbol: false,
-              clip: true,
-              data: generateData(),
-              lineStyle: {
-                width: 1,
-                type: 'dashed',
-                color: 'rgba(0,0,0,0.5)'
-              },
-              z: 1000
-            }
-          ]
-        : [])
+      ...overlays(variant, {
+        xVar,
+        yVar,
+        region,
+        extents
+      })
+      // NOTE: uncomment the series below to add the trend line
+      // trend line is development only feature for now, for testing
+      // it is only accurate for "all" subgroup
+      // ...(process.env.NODE_ENV === 'development'
+      //   ? [
+      //       {
+      //         type: 'line',
+      //         showSymbol: false,
+      //         clip: true,
+      //         data: generateSesLine(),
+      //         lineStyle: {
+      //           width: 1,
+      //           type: 'dashed',
+      //           color: 'rgba(0,0,0,0.5)'
+      //         },
+      //         z: 1000
+      //       }
+      //     ]
+      //   : [])
     ]
   }
 
