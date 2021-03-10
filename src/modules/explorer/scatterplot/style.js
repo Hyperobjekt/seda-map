@@ -704,18 +704,23 @@ export const getScatterplotOptions = (
         yVar
       }),
       ...overlays(variant, { xVar, yVar, region, extents }),
-      {
-        type: 'line',
-        showSymbol: false,
-        clip: true,
-        data: generateData(),
-        lineStyle: {
-          width: 1,
-          type: 'dashed',
-          color: 'rgba(0,0,0,0.5)'
-        },
-        z: 1000
-      }
+      // NOTE: trend line is development only feature for now, for testing
+      ...(process.env.NODE_ENV === 'development'
+        ? [
+            {
+              type: 'line',
+              showSymbol: false,
+              clip: true,
+              data: generateData(),
+              lineStyle: {
+                width: 1,
+                type: 'dashed',
+                color: 'rgba(0,0,0,0.5)'
+              },
+              z: 1000
+            }
+          ]
+        : [])
     ]
   }
 
