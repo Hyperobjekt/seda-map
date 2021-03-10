@@ -7,6 +7,7 @@ import {
   isUnavailable,
   valueToLowMidHigh
 } from '../../app/selectors'
+import { getMidLowHigh } from '../../app/selectors/metrics'
 import { getLang } from '../../app/selectors/lang'
 import {
   getKeyMetrics,
@@ -14,6 +15,13 @@ import {
 } from '../../app/selectors/metrics'
 import { ListSubheader, withStyles } from '@material-ui/core'
 import { formatNumber } from '../../../../shared/utils'
+
+/** Thresholds for below / above average */
+const DIFF_RANGES = {
+  avg: [-0.25, 0.25],
+  grd: [-0.035, 0.035],
+  coh: [-0.025, 0.025]
+}
 
 const getSesComparisonItem = (
   location,
@@ -26,9 +34,9 @@ const getSesComparisonItem = (
   const ses = location[secondaryVar]
   if (!location || !location[varName] || isUnavailable(ses))
     return null
-  const diffVal =
-    location[varName] - getPredictedValue(ses, metricId, region)
-  const indicator = valueToLowMidHigh(metricId, diffVal)
+  const predictedVal = getPredictedValue(ses, metricId, region)
+  const diffVal = location[varName] - predictedVal
+  const indicator = getMidLowHigh(diffVal, DIFF_RANGES[metricId])
   const langKey = [
     'SUMMARY',
     metricId + secondaryId,
