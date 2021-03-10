@@ -13,12 +13,14 @@ import {
   getFormatterForVarName,
   isVersusFromVarNames,
   isGapVarName,
-  getMetricIdFromVarName
+  getMetricIdFromVarName,
+  getPredictedValue
 } from '../app/selectors'
 import { getScatterplotBaseOptions } from '../../scatterplot'
 import { getLang } from '../app/selectors/lang'
 import { getDotSizeScale } from './selectors'
 import { max, tickStep, ticks } from 'd3-array'
+import { scaleLinear } from 'd3-scale'
 
 /**
  *
@@ -625,6 +627,12 @@ const yAxis = ({ variant, region, extent }) => {
   }
 }
 
+/**
+ * Returns an eCharts options object
+ * @param {*} variant
+ * @param {*} param1
+ * @returns
+ */
 export const getScatterplotOptions = (
   variant,
   {
@@ -642,6 +650,28 @@ export const getScatterplotOptions = (
   const sizer = getDotSizeScale({
     extent: extents[2]
   })
+  function generateData() {
+    const stepCount = 400
+    const metricId = getMetricIdFromVarName(yVar)
+    const xExtent = extents[0]
+    const xScale = scaleLinear()
+      .domain([0, stepCount])
+      .range(xExtent)
+
+    let data = []
+    for (let i = 0; i <= stepCount; i++) {
+      let x = xScale(i)
+      data.push([x, getPredictedValue(x, metricId, region)])
+    }
+    console.log(
+      'generateData',
+      xScale.domain(),
+      xScale.range(),
+      data
+    )
+    return data
+  }
+
   const options = {
     grid: grid(variant),
     visualMap: visualMap(variant, {
@@ -673,7 +703,19 @@ export const getScatterplotOptions = (
         xVar,
         yVar
       }),
-      ...overlays(variant, { xVar, yVar, region, extents })
+      ...overlays(variant, { xVar, yVar, region, extents }),
+      {
+        type: 'line',
+        showSymbol: false,
+        clip: true,
+        data: generateData(),
+        lineStyle: {
+          width: 1,
+          type: 'dashed',
+          color: 'rgba(0,0,0,0.5)'
+        },
+        z: 1000
+      }
     ]
   }
 
