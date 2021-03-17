@@ -139,6 +139,14 @@ const getMetricVarName = (metric, demographic = 'all') => {
   return demographic + '_' + metric
 }
 
+/**
+ * Gets the secondary var name for the given demographic
+ * and substitues "all" for the demographic if SES is
+ * unavailable for the given demographic.
+ * @param {*} secondary
+ * @param {*} demographic
+ * @returns
+ */
 const getSecondaryVarName = (secondary, demographic) => {
   // use "all" SES option for the following demographics
   if (secondary === 'ses') {
