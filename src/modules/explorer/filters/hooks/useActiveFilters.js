@@ -9,7 +9,7 @@ import { getFilterValue } from '../../../filters/useFilterStore'
  */
 export default () => {
   const filters = useFilters()
-  const [region] = useDataOptions(state => state.region)
+  const region = useDataOptions(state => state.region)
 
   return useMemo(() => {
     const flags = FILTER_FLAGS[region].flat()
