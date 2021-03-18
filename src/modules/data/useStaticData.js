@@ -229,7 +229,7 @@ const HACK_FIX_NP_SEG = data => {
   }
 }
 
-const [useStaticData] = create((set, get) => ({
+const useStaticData = create((set, get) => ({
   data: {},
   loading: [],
   loaded: [],

@@ -1,15 +1,21 @@
 import useFilters from './useFilters'
-import { useRegion } from '../../app/hooks'
+import { useDataOptions } from '../../app/hooks'
 import { FILTER_FLAGS } from '../../app/constants/flags'
 import { useMemo } from 'react'
 import { getFilterValue } from '../../../filters/useFilterStore'
+import { getSecondaryForDemographic } from '../../app/selectors'
+import shallow from 'zustand/shallow'
 
 /**
  * Returns the currently active filters in the explorer
  */
 export default () => {
   const filters = useFilters()
-  const [region] = useRegion()
+  const [region, demographic] = useDataOptions(
+    state => [state.region, state.demographic],
+    shallow
+  )
+
   return useMemo(() => {
     const flags = FILTER_FLAGS[region].flat()
     const locationId = getFilterValue(filters, [
@@ -58,6 +64,16 @@ export default () => {
             return false
           return true
         })
+        // remove SES for subgroups that don't have it
+        .filter(f => {
+          if (f[0] !== 'range') return true
+          const secondary = getSecondaryForDemographic(
+            demographic
+          )
+          if (f[1] === 'ses' && secondary.indexOf('ses') === -1)
+            return false
+          return true
+        })
     )
-  }, [filters, region])
+  }, [filters, region, demographic])
 }

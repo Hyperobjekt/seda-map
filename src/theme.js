@@ -1,12 +1,12 @@
 import { createMuiTheme } from '@material-ui/core/styles'
 
-const fontFamily =
+export const fontFamily =
   'maisonneue-book,lato,helvetica neue,Arial,sans-serif,-apple-system'
-const boldFontFamily =
+export const boldFontFamily =
   'maisonneue-bold,lato,helvetica neue,Arial,sans-serif,-apple-system'
-const headerFontFamily =
+export const headerFontFamily =
   'sharpgrotesk-medium20, lato, helvetica neue, Arial, sans-serif, -apple-system'
-const condensedFontFamily =
+export const condensedFontFamily =
   'sharpgrotesk-medium15, lato, helvetica neue, Arial, sans-serif, -apple-system'
 
 const borderRadius = 3

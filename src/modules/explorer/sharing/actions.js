@@ -22,6 +22,8 @@ export const onFacebookShare = (shareUrl, options = {}) => {
   const popupOptions = 
     objectToUrlParams(Object.assign(defaultOptions, options));
   window.open(url,'sharer', popupOptions);
+  //fire analytics event
+  window.dataLayer.push({event: 'shareType', shareType: 'facebook', shareURL: shareUrl})
 }
 /**
  * Opens a popup window to share a tweet + url on twitter
@@ -34,6 +36,8 @@ export const onTwitterShare = (shareUrl, text, options = {}) => {
   const popupOptions = 
     objectToUrlParams(Object.assign(defaultOptions, options));
   window.open(url, 'sharer', popupOptions);
+  //fire analytics event
+  window.dataLayer.push({event: 'shareType', shareType: 'twitter', shareURL: shareUrl})
 }
 
 /**

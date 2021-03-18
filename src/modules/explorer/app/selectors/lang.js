@@ -29,7 +29,6 @@ const interpolate = (text, params = {}) => {
       if (params[a]) return params[a]
       // return the key if there is no match
       return a
-      
     })
     .join('')
 }
@@ -42,7 +41,7 @@ const interpolate = (text, params = {}) => {
 export const getLang = (key = '', props = {}) => {
   key = key.toUpperCase()
   if (!LANG[key]) {
-    console.warn('missing language for key: ', key)
+    // console.warn('missing language for key: ', key)
     return ''
   }
   return Object.keys(props).length > 0
@@ -51,7 +50,8 @@ export const getLang = (key = '', props = {}) => {
 }
 
 /** Split a lang string at the vars formatted as $[var] */
-export const splitLang = text => text.split(/(\$\[[a-zA-Z0-9_]*\])/)
+export const splitLang = text =>
+  text.split(/(\$\[[a-zA-Z0-9_]*\])/)
 
 /**
  * Gets the proper language key to use given the metric and value

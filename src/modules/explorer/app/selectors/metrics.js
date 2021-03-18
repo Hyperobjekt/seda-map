@@ -30,8 +30,9 @@ export const getMetricById = id =>
  * @param {*} dem
  */
 export const getSecondaryForDemographic = dem => {
+  // non-gaps only have ses
   const metrics = {
-    ses: ['wb', 'wh'],
+    ses: ['all', 'w', 'b', 'h', 'a', 'i', 'wb', 'wh'],
     seg: ['wb', 'wh', 'pn'],
     min: ['wb', 'wh']
   }
@@ -66,7 +67,10 @@ export const getMetricFromVarName = varName =>
   getMetricById(getMetricIdFromVarName(varName))
 
 /** Checks if a value falls within the provided mid range */
-const getMidLowHigh = (value, midRange = [-0.25, 0.25]) => {
+export const getMidLowHigh = (
+  value,
+  midRange = [-0.25, 0.25]
+) => {
   return value < midRange[0]
     ? 'LOW'
     : value > midRange[1]

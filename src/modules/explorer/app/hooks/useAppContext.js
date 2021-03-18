@@ -21,7 +21,6 @@ import { applyFilters } from '../../../filters'
 import { getFiltersForDemographic } from '../../filters/selectors'
 import { MAX_DOTS } from '../../scatterplot/constants'
 
-
 const getFilteredData = (filters, demographic, regionData) => {
   // update filters to apply to current demographic
   const dataFilters = getFiltersForDemographic(
@@ -77,7 +76,11 @@ export default function useAppContext() {
     )
 
     // get circles with valid values only, limit to MAX_DOTS
-    const _scatterplotData = regionData && regionData.filter(d => scatterplotVars.every(v => hasVal(d[v])))
+    const _scatterplotData =
+      regionData &&
+      regionData.filter(d =>
+        scatterplotVars.every(v => hasVal(d[v]))
+      )
     const scatterplotData = getFilteredData(
       filters,
       demographic,
@@ -92,8 +95,8 @@ export default function useAppContext() {
 
     const allData = regionData
       ? regionData.filter(d =>
-        scatterplotVars.every(v => hasVal(d[v]))
-      )
+          scatterplotVars.every(v => hasVal(d[v]))
+        )
       : []
 
     // all variables used in the scatterplot / map
@@ -109,9 +112,10 @@ export default function useAppContext() {
     const dataExtents = {}
     allVars.forEach(v => {
       // #516: do not adjust size extent based on filtered data
-      dataExtents[v] = v.indexOf('_sz') > -1 ? 
-        getDataExtent(regionData.slice(0,MAX_DOTS), v) : 
-        getDataExtent(scatterplotData, v)
+      dataExtents[v] =
+        v.indexOf('_sz') > -1
+          ? getDataExtent(regionData.slice(0, MAX_DOTS), v)
+          : getDataExtent(scatterplotData, v)
     })
 
     // create padded extents for the scatterplot
