@@ -72,6 +72,10 @@ const additionalTopics = [
     answer: 'HELP_COH_CONCEPT_A'
   },
   {
+    question: 'HELP_FLAGGED',
+    answer: 'HELP_FLAGGED_A'
+  },
+  {
     question: 'HELP_FRL',
     answer: 'HELP_FRL_A'
   },
