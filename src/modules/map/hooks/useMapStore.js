@@ -52,7 +52,7 @@ const getViewportForBounds = (
   }
 }
 
-const [useMapStore] = create((set, get) => ({
+const useMapStore = create((set, get) => ({
   loaded: false,
   resetViewport: { ...DEFAULT_VIEWPORT },
   viewport: DEFAULT_VIEWPORT,

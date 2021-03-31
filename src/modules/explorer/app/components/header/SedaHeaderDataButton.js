@@ -129,7 +129,8 @@ const SedaHeaderDataButton = ({classes}) => {
       >
       <IconButton
         className={classes.root}
-        onClick={handleToggleSettings}>
+        onClick={handleToggleSettings}
+        aria-label="toggle options">
         <SettingsIcon className={classes.logo} />
       </IconButton>
     </Tooltip>

@@ -33,20 +33,29 @@ const StyledExpansionPanel = withStyles(theme => ({
     }
   },
   summary: {
-    padding: `${theme.spacing(1)}px ${theme.spacing(3)}px`,
+    padding: theme.spacing(1, 3),
     '&:after': {
       display: 'none'
     },
     '& .MuiExpansionPanelSummary-expandIcon': {
-      padding: `0 ${theme.spacing(2)}px`
-    },
+      padding: theme.spacing(0, 2)
+    }
   },
   details: {
-    padding: `0 ${theme.spacing(3)}px ${theme.spacing(2)}px`,
+    padding: theme.spacing(0, 3, 2),
+    color: theme.palette.text.secondary,
+    [theme.breakpoints.up('lg')]: {
+      fontSize: theme.typography.pxToRem(13)
+    }
   },
   content: {},
   heading: {
-    ...theme.mixins.boldType
+    ...theme.typography.h6,
+    fontSize: theme.typography.pxToRem(12),
+    lineHeight: 1.33,
+    [theme.breakpoints.up('lg')]: {
+      fontSize: theme.typography.pxToRem(13)
+    }
   }
 }))(ExpansionPanel)
 
@@ -102,8 +111,16 @@ const additionalTopics = [
   {
     question: 'HELP_SES',
     answer: 'HELP_SES_A'
-  },
+  }
 ]
+
+const handleClick = (t, e) => {
+  // analytics help item expansion
+  window.dataLayer.push({
+    event: 'helpTopicExpanded',
+    helpTopicSelection: t
+  })
+}
 
 const SedaHelpPanel = props => {
   const classes = useStyles()
@@ -116,13 +133,16 @@ const SedaHelpPanel = props => {
         <Typography className={classes.title}>
           Help Panel
         </Typography>
-        <IconButton onClick={toggleHelp}>
+        <IconButton onClick={toggleHelp} aria-label="close">
           <CloseIcon />
         </IconButton>
       </SidePanelHeader>
       <SidePanelBody>
         {topics.map((t, i) => (
-          <StyledExpansionPanel key={t} title={getLang(t)}>
+          <StyledExpansionPanel
+            key={t}
+            title={getLang(t)}
+            onClick={e => handleClick(t, e)}>
             <div
               dangerouslySetInnerHTML={{
                 __html: getLang(`${t}_A`)
@@ -131,10 +151,12 @@ const SedaHelpPanel = props => {
           </StyledExpansionPanel>
         ))}
         {additionalTopics.map(q => (
-          <StyledExpansionPanel key={q.question} title={getLang(q.question)}>
+          <StyledExpansionPanel
+            key={q.question}
+            title={getLang(q.question)}>
             <div
               dangerouslySetInnerHTML={{
-                __html: getLang(q.answer, {region: region})
+                __html: getLang(q.answer, { region: region })
               }}
             />
           </StyledExpansionPanel>

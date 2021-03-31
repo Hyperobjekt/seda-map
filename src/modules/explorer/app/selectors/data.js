@@ -51,12 +51,12 @@ export const getPredictedValue = (value, metricId, regionId) => {
   )
     return null
   const b = FUNC_VARS[regionId][metricId]
-  return (
+  const result =
     b[0] +
     b[1] * value +
     b[2] * Math.pow(value, 2) +
     b[3] * Math.pow(value, 3)
-  )
+  return result
 }
 
 /** checks if value is present */
@@ -139,6 +139,14 @@ const getMetricVarName = (metric, demographic = 'all') => {
   return demographic + '_' + metric
 }
 
+/**
+ * Gets the secondary var name for the given demographic
+ * and substitues "all" for the demographic if SES is
+ * unavailable for the given demographic.
+ * @param {*} secondary
+ * @param {*} demographic
+ * @returns
+ */
 const getSecondaryVarName = (secondary, demographic) => {
   // use "all" SES option for the following demographics
   if (secondary === 'ses') {

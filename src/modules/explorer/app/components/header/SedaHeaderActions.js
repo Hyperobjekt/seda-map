@@ -57,6 +57,11 @@ const styles = theme => ({
   }
 })
 
+const onSelect = (e, hit) => {
+  //fire analytics event
+  window.dataLayer.push({event: 'searchSelected', searchSelection: hit.suggestionValue })
+}
+
 const SedaHeaderActions = ({ classes, ...props }) => {
   const [, , isEmbed] = useActiveView()
   return (
@@ -66,6 +71,7 @@ const SedaHeaderActions = ({ classes, ...props }) => {
           TextFieldProps={{
             classes: { root: classes.searchRoot }
           }}
+          onSelect={onSelect}
           placeholder="find a place"
         />
         <SedaViewControls className={classes.viewControls} />
