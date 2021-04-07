@@ -6,13 +6,13 @@ import { fromJS } from 'immutable'
 export const SEDA_SOURCES = fromJS({
   seda: {
     url:
-      'mapbox://hyperobjekt.states-v4-' +
+      'mapbox://hyperobjekt.states-' +
       process.env.REACT_APP_BUILD_ID +
-      ',hyperobjekt.counties-v4-' +
+      ',hyperobjekt.counties-' +
       process.env.REACT_APP_BUILD_ID +
-      ',hyperobjekt.districts-v4-' +
+      ',hyperobjekt.districts-' +
       process.env.REACT_APP_BUILD_ID +
-      ',hyperobjekt.schools-v4-' +
+      ',hyperobjekt.schools-' +
       process.env.REACT_APP_BUILD_ID,
     type: 'vector'
   }

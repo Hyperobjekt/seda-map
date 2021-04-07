@@ -1,11 +1,15 @@
 import React from 'react'
-import useSchoolFlags from '../../app/hooks/useSchoolFlags'
+import useLocationFlags from '../../app/hooks/useLocationFlags'
 import {
   ListItem,
   Typography,
   withStyles
 } from '@material-ui/core'
 import { getPrefixLang } from '../../app/selectors/lang'
+import {
+  getRegionFromLocationId,
+  getSingularRegion
+} from '../../app/selectors'
 
 const styles = theme => ({
   listItem: {
@@ -16,16 +20,28 @@ const styles = theme => ({
   },
   text: {
     background: `rgba(255,0,62,0.06)`,
-    padding: theme.spacing(1, 1.5)
+    color: '#860000',
+    padding: theme.spacing(1, 1.5),
+    fontSize: theme.typography.pxToRem(12),
+    [theme.breakpoints.up('lg')]: {
+      fontSize: theme.typography.pxToRem(14)
+    }
   }
 })
 
 const SedaLocationFlags = ({ locationId, classes }) => {
-  const flags = useSchoolFlags()
-  const locationFlags = ['sped', 'lep', 'gifted'].filter(
+  const flags = useLocationFlags()
+  const locationFlags = [
+    'sped',
+    'lep',
+    'gifted',
+    'missing'
+  ].filter(
     (flagType, i) =>
       flags[i] && flags[i].indexOf(locationId) > -1
   )
+  const regionType = getRegionFromLocationId(locationId)
+  console.log(locationId, getSingularRegion(regionType))
   return (
     <>
       {locationFlags.map(flag => (
@@ -33,7 +49,9 @@ const SedaLocationFlags = ({ locationId, classes }) => {
           <Typography
             className={classes.text}
             dangerouslySetInnerHTML={{
-              __html: getPrefixLang(flag, 'FLAG')
+              __html: getPrefixLang(flag, 'FLAG', {
+                region: getSingularRegion(regionType)
+              })
             }}
           />
         </ListItem>
