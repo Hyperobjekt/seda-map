@@ -41,7 +41,6 @@ const SedaLocationFlags = ({ locationId, classes }) => {
       flags[i] && flags[i].indexOf(locationId) > -1
   )
   const regionType = getRegionFromLocationId(locationId)
-  console.log(locationId, getSingularRegion(regionType))
   return (
     <>
       {locationFlags.map(flag => (

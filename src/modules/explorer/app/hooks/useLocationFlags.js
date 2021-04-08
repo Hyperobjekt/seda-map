@@ -7,8 +7,8 @@ const FLAGGED_ENDPOINT =
   process.env.REACT_APP_DATA_ENDPOINT + 'flagged/'
 
 const fixId = id => {
-  if (Object.keys(ID_LENGTH_TO_REGION).indexOf(id.length) > -1)
-    return id
+  if (Object.keys(ID_LENGTH_TO_REGION).indexOf(id.length.toString()) > -1)
+    return '' + id
   return '0' + id
 }
 
@@ -24,7 +24,6 @@ export const loadFlaggedLocations = () =>
     ['sped', 'lep', 'gifted', 'missing'].map(type => {
       return loadFlaggedData(type)
         .then(result => {
-          console.log('got response', type, result)
           return result.data.map(fixId)
         })
         .catch(error => {
@@ -56,7 +55,6 @@ export default function useLocationFlags() {
   } = useFlagStore(state => state, shallow)
   if (!loaded) {
     loadFlaggedLocations().then(res => {
-      console.log('loaded flagged locations', res)
       set({
         loaded: true,
         sped: res[0],
