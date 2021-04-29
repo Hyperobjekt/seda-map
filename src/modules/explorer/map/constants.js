@@ -7,13 +7,13 @@ export const SEDA_SOURCES = fromJS({
   seda: {
     url:
       'mapbox://hyperobjekt.states-' +
-      process.env.REACT_APP_BUILD_ID +
+      process.env.REACT_APP_TILESET_SUFFIX +
       ',hyperobjekt.counties-' +
-      process.env.REACT_APP_BUILD_ID +
+      process.env.REACT_APP_TILESET_SUFFIX +
       ',hyperobjekt.districts-' +
-      process.env.REACT_APP_BUILD_ID +
+      process.env.REACT_APP_TILESET_SUFFIX +
       ',hyperobjekt.schools-' +
-      process.env.REACT_APP_BUILD_ID,
+      process.env.REACT_APP_TILESET_SUFFIX,
     type: 'vector'
   }
 })
