@@ -62,6 +62,11 @@ export const DEMOGRAPHICS = [
  */
 export const GAPS = [
   {
+    id: 'wa',
+    label: LANG['LABEL_WA'],
+    regions: ['states', 'counties', 'districts']
+  },
+  {
     id: 'wb',
     label: LANG['LABEL_WB'],
     regions: ['states', 'counties', 'districts']
@@ -71,11 +76,6 @@ export const GAPS = [
     label: LANG['LABEL_WH'],
     regions: ['states', 'counties', 'districts']
   },
-  // {
-  //   id: 'wi',
-  //   label: LANG['LABEL_WI'],
-  //   regions: ['states', 'counties', 'districts']
-  // },
   {
     id: 'pn',
     label: LANG['LABEL_PN'],

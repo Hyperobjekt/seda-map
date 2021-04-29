@@ -151,7 +151,7 @@ const getSecondaryVarName = (secondary, demographic) => {
   // use "all" SES option for the following demographics
   if (secondary === 'ses') {
     const useAll =
-      ['m', 'f', 'p', 'np'].indexOf(demographic) > -1
+      ['m', 'f', 'p', 'np', 'a', 'i'].indexOf(demographic) > -1
     return useAll ? 'all_ses' : demographic + '_ses'
   }
   return demographic + '_' + secondary
