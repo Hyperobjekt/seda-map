@@ -24,7 +24,7 @@ do
         CLOUDFRONT_ID=E2OT07260LEDV6
         shift # Remove --dev from processing
         ;;
-        OTHER_ARGUMENTS+=("$1")
+        OTHER_ARGUMENTS+="$1")
         shift # Remove generic argument from processing
         ;;
     esac
@@ -34,3 +34,4 @@ done
 npm run build
 aws s3 cp build/ s3://$S3_BUCKET --recursive --acl public-read --cache-control max-age=604800
 aws cloudfront create-invalidation --distribution-id=$CLOUDFRONT_ID --paths="/*"
+exit 0
