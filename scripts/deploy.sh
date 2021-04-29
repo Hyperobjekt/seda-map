@@ -32,6 +32,7 @@ done
 
 # Build and deploy
 npm run build
-aws s3 cp build/ s3://$S3_BUCKET --recursive --acl public-read --cache-control max-age=604800
+aws s3 cp build/ s3://$S3_BUCKET --recursive --cache-control max-age=604800
 aws cloudfront create-invalidation --distribution-id=$CLOUDFRONT_ID --paths="/*"
+
 exit 0
