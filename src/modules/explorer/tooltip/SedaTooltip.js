@@ -6,8 +6,6 @@ import {
   getLang
 } from '../app/selectors/lang'
 import {
-  isVersusFromVarNames,
-  getDemographicForVarNames,
   getRegionFromLocationId,
   getSingularRegion,
   isUnavailable
@@ -15,7 +13,7 @@ import {
 import { Typography, makeStyles } from '@material-ui/core'
 import clsx from 'clsx'
 import { Tooltip } from '../../../shared'
-import { useHovered, useRegion } from '../app/hooks'
+import { useHovered, useRegion, useUiStore } from '../app/hooks'
 import { useScatterplotVars } from '../scatterplot'
 import useTooltipVisibility from './hooks/useTooltipVisibility'
 import useTooltipCoords from './hooks/useTooltipCoords'
@@ -114,23 +112,16 @@ const SedaTooltip = props => {
   const [xVar, yVar] = useScatterplotVars()
   const [region] = useRegion()
   const data = useLocationData(hoveredId)
-
+  // force vars overrides which vars show in the tooltip
+  const forceVars = useUiStore(state => state.forceVars)
   const featureRegion = getRegionFromLocationId(hoveredId)
   // force free lunch secondary metric for schools
   const secondaryVar =
     region === featureRegion
       ? xVar
       : getSecondaryVar(region, featureRegion)
-  const isVersus = isVersusFromVarNames(xVar, yVar)
-  const demographic = getDemographicForVarNames(xVar, yVar)
-  const descriptionVars = isVersus
-    ? [demographic + '_' + xVar.split('_')[1]]
-    : [yVar, xVar]
+  const tooltipVars = forceVars || [yVar, secondaryVar]
 
-  // add var to feature if missing
-  if (isVersus && data && !data[descriptionVars[0]]) {
-    data[descriptionVars[0]] = data[yVar] - data[xVar]
-  }
   const bounds = [
     0,
     0,
@@ -148,11 +139,13 @@ const SedaTooltip = props => {
       y={y}
       bounds={bounds}
       {...props}>
-      <StatDetailed varName={yVar} value={data[yVar]} />
-      <StatDetailed
-        varName={secondaryVar}
-        value={data[secondaryVar]}
-      />
+      {tooltipVars.map(varName => (
+        <StatDetailed
+          key={varName}
+          varName={varName}
+          value={data[varName]}
+        />
+      ))}
       <Typography className={classes.hint} variant="caption">
         {getLang('TOOLTIP_HINT', {
           region: getSingularRegion(region)

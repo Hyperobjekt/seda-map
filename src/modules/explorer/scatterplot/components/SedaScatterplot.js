@@ -104,13 +104,18 @@ const SedaScatterplot = () => {
 
   // handle hover events
   const handleHover = useCallback(
-    e => {
+    (e, eChartInstance, vars) => {
       // grab data from event
       const id = getLocatonIdFromEvent(e)
       const coords = getCoordsFromEvent(e)
       if (e.type === 'mouseover') {
         // set the current hovered ID and coords
-        setHovered(id, coords)
+        console.log({ vars })
+        setHovered(id, coords, {
+          showTooltip: true,
+          showMarkers: true,
+          forceVars: [vars[1], vars[0]] // y and x vars from chart
+        })
         // if the tooltip is going to be cleared, cancel it
         if (timeoutRef.current) {
           clearTimeout(timeoutRef.current)

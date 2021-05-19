@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import { withStyles } from '@material-ui/core'
@@ -117,8 +117,8 @@ function SedaScatterplotBase({
     : xVar
   const xLabelPrefix = gapChart
     ? flipLabelOrder
-      ? 'LABEL_GAP'
-      : 'LABEL_GAP_FLIP'
+      ? 'LABEL_GAP_FLIP'
+      : 'LABEL_GAP'
     : 'LABEL'
   const xMetric = getMetricIdFromVarName(xVar)
   // hint metrics that do no have explanation elsewhere
@@ -130,6 +130,14 @@ function SedaScatterplotBase({
     () =>
       extents.map((extent, i) => adjustExtent(vars[i], extent)),
     [extents, vars]
+  )
+
+  /** Add chart variables to hover callback */
+  const handleHover = useCallback(
+    (e, eChartInstance) => {
+      onHover && onHover(e, eChartInstance, vars)
+    },
+    [onHover, vars]
   )
 
   // memoize the scatterplot options
@@ -171,7 +179,7 @@ function SedaScatterplotBase({
         loading={loading}
         options={options}
         classes={{ error: 'scatterplot__error' }}
-        onHover={onHover}
+        onHover={handleHover}
         onClick={onClick}
         onReady={onReady}
       />
