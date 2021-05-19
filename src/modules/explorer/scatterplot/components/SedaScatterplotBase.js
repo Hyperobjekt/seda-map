@@ -109,10 +109,17 @@ function SedaScatterplotBase({
 
   const [xVar, yVar, zVar] = vars
 
+  // flip label order for school poverty metric
+  const flipLabelOrder = xVar.indexOf('seg') > -1
+
   const xLabel = gapChart
     ? getDemographicIdFromVarName(xVar)
     : xVar
-  const xLabelPrefix = gapChart ? 'LABEL_GAP' : 'LABEL'
+  const xLabelPrefix = gapChart
+    ? flipLabelOrder
+      ? 'LABEL_GAP'
+      : 'LABEL_GAP_FLIP'
+    : 'LABEL'
   const xMetric = getMetricIdFromVarName(xVar)
   // hint metrics that do no have explanation elsewhere
   const hasAxisHint =
@@ -124,7 +131,6 @@ function SedaScatterplotBase({
       extents.map((extent, i) => adjustExtent(vars[i], extent)),
     [extents, vars]
   )
-
 
   // memoize the scatterplot options
   const options = useMemo(() => {
@@ -219,9 +225,9 @@ SedaScatterplotBase.defaultProps = {
   data: [],
   vars: [],
   extents: [],
-  onHover: () => { },
-  onClick: () => { },
-  onReady: () => { }
+  onHover: () => {},
+  onClick: () => {},
+  onReady: () => {}
 }
 
 SedaScatterplotBase.propTypes = {
