@@ -32,7 +32,18 @@ export const getMetricById = id =>
 export const getSecondaryForDemographic = dem => {
   // non-gaps only have ses
   const metrics = {
-    ses: ['all', 'w', 'b', 'h', 'a', 'i', 'wb', 'wh'],
+    ses: [
+      'all',
+      'w',
+      'b',
+      'h',
+      'a',
+      'i',
+      'wb',
+      'wh',
+      'wa',
+      'wi'
+    ],
     seg: ['wb', 'wh', 'pn'],
     min: ['wb', 'wh']
   }
