@@ -114,7 +114,7 @@ const additionalTopics = [
   }
 ]
 
-const handleClick = (t, e) => {
+const handleClick = t => {
   // analytics help item expansion
   window.dataLayer.push({
     event: 'helpTopicExpanded',
@@ -138,7 +138,7 @@ const SedaHelpPanel = props => {
         </IconButton>
       </SidePanelHeader>
       <SidePanelBody>
-        {topics.map((t, i) => (
+        {topics.map(t => (
           <StyledExpansionPanel
             key={t}
             title={getLang(t)}

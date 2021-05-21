@@ -23,9 +23,6 @@ const styles = theme => ({
     background: 'white',
     [theme.breakpoints.down('sm')]: {
       background: theme.palette.primary.highlight
-    },
-    '& .icon .filled': {
-      opacity: 1
     }
   }
 })

@@ -16,12 +16,11 @@ import { useMapStore, useMapViewport } from '../hooks'
 const isMapEvent = event => {
   // if first element in path is not overlays, hover is over something other than the map
   return (
-    event?.path &&
-    event.path.length > 0 &&
-    event.path[0].classList.contains('overlays')
-  ) || (
-    event?.target && 
-    event.target.classList.contains('overlays')
+    (event?.path &&
+      event.path.length > 0 &&
+      event.path[0].classList.contains('overlays')) ||
+    (event?.target &&
+      event.target.classList.contains('overlays'))
   )
 }
 
@@ -156,7 +155,7 @@ const MapBase = ({
 
   // handler for viewport change
   const handleViewportChange = useCallback(
-    (vp, options = {}) => {
+    vp => {
       if (!loaded) return
       if (vp.zoom && vp.zoom < 2) return
       setViewport(vp)
@@ -165,7 +164,7 @@ const MapBase = ({
   )
 
   // handler for feature hover
-  const handleHover = ({ features, point, srcEvent }) => {
+  const handleHover = ({ features, srcEvent }) => {
     if (!isMapEvent(srcEvent)) return onHover(null, [null, null])
     const newHoveredFeature =
       features && features.length > 0 ? features[0] : null
@@ -180,7 +179,7 @@ const MapBase = ({
   }
 
   // handler for feature click
-  const handleClick = ({ features, srcEvent, ...rest }) => {
+  const handleClick = ({ features, srcEvent }) => {
     if (!isMapEvent(srcEvent)) return
     // activate feature if one was clicked and this isn't a control click
     features && features.length > 0 && onClick(features[0])

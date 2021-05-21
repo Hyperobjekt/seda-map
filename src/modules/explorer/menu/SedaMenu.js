@@ -61,7 +61,7 @@ const useStyles = makeStyles(theme => ({
   linkBox: {
     padding: theme.spacing(15.5, 3, 3, 6)
   },
-  linkItem:{
+  linkItem: {
     display: 'block',
     marginBottom: theme.spacing(4),
     fontFamily: theme.typography.button.fontFamily,
@@ -73,7 +73,7 @@ const useStyles = makeStyles(theme => ({
     '&:hover': {
       color: theme.palette.text.primary
     },
-    '&.whatsnew':{
+    '&.whatsnew': {
       color: theme.palette.primary.main
     }
   },
@@ -99,13 +99,13 @@ const socialIcons = {
   twitter: <TwitterIcon />
 }
 
-const MenuLinks = ({ links, classes = {}, ...props }) => (
+const MenuLinks = ({ links, classes = {} }) => (
   <div className={classes.root}>
     {Boolean(links.length) &&
       links.map((item, i) => (
         <Link
           key={i}
-          className={`${classes.item} ${item.id}`} 
+          className={`${classes.item} ${item.id}`}
           aria-label={item.label}
           href={item.url}>
           {item.label}
@@ -114,12 +114,7 @@ const MenuLinks = ({ links, classes = {}, ...props }) => (
   </div>
 )
 
-const MenuFooter = ({
-  socials,
-  icons,
-  classes = {},
-  ...props
-}) => (
+const MenuFooter = ({ socials, icons, classes = {} }) => (
   <div className={classes.root}>
     {Boolean(socials.length) &&
       socials.map((item, i) => (

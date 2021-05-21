@@ -112,7 +112,7 @@ export default function SplitView({
 
   // Set the drag hook and define component movement based on gesture data
   const bind = useDrag(
-    ({ down, first, last, initial, movement: [mx, my] }) => {
+    ({ first, last, movement: [mx] }) => {
       setPosition(mx)
       if (first) {
         setResizing(true)

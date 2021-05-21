@@ -9,7 +9,6 @@
   },
   "rules": {
     "no-template-curly-in-string": 0,
-    "react/prop-types": "off",
-    "no-unused-vars": "warn"
+    "react/prop-types": "off"
   }
 }

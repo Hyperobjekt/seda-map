@@ -7,7 +7,7 @@ import {
   Typography,
   ListSubheader,
   ListItemSecondaryAction,
-  IconButton,
+  IconButton
 } from '@material-ui/core'
 import { getLang } from '../../app/selectors/lang'
 import { CloseIcon } from '../../../icons'
@@ -18,11 +18,11 @@ import useRemoveLocation from '../hooks/useRemoveLocation'
 import useLocations from '../hooks/useLocations'
 import { SedaSearch } from '../../search'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   root: {
     paddingTop: 4,
     paddingBottom: 4
-  },
+  }
 }))
 
 const LocationList = ({
@@ -52,7 +52,7 @@ const LocationList = ({
       }
       {...props}>
       {locations &&
-        locations.map((locationId, i) => {
+        locations.map(locationId => {
           return (
             <ListItem
               button
@@ -118,7 +118,7 @@ const SedaLocationSelect = () => {
         placeholder={getLang('LOCATIONS_SEARCH')}
       />
       <LocationList
-        title={getLang("LOCATIONS_SELECTED")}
+        title={getLang('LOCATIONS_SELECTED')}
         locations={locations}
         emptyMessage={getLang('LOCATIONS_ACTIVE_NONE', {
           region: activeRegion

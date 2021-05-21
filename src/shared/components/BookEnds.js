@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import { withStyles } from '@material-ui/core'
 
-const styles = theme => ({
+const styles = () => ({
   root: {
     position: 'relative',
     display: 'flex',

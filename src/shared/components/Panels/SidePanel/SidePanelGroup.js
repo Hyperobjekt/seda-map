@@ -37,7 +37,7 @@ const setChildPositions = (
 ) => {
   let openPanels = 0
   let leftOffset = 0
-  return React.Children.map(children, (child, i) => {
+  return React.Children.map(children, child => {
     // only set position if panel is open
     if (!child || !child.props.open) return child
     // get left offset

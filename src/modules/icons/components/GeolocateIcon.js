@@ -1,9 +1,9 @@
+import { SvgIcon } from '@material-ui/core'
 import React from 'react'
-import Icon from './Icon'
 
 const GeolocateIcon = ({ ...props }) => {
   return (
-    <Icon {...props}>
+    <SvgIcon {...props}>
       <path
         fillRule="evenodd"
         d="M12 4.5C7.85786 4.5 4.5 7.85786 4.5 12C4.5 16.1421 7.85786 19.5 12 19.5C16.1421 19.5 19.5 16.1421 19.5 12C19.5 7.85786 16.1421 4.5 12 4.5ZM3.5 12C3.5 7.30558 7.30558 3.5 12 3.5C16.6944 3.5 20.5 7.30558 20.5 12C20.5 16.6944 16.6944 20.5 12 20.5C7.30558 20.5 3.5 16.6944 3.5 12Z"
@@ -28,7 +28,7 @@ const GeolocateIcon = ({ ...props }) => {
         fillRule="evenodd"
         d="M11.5 22L11.5 20L12.5 20L12.5 22C12.5 22.2761 12.2761 22.5 12 22.5C11.7239 22.5 11.5 22.2761 11.5 22Z"
       />
-    </Icon>
+    </SvgIcon>
   )
 }
 

@@ -105,8 +105,7 @@ const GradientLegend = ({
   markerPosition,
   labelFormatter,
   classes: overrides,
-  className,
-  ...props
+  className
 }) => {
   const classes = useStyles()
   const markerStyle = useSpring({

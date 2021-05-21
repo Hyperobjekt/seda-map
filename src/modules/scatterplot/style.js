@@ -100,7 +100,7 @@ const extendScatterplotStyle = (overrides = {}) => ({
 /**
  * Gets a data series with selected items
  */
-const getUnderlaySeries = ({ scatterData, options }) => {
+const getUnderlaySeries = ({ scatterData }) => {
   // data index for the id property
   const baseSeries = {
     id: 'underlay',
