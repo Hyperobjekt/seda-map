@@ -41,12 +41,12 @@ const DataSection = ({ title, total, data, ...props }) => {
   )
 }
 
-const DataView = props => {
+const DataView = () => {
   const data = useStaticData(state => state.data)
   const filters = useFilterStore(state => state.filters, shallow)
 
   const filtered = useMemo(() => {
-    return Object.keys(data).reduce((dataObj, key, i) => {
+    return Object.keys(data).reduce((dataObj, key) => {
       dataObj[key] = applyFilters(data[key], filters)
       return dataObj
     }, {})
@@ -58,7 +58,7 @@ const DataView = props => {
       <DataLoader />
       <FiltersForm style={{ maxWidth: 400 }} />
       <h2>Data</h2>
-      {Object.keys(filtered).map((key, i) => {
+      {Object.keys(filtered).map(key => {
         return (
           <DataSection
             key={key}

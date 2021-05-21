@@ -7,7 +7,11 @@ const FLAGGED_ENDPOINT =
   process.env.REACT_APP_DATA_ENDPOINT + 'flagged/'
 
 const fixId = id => {
-  if (Object.keys(ID_LENGTH_TO_REGION).indexOf(id.length.toString()) > -1)
+  if (
+    Object.keys(ID_LENGTH_TO_REGION).indexOf(
+      id.length.toString()
+    ) > -1
+  )
     return '' + id
   return '0' + id
 }
@@ -35,7 +39,7 @@ export const loadFlaggedLocations = () =>
     })
   )
 
-const useFlagStore = create((set, get) => ({
+const useFlagStore = create(set => ({
   loaded: false,
   sped: [],
   lep: [],

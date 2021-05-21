@@ -144,7 +144,7 @@ export const registerFilterRule = (name, filterFunction) => {
  * @param {*} name
  */
 export const hasFilterRule = name => {
-  return filterRules.hasOwnProperty(name)
+  return Object.prototype.hasOwnProperty.call(filterRules, name)
 }
 
 /**

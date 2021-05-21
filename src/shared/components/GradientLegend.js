@@ -207,7 +207,7 @@ const GradientLegend = ({
             }
           )}
           style={{
-            left: Boolean(midPosition)
+            left: midPosition
               ? midPosition * 100 + '%'
               : undefined
           }}>

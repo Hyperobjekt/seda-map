@@ -79,7 +79,7 @@ const styles = theme => ({
   }
 })
 
-const getLabelPrefix = (type, value) => {
+const getLabelPrefix = type => {
   switch (type) {
     case 'region':
       return `LABEL_SINGULAR`

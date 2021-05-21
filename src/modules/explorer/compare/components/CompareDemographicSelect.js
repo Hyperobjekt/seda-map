@@ -10,7 +10,7 @@ const gaps = getGaps().map(g => g.id)
 const demographics = getDemographics().map(d => d.id)
 const options = [...demographics, ...gaps]
 
-const styles = theme => ({
+const styles = () => ({
   root: {
     display: 'flex',
     alignItems: 'center',

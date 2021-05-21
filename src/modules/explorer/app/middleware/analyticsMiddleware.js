@@ -11,8 +11,8 @@ const getPropertyChanges = (next, previous) => {
   return Object.keys(next).reduce((obj, current) => {
     if (
       !previous ||
-      !previous.hasOwnProperty(current) ||
-      (previous.hasOwnProperty(current) &&
+      !Object.prototype.hasOwnProperty.call(previous, current) ||
+      (Object.prototype.hasOwnProperty.call(previous, current) &&
         previous[current] !== next[current])
     ) {
       // if there was no last update, then all changes are new
@@ -32,7 +32,7 @@ const getSameProperties = (next, previous) => {
   return Object.keys(next).reduce((obj, current) => {
     if (
       previous &&
-      previous.hasOwnProperty(current) &&
+      Object.prototype.hasOwnProperty.call(previous, current) &&
       previous[current] === next[current]
     ) {
       if (!obj) obj = {}
@@ -43,27 +43,48 @@ const getSameProperties = (next, previous) => {
 }
 
 const filterAndLog = item => {
-    if(item.metric) {
-        window.dataLayer.push({event: 'metricSelected', metricSelection: item.metric })
-    }
-    if(item.region) {
-        window.dataLayer.push({event: 'geoTypeSelected', geoTypeSelection: item.region })
-    }
-    if(item.demographic) {
-        window.dataLayer.push({event: 'studentTypeSelected', studentTypeSelection: item.demographic })
-    }
-    if(item.showEmbedDialog) {
-        window.dataLayer.push({event: 'shareType', shareType: 'embed' })
-    };
-    if(item.showLinkDialog) {
-        window.dataLayer.push({event: 'shareType', shareType: 'link' })
-    };
-    if(item.showChart === true || item.showChart === false) {
-        window.dataLayer.push({event: 'chartButtonSelected', chartButtonSelection: item.showChart })
-    };
-    if(item.view) {
-        window.dataLayer.push({event: 'displayTypeSelected', displayTypeSelection: item.view })
-    };
+  if (item.metric) {
+    window.dataLayer.push({
+      event: 'metricSelected',
+      metricSelection: item.metric
+    })
+  }
+  if (item.region) {
+    window.dataLayer.push({
+      event: 'geoTypeSelected',
+      geoTypeSelection: item.region
+    })
+  }
+  if (item.demographic) {
+    window.dataLayer.push({
+      event: 'studentTypeSelected',
+      studentTypeSelection: item.demographic
+    })
+  }
+  if (item.showEmbedDialog) {
+    window.dataLayer.push({
+      event: 'shareType',
+      shareType: 'embed'
+    })
+  }
+  if (item.showLinkDialog) {
+    window.dataLayer.push({
+      event: 'shareType',
+      shareType: 'link'
+    })
+  }
+  if (item.showChart === true || item.showChart === false) {
+    window.dataLayer.push({
+      event: 'chartButtonSelected',
+      chartButtonSelection: item.showChart
+    })
+  }
+  if (item.view) {
+    window.dataLayer.push({
+      event: 'displayTypeSelected',
+      displayTypeSelection: item.view
+    })
+  }
 }
 
 const analyticsMiddleware = config => (set, get, api) =>
@@ -90,4 +111,4 @@ const analyticsMiddleware = config => (set, get, api) =>
     api
   )
 
-  export default analyticsMiddleware
+export default analyticsMiddleware
