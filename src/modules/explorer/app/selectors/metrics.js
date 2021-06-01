@@ -1,3 +1,8 @@
+import {
+  MIN_GAP_DEMOGRAPHICS,
+  SEG_GAP_DEMOGRAPHICS,
+  SES_GAP_DEMOGRAPHICS
+} from '../constants/demographics'
 import { METRICS, KEY_METRIC_IDS } from '../constants/metrics'
 import { isGapDemographic } from './demographics'
 
@@ -32,20 +37,9 @@ export const getMetricById = id =>
 export const getSecondaryForDemographic = dem => {
   // non-gaps only have ses
   const metrics = {
-    ses: [
-      'all',
-      'w',
-      'b',
-      'h',
-      'a',
-      'i',
-      'wb',
-      'wh',
-      'wa',
-      'wi'
-    ],
-    seg: ['wb', 'wh', 'pn'],
-    min: ['wb', 'wh']
+    ses: SES_GAP_DEMOGRAPHICS,
+    seg: SEG_GAP_DEMOGRAPHICS,
+    min: MIN_GAP_DEMOGRAPHICS
   }
   return Object.keys(metrics).filter(
     m => metrics[m].indexOf(dem) > -1

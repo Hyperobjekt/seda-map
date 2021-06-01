@@ -24,11 +24,11 @@ export const DEMOGRAPHICS = [
     label: LANG['LABEL_H'],
     regions: ['states', 'counties', 'districts']
   },
-  // {
-  //   id: 'i',
-  //   label: LANG['LABEL_I'],
-  //   regions: ['states', 'counties', 'districts']
-  // },
+  {
+    id: 'i',
+    label: LANG['LABEL_I'],
+    regions: ['states', 'counties', 'districts']
+  },
   {
     id: 'a',
     label: LANG['LABEL_A'],
@@ -76,6 +76,11 @@ export const GAPS = [
     regions: ['states', 'counties', 'districts']
   },
   {
+    id: 'wi',
+    label: LANG['LABEL_WI'],
+    regions: ['states', 'counties', 'districts']
+  },
+  {
     id: 'pn',
     label: LANG['LABEL_PN'],
     regions: ['states', 'counties', 'districts']
@@ -87,17 +92,36 @@ export const GAPS = [
   }
 ]
 
-if (process.env.REACT_APP_EMBARGOED === '1') {
-  const dem = {
-    id: 'i',
-    label: LANG['LABEL_I'],
-    regions: ['states', 'counties', 'districts']
-  }
-  const gap = {
-    id: 'wi',
-    label: LANG['LABEL_WI'],
-    regions: ['states', 'counties', 'districts']
-  }
-  DEMOGRAPHICS.splice(4, 0, dem)
-  GAPS.splice(2, 0, gap)
-}
+/**
+ * Demographic IDs that have a SES gap chart
+ * (Socioeconomic difference)
+ */
+export const SES_GAP_DEMOGRAPHICS = [
+  'all',
+  'w',
+  'b',
+  'h',
+  'a',
+  'i',
+  'wb',
+  'wh',
+  'wa',
+  'wi'
+]
+/**
+ * Demographic IDs that have a SEG gap chart
+ * (difference in exposure to poor students)
+ */
+export const SEG_GAP_DEMOGRAPHICS = [
+  'wa',
+  'wb',
+  'wh',
+  'wi',
+  'pn'
+]
+/**
+ * Demographiic IDs that have a MIN gap chart
+ * (difference in exposure to minority students)
+ */
+export const MIN_GAP_DEMOGRAPHICS = ['wa', 'wb', 'wh', 'wi']
+export const NO_SES_DEMOGRAPHICS = ['m', 'f', 'p', 'np']

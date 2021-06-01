@@ -5,12 +5,12 @@ for arg in "$@"
 do
     case $arg in
         --dev)
-        S3_BUCKET=edop-explorer-dev
+        S3_BUCKET=edop-explorer-dev/explorer
         CLOUDFRONT_ID=EX40URMY4LM1
         shift # Remove --dev from processing
         ;;
         --staging)
-        S3_BUCKET=edop-explorer-staging
+        S3_BUCKET=edop-explorer-staging/explorer
         CLOUDFRONT_ID=E3RUN2ZOVQG0DY
         shift # Remove --dev from processing
         ;;
@@ -20,7 +20,7 @@ do
         shift # Remove --dev from processing
         ;;
         --prod)
-        S3_BUCKET=edop-explorer-production
+        S3_BUCKET=edop-explorer-production/explorer
         CLOUDFRONT_ID=E2OT07260LEDV6
         shift # Remove --dev from processing
         ;;

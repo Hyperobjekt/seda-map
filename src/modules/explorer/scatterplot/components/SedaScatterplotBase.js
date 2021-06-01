@@ -110,7 +110,8 @@ function SedaScatterplotBase({
   const [xVar, yVar, zVar] = vars
 
   // flip label order for school poverty metric
-  const flipLabelOrder = xVar.indexOf('seg') > -1
+  const flipLabelOrder =
+    xVar.indexOf('seg') > -1 || xVar.indexOf('min') > -1
 
   const xLabel = gapChart
     ? getDemographicIdFromVarName(xVar)
@@ -120,6 +121,7 @@ function SedaScatterplotBase({
       ? 'LABEL_GAP_FLIP'
       : 'LABEL_GAP'
     : 'LABEL'
+  console.log('flip?', flipLabelOrder, xVar)
   const xMetric = getMetricIdFromVarName(xVar)
   // hint metrics that do no have explanation elsewhere
   const hasAxisHint =
