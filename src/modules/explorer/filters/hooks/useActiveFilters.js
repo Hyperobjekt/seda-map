@@ -56,15 +56,15 @@ const adjustLocationFilters = (region, locationId) => f => {
  * @param {*} region
  * @returns
  */
-const adjustLimitFilter = region => {
-  return f => {
-    if (f[0] !== 'limit') return true
-    const limit = parseInt(f[1])
-    if (region === 'counties' && limit > 3000) return false
-    if (region === 'states' && limit > 50) return false
-    return true
-  }
-}
+// const adjustLimitFilter = region => {
+//   return f => {
+//     if (f[0] !== 'limit') return true
+//     const limit = parseInt(f[1])
+//     if (region === 'counties' && limit > 3000) return false
+//     if (region === 'states' && limit > 50) return false
+//     return true
+//   }
+// }
 
 /**
  * Returns the currently active filters in the explorer
