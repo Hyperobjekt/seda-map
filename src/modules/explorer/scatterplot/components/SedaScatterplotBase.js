@@ -121,7 +121,6 @@ function SedaScatterplotBase({
       ? 'LABEL_GAP_FLIP'
       : 'LABEL_GAP'
     : 'LABEL'
-  console.log('flip?', flipLabelOrder, xVar)
   const xMetric = getMetricIdFromVarName(xVar)
   // hint metrics that do no have explanation elsewhere
   const hasAxisHint =
@@ -176,15 +175,21 @@ function SedaScatterplotBase({
       })}
       className={clsx('scatterplot', classes.root, className)}
       {...props}>
-      <ScatterplotBase
-        theme={theme}
-        loading={loading}
-        options={options}
-        classes={{ error: 'scatterplot__error' }}
-        onHover={handleHover}
-        onClick={onClick}
-        onReady={onReady}
-      />
+      {options[1] && (
+        <ScatterplotBase theme={theme} options={options[1]} />
+      )}
+      {options[0] && (
+        <ScatterplotBase
+          theme={theme}
+          loading={loading}
+          options={options[0]}
+          classes={{ error: 'scatterplot__error' }}
+          onHover={handleHover}
+          onClick={onClick}
+          onReady={onReady}
+        />
+      )}
+
       {children}
       <SedaLocationMarkers
         className={clsx('scatterplot__markers', classes.markers)}

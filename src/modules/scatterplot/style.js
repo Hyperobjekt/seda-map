@@ -162,9 +162,7 @@ const getScatterplotSeries = props => {
   // pull out series that are not 'base' or 'underlay'
   const otherSeries =
     options && options.series
-      ? options.series.filter(
-          s => ['base', 'underlay'].indexOf(s.id) === -1
-        )
+      ? options.series.filter(s => ['base'].indexOf(s.id) === -1)
       : []
 
   // if there is no scale, create one based on zVar (for sizing)
@@ -175,35 +173,17 @@ const getScatterplotSeries = props => {
       : () => 10
   }
 
-  // if the number of data points is below the underlay threshold
-  const hasUnderlay =
-    data.length < UNDERLAY_THRESHOLD &&
-    allData.length !== data.length
-
   // get the scatterplot data series, depending on if there is an underlay or not
   const allScatterData = zVar
-    ? getDataSubset(hasUnderlay ? allData : data, [
-        xVar,
-        yVar,
-        zVar
-      ])
-    : getDataSubset(hasUnderlay ? allData : data, [xVar, yVar])
-  const selectIds = hasUnderlay ? data.map(d => d.id) : []
-  const mainDataSeries = hasUnderlay
-    ? getSeriesSubset(allScatterData, selectIds)
-    : allScatterData
+    ? getDataSubset(data, [xVar, yVar, zVar])
+    : getDataSubset(data, [xVar, yVar])
+  const mainDataSeries = allScatterData
 
   // return an array of series with appropriate data sources
   const series = [
     getBaseSeries({
       scatterData: mainDataSeries.slice(0, MAX_DOTS),
       ...props
-    }),
-    getUnderlaySeries({
-      scatterData: hasUnderlay
-        ? allScatterData.slice(0, MAX_DOTS)
-        : [],
-      options
     }),
     ...otherSeries
   ]

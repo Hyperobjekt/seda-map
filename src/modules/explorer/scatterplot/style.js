@@ -21,6 +21,7 @@ import { getLang } from '../app/selectors/lang'
 import { getDotSizeScale } from './selectors'
 import { max, tickStep, ticks } from 'd3-array'
 import { scaleLinear } from 'd3-scale'
+import { getDataSubset } from '../../scatterplot/utils'
 
 /**
  *
@@ -669,14 +670,8 @@ export const getScatterplotOptions = (
     return data
   }
 
-  const options = {
+  const baseOptions = {
     grid: grid(variant),
-    visualMap: visualMap(variant, {
-      xVar,
-      yVar,
-      region,
-      colorExtent
-    }),
     xAxis: xAxis({
       variant,
       varName: xVar,
@@ -688,13 +683,41 @@ export const getScatterplotOptions = (
       varName: yVar,
       region,
       extent: extents[1]
+    })
+  }
+
+  const underlayData = zVar
+    ? getDataSubset(allData, [xVar, yVar, zVar])
+    : getDataSubset(allData, [xVar, yVar])
+
+  const underlayOptions = {
+    ...baseOptions,
+    series: [
+      {
+        id: 'underlay',
+        type: 'scatter',
+        data: underlayData,
+        symbolSize: 5,
+        silent: true,
+        large: true,
+        zLevel: 1,
+        itemStyle: {
+          color: '#ddd',
+          borderWidth: 0
+        }
+      }
+    ]
+  }
+
+  const options = {
+    ...baseOptions,
+    visualMap: visualMap(variant, {
+      xVar,
+      yVar,
+      region,
+      colorExtent
     }),
     series: [
-      // series('underlay', variant, {
-      //   symbolSize: 6,
-      //   xVar,
-      //   yVar
-      // }),
       series('base', variant, {
         sizer,
         xVar,
@@ -727,14 +750,18 @@ export const getScatterplotOptions = (
       //   : [])
     ]
   }
+  const result = [
+    getScatterplotBaseOptions({
+      allData,
+      data,
+      xVar,
+      yVar,
+      zVar,
+      selected: [],
+      options
+    }),
+    underlayOptions
+  ]
 
-  return getScatterplotBaseOptions({
-    allData,
-    data,
-    xVar,
-    yVar,
-    zVar,
-    selected: [],
-    options
-  })
+  return result
 }

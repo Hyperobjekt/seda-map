@@ -172,12 +172,21 @@ const SedaOptionButton = ({ type, value, ...props }) => {
   )
 }
 
+const getFilterCount = (filters, region) => {
+  return filters
+    .filter(f => f[0] !== 'sort')
+    .filter(f =>
+      f[0] === 'limit' ? parseInt(f[1]) !== 10000 : true
+    ).length
+}
+
 const SedaHeaderTitle = ({ classes, className, ...props }) => {
   const [metricId, demId, regionId] = useActiveOptions()
   const filterLocation = useFilterLocationName()
   const isGap = isGapDemographic(demId)
   const filters = useActiveFilters()
-  const filterCount = filters.filter(f => f[0] !== 'sort').length
+  const filterCount = getFilterCount(filters, regionId)
+  console.log(filterCount)
   const isEmbed = useUiStore(state => state.isEmbed)
 
   // context strings to inject in title

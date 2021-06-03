@@ -110,7 +110,6 @@ const SedaScatterplot = () => {
       const coords = getCoordsFromEvent(e)
       if (e.type === 'mouseover') {
         // set the current hovered ID and coords
-        console.log({ vars })
         setHovered(id, coords, {
           showTooltip: true,
           showMarkers: true,
