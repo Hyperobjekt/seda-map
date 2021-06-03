@@ -175,20 +175,20 @@ function SedaScatterplotBase({
       })}
       className={clsx('scatterplot', classes.root, className)}
       {...props}>
-      {options[1] && (
-        <ScatterplotBase theme={theme} options={options[1]} />
-      )}
-      {options[0] && (
-        <ScatterplotBase
-          theme={theme}
-          loading={loading}
-          options={options[0]}
-          classes={{ error: 'scatterplot__error' }}
-          onHover={handleHover}
-          onClick={onClick}
-          onReady={onReady}
-        />
-      )}
+      <ScatterplotBase
+        theme={theme}
+        options={options[1] || {}}
+      />
+
+      <ScatterplotBase
+        theme={theme}
+        loading={loading}
+        options={options[0] || {}}
+        classes={{ error: 'scatterplot__error' }}
+        onHover={handleHover}
+        onClick={onClick}
+        onReady={onReady}
+      />
 
       {children}
       <SedaLocationMarkers

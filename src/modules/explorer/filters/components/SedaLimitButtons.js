@@ -41,12 +41,7 @@ const SedaLimitButtons = ({ classes, ...props }) => {
   // get limit filter from filters array, or set to default for region
   const limitValue = getFilterValue(filters, ['limit'])
 
-  const sizes = [...REGION_SIZE_FILTERS[region]]
-  // only add "all" option on non-schools and non-districts regions
-  // (too many schools / districts to highlight at once)
-  if (['districts', 'schools'].indexOf(region) === -1) {
-    sizes.push('all')
-  }
+  const sizes = [...REGION_SIZE_FILTERS[region], 'all']
 
   const handleSetLimitFilter = value => {
     // no limit filter applied

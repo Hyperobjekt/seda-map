@@ -84,16 +84,8 @@ export default function useActiveFilters() {
       .filter(adjustFlagFilters(flags))
       .filter(adjustSecondaryVarFilters(region))
       .filter(adjustLocationFilters(region, locationId))
-      .filter(adjustLimitFilter(region))
-
-    const hasLimit =
-      activeFilters.findIndex(f => f[0] === 'limit') > -1
-    const needsLimit =
-      ['districts', 'schools'].indexOf(region) > -1
 
     // add limit if needed
-    return needsLimit && !hasLimit
-      ? [...activeFilters, ['limit', '10000']]
-      : activeFilters
+    return activeFilters
   }, [filters, region])
 }

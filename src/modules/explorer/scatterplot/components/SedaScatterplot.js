@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => ({
   },
   chart: {
     position: 'absolute',
-    top: theme.spacing(9),
+    top: theme.spacing(12),
     left: theme.spacing(4),
     right: theme.spacing(8),
     bottom: theme.spacing(6),
@@ -55,7 +55,10 @@ const useStyles = makeStyles(theme => ({
     maxWidth: 88,
     whiteSpace: 'normal',
     fontSize: theme.typography.pxToRem(12),
-    [theme.breakpoints.up('sm')]: {
+    position: 'absolute',
+    top: theme.spacing(-8),
+    right: -32,
+    [theme.breakpoints.up('md')]: {
       position: 'absolute',
       top: -1,
       right: -88
@@ -142,7 +145,6 @@ const SedaScatterplot = () => {
     },
     [addLocation]
   )
-
   const classes = useStyles()
   return (
     <div className={clsx(classes.root)}>
@@ -171,7 +173,9 @@ const SedaScatterplot = () => {
                 })}
                 xVar={xVar}
                 yVar={yVar}
-                region={region}>
+                region={region}
+                highlighted={scatterplotData.length}
+                total={allData.length}>
                 {!isSplit && hasGapChart && !isEmbed && (
                   <LinkButton
                     className={classes.toggleButton}
@@ -216,7 +220,9 @@ const SedaScatterplot = () => {
                 })}
                 xVar={xGapVar}
                 yVar={yGapVar}
-                region={region}>
+                region={region}
+                highlighted={scatterplotData.length}
+                total={allData.length}>
                 {!isSplit && isVersus && !isEmbed && (
                   <LinkButton
                     className={classes.toggleButton}

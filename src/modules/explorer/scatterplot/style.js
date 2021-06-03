@@ -1,4 +1,5 @@
 import { fade } from '@material-ui/core/styles/colorManipulator'
+import * as merge from 'deepmerge'
 
 import {
   getCSSVariable,
@@ -16,12 +17,105 @@ import {
   getMetricIdFromVarName,
   getPredictedValue
 } from '../app/selectors'
-import { getScatterplotBaseOptions } from '../../scatterplot'
 import { getLang } from '../app/selectors/lang'
 import { getDotSizeScale } from './selectors'
 import { max, tickStep, ticks } from 'd3-array'
 import { scaleLinear } from 'd3-scale'
 import { getDataSubset } from '../../scatterplot/utils'
+import { MAX_DOTS, PROGRESSIVE_THRESHOLD } from './constants'
+
+/** Default options for scatterplot container */
+const gridOptions = {
+  top: '24',
+  right: '24',
+  bottom: '24',
+  left: '24'
+}
+
+/** Default options for x axis */
+const xAxisOptions = {
+  type: 'value',
+  interval: 1,
+  nameTextStyle: {
+    fontSize: 14,
+    fontWeight: 'bold'
+  },
+  nameLocation: 'center',
+  nameGap: 16,
+  splitLine: {
+    show: false
+  },
+  axisLine: {
+    show: false
+  },
+  axisTick: {
+    show: false
+  }
+}
+
+/** Default options for y axis */
+const yAxisOptions = {
+  type: 'value',
+  splitLine: {
+    show: true,
+    lineStyle: {
+      type: 'dashed',
+      color: ['rgba(0,0,0,0.1)']
+    }
+  },
+  axisTick: {
+    show: false
+  },
+  axisLine: {
+    show: false
+  }
+}
+
+/** Default options for visual map */
+const visualMapOptions = {
+  dimension: 1,
+  calculable: false,
+  show: false
+}
+
+/**
+ * Merge axis overrides with default axis options
+ * @param {string} axisName 'x' or 'y'
+ * @param {object} overrides https://ecomfe.github.io/echarts-doc/public/en/option.html#xAxis
+ */
+const getAxisOptions = (axisName, overrides = {}) =>
+  merge(
+    axisName === 'x' ? xAxisOptions : yAxisOptions,
+    overrides
+  )
+
+/**
+ * Merge container overrides with default container options
+ * @param {object} overrides https://ecomfe.github.io/echarts-doc/public/en/option.html#grid
+ */
+const getGridOptions = (overrides = {}) =>
+  merge(gridOptions, overrides)
+
+/**
+ * Merge visual map overrides with default visual map options
+ * @param {object} overrides https://ecomfe.github.io/echarts-doc/public/en/option.html#visualMap
+ */
+const getVisualMapOptions = (overrides = []) =>
+  overrides.map(vm => merge(visualMapOptions, vm))
+
+/**
+ * Gets the base scatterplot config with the provided overrides
+ * @param {*} overrides any override options for the scatterplot
+ */
+const extendScatterplotStyle = (overrides = {}) => ({
+  ...overrides,
+  grid: getGridOptions(overrides.grid),
+  xAxis: getAxisOptions('x', overrides.xAxis),
+  yAxis: getAxisOptions('y', overrides.yAxis),
+  visualMap: getVisualMapOptions(overrides.visualMap)
+})
+
+const isDataReady = ({ data }) => data && data.length !== 0
 
 /**
  *
@@ -71,47 +165,6 @@ export const grid = variant => {
         bottom: 0,
         left: 0
       }
-  }
-}
-
-/** SERIES CONFIGURATION */
-
-/**
- * Gets an echart series
- */
-const getSeries = (seriesId, type, options) => ({
-  id: seriesId,
-  type: type,
-  ...options
-})
-
-/**
- * Get the style overrides for the base series
- * @param {boolean} highlightedOn
- */
-const getBaseSeries = ({ sizer, variant, xVar, yVar }) => {
-  const isVs = isVersusFromVarNames(xVar, yVar)
-  return getSeries('base', 'scatter', {
-    silent: variant === 'preview',
-    z: 100,
-    itemStyle: {
-      borderColor: isVs
-        ? 'rgba(0,0,0,0.4)'
-        : 'rgba(7,55,148,0.4)',
-      borderWidth: 0.75
-    },
-    symbolSize: value => sizer(value[2])
-  })
-}
-
-export const series = (seriesId, variant, options = {}) => {
-  switch (seriesId) {
-    case 'base':
-      return getBaseSeries({ ...options, variant })
-    // case 'highlighted':
-    //   return getHighlightedSeries(options)
-    default:
-      return getSeries(seriesId, variant, options)
   }
 }
 
@@ -628,29 +681,7 @@ const yAxis = ({ variant, region, extent }) => {
   }
 }
 
-/**
- * Returns an eCharts options object
- * @param {*} variant
- * @param {*} param1
- * @returns
- */
-export const getScatterplotOptions = (
-  variant,
-  {
-    data = [],
-    allData = [],
-    xVar,
-    yVar,
-    zVar,
-    extents,
-    colorExtent,
-    region
-  }
-) => {
-  if (!data || data.length === 0) return {}
-  const sizer = getDotSizeScale({
-    extent: extents[2]
-  })
+export const getTrendLine = ({ yVar, extents, region }) => {
   // creates a trend line for SES relative to Y metric
   // NOTE: not used now, uncomment the line series below to add
   // eslint-disable-next-line
@@ -669,29 +700,37 @@ export const getScatterplotOptions = (
     }
     return data
   }
-
-  const baseOptions = {
-    grid: grid(variant),
-    xAxis: xAxis({
-      variant,
-      varName: xVar,
-      region,
-      extent: extents[0]
-    }),
-    yAxis: yAxis({
-      variant,
-      varName: yVar,
-      region,
-      extent: extents[1]
-    })
+  // NOTE: uncomment the series below to add the trend line
+  // trend line is development only feature for now, for testing
+  // it is only accurate for "all" subgroup
+  // ...(process.env.NODE_ENV === 'development'
+  return {
+    type: 'line',
+    showSymbol: false,
+    clip: true,
+    data: generateSesLine(),
+    lineStyle: {
+      width: 1,
+      type: 'dashed',
+      color: 'rgba(0,0,0,0.5)'
+    },
+    z: 1000
   }
+}
 
-  const underlayData = zVar
-    ? getDataSubset(allData, [xVar, yVar, zVar])
-    : getDataSubset(allData, [xVar, yVar])
-
-  const underlayOptions = {
-    ...baseOptions,
+/**
+ * Gets the echart options for the underlay chart with grey dots
+ * @param {*} param0
+ * @param {*} base
+ * @returns
+ */
+export const getUnderlayOptions = (
+  { allData = [], xVar, yVar, zVar },
+  base
+) => {
+  const underlayData = getDataSubset(allData, [xVar, yVar, zVar])
+  return {
+    ...base,
     series: [
       {
         id: 'underlay',
@@ -708,9 +747,29 @@ export const getScatterplotOptions = (
       }
     ]
   }
+}
 
+/**
+ * Gets the echart options for the main chart, with visual map, dot sizing, grid lines, axis labels, etc.
+ * @param {*} variant
+ * @param {*} param1
+ * @param {*} base
+ * @returns
+ */
+export const getOverlayOptions = (
+  variant,
+  { data = [], xVar, yVar, zVar, extents, colorExtent, region },
+  base
+) => {
+  const sizer = getDotSizeScale({
+    extent: extents[2]
+  })
+  const isVs = isVersusFromVarNames(xVar, yVar)
+  const baseSeriesData = isDataReady({ data })
+    ? getDataSubset(data, [xVar, yVar, zVar]).slice(0, MAX_DOTS)
+    : []
   const options = {
-    ...baseOptions,
+    ...base,
     visualMap: visualMap(variant, {
       xVar,
       yVar,
@@ -718,50 +777,65 @@ export const getScatterplotOptions = (
       colorExtent
     }),
     series: [
-      series('base', variant, {
-        sizer,
-        xVar,
-        yVar
-      }),
+      {
+        id: 'base',
+        type: 'scatter',
+        data: baseSeriesData,
+        silent: variant === 'preview',
+        z: 100,
+        itemStyle: {
+          borderColor: isVs
+            ? 'rgba(0,0,0,0.4)'
+            : 'rgba(7,55,148,0.4)',
+          borderWidth: 0.75
+        },
+        symbolSize: value => sizer(value[2]),
+        progressiveThreshold: PROGRESSIVE_THRESHOLD,
+        zLevel: 1
+      },
       ...overlays(variant, {
         xVar,
         yVar,
         region,
         extents
       })
-      // NOTE: uncomment the series below to add the trend line
-      // trend line is development only feature for now, for testing
-      // it is only accurate for "all" subgroup
-      // ...(process.env.NODE_ENV === 'development'
-      //   ? [
-      //       {
-      //         type: 'line',
-      //         showSymbol: false,
-      //         clip: true,
-      //         data: generateSesLine(),
-      //         lineStyle: {
-      //           width: 1,
-      //           type: 'dashed',
-      //           color: 'rgba(0,0,0,0.5)'
-      //         },
-      //         z: 1000
-      //       }
-      //     ]
-      //   : [])
     ]
   }
-  const result = [
-    getScatterplotBaseOptions({
-      allData,
-      data,
-      xVar,
-      yVar,
-      zVar,
-      selected: [],
-      options
-    }),
-    underlayOptions
-  ]
+  return extendScatterplotStyle(options)
+}
 
-  return result
+/**
+ * Returns an eCharts options object
+ * @param {*} variant
+ * @param {*} param1
+ * @returns
+ */
+export const getScatterplotOptions = (variant, context = {}) => {
+  if (!context.data || context.data.length === 0) return {}
+  const { xVar, yVar, extents, region } = context
+  const baseOptions = {
+    grid: grid(variant),
+    xAxis: xAxis({
+      variant,
+      varName: xVar,
+      region,
+      extent: extents[0]
+    }),
+    yAxis: yAxis({
+      variant,
+      varName: yVar,
+      region,
+      extent: extents[1]
+    })
+  }
+  const overlayOptions = getOverlayOptions(
+    variant,
+    context,
+    baseOptions
+  )
+  const underlayOptions = getUnderlayOptions(
+    context,
+    baseOptions
+  )
+  return [overlayOptions, underlayOptions]
 }
