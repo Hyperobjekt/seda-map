@@ -164,7 +164,6 @@ function SedaScatterplotBase({
     colorExtent,
     region
   ])
-  if (variant==='preview') console.log({options})
 
   return (
     <div

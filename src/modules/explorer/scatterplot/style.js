@@ -321,7 +321,6 @@ const createLabels = (
       : parseFloat(value) > parseFloat(midPoint)
       ? '+' + value
       : value
-    console.log({value, label, midPoint, labelKey})
     return {
       value: axis === 'y' ? [0, pos] : [pos, 0],
       axis: axis,
@@ -420,7 +419,6 @@ const getOverlayForVarName = ({
           formatter,
           midPoint
         )
-  console.log({labels})
   const lines = createLines(positions, axis, midPoint)
   return getOverlay(labels, lines)
 }
@@ -458,7 +456,6 @@ const getOverlaysForContext = (
       extent: extents[0]
     })
     overlays.push(xOverlays)
-    console.log({xOverlays})
 
     overlays.push(
       getOverlayForVarName({
@@ -736,7 +733,6 @@ export const getUnderlayOptions = (
   { allData = [], xVar, yVar, zVar },
   base
 ) => {
-  console.log({base})
   const underlayData = getDataSubset(allData, [xVar, yVar, zVar])
   return {
     ...base,
