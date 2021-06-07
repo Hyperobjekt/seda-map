@@ -62,7 +62,7 @@ const styles = theme => ({
     position: 'absolute'
   },
   xAxis: {
-    bottom: theme.spacing(-4),
+    bottom: -21,
     left: 0,
     right: 0,
     width: 'auto'
@@ -164,6 +164,7 @@ function SedaScatterplotBase({
     colorExtent,
     region
   ])
+  if (variant==='preview') console.log({options})
 
   return (
     <div

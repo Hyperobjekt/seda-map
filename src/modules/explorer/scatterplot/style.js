@@ -318,9 +318,10 @@ const createLabels = (
       ? getLang(labelKey, {
           value: value[0] === '-' ? value.substring(1) : value
         })
-      : value > midPoint
+      : parseFloat(value) > parseFloat(midPoint)
       ? '+' + value
       : value
+    console.log({value, label, midPoint, labelKey})
     return {
       value: axis === 'y' ? [0, pos] : [pos, 0],
       axis: axis,
@@ -419,6 +420,7 @@ const getOverlayForVarName = ({
           formatter,
           midPoint
         )
+  console.log({labels})
   const lines = createLines(positions, axis, midPoint)
   return getOverlay(labels, lines)
 }
@@ -449,14 +451,15 @@ const getOverlaysForContext = (
 ) => {
   const overlays = []
   if (variant === 'map') {
-    overlays.push(
-      getOverlayForVarName({
-        varName: xVar,
-        axis: 'x',
-        region,
-        extent: extents[0]
-      })
-    )
+    const xOverlays = getOverlayForVarName({
+      varName: xVar,
+      axis: 'x',
+      region,
+      extent: extents[0]
+    })
+    overlays.push(xOverlays)
+    console.log({xOverlays})
+
     overlays.push(
       getOverlayForVarName({
         varName: yVar,
@@ -580,6 +583,7 @@ const getXAxis = ({ region, extent, ...rest }) => {
     inverse: region === 'schools',
     axisLabel: { show: false },
     axisLine: { show: false },
+    axisTick: { show: false },
     splitLine: {
       show: true,
       lineStyle: { type: 'solid', color: '#e4e4e4' }
@@ -601,6 +605,7 @@ const getMapXAxis = ({ varName, metric, region, extent }) => {
       formatter: formatter
     },
     axisLine: { show: false },
+    axisTick: { show: false },
     interval: getIncrementForExtent(extent),
     nameGap: 0,
     nameTextStyle: {},
@@ -667,6 +672,9 @@ const getMapYAxis = ({ region, extent, ...rest }) => {
         color: '#888'
       }
     },
+    axisTick: {
+      show: false
+    },
     splitLine: { show: false },
     ...rest
   }
@@ -728,9 +736,18 @@ export const getUnderlayOptions = (
   { allData = [], xVar, yVar, zVar },
   base
 ) => {
+  console.log({base})
   const underlayData = getDataSubset(allData, [xVar, yVar, zVar])
   return {
     ...base,
+    xAxis: {
+      ...base.xAxis,
+      splitLine: { show: false },
+    },
+    yAxis: {
+      ...base.yAxis,
+      splitLine: { show: false }
+    },
     series: [
       {
         id: 'underlay',
