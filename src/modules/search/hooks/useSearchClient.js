@@ -31,9 +31,9 @@ export const useSearchClient = (algoliaId, algoliaKey) =>
         },
         searchForFacetValues: algoliaClient.searchForFacetValues
       }
+      return client
     } catch (e) {
       console.error(e.message)
-    } finally {
-      return client
+      return false
     }
   }, [algoliaId, algoliaKey])

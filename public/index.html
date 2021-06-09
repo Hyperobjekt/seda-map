@@ -1474,7 +1474,12 @@
 
         // registers a handler for a custom event
         var addHandler = function(handlerId, handler) {
-          if (!handlers.hasOwnProperty(handlerId)) {
+          if (
+            !Object.prototype.hasOwnProperty.call(
+              handlers,
+              handlerId
+            )
+          ) {
             handlers[handlerId] = []
           }
           handlers[handlerId].push(handler)

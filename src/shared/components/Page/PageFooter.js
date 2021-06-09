@@ -1,13 +1,13 @@
-import React from "react"
-import PropTypes from "prop-types"
-import { makeStyles } from "@material-ui/core"
-import clsx from "clsx"
+import React from 'react'
+import PropTypes from 'prop-types'
+import { makeStyles } from '@material-ui/core'
+import clsx from 'clsx'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   root: {
-    display: "flex",
-    flexGrow: 1,
-  },
+    display: 'flex',
+    flexGrow: 1
+  }
 }))
 
 const PageFooter = ({
@@ -19,18 +19,17 @@ const PageFooter = ({
   return (
     <footer
       className={clsx(classes.root, overrides.root)}
-      {...props}
-    >
+      {...props}>
       {children}
     </footer>
   )
 }
 
 PageFooter.propTypes = {
-  classes: PropTypes.object,
+  classes: PropTypes.object
 }
 PageFooter.defaultProps = {
-  classes: {},
+  classes: {}
 }
 
 export default PageFooter

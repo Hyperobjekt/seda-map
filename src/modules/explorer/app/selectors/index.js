@@ -16,8 +16,7 @@ export const getFeatureProperty = (feature, propName) => {
 
 export const SHOW_PUERTO_RICO =
   process.env.REACT_APP_SHOW_PR === '1'
-export const SHOW_NATIVE_AMERICAN =
-  process.env.REACT_APP_EMBARGOED === '1'
+export const SHOW_NATIVE_AMERICAN = true
 
 export {
   getColorForVarNameValue,

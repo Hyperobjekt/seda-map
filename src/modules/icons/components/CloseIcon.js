@@ -1,5 +1,5 @@
 import React from 'react'
-import Icon from './Icon'
+import { SvgIcon as Icon } from '@material-ui/core'
 
 const CloseIcon = ({ ...props }) => {
   return (

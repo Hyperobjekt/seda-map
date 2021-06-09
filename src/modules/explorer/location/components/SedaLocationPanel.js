@@ -85,9 +85,7 @@ const SedaLocationPanel = ({ classes, ...props }) => {
       <SidePanelBody style={{ overflowY: 'scroll' }}>
         {data && (
           <List className={classes.list} disablePadding>
-            {region === 'schools' && (
-              <SedaLocationFlags locationId={data.id} />
-            )}
+            <SedaLocationFlags locationId={data.id} />
             <SedaLocationSummary location={data} />
             <SedaLocationKeyMetrics location={data} />
             {region !== 'schools' && (

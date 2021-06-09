@@ -1,6 +1,6 @@
 import React from 'react'
 import {
-  makeStyles,
+  withStyles,
   ButtonGroup,
   Button
 } from '@material-ui/core'
@@ -10,7 +10,7 @@ import clsx from 'clsx'
 import { MapIcon, ChartIcon, SplitIcon } from '../../../../icons'
 import { useActiveView } from '../../hooks'
 
-const useStyles = makeStyles(theme => ({
+const styles = theme => ({
   root: {},
   button: {
     whiteSpace: 'nowrap',
@@ -23,12 +23,9 @@ const useStyles = makeStyles(theme => ({
     background: 'white',
     [theme.breakpoints.down('sm')]: {
       background: theme.palette.primary.highlight
-    },
-    '& .icon .filled': {
-      opacity: 1
     }
   }
-}))
+})
 
 const buttons = [
   { id: 'map', label: 'Map', icon: <MapIcon /> },
@@ -36,8 +33,7 @@ const buttons = [
   { id: 'split', label: 'Map + Chart', icon: <SplitIcon /> }
 ]
 
-const SedaViewControls = ({ classes: overrides, ...props }) => {
-  const classes = useStyles()
+const SedaViewControls = ({ classes, className, ...props }) => {
   const [view, setView] = useActiveView()
   const theme = useTheme()
   const isLargeViewport = useMediaQuery(
@@ -50,7 +46,7 @@ const SedaViewControls = ({ classes: overrides, ...props }) => {
   return (
     <ButtonGroup
       variant="outlined"
-      className={clsx(classes.root)}
+      className={clsx(classes.root, className)}
       {...props}>
       {viewButtons.map(b => (
         <Button
@@ -69,4 +65,4 @@ const SedaViewControls = ({ classes: overrides, ...props }) => {
 
 SedaViewControls.propTypes = {}
 
-export default SedaViewControls
+export default withStyles(styles)(SedaViewControls)

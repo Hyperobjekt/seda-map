@@ -139,6 +139,19 @@ const theme = createMuiTheme({
         color: 'rgba(3, 18, 50, 0.94)'
       }
     },
+    MuiButtonBase: {
+      root: {
+        '& .filled': {
+          opacity: 0
+        },
+        '&:hover .filled': {
+          opacity: 1
+        }
+      }
+    },
+    MuiSvgIcon: {
+      root: {}
+    },
     MuiListSubheader: {
       root: {
         backgroundColor: '#fff',

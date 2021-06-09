@@ -1,8 +1,4 @@
-export {
-  IconTooltipButton,
-  LinkButton,
-  SelectionButton
-} from './Buttons'
+export { LinkButton, SelectionButton } from './Buttons'
 export { HideOnScroll } from './Helpers'
 export {
   NumberSlider,

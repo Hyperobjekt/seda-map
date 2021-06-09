@@ -32,9 +32,6 @@ const ScatterplotBase = ({
   onHover,
   onClick,
   onReady,
-  onMouseMove,
-  onMouseOver,
-  onMouseOut,
   ...props
 }) => {
   const [themeId, setThemeId] = useState(null)

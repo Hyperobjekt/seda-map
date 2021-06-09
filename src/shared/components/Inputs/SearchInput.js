@@ -57,7 +57,7 @@ const SearchInput = ({
                 <CloseIcon />
               </IconButton>
             ) : (
-              <SearchIcon />
+              <SearchIcon style={{ fontSize: 16 }} />
             )}
           </InputAdornment>
         ),

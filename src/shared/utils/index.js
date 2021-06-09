@@ -45,7 +45,7 @@ export const mapObjectKeys = (obj, keyMap) =>
  * Returns keys that exist in the object
  */
 export const getKeysInObject = (keys, obj = {}) =>
-  keys.filter(k => obj.hasOwnProperty(k))
+  keys.filter(k => Object.prototype.hasOwnProperty.call(obj, k))
 
 export const makeId = () =>
   '_' +

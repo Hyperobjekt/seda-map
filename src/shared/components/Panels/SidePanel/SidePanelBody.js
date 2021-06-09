@@ -1,23 +1,19 @@
-import React from "react"
-import PropTypes from "prop-types"
-import { makeStyles } from "@material-ui/core"
-import clsx from "clsx"
+import React from 'react'
+import PropTypes from 'prop-types'
+import { makeStyles } from '@material-ui/core'
+import clsx from 'clsx'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   root: {
     flexGrow: 1,
-    display: "flex",
-    flexDirection: "column",
-    overflowY: "scroll",
-    overflowX: "hidden",
-  },
+    display: 'flex',
+    flexDirection: 'column',
+    overflowY: 'scroll',
+    overflowX: 'hidden'
+  }
 }))
 
-const SidePanelBody = ({
-  children,
-  classes: overrides,
-  ...props
-}) => {
+const SidePanelBody = ({ children, classes: overrides }) => {
   const classes = useStyles()
   return (
     <div className={clsx(classes.root, overrides.root)}>
@@ -28,10 +24,10 @@ const SidePanelBody = ({
 
 SidePanelBody.propTypes = {
   /** class name overrides for elements */
-  classes: PropTypes.object,
+  classes: PropTypes.object
 }
 SidePanelBody.defaultProps = {
-  classes: {},
+  classes: {}
 }
 
 export default SidePanelBody

@@ -170,7 +170,7 @@ const SedaCollapsePanel = ({
     setHovered(true)
   }
   // trigger panel collapse on mouse leave
-  const handleMouseLeave = e => {
+  const handleMouseLeave = () => {
     setHovered(false)
   }
 
@@ -179,7 +179,7 @@ const SedaCollapsePanel = ({
   }
 
   // toggle between condensed / expanded mode
-  const handleToggleCondensed = e => {
+  const handleToggleCondensed = () => {
     !condensed && setHovered(false)
     toggleCondensed()
   }

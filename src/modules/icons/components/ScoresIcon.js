@@ -1,9 +1,9 @@
+import { SvgIcon } from '@material-ui/core'
 import React from 'react'
-import Icon from './Icon'
 
 const ScoresIcon = ({ ...props }) => {
   return (
-    <Icon {...props}>
+    <SvgIcon {...props}>
       <path
         fillRule="evenodd"
         d="M4 11.9736C4.27614 11.9736 4.5 12.1975 4.5 12.4736V20.9999C4.5 21.2761 4.27614 21.4999 4 21.4999C3.72386 21.4999 3.5 21.2761 3.5 20.9999V12.4736C3.5 12.1975 3.72386 11.9736 4 11.9736Z"
@@ -24,7 +24,7 @@ const ScoresIcon = ({ ...props }) => {
         fillRule="evenodd"
         d="M12 2.5C12.2761 2.5 12.5 2.72386 12.5 3L12.5 21C12.5 21.2761 12.2761 21.5 12 21.5C11.7239 21.5 11.5 21.2761 11.5 21L11.5 3C11.5 2.72386 11.7239 2.5 12 2.5Z"
       />
-    </Icon>
+    </SvgIcon>
   )
 }
 

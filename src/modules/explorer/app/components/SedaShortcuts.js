@@ -7,7 +7,7 @@ import { useTogglePanel } from '../../panels'
  * TODO: keyboard shortcuts
  * @param {*} props
  */
-const SedaShortcuts = props => {
+const SedaShortcuts = () => {
   const togglePanel = useTogglePanel()
   // help panel shortcut
   const helpPress = useKeyPress('?')

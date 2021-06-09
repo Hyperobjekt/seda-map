@@ -157,7 +157,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const SedaFooter = props => {
+const SedaFooter = () => {
   const shareUrl = window.location.href
 
   const [, toggleLinkDialog] = useLinkDialogVisibility()

@@ -1,5 +1,4 @@
 export {
-  IconTooltipButton,
   LinkButton,
   SelectionButton,
   HideOnScroll,

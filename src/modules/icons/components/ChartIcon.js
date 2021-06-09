@@ -1,9 +1,9 @@
+import { SvgIcon } from '@material-ui/core'
 import React from 'react'
-import Icon from './Icon'
 
 const ChartIcon = ({ ...props }) => {
   return (
-    <Icon {...props}>
+    <SvgIcon {...props}>
       <g className="filled">
         <path
           fillRule="evenodd"
@@ -85,7 +85,7 @@ const ChartIcon = ({ ...props }) => {
           d="M13.5 14C13.7761 14 14 13.7761 14 13.5C14 13.2239 13.7761 13 13.5 13C13.2239 13 13 13.2239 13 13.5C13 13.7761 13.2239 14 13.5 14ZM13.5 15C14.3284 15 15 14.3284 15 13.5C15 12.6716 14.3284 12 13.5 12C12.6716 12 12 12.6716 12 13.5C12 14.3284 12.6716 15 13.5 15Z"
         />
       </g>
-    </Icon>
+    </SvgIcon>
   )
 }
 

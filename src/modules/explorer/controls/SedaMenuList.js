@@ -20,7 +20,7 @@ const SedaMenuList = ({
 }) => {
   return (
     <Component {...props}>
-      {items.map((item, i) => {
+      {items.map(item => {
         return (
           <ItemComponent
             key={item}

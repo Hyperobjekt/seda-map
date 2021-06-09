@@ -15,7 +15,7 @@ const FiltersForm = props => {
 
   const handleFilterRemove = filter => removeFilter(filter)
   const handleFilterChange = (change, e) => {
-    console.log('TODO: implement with setFilter')
+    console.log('TODO: implement with setFilter', change, e)
   }
   const handleFilterAdd = filter => {
     addFilter(filter)
