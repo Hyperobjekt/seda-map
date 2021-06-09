@@ -13,6 +13,7 @@ import {
 } from '../../../../shared/utils'
 import { getStateAbbr } from '../../../../shared/utils/states'
 import { getRegionFromLocationId } from './regions'
+import { NO_SES_DEMOGRAPHICS } from '../constants/demographics'
 
 // values provided by SEDA team for calulation distance from regression
 const FUNC_VARS = {
@@ -150,8 +151,7 @@ const getMetricVarName = (metric, demographic = 'all') => {
 const getSecondaryVarName = (secondary, demographic) => {
   // use "all" SES option for the following demographics
   if (secondary === 'ses') {
-    const useAll =
-      ['m', 'f', 'p', 'np'].indexOf(demographic) > -1
+    const useAll = NO_SES_DEMOGRAPHICS.indexOf(demographic) > -1
     return useAll ? 'all_ses' : demographic + '_ses'
   }
   return demographic + '_' + secondary

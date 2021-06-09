@@ -92,7 +92,5 @@ export const getIntervalForExtent = extent => {
 export const getMissingVarNames = (data, region, varNames) => {
   // always need to fetch vars for schools
   if (region === 'schools') return varNames
-  return data
-    ? varNames.filter(v => !Boolean(data[v]))
-    : varNames
+  return data ? varNames.filter(v => !data[v]) : varNames
 }

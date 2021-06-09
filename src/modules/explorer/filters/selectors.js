@@ -45,8 +45,6 @@ export const removeIrrelevantFilters = (filters, region) => {
     : filters.filter(f => f[1] !== 'frl' && f[0] !== 'contains')
 }
 
-export const getHumanReadableFilters = filters => {}
-
 /**
  * Returns the search indicies for the current region
  * @param {*} region

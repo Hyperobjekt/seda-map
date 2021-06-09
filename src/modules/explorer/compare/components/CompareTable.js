@@ -17,26 +17,33 @@ import { getMetricIdsForRegion } from '../../app/selectors/metrics'
 import useSetCompareLocation from '../hooks/useSetCompareLocation'
 import clsx from 'clsx'
 import useCompareLocationsData from '../hooks/useCompareLocationsData'
-import { isGapDemographic, isUnavailable } from '../../app/selectors'
+import {
+  isGapDemographic,
+  isUnavailable
+} from '../../app/selectors'
 
 const TABLE_METRICS = ['avg', 'grd', 'coh', 'ses', 'frl']
 
-const getSesHintFromDemographic = (demographic) => {
-  if(isGapDemographic(demographic)) {
-    return ['pn', 'mf'].indexOf(demographic) > -1  ? 'ses_gap_na' : 'ses_gap'
-  }else {
-    return ['p', 'np'].indexOf(demographic) > -1 
-    ? 'ses_na' 
-    : ['w', 'b', 'h', 'a', 'i'].indexOf(demographic) > -1 
-    ? 'ses_subgroup'
-    : 'ses_all'
+const getSesHintFromDemographic = demographic => {
+  if (isGapDemographic(demographic)) {
+    return ['pn', 'mf'].indexOf(demographic) > -1
+      ? 'ses_gap_na'
+      : 'ses_gap'
+  } else {
+    return ['p', 'np'].indexOf(demographic) > -1
+      ? 'ses_na'
+      : ['w', 'b', 'h', 'a', 'i'].indexOf(demographic) > -1
+      ? 'ses_subgroup'
+      : 'ses_all'
   }
 }
 
 const getAccessor = (demographic, m) => {
-  if(m !== 'ses') return [demographic, m].join('_')
-  
-  return ['m', 'f'].indexOf(demographic) > -1 ? ['all', m].join('_') : [demographic, m].join('_')
+  if (m !== 'ses') return [demographic, m].join('_')
+
+  return ['m', 'f'].indexOf(demographic) > -1
+    ? ['all', m].join('_')
+    : [demographic, m].join('_')
 }
 
 const numberSorter = (a, b, columnId) => {
@@ -74,12 +81,20 @@ const TableHeaderMetric = withStyles(theme => ({
     lineHeight: 1.43
   }
 }))(({ column, classes, children }) => {
-  const demographic = useCompareStore(state => state.demographic, shallow)
-  const demographicProps = isGapDemographic(demographic) ? {
-    gap: getPrefixLang(demographic, 'LABEL')
-  } : ['w', 'b', 'h', 'a', 'i', 'np', 'p'] ? {
-    subgroup: getPrefixLang(demographic, 'LABEL')
-  } : {}
+  const demographic = useCompareStore(
+    state => state.demographic,
+    shallow
+  )
+  const demographicProps = isGapDemographic(demographic)
+    ? {
+        gap: getPrefixLang(demographic, 'LABEL')
+      }
+    : ['w', 'b', 'h', 'a', 'i', 'np', 'p'].indexOf(demographic) >
+      -1
+    ? {
+        subgroup: getPrefixLang(demographic, 'LABEL')
+      }
+    : {}
   return (
     <div
       className={clsx(classes.root, {
@@ -94,10 +109,13 @@ const TableHeaderMetric = withStyles(theme => ({
         {getPrefixLang(column.id, 'LABEL')}
       </Typography>
       <Typography className={classes.subtitle} variant="caption">
-        {column.id === 'ses' 
-          ? getPrefixLang(getSesHintFromDemographic(demographic), 'COMPARE_HINT', demographicProps)
-          : getPrefixLang(column.id, 'COMPARE_HINT')
-        }
+        {column.id === 'ses'
+          ? getPrefixLang(
+              getSesHintFromDemographic(demographic),
+              'COMPARE_HINT',
+              demographicProps
+            )
+          : getPrefixLang(column.id, 'COMPARE_HINT')}
       </Typography>
       {children}
     </div>
@@ -113,17 +131,19 @@ function renderLocationCell(props) {
   )
 }
 
-const renderMetricCell = varName => props => {
-  return (
-    <SedaStat
-      value={props.value}
-      varName={varName}
-      marginOfError={props.row.original[varName + '_e']}
-    />
-  )
+const renderMetricCell = varName => {
+  return function Stat(props) {
+    return (
+      <SedaStat
+        value={props.value}
+        varName={varName}
+        marginOfError={props.row.original[varName + '_e']}
+      />
+    )
+  }
 }
 
-const CompareTable = ({ classes, ...props }) => {
+const CompareTable = ({ classes }) => {
   // pull active metric + demographic from the store, with setter
   const [
     metric,

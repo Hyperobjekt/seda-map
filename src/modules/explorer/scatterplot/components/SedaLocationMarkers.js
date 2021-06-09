@@ -41,7 +41,6 @@ export const getXyzTransformers = (region, extents) => {
 }
 
 const SedaLocationMarkers = ({
-  gapChart = false,
   vars,
   extents,
   region,

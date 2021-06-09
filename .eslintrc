@@ -1,6 +1,6 @@
 {
   "parser": "babel-eslint",
-  "plugins": ["react"],
+  "plugins": ["react", "react-hooks"],
   "extends": ["eslint:recommended", "plugin:react/recommended"],
   "globals": {
     "document": true,
@@ -9,6 +9,7 @@
   },
   "rules": {
     "no-template-curly-in-string": 0,
+    "no-unused-vars": "warn",
     "react/prop-types": "off"
   }
 }

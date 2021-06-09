@@ -33,7 +33,7 @@ const getJustify = justify => {
   }
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   root: {
     display: 'flex',
     flexDirection: props =>

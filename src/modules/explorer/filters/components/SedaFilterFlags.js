@@ -99,7 +99,7 @@ const SedaFilterFlags = ({ classes, className, ...props }) => {
    * @param {*} event
    * @param {*} key
    */
-  const handleCheckboxChange = (checkbox, event) => {
+  const handleCheckboxChange = checkbox => {
     const key = checkbox.id
     const isOn = checkedFlags.indexOf(key) > -1
     // exclusive flag filters are set to 1 when checked

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import { withStyles } from '@material-ui/core'
@@ -62,7 +62,7 @@ const styles = theme => ({
     position: 'absolute'
   },
   xAxis: {
-    bottom: theme.spacing(-4),
+    bottom: -21,
     left: 0,
     right: 0,
     width: 'auto'
@@ -109,10 +109,18 @@ function SedaScatterplotBase({
 
   const [xVar, yVar, zVar] = vars
 
+  // flip label order for school poverty metric
+  const flipLabelOrder =
+    xVar.indexOf('seg') > -1 || xVar.indexOf('min') > -1
+
   const xLabel = gapChart
     ? getDemographicIdFromVarName(xVar)
     : xVar
-  const xLabelPrefix = gapChart ? 'LABEL_GAP' : 'LABEL'
+  const xLabelPrefix = gapChart
+    ? flipLabelOrder
+      ? 'LABEL_GAP_FLIP'
+      : 'LABEL_GAP'
+    : 'LABEL'
   const xMetric = getMetricIdFromVarName(xVar)
   // hint metrics that do no have explanation elsewhere
   const hasAxisHint =
@@ -125,6 +133,13 @@ function SedaScatterplotBase({
     [extents, vars]
   )
 
+  /** Add chart variables to hover callback */
+  const handleHover = useCallback(
+    (e, eChartInstance) => {
+      onHover && onHover(e, eChartInstance, vars)
+    },
+    [onHover, vars]
+  )
 
   // memoize the scatterplot options
   const options = useMemo(() => {
@@ -162,13 +177,19 @@ function SedaScatterplotBase({
       {...props}>
       <ScatterplotBase
         theme={theme}
+        options={options[1] || {}}
+      />
+
+      <ScatterplotBase
+        theme={theme}
         loading={loading}
-        options={options}
+        options={options[0] || {}}
         classes={{ error: 'scatterplot__error' }}
-        onHover={onHover}
+        onHover={handleHover}
         onClick={onClick}
         onReady={onReady}
       />
+
       {children}
       <SedaLocationMarkers
         className={clsx('scatterplot__markers', classes.markers)}
@@ -219,9 +240,9 @@ SedaScatterplotBase.defaultProps = {
   data: [],
   vars: [],
   extents: [],
-  onHover: () => { },
-  onClick: () => { },
-  onReady: () => { }
+  onHover: () => {},
+  onClick: () => {},
+  onReady: () => {}
 }
 
 SedaScatterplotBase.propTypes = {

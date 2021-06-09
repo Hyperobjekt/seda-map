@@ -205,7 +205,9 @@ export const getLocatonIdFromEvent = e => {
   const idIndex = 3
   // get the data array for the hovered location
   const hoverData =
-    e && e.data && e.data.hasOwnProperty('value')
+    e &&
+    e.data &&
+    Object.prototype.hasOwnProperty.call(e.data, 'value')
       ? e.data['value']
       : e.data
   const id = hoverData ? hoverData[idIndex] : null

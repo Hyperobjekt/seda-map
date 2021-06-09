@@ -14,7 +14,10 @@ import {
   isVersusFromVarNames
 } from '../../app/selectors'
 import { getLang, getPrefixLang } from '../../app/selectors/lang'
-import { titleCase } from '../../../../shared/utils'
+import {
+  formatInteger,
+  titleCase
+} from '../../../../shared/utils'
 import HintIconButton from '../../../../shared/components/Buttons/HintIconButton'
 import useSplitViewActive from '../../app/hooks/useSplitViewActive'
 
@@ -22,25 +25,39 @@ const styles = theme => ({
   root: {
     position: 'absolute',
     left: theme.spacing(0),
-    top: theme.spacing(-8),
+    top: theme.spacing(-9.25),
     minHeight: theme.spacing(9),
     right: 0,
     textAlign: 'left',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-start',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     [theme.breakpoints.down('sm')]: {
-      marginTop: -56,
+      marginTop: -72,
       position: 'static',
       width: `calc(100vw - 32px)`,
       marginLeft: 8,
       flexDirection: 'row'
     }
   },
+  compact: {
+    '& $title': {
+      maxWidth: `calc(100% - 100px)`
+    }
+  },
+  split: {
+    '& $title': {
+      maxWidth: '100%'
+    },
+    '& $footnote': {
+      maxWidth: '44em'
+    }
+  },
   title: {
     fontSize: theme.typography.pxToRem(12),
-    lineHeight: 1.25,
+    lineHeight: 1.42,
+    maxWidth: '37em',
     whiteSpace: 'normal',
     [theme.breakpoints.up('lg')]: {
       fontSize: theme.typography.pxToRem(13)
@@ -50,7 +67,7 @@ const styles = theme => ({
     fontSize: theme.typography.pxToRem(12),
     marginTop: 2,
     whiteSpace: 'normal',
-    maxWidth: '62em',
+    maxWidth: '37em',
     [theme.breakpoints.up('lg')]: {
       fontSize: theme.typography.pxToRem(13)
     }
@@ -95,7 +112,8 @@ const getScatterplotLang = (key, chartType, context) => {
   if (chartType === 'VS') return getLang(key + '_VS', context)
   if (chartType === 'GAP') return getLang(key + '_GAP', context)
   // AVG chart needs metric re-wording
-  if (chartType === 'AVG' && isTitle) return getLang(key + '_AVG', context)
+  if (chartType === 'AVG' && isTitle)
+    return getLang(key + '_AVG', context)
   return getLang(key, context)
 }
 
@@ -105,6 +123,8 @@ const SedaScatterplotHeader = ({
   xVar,
   yVar,
   region,
+  highlighted,
+  total,
   children,
   ...props
 }) => {
@@ -128,11 +148,14 @@ const SedaScatterplotHeader = ({
     type,
     context
   )
+  const isFiltered = total - highlighted > 0
   return (
     <div
       className={clsx(
         'scatterplot__header',
         classes.root,
+        compact && classes.compact,
+        isSplit && classes.split,
         className
       )}
       {...props}>
@@ -145,7 +168,13 @@ const SedaScatterplotHeader = ({
           variant="body2"
           color="textSecondary"
           className={classes.footnote}>
-          {description}
+          {description}{' '}
+          {isFiltered &&
+            getLang('SCATTERPLOT_FILTERED', {
+              region,
+              total,
+              highlighted: formatInteger(highlighted)
+            })}
         </Typography>
       )}
       {children}

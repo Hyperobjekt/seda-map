@@ -105,8 +105,7 @@ const GradientLegend = ({
   markerPosition,
   labelFormatter,
   classes: overrides,
-  className,
-  ...props
+  className
 }) => {
   const classes = useStyles()
   const markerStyle = useSpring({
@@ -207,7 +206,7 @@ const GradientLegend = ({
             }
           )}
           style={{
-            left: Boolean(midPosition)
+            left: midPosition
               ? midPosition * 100 + '%'
               : undefined
           }}>

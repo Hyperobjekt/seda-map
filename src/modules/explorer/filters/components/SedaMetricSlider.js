@@ -33,12 +33,7 @@ const getDefaultValue = (region, metric) => {
   return vals[metric]
 }
 
-const SedaMetricSlider = ({
-  metricId,
-  classes,
-  isActive,
-  ...props
-}) => {
+const SedaMetricSlider = ({ metricId, classes, ...props }) => {
   // grab filters array
   const filters = useActiveFilters()
   // function to remove a single filter

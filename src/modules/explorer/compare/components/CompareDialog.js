@@ -17,7 +17,7 @@ import { useMediaQuery } from '@material-ui/core'
 const styles = theme => ({
   root: {
     margin: 0,
-    padding: theme.spacing(2),
+    padding: theme.spacing(2)
   },
   toolbar: {
     display: 'flex',
@@ -30,7 +30,7 @@ const styles = theme => ({
       }
     },
     [theme.breakpoints.down('sm')]: {
-      flexDirection: 'column',
+      flexDirection: 'column'
     }
   }
 })
@@ -40,12 +40,12 @@ const DialogContent = withStyles(theme => ({
     padding: theme.spacing(2),
     [theme.breakpoints.down('sm')]: {
       display: 'flex',
-      flexDirection: 'column',
+      flexDirection: 'column'
     }
   }
 }))(MuiDialogContent)
 
-function CompareDialog({ classes, ...props }) {
+function CompareDialog({ classes }) {
   // get required state
   const [open, setOpen] = useCompareDialog()
   const [activeLocation] = useActiveLocation()

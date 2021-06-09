@@ -8,7 +8,4 @@ export { default as useFilters } from './hooks/useFilters'
 export {
   default as useFilterPanelVisible
 } from './hooks/useFilterPanelVisible'
-export {
-  getHumanReadableFilters,
-  getActiveFilterCount
-} from './selectors'
+export { getActiveFilterCount } from './selectors'

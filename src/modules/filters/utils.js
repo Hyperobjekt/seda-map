@@ -5,7 +5,7 @@
  * @param {string|number} value
  */
 const filterStartsWith = (data, column, value) =>
-  data.filter((d, i) => d[column] && d[column].startsWith(value))
+  data.filter(d => d[column] && d[column].startsWith(value))
 
 /**
  * Filters entries that do not have a value that is equal to the provided `value`
@@ -14,7 +14,7 @@ const filterStartsWith = (data, column, value) =>
  * @param {string|number} value
  */
 const filterEquals = (data, column, value) =>
-  data.filter((d, i) => d[column] === value)
+  data.filter(d => d[column] === value)
 
 /**
  * Filters entries that do not have a value that is not equal to the provided `value`
@@ -23,7 +23,7 @@ const filterEquals = (data, column, value) =>
  * @param {string|number} value
  */
 const filterNotEquals = (data, column, value) =>
-  data.filter((d, i) => d[column] !== value)
+  data.filter(d => d[column] !== value)
 
 /**
  * Filters entries that do not have a value greater than a provided `value`
@@ -32,7 +32,7 @@ const filterNotEquals = (data, column, value) =>
  * @param {number} value
  */
 const filterGreaterThan = (data, column, value) =>
-  data.filter((d, i) => d[column] > value)
+  data.filter(d => d[column] > value)
 
 /**
  * Filters entries that do not have a value greater than or equal to a provided `value`
@@ -41,7 +41,7 @@ const filterGreaterThan = (data, column, value) =>
  * @param {number} value
  */
 const filterGreaterThanEqual = (data, column, value) =>
-  data.filter((d, i) => d[column] >= value)
+  data.filter(d => d[column] >= value)
 
 /**
  * Filters datat that does not have a value less than the provided `value`
@@ -50,7 +50,7 @@ const filterGreaterThanEqual = (data, column, value) =>
  * @param {number} value
  */
 const filterLessThan = (data, column, value) =>
-  data.filter((d, i) => d[column] < value)
+  data.filter(d => d[column] < value)
 
 /**
  * Filters data that does not have a value less than or equal to the provided `value`
@@ -59,7 +59,7 @@ const filterLessThan = (data, column, value) =>
  * @param {number} value
  */
 const filterLessThanEqual = (data, column, value) =>
-  data.filter((d, i) => d[column] <= value)
+  data.filter(d => d[column] <= value)
 
 /**
  * Filters data that does not have a value for the provided column
@@ -67,7 +67,7 @@ const filterLessThanEqual = (data, column, value) =>
  * @param {string} column
  */
 const filterHas = (data, column) =>
-  data.filter((d, i) => d[column] || d[column] === 0)
+  data.filter(d => d[column] || d[column] === 0)
 
 /**
  * Filters data that does not include the provided value
@@ -76,7 +76,7 @@ const filterHas = (data, column) =>
  * @param {string} value string
  */
 const filterContains = (data, column, value) => {
-  return data.filter((d, i) => d[column].includes(value))
+  return data.filter(d => d[column].includes(value))
 }
 
 /**
@@ -87,7 +87,7 @@ const filterContains = (data, column, value) => {
  */
 const filterRange = (data, column, value) =>
   data.filter(
-    (d, i) => d[column] >= value[0] && d[column] <= value[1]
+    d => d[column] >= value[0] && d[column] <= value[1]
   )
 
 /**
@@ -144,7 +144,7 @@ export const registerFilterRule = (name, filterFunction) => {
  * @param {*} name
  */
 export const hasFilterRule = name => {
-  return filterRules.hasOwnProperty(name)
+  return Object.prototype.hasOwnProperty.call(filterRules, name)
 }
 
 /**

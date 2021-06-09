@@ -5,4 +5,3 @@ export {
 export {
   default as ScatterplotAxis
 } from './components/ScatterplotAxis'
-export { getScatterplotBaseOptions } from './style'

@@ -124,7 +124,7 @@ export const paramsToFilterArray = params => {
   // handle legacy filter value (2 letter state)
   if (
     params.filter &&
-    params.filter.length === 2 && 
+    params.filter.length === 2 &&
     ['mg', 'ch', 'us', 'rg'].indexOf(params.filter) === -1
   ) {
     const id = getStateFipsFromAbbr(params.filter)
@@ -181,7 +181,8 @@ const isValidSecondary = secondary =>
 const isValidViewport = (zoom, lat, lon) =>
   !isNaN(zoom) && !isNaN(lat) && !isNaN(lon)
 
-const isValidFilter = filter => true
+// TODO: check that provided filter is valid
+const isValidFilter = filter => Boolean(filter)
 
 export const isValidExplorerRoute = (route, vars) => {
   const path = getStrippedRoute(route)

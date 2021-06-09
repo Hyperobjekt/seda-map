@@ -79,7 +79,7 @@ const styles = theme => ({
   }
 })
 
-const getLabelPrefix = (type, value) => {
+const getLabelPrefix = type => {
   switch (type) {
     case 'region':
       return `LABEL_SINGULAR`
@@ -172,12 +172,16 @@ const SedaOptionButton = ({ type, value, ...props }) => {
   )
 }
 
+const getFilterCount = filters => {
+  return filters.filter(f => f[0] !== 'sort').length
+}
+
 const SedaHeaderTitle = ({ classes, className, ...props }) => {
   const [metricId, demId, regionId] = useActiveOptions()
   const filterLocation = useFilterLocationName()
   const isGap = isGapDemographic(demId)
   const filters = useActiveFilters()
-  const filterCount = filters.filter(f => f[0] !== 'sort').length
+  const filterCount = getFilterCount(filters, regionId)
   const isEmbed = useUiStore(state => state.isEmbed)
 
   // context strings to inject in title

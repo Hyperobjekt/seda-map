@@ -81,6 +81,10 @@ const additionalTopics = [
     answer: 'HELP_COH_CONCEPT_A'
   },
   {
+    question: 'HELP_FLAGGED',
+    answer: 'HELP_FLAGGED_A'
+  },
+  {
     question: 'HELP_FRL',
     answer: 'HELP_FRL_A'
   },
@@ -110,7 +114,7 @@ const additionalTopics = [
   }
 ]
 
-const handleClick = (t, e) => {
+const handleClick = t => {
   // analytics help item expansion
   window.dataLayer.push({
     event: 'helpTopicExpanded',
@@ -134,7 +138,7 @@ const SedaHelpPanel = props => {
         </IconButton>
       </SidePanelHeader>
       <SidePanelBody>
-        {topics.map((t, i) => (
+        {topics.map(t => (
           <StyledExpansionPanel
             key={t}
             title={getLang(t)}

@@ -82,8 +82,7 @@ FilterListItem.defaultProps = {
 const FilterList = ({
   filters,
   onFilterRemove,
-  onFilterChange,
-  ...props
+  onFilterChange
 }) => {
   const handleFilterChange = (change, e) => {
     onFilterChange && onFilterChange(change, e)

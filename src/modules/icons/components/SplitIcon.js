@@ -1,9 +1,9 @@
+import { SvgIcon } from '@material-ui/core'
 import React from 'react'
-import Icon from './Icon'
 
 const SplitIcon = ({ ...props }) => {
   return (
-    <Icon {...props}>
+    <SvgIcon {...props}>
       <g className="outline">
         <path
           fillRule="evenodd"
@@ -57,7 +57,7 @@ const SplitIcon = ({ ...props }) => {
           d="M20.0455 5H14.9545C14.7035 5 14.5 5.20351 14.5 5.45455V18.5455C14.5 18.7965 14.7035 19 14.9545 19H20.0455C20.2965 19 20.5 18.7965 20.5 18.5455V5.45455C20.5 5.20351 20.2965 5 20.0455 5ZM14.9545 4C14.1512 4 13.5 4.65122 13.5 5.45455V18.5455C13.5 19.3488 14.1512 20 14.9545 20H20.0455C20.8488 20 21.5 19.3488 21.5 18.5455V5.45455C21.5 4.65122 20.8488 4 20.0455 4H14.9545Z"
         />
       </g>
-    </Icon>
+    </SvgIcon>
   )
 }
 

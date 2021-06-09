@@ -101,7 +101,6 @@ const ExpansionPanel = ({
   title,
   startIcon,
   expandIcon,
-  defaultExpanded,
   classes,
   ...props
 }) => {
