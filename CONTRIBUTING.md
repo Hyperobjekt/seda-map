@@ -153,6 +153,8 @@ Before a pull request is approved it must meet the following requirements:
 
 ## Deploying the explorer
 
+Deploying the explorer is handled by Travis CI.  See `.travis.yml` in the root of the repo for details.  There is also a deploy script (`./scripts/deploy.sh`) for manual deploys to dev, staging, production, and embargoed environments.  You must have AWS CLI configured with an account that has permission to S3 / Cloudfront resources in order to run this script.  
+
 ### Code lifecycle
 
 When deploying new code to the explorer, the code will proceed through the following steps:
