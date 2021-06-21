@@ -20,6 +20,9 @@ const SedaExplorer = props => {
 
   const isMobile = useIsMobile()
 
+  // show tooltips on non-mobile sizes or embeds
+  const showTooltip = !isMobile || isEmbed
+
   return (
     <PageBody {...props}>
       {!isEmbed && <SedaPanelGroup />}
@@ -32,7 +35,7 @@ const SedaExplorer = props => {
           isEmbed && view === 'map' ? <></> : <SedaScatterplot />
         }
       />
-      {!isMobile && <SedaTooltip />}
+      {showTooltip && <SedaTooltip />}
       <SedaError />
     </PageBody>
   )
