@@ -2,32 +2,26 @@
 
 The following is a set of guidelines for contributing to the [Educational Opportunity Explorer](https://edopportunity.org/explorer). The Educational Opportunity Explorer is hosted and managed by [Hyperobjekt](https://hyperobjekt.com/). These are mostly guidelines, not rules. Use your best judgment, and feel free to propose changes to this document in a pull request.
 
-#### Table Of Contents
-
-[What should I know before I get started?](#what-should-i-know-before-i-get-started)
-
-- [Packages in use](#packages-in-use)
-- [Application Structure](#application-structure)
-- [Application State](#application-state)
-- [Environment Variables](#environment-variables)
-
-[How Can I Contribute?](#how-can-i-contribute)
-
-- [Reporting Bugs](#reporting-bugs)
-- [Suggesting Features](#suggesting-features)
-- [Making a Contribution](#making-a-contribution)
-- [Pull Requests](#pull-requests)
-
-[Deploying the explorer](#deploying-the-explorer)
-
-- [Code Lifecycle](#code-lifecycle)
-
-[Styleguides](#styleguides)
-
-- [Git Commit Messages](#git-commit-messages)
-- [React Component Styleguide](#react-component-styleguide)
-
-[Resources](#resources)
+## Table Of Contents
+- [Table Of Contents](#table-of-contents)
+- [What should I know before I get started?](#what-should-i-know-before-i-get-started)
+  - [Packages In Use](#packages-in-use)
+  - [Application Structure](#application-structure)
+    - [Constants (`src/modules/explorer/app/constants`)](#constants-srcmodulesexplorerappconstants)
+    - [Modules (`/src/modules`)](#modules-srcmodules)
+  - [Application State](#application-state)
+  - [Environment Variables](#environment-variables)
+- [How Can I Contribute?](#how-can-i-contribute)
+  - [Reporting Bugs](#reporting-bugs)
+  - [Suggesting Features](#suggesting-features)
+  - [Making a Contribution](#making-a-contribution)
+    - [Local development](#local-development)
+  - [Pull requests](#pull-requests)
+- [Deploying the explorer](#deploying-the-explorer)
+  - [Code lifecycle](#code-lifecycle)
+- [Coding Style](#coding-style)
+  - [React Component Styleguide](#react-component-styleguide)
+  - [Styling / CSS](#styling--css)
 
 ## What should I know before I get started?
 
@@ -92,17 +86,17 @@ When using data from the stores, it is important to only pull the data needed in
 
 Before you can get everything running you will need to create a local environment variables file called `.env.local`. This file contains API keys used for accessing Mapbox, Algolia, and other services used within the application. The `.env.local` file contains the following variables:
 
-```
-REACT_APP_MAPBOX_ACCESS_TOKEN=
-REACT_APP_MAPBOX_USER=
-REACT_APP_ALGOLIA_ID=
-REACT_APP_ALGOLIA_KEY=
-REACT_APP_DATA_ENDPOINT=https://data.edopportunity.org/dev/
-REACT_APP_TILESET_SUFFIX=dev
-REACT_APP_SUBFOLDER=
+```sh
+REACT_APP_MAPBOX_ACCESS_TOKEN=    # mapbox token 
+REACT_APP_MAPBOX_USER=            # mapbox username
+REACT_APP_ALGOLIA_ID=             # algolia ID for search
+REACT_APP_ALGOLIA_KEY=            # algolia key for search
+REACT_APP_DATA_ENDPOINT=          # endpoint with static data files
+REACT_APP_SHOW_PR=                # 1 to show Puerto Rico data, 0 to hide
+REACT_APP_TILESET_SUFFIX=         # suffix used for the tileset name (e.g. 4-1-0 for v4.1.0 tilesets)
 ```
 
-If you require any of these values, ask for them on Slack.
+If you require any of these values, ask for them on Slack or look in the "Hyperobjekt Assets" folder on drive (Hyperobjekt Assets > SEDA > Development).
 
 ## How Can I Contribute?
 
@@ -159,6 +153,8 @@ Before a pull request is approved it must meet the following requirements:
 
 ## Deploying the explorer
 
+Deploying the explorer is handled by Travis CI.  See `.travis.yml` in the root of the repo for details.  There is also a deploy script (`./scripts/deploy.sh`) for manual deploys to dev, staging, production, and embargoed environments.  You must have AWS CLI configured with an account that has permission to S3 / Cloudfront resources in order to run this script.  
+
 ### Code lifecycle
 
 When deploying new code to the explorer, the code will proceed through the following steps:
@@ -168,26 +164,7 @@ When deploying new code to the explorer, the code will proceed through the follo
 3. **Staging**: when a new version of the working copy in the `master` branch is ready to be deployed, it is merged into the `staging` branch. a live copy of the code in the staging environment can be seen at staging.edopportunity.org/explorer
 4. **Production**: once the new version has been tested and approved on the staging site it is merged into the `production` branch. code in the `production` branch is deployed to the live version of the explorer at edopportunity.org/explorer
 
-## Styleguides
-
-### Git Commit Messages
-
-- Consider starting the commit message with an applicable emoji:
-  - :art: `:art:` when improving the format/structure of the code
-  - :racehorse: `:racehorse:` when improving performance
-  - :non-potable_water: `:non-potable_water:` when plugging memory leaks
-  - :memo: `:memo:` when writing docs
-  - :penguin: `:penguin:` when fixing something on Linux
-  - :apple: `:apple:` when fixing something on macOS
-  - :checkered_flag: `:checkered_flag:` when fixing something on Windows
-  - :bug: `:bug:` when fixing a bug
-  - :fire: `:fire:` when removing code or files
-  - :green_heart: `:green_heart:` when fixing the CI build
-  - :white_check_mark: `:white_check_mark:` when adding tests
-  - :lock: `:lock:` when dealing with security
-  - :arrow_up: `:arrow_up:` when upgrading dependencies
-  - :arrow_down: `:arrow_down:` when downgrading dependencies
-  - :shirt: `:shirt:` when removing linter warnings
+## Coding Style
 
 ### React Component Styleguide
 
