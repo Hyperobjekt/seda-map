@@ -3,6 +3,7 @@
 The following is a set of guidelines for contributing to the [Educational Opportunity Explorer](https://edopportunity.org/explorer). The Educational Opportunity Explorer is hosted and managed by [Hyperobjekt](https://hyperobjekt.com/). These are mostly guidelines, not rules. Use your best judgment, and feel free to propose changes to this document in a pull request.
 
 ## Table Of Contents
+
 - [Table Of Contents](#table-of-contents)
 - [What should I know before I get started?](#what-should-i-know-before-i-get-started)
   - [Packages In Use](#packages-in-use)
@@ -87,7 +88,7 @@ When using data from the stores, it is important to only pull the data needed in
 Before you can get everything running you will need to create a local environment variables file called `.env.local`. This file contains API keys used for accessing Mapbox, Algolia, and other services used within the application. The `.env.local` file contains the following variables:
 
 ```sh
-REACT_APP_MAPBOX_ACCESS_TOKEN=    # mapbox token 
+REACT_APP_MAPBOX_ACCESS_TOKEN=    # mapbox token
 REACT_APP_MAPBOX_USER=            # mapbox username
 REACT_APP_ALGOLIA_ID=             # algolia ID for search
 REACT_APP_ALGOLIA_KEY=            # algolia key for search
@@ -134,7 +135,7 @@ Perform all of your development in this local branch. When you are ready, push t
 
 ### Pull requests
 
-Create a pull request of your branch to the `master` branch whenever you have code that:
+Create a pull request of your branch to the `development` branch whenever you have code that:
 
 - is ready to be merged into the code base
 - requires some review or have questions from another team member
@@ -153,15 +154,15 @@ Before a pull request is approved it must meet the following requirements:
 
 ## Deploying the explorer
 
-Deploying the explorer is handled by Travis CI.  See `.travis.yml` in the root of the repo for details.  There is also a deploy script (`./scripts/deploy.sh`) for manual deploys to dev, staging, production, and embargoed environments.  You must have AWS CLI configured with an account that has permission to S3 / Cloudfront resources in order to run this script.  
+Deploying the explorer is handled by Travis CI. See `.travis.yml` in the root of the repo for details. There is also a deploy script (`./scripts/deploy.sh`) for manual deploys to dev, staging, production, and embargoed environments. You must have AWS CLI configured with an account that has permission to S3 / Cloudfront resources in order to run this script.
 
 ### Code lifecycle
 
 When deploying new code to the explorer, the code will proceed through the following steps:
 
-1. **Development**: development happens locally and is pushed to branches in the repository named by the contribution type (see [Local Development](#local-development)). When local development is complete a pull request is submitted to the master branch.
-2. **Master**: the `master` branch contains the working copy of the current code base. once your code is merged into the `master` branch a live copy can be viewed at dev.edopportunity.org/explorer
-3. **Staging**: when a new version of the working copy in the `master` branch is ready to be deployed, it is merged into the `staging` branch. a live copy of the code in the staging environment can be seen at staging.edopportunity.org/explorer
+1. **Local branches**: development happens locally and is pushed to branches in the repository named by the contribution type (see [Local Development](#local-development)). When local development is complete a pull request is submitted to the development branch.
+2. **development**: the `development` branch contains the working copy of the current code base. once your code is merged into the `development` branch a live copy can be viewed at dev.edopportunity.org/explorer
+3. **Staging**: when a new version of the working copy in the `development` branch is ready to be deployed, it is merged into the `staging` branch. a live copy of the code in the staging environment can be seen at staging.edopportunity.org/explorer
 4. **Production**: once the new version has been tested and approved on the staging site it is merged into the `production` branch. code in the `production` branch is deployed to the live version of the explorer at edopportunity.org/explorer
 
 ## Coding Style
