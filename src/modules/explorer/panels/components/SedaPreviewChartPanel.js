@@ -72,7 +72,8 @@ const useChartOverlayStyles = makeStyles(theme => ({
     left: theme.spacing(3),
     width: `calc(100% - ${theme.spacing(6)}px)`,
     height: `calc(100% - ${theme.spacing(3)}px)`,
-    overflow: 'hidden'
+    overflow: 'hidden',
+    zIndex: 1
   },
   inner: {
     padding: theme.spacing(3),
