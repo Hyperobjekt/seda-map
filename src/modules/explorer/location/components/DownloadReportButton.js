@@ -6,9 +6,7 @@ import {
   getPredictedValue,
   getRegionFromLocationId
 } from '../../app/selectors'
-import {
-  getLocationNameString,
-} from '..'
+import { getLocationNameString } from '..'
 import { formatNumber } from '../../../../shared/utils'
 import { hasVal } from '../../app/selectors/data'
 import { getStateName } from '../../../../shared/utils/states'
@@ -24,7 +22,7 @@ const getPdfRegion = region => {
     : region === 'districts'
     ? 'district'
     : region === 'schools'
-    ? 'school' 
+    ? 'school'
     : 'state'
 }
 
@@ -60,7 +58,12 @@ export const fetchReport = locationData => {
   const region = getRegionFromLocationId(id)
   const diffs = getDiffValues(locationData)
   //fire analytics events
-  window.dataLayer.push({event: 'reportDownloaded', geoTypeSelection: region, locationId: id, locationName: getLocationNameString(id)})
+  window.dataLayer.push({
+    event: 'reportDownloaded',
+    geoTypeSelection: region,
+    locationId: id,
+    locationName: getLocationNameString(locationData)
+  })
   return axios({
     url: 'https://export.edopportunity.org/',
     method: 'POST',
