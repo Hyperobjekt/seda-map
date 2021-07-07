@@ -3,6 +3,7 @@ import clsx from 'clsx'
 import { CheckboxGroup } from '../../../../shared/components/Inputs/Checkboxes'
 import { useRegion } from '../../app/hooks'
 import {
+  ALL_FILTER_FLAGS,
   EXCLUSIVE_FLAGS,
   FILTER_FLAGS
 } from '../../app/constants/flags'
@@ -13,6 +14,7 @@ import useFilterStore from '../../../filters'
 import {
   FormControl,
   FormLabel,
+  Tooltip,
   withStyles
 } from '@material-ui/core'
 import { hasFilterRule } from '../../../filters/useFilterStore'
@@ -29,11 +31,12 @@ const styles = theme => ({
   }
 })
 
-const makeCheckboxes = (flags, checked) => {
+const makeCheckboxes = (flags, checked, regionFlags) => {
   return flags.map(flag => ({
     id: flag,
     label: getPrefixLang(flag, 'FLAG_LABEL'),
-    checked: checked.indexOf(flag) > -1
+    checked: checked.indexOf(flag) > -1,
+    disabled: regionFlags.indexOf(flag) < 0
   }))
 }
 
@@ -68,6 +71,18 @@ const getUncheckedFlags = filters => {
   return [...uncheckedNonExclusive, ...uncheckedExclusive]
 }
 
+const getAvailableRegions = filters => {
+  const availableRegions = Object.keys(FILTER_FLAGS)
+    .filter(
+      g =>
+        FILTER_FLAGS[g].flat().length > 0 &&
+        FILTER_FLAGS[g].flat().indexOf(filters[0].id) > -1
+    )
+    .join(' or ')
+
+  return availableRegions
+}
+
 const SedaFilterFlags = ({ classes, className, ...props }) => {
   const [region] = useRegion()
 
@@ -89,8 +104,12 @@ const SedaFilterFlags = ({ classes, className, ...props }) => {
   const setFilter = useFilterStore(state => state.setFilter)
   // get checkbox group from flags and active filters
   const checkboxGroups = useMemo(() => {
-    return regionFlags.map(flagGroup =>
-      makeCheckboxes(flagGroup, checkedFlags)
+    return ALL_FILTER_FLAGS.map((flagGroup, i) =>
+      makeCheckboxes(
+        flagGroup,
+        checkedFlags,
+        regionFlags.length > i ? regionFlags[i] : []
+      )
     )
   }, [checkedFlags, regionFlags])
 
@@ -112,27 +131,50 @@ const SedaFilterFlags = ({ classes, className, ...props }) => {
       ? setFilter(['neq', key, 1])
       : removeFilter(['neq', key], true)
   }
-
   return (
     <PanelListItem
       className={clsx(classes.root, className)}
       {...props}>
-      {checkboxGroups.map((group, i) => (
-        <FormControl
-          className={classes.group}
-          key={i}
-          component="fieldset">
-          <FormLabel
-            className={classes.label}
-            component="legend">
-            {GROUP_TITLES[i]}
-          </FormLabel>
-          <CheckboxGroup
-            checkboxes={group}
-            onChange={handleCheckboxChange}
-          />
-        </FormControl>
-      ))}
+      {checkboxGroups.map((group, i) =>
+        i + 1 > regionFlags.length ? (
+          <Tooltip
+            arrow
+            title={`These filters are only available in ${getAvailableRegions(
+              group
+            )} view`}
+            placement="right">
+            <FormControl
+              className={classes.group}
+              key={i}
+              component="fieldset">
+              <FormLabel
+                className={classes.label}
+                component="legend">
+                {GROUP_TITLES[i]}
+              </FormLabel>
+              <CheckboxGroup
+                checkboxes={group}
+                onChange={handleCheckboxChange}
+              />
+            </FormControl>
+          </Tooltip>
+        ) : (
+          <FormControl
+            className={classes.group}
+            key={i}
+            component="fieldset">
+            <FormLabel
+              className={classes.label}
+              component="legend">
+              {GROUP_TITLES[i]}
+            </FormLabel>
+            <CheckboxGroup
+              checkboxes={group}
+              onChange={handleCheckboxChange}
+            />
+          </FormControl>
+        )
+      )}
     </PanelListItem>
   )
 }
