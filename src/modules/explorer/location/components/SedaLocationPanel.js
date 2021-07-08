@@ -36,16 +36,28 @@ const styles = theme => ({
     minHeight: theme.spacing(8)
   },
   footer: {
-    display: 'flex',
+    display: 'grid',
+    gridGap: '9px',
+    gridTemplateColumns: 'repeat(2, 1fr)',
+    padding: '9px',
     justifyContent: 'stretch',
     alignItems: 'stretch',
-    height: theme.spacing(6),
     '& .MuiButton-root': {
       flex: 1,
-      '&:first-child': {
-        borderRight: '1px solid',
-        borderRightColor: theme.palette.divider
-      }
+      color: theme.palette.primary.main,
+      padding: '6px 6px 5px',
+      border: '1px solid',
+      borderColor: theme.palette.divider
+    },
+    '& .MuiSvgIcon-root': {
+      width: '15px',
+      marginRight: '6px'
+    },
+    '& .MuiButton-root:first-child .MuiSvgIcon-root': {
+      width: '18px',
+      position: 'relative',
+      marginRight: '2px',
+      top: '2px'
     }
   }
 })
@@ -109,7 +121,7 @@ const SedaLocationPanel = ({ classes, ...props }) => {
         )}
       </SidePanelBody>
       <SidePanelFooter className={classes.footer}>
-        <CompareButton />
+        <CompareButton showIcon />
         <DownloadReportButton location={data} />
       </SidePanelFooter>
     </SidePanel>

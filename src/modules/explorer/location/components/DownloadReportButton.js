@@ -11,6 +11,7 @@ import { formatNumber } from '../../../../shared/utils'
 import { hasVal } from '../../app/selectors/data'
 import { getStateName } from '../../../../shared/utils/states'
 import axios from 'axios'
+import { DownloadIcon } from '../../../icons'
 
 /**
  * Returns a singular region name for the PDF export
@@ -119,6 +120,7 @@ const DownloadReportButton = ({ location, ...props }) => {
       disabled={loading}
       onClick={handleDownloadReport}
       {...props}>
+      <DownloadIcon />
       {loading
         ? 'Generating...'
         : getLang('LOCATION_REPORT_BUTTON')}
