@@ -12,6 +12,7 @@ The following is a set of guidelines for contributing to the [Educational Opport
     - [Modules (`/src/modules`)](#modules-srcmodules)
   - [Application State](#application-state)
   - [Environment Variables](#environment-variables)
+  - [Language Strings](#language-strings)
 - [How Can I Contribute?](#how-can-i-contribute)
   - [Reporting Bugs](#reporting-bugs)
   - [Suggesting Features](#suggesting-features)
@@ -98,6 +99,17 @@ REACT_APP_TILESET_SUFFIX=         # suffix used for the tileset name (e.g. 4-1-0
 ```
 
 If you require any of these values, ask for them on Slack or look in the "Hyperobjekt Assets" folder on drive (Hyperobjekt Assets > SEDA > Development).
+
+### Language Strings
+
+No hardcoded language strings should be used in the app. All strings consist of key / value pairs that are loaded on build from a [shared google sheet](https://docs.google.com/spreadsheets/d/1L633lO5wfQGLbaVnaSnIg9TrprX9k4Ie8qe_CLDmQN8/edit#gid=0), request access if needed.
+
+To add a new string to the sheet:
+
+- add a new row to the sheet
+- in the key column, enter a key for the string. make it descriptive so you can determine the purpose of the string.
+- add the string content in the value field. you can interpolate variables into the string by using the format `$[variable]`. you will need to restart your development server to fetch any new entries.
+- use the `getLang` utility function to retrieve the value (e.g. `getLang("MY_STRING_KEY")` or `getLang("MY_STRING_KEY", { value: "something" })` to provide a value to interpolate.)
 
 ## How Can I Contribute?
 

@@ -135,30 +135,8 @@ const SedaFilterFlags = ({ classes, className, ...props }) => {
     <PanelListItem
       className={clsx(classes.root, className)}
       {...props}>
-      {checkboxGroups.map((group, i) =>
-        i + 1 > regionFlags.length ? (
-          <Tooltip
-            arrow
-            title={`These filters are only available in ${getAvailableRegions(
-              group
-            )} view`}
-            placement="right">
-            <FormControl
-              className={classes.group}
-              key={i}
-              component="fieldset">
-              <FormLabel
-                className={classes.label}
-                component="legend">
-                {GROUP_TITLES[i]}
-              </FormLabel>
-              <CheckboxGroup
-                checkboxes={group}
-                onChange={handleCheckboxChange}
-              />
-            </FormControl>
-          </Tooltip>
-        ) : (
+      {checkboxGroups.map((group, i) => {
+        const checkboxes = (
           <FormControl
             className={classes.group}
             key={i}
@@ -174,7 +152,19 @@ const SedaFilterFlags = ({ classes, className, ...props }) => {
             />
           </FormControl>
         )
-      )}
+        return i + 1 > regionFlags.length ? (
+          <Tooltip
+            arrow
+            title={getLang('TOOLTIP_HINT_REGION_FILTER', {
+              regions: getAvailableRegions(group)
+            })}
+            placement="top">
+            {checkboxes}
+          </Tooltip>
+        ) : (
+          checkboxes
+        )
+      })}
     </PanelListItem>
   )
 }
