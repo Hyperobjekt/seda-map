@@ -13,7 +13,7 @@ import { formatInteger } from '../../../../shared/utils'
 /**
  * Contains all controls for modifying filters
  */
-const SedaFiltersForm = (props) => {
+const SedaFiltersForm = props => {
   const {
     filterResults,
     totalResults,
@@ -59,9 +59,7 @@ const SedaFiltersForm = (props) => {
           isActive={metric === activeMetric}
         />
       ))}
-      {(region === 'schools' || region === 'districts') && (
-        <SedaFilterFlags />
-      )}
+      <SedaFilterFlags />
     </List>
   )
 }
