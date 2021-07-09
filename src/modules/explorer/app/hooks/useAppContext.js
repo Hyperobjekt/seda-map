@@ -110,17 +110,23 @@ export default function useAppContext() {
 
     // add extents for all vars
     const dataExtents = {}
+    const allDataExtents = {}
     allVars.forEach(v => {
       // #516: do not adjust size extent based on filtered data
       dataExtents[v] =
         v.indexOf('_sz') > -1
           ? getDataExtent(regionData.slice(0, MAX_DOTS), v)
           : getDataExtent(scatterplotData, v)
+
+      allDataExtents[v] =
+        v.indexOf('_sz') > -1
+          ? getDataExtent(regionData.slice(0, MAX_DOTS), v)
+          : getDataExtent(allData, v)
     })
 
     // create padded extents for the scatterplot
     const scatterplotExtents = scatterplotVars.map(v => {
-      const extent = dataExtents[v]
+      const extent = allDataExtents[v]
       // pad extents that are not "size"
       return v.indexOf('sz') > -1
         ? extent
