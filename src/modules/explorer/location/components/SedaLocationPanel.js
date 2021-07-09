@@ -121,7 +121,7 @@ const SedaLocationPanel = ({ classes, ...props }) => {
         )}
       </SidePanelBody>
       <SidePanelFooter className={classes.footer}>
-        <CompareButton showIcon />
+        <CompareButton />
         <DownloadReportButton location={data} />
       </SidePanelFooter>
     </SidePanel>

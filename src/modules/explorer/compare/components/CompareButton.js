@@ -22,7 +22,7 @@ const CompareButton = props => {
         disabled={locations.length === 0}
         onClick={handleOpenDialog}
         {...props}>
-        {props.showIcon && <CompareIcon />}
+        <CompareIcon />
         {getLang('LOCATION_COMPARE_BUTTON')}
       </Button>
       <CompareDialog />
