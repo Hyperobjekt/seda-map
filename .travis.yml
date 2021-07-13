@@ -7,7 +7,7 @@ cache:
 script:
   - if [ "$TRAVIS_BRANCH" = "production" ]; then export PUBLIC_URL=https://edopportunity.org/explorer/; fi
   - if [ "$TRAVIS_BRANCH" = "staging" ]; then export PUBLIC_URL=https://staging.edopportunity.org/explorer/; fi
-  - if [ "$TRAVIS_BRANCH" = "master" ]; then export PUBLIC_URL=https://dev.edopportunity.org/explorer/; fi
+  - if [ "$TRAVIS_BRANCH" = "development" ]; then export PUBLIC_URL=https://dev.edopportunity.org/explorer/; fi
   - npm run build
 before_deploy:
   - pip install --user awscli
@@ -53,12 +53,12 @@ deploy:
     local_dir: build
     upload-dir: explorer
     on:
-      branch: master
+      branch: development
   - provider: script
     script: aws cloudfront create-invalidation --distribution-id=$CLOUDFRONT_ID_DEV --paths="/explorer/*"
     on:
-      branch: master
+      branch: development
   - provider: script
     script: aws cloudfront create-invalidation --distribution-id=$CLOUDFRONT_ID_DEV --paths="/explorer/*"
     on:
-      branch: master
+      branch: development

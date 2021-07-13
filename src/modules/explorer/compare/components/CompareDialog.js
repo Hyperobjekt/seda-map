@@ -29,6 +29,9 @@ const styles = theme => ({
         marginTop: theme.spacing(2)
       }
     },
+    '& .MuiButton-root': {
+      color: theme.palette.primary.main
+    },
     [theme.breakpoints.down('sm')]: {
       flexDirection: 'column'
     }

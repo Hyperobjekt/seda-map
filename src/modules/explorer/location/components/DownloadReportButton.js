@@ -6,13 +6,12 @@ import {
   getPredictedValue,
   getRegionFromLocationId
 } from '../../app/selectors'
-import {
-  getLocationNameString,
-} from '..'
+import { getLocationNameString } from '..'
 import { formatNumber } from '../../../../shared/utils'
 import { hasVal } from '../../app/selectors/data'
 import { getStateName } from '../../../../shared/utils/states'
 import axios from 'axios'
+import { DownloadIcon } from '../../../icons'
 
 /**
  * Returns a singular region name for the PDF export
@@ -24,7 +23,7 @@ const getPdfRegion = region => {
     : region === 'districts'
     ? 'district'
     : region === 'schools'
-    ? 'school' 
+    ? 'school'
     : 'state'
 }
 
@@ -60,7 +59,12 @@ export const fetchReport = locationData => {
   const region = getRegionFromLocationId(id)
   const diffs = getDiffValues(locationData)
   //fire analytics events
-  window.dataLayer.push({event: 'reportDownloaded', geoTypeSelection: region, locationId: id, locationName: getLocationNameString(id)})
+  window.dataLayer.push({
+    event: 'reportDownloaded',
+    geoTypeSelection: region,
+    locationId: id,
+    locationName: getLocationNameString(locationData)
+  })
   return axios({
     url: 'https://export.edopportunity.org/',
     method: 'POST',
@@ -116,6 +120,7 @@ const DownloadReportButton = ({ location, ...props }) => {
       disabled={loading}
       onClick={handleDownloadReport}
       {...props}>
+      <DownloadIcon />
       {loading
         ? 'Generating...'
         : getLang('LOCATION_REPORT_BUTTON')}

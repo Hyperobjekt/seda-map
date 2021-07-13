@@ -11,6 +11,7 @@ const useStyles = makeStyles(theme => ({
     height: 200,
     marginRight: 0,
     marginBottom: 0,
+    zIndex: 0,
     '&:before': {
       content: '""',
       display: 'block',

@@ -37,3 +37,7 @@ export {
 export { default as SearchIcon } from './components/SearchIcon'
 export { default as LinkIcon } from './components/LinkIcon'
 export { default as EmbedIcon } from './components/EmbedIcon'
+export { default as CompareIcon } from './components/CompareIcon'
+export {
+  default as DownloadIcon
+} from './components/DownloadIcon'
