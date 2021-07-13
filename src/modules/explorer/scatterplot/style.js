@@ -724,21 +724,47 @@ export const getTrendLine = ({ yVar, extents, region }) => {
 }
 
 /**
+ * Reduces the number of points in the dataset based on proximity
+ */
+const getReducedDataset = data => {
+  // rounds to 2 decimals
+  function round(number) {
+    return Math.round(number * 100) / 100
+  }
+  const reducedData = data.reduce((obj, point) => {
+    // create a key based on the dot position
+    const key = round(point[0]) + ',' + round(point[1])
+    // if there is no dot in this position, add it to the data set
+    if (!obj[key]) {
+      obj[key] = point
+    }
+    return obj
+  }, {})
+  return Object.values(reducedData)
+}
+
+/**
  * Gets the echart options for the underlay chart with grey dots
  * @param {*} param0
  * @param {*} base
  * @returns
  */
 export const getUnderlayOptions = (
-  { allData = [], xVar, yVar, zVar },
+  { allData = [], xVar, yVar, zVar, extents },
   base
 ) => {
-  const underlayData = getDataSubset(allData, [xVar, yVar, zVar])
+  const sizer = getDotSizeScale({
+    extent: extents[2]
+  })
+  const underlayData = getReducedDataset(
+    getDataSubset(allData, [xVar, yVar, zVar])
+  )
+
   return {
     ...base,
     xAxis: {
       ...base.xAxis,
-      splitLine: { show: false },
+      splitLine: { show: false }
     },
     yAxis: {
       ...base.yAxis,
@@ -749,12 +775,11 @@ export const getUnderlayOptions = (
         id: 'underlay',
         type: 'scatter',
         data: underlayData,
-        symbolSize: 5,
+        symbolSize: value => sizer(value[2]),
         silent: true,
-        large: true,
         zLevel: 1,
         itemStyle: {
-          color: '#ddd',
+          color: '#e0e0e0',
           borderWidth: 0
         }
       }
