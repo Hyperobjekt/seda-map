@@ -53,31 +53,25 @@ const SedaLimitButtons = ({ classes, ...props }) => {
   }
 
   return (
-    <PanelListItem
-      title={getPrefixLang('size', 'FILTER_LABEL')}
-      desc={getPrefixLang('size_desc', 'FILTER_LABEL')}
-      titleProps={{ id: 'limit-slider' }}
+    <ButtonGroup
+      variant="outlined"
+      className={clsx(classes.root)}
       {...props}>
-      <ButtonGroup
-        variant="outlined"
-        className={clsx(classes.root)}
-        {...props}>
-        {sizes.map(size => {
-          return (
-            <Button
-              key={size}
-              className={clsx(classes.button, {
-                [classes.active]:
-                  (!limitValue && size === 'all') ||
-                  parseInt(limitValue) === size
-              })}
-              onClick={e => handleSetLimitFilter(size, e)}>
-              {size === 'all' ? size : formatNumber(size)}
-            </Button>
-          )
-        })}
-      </ButtonGroup>
-    </PanelListItem>
+      {sizes.map(size => {
+        return (
+          <Button
+            key={size}
+            className={clsx(classes.button, {
+              [classes.active]:
+                (!limitValue && size === 'all') ||
+                parseInt(limitValue) === size
+            })}
+            onClick={e => handleSetLimitFilter(size, e)}>
+            {size === 'all' ? size : formatNumber(size)}
+          </Button>
+        )
+      })}
+    </ButtonGroup>
   )
 }
 

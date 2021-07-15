@@ -45,6 +45,7 @@ const BasicSidePanel = ({
   onClose,
   ...props
 }) => {
+  const isTitleString = typeof title === 'string'
   const closeRef = useRef(null)
   // set focus to close button when the panel opens
   useEffect(() => {
@@ -53,9 +54,12 @@ const BasicSidePanel = ({
   return (
     <SidePanel classes={{ root: classes.root }} {...props}>
       <SidePanelHeader sticky>
-        <Typography className={classes.title}>
-          {title}
-        </Typography>
+        {isTitleString && (
+          <Typography className={classes.title}>
+            {title}
+          </Typography>
+        )}
+        {!isTitleString && title}
         <IconButton ref={closeRef} onClick={onClose}>
           <CloseIcon />
         </IconButton>

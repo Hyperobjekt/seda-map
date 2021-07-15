@@ -10,7 +10,13 @@ import { DebouncedSlider as Slider } from '../../../../shared'
 import { getPrefixLang } from '../../app/selectors/lang'
 import { getFormatterForVarName } from '../../app/selectors'
 import useActiveFilters from '../hooks/useActiveFilters'
-import { Tooltip, withStyles } from '@material-ui/core'
+import {
+  Box,
+  IconButton,
+  Tooltip,
+  withStyles
+} from '@material-ui/core'
+import { Close } from '@material-ui/icons'
 
 const ValueLabelComponent = props => {
   const { children, open, value } = props
@@ -33,7 +39,31 @@ const getDefaultValue = (region, metric) => {
   return vals[metric]
 }
 
-const SedaMetricSlider = ({ metricId, classes, ...props }) => {
+const MetricTitle = ({ onDismiss, metric }) => {
+  return (
+    <Box
+      display="flex"
+      justifyContent="space-between"
+      alignItems="center">
+      <span>{getPrefixLang(metric, 'FILTER_LABEL')}</span>
+      <Tooltip title="remove filter" placement="top" arrow>
+        <IconButton
+          style={{ padding: 0 }}
+          value={metric}
+          onClick={() => onDismiss(metric)}>
+          <Close aria-label="remove filter" />
+        </IconButton>
+      </Tooltip>
+    </Box>
+  )
+}
+
+const SedaMetricSlider = ({
+  metricId,
+  classes,
+  onDismiss,
+  ...props
+}) => {
   // grab filters array
   const filters = useActiveFilters()
   // function to remove a single filter
@@ -77,7 +107,9 @@ const SedaMetricSlider = ({ metricId, classes, ...props }) => {
   )
   return (
     <PanelListItem
-      title={getPrefixLang(metricId, 'FILTER_LABEL')}
+      title={
+        <MetricTitle metric={metricId} onDismiss={onDismiss} />
+      }
       desc={getPrefixLang(`${metricId}_desc`, 'FILTER_LABEL')}
       titleProps={{ id: metricId + '-slider' }}
       {...props}>
